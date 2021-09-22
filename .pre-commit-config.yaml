@@ -1,0 +1,38 @@
+---
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.26.1
+    hooks:
+      - id: yamllint
+        types:
+          - yaml
+  - repo: https://github.com/ansible-community/ansible-lint.git
+    rev: v5.1.3
+    hooks:
+      - id: ansible-lint
+        types:
+          - yaml
+  - repo: https://github.com/psf/black
+    rev: stable
+    hooks:
+      - id: black
+        name: black
+        language_version: python3.9
+        entry: black
+        args: [--line-length, "88"]
+        types:
+          - python
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: 3.9.2
+    hooks:
+      - id: flake8
+        name: flake8
+        entry: flake8
+        types:
+          - python
+...

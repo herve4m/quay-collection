@@ -1,0 +1,24 @@
+---
+namespace: herve4m
+name: quay
+version: 0.0.1
+readme: README.md
+authors:
+  - Hervé Quatremain <hquatrem@redhat.com>
+description: Ansible modules to manage Red Hat Quay installations
+license:
+  - GPL-3.0-or-later
+tags:
+  - quay
+  - registry
+repository: https://github.com/hquatrem/quay-collection
+
+# The URL to any online docs
+documentation: https://github.com/herve4m/quay-collection
+
+# The URL to the homepage of the collection/project
+homepage: https://github.com/herve4m/quay-collection
+
+# The URL to the collection issue tracker
+issues: https://github.com/hquatrem/quay-collection/issues
+...

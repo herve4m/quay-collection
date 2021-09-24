@@ -4,7 +4,7 @@ name: quay
 version: 0.0.1
 readme: README.md
 authors:
-  - Hervé Quatremain <hquatrem@redhat.com>
+  - Hervé Quatremain <rv4m@yahoo.co.uk>
 description: Ansible modules to manage Red Hat Quay installations
 license:
   - GPL-3.0-or-later

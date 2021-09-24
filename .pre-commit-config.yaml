@@ -6,7 +6,7 @@ repos:
       - id: end-of-file-fixer
       - id: trailing-whitespace
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.26.1
+    rev: v1.26.3
     hooks:
       - id: yamllint
         types:
@@ -18,13 +18,13 @@ repos:
         types:
           - yaml
   - repo: https://github.com/psf/black
-    rev: stable
+    rev: 21.9b0
     hooks:
       - id: black
         name: black
         language_version: python3.9
         entry: black
-        args: [--line-length, "88"]
+        args: [--line-length, "94"]
         types:
           - python
   - repo: https://gitlab.com/pycqa/flake8

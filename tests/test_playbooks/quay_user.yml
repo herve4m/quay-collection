@@ -1,0 +1,75 @@
+---
+- name: Testing the quay_user module
+  hosts: localhost
+  become: false
+  gather_facts: false
+  vars:
+    quay_url: http://localhost:8080
+    token: BQi2UH35DjB1D65zRFQ4FzuhNFkCyJtvO0HMCou7
+
+  tasks:
+    - name: Ensure user lvasquez exists
+      herve4m.quay.quay_user:
+        username: lvasquez
+        email: lvasquez@example.com
+        password: vs9mrD55NP
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure user dwilde exists but account is disabled
+      herve4m.quay.quay_user:
+        username: dwilde
+        enabled: false
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure user jziglar is a superuser but account is disabled
+      herve4m.quay.quay_user:
+        username: jziglar
+        state: present
+        # Only effective after a restart of the Red Hat Quay service.
+        superuser: true
+        enabled: false
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure user jziglar is not a superuser and their account is enabled
+      herve4m.quay.quay_user:
+        username: jziglar
+        state: present
+        # Works because the Red Hat Quay service has not been restarted yet.
+        superuser: false
+        enabled: true
+        password: vs9mrD55NP
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure user jziglar is a superuser
+      herve4m.quay.quay_user:
+        username: jziglar
+        state: present
+        superuser: true
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure the users are removed
+      herve4m.quay.quay_user:
+        username: "{{ item }}"
+        state: absent
+        enabled: false
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+      loop:
+        - lvasquez
+        # Deleting a disabled user account
+        - dwilde
+        # Deleting a superuser account
+        - jziglar
+...

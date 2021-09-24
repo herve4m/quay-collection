@@ -43,7 +43,7 @@ author: Herve Quatremain (@herve4m)
 options:
   username:
     description:
-      - Name of the user to create, remove, or modify.
+      - Name of the user account to create, remove, or modify.
     required: true
     type: str
   email:
@@ -86,6 +86,8 @@ options:
     choices: [absent, present]
 notes:
   - Supports C(check_mode).
+  - The token that you provide in C(quay_token) must have the
+    "Super User Access" permission.
   - You cannot delete or modify superuser accounts.
   - You cannot revoke superuser privileges with this module.
 extends_documentation_fragment: herve4m.quay.auth

@@ -33,6 +33,9 @@ options:
   name:
     description:
       - Name of the organization to create, remove, or modify.
+      - The name must be in lowercase and must not contain white spaces. For
+        compatibility with earlier versions of Docker, the name must be at
+        least four characters long.
     required: true
     type: str
   new_name:

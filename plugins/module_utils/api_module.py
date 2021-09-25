@@ -297,13 +297,15 @@ class APIModule(AnsibleModule):
             msg_fragments.append(detail)
         return ": ".join(msg_fragments)
 
-    def get_object_path(self, endpoint, exit_on_error=True, **kwargs):
+    def get_object_path(self, endpoint, query_params=None, exit_on_error=True, **kwargs):
         """Retrieve a single object from a GET API call.
 
         :param endpoint: API endpoint path. You can add path parameters in that
                          path by enclosing them in braces ``{}``.
                          For example, ``superuser/users/{username}``
         :type endpoint: str
+        :param query_params: The optional query to append to the URL
+        :type query_params: dict
         :param exit_on_error: If ``True`` (the default), exit the module on API
                               error. Otherwise, raise the
                               :py:class:``APIModuleError`` exception.
@@ -322,7 +324,7 @@ class APIModule(AnsibleModule):
         for k in kwargs:
             endpoint = endpoint.replace("{" + k + "}", kwargs[k])
 
-        url = self.build_url(endpoint)
+        url = self.build_url(endpoint, query_params=query_params)
         try:
             response = self.make_request("GET", url)
         except APIModuleError as e:

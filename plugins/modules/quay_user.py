@@ -186,6 +186,10 @@ def main():
     if state == "absent":
         # It seems that only enabled users can be deleted
         if user_details:
+            # Force the superuser flag to False for the API to update the
+            # Quay `config.yaml` configuration file. That only works if a
+            # previous module execution set that flag for the user and the Quay
+            # system has not yet been restarted.
             module.unconditional_update(
                 "user",
                 username,

@@ -32,25 +32,22 @@ author: Herve Quatremain (@herve4m)
 options:
   name:
     description:
-      - Name of the repository to create, remove, or modify.
+      - Name of the repository to create, remove, or modify. The format for the
+        name is C(namespace)/C(shortname). The namespace can be an organization
+        or a personal namespace.
       - The name must be in lowercase and must not contain white spaces.
-    required: true
-    type: str
-  namespace:
-    description:
-      - Name of the organization or the user account that owns the repository.
-      - Quay organizes repositories in namespaces. A namespace can use the name
-        of an organization or the name of a user account.
-      - The full repository name is C(namespace)/C(name).
-      - You must be the owner of the user account to manage its repositories
-        (the token you use in C(quay_token) must belong to that user).
+      - If you omit the namespace part in the name, then the module creates
+        the repository in your personal namespace.
+      - You can manage repositories in your personal namespace, but not in the
+        personal namespace of other users. The token you use in C(quay_token)
+        determines the user account you are using.
     required: true
     type: str
   visibility:
     description:
       - If C(public), then anyone can pull images from the repository.
       - If C(private), then nobody can access the repository and you need to
-        explicitly grant access to users and teams.
+        explicitly grant access to users, robots, and teams.
     type: str
     choices: [public, private]
   description:
@@ -59,23 +56,25 @@ options:
     type: str
   perms:
     description:
-      - User and team permissions to associate with the repository.
+      - User, robot, and team permissions to associate with the repository.
     type: list
     elements: dict
     suboptions:
       type:
         description:
-          - Specifies if the permission is granted for a user or a team.
+          - Specifies the type of the account. Choose C(user) for both user and
+            robot accounts.
         type: str
         choices: [user, team]
         default: user
       name:
         description:
-          - Name of the user account or the team.
+          - Name of the account. The format for robot accounts is
+            C(namespace)+C(shortrobotname).
         type: str
       role:
         description:
-          - Type of permission to grant to the user or the team.
+          - Type of permission to grant.
         type: str
         choices: [read, write, admin]
         default: read
@@ -108,9 +107,7 @@ extends_documentation_fragment: herve4m.quay.auth
 EXAMPLES = r"""
 - name: Ensure repository smallimage exists in the production organization
   herve4m.quay.quay_repository:
-    # Full repository name: production/smallimage
-    name: smallimage
-    namespace: production
+    name: production/smallimage
     visibility: private
     description: |
       # My first repository
@@ -124,15 +121,16 @@ EXAMPLES = r"""
       - name: lvasquez
         type: user
         role: read
+      - name: production+automationrobot
+        type: user
+        role: admin
     state: present
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-- name: Ensure repository bigimage exists in my (lvasquez) namespace
+- name: Ensure repository bigimage exists in my namespace
   herve4m.quay.quay_repository:
-    # Full repository name: lvasquez/bigimage
     name: bigimage
-    namespace: lvasquez
     visibility: public
     perms:
       - name: dwilde
@@ -144,16 +142,14 @@ EXAMPLES = r"""
 
 - name: Ensure repository development/testimg does not exist
   herve4m.quay.quay_repository:
-    name: testimg
-    namespace: development
+    name: development/testimg
     state: absent
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
 - name: Ensure repository has the exact set of permissions
   herve4m.quay.quay_repository:
-    name: smallimage
-    namespace: production
+    name: production/smallimage
     perms:
       - name: operators
         type: team
@@ -163,6 +159,9 @@ EXAMPLES = r"""
         role: read
       - name: developers
         type: team
+        role: read
+      - name: production+auditrobot
+        type: user
         role: read
     append: false
     state: present
@@ -178,7 +177,6 @@ from ..module_utils.api_module import APIModule
 def main():
     argument_spec = dict(
         name=dict(required=True),
-        namespace=dict(required=True),
         visibility=dict(choices=["public", "private"]),
         description=dict(),
         perms=dict(
@@ -198,15 +196,25 @@ def main():
     module = APIModule(argument_spec=argument_spec, supports_check_mode=True)
 
     # Extract our parameters
-    name = module.params.get("name")
-    namespace = module.params.get("namespace")
+    name = module.params.get("name").strip("/")
     visibility = module.params.get("visibility")
     description = module.params.get("description")
     perms = module.params.get("perms")
     append = module.params.get("append")
     state = module.params.get("state")
 
-    full_repo_name = "{namespace}/{repository}".format(namespace=namespace, repository=name)
+    my_name = module.who_am_i()
+    try:
+        namespace, repo_shortname = name.split("/", 1)
+    except ValueError:
+        # No namespace part in the repository name. Therefore, the repository
+        # is in the user's personal namespace
+        namespace = my_name
+        repo_shortname = name
+
+    full_repo_name = "{namespace}/{repository}".format(
+        namespace=namespace, repository=repo_shortname
+    )
 
     # Get the repository details
     #
@@ -229,7 +237,9 @@ def main():
     #   "can_admin": true
     # }
     repo_details = module.get_object_path(
-        "repository/{full_repo_name}", full_repo_name=full_repo_name
+        "repository/{full_repo_name}",
+        ok_error_codes=[404, 403],
+        full_repo_name=full_repo_name,
     )
 
     # Remove the repository
@@ -246,17 +256,28 @@ def main():
     #
     # GET /api/v1/organization/{orgname}
     # GET /api/v1/users/{username}
-    if not module.get_object_path(
-        "organization/{orgname}", orgname=namespace
-    ) and not module.get_object_path("users/{username}", username=namespace):
-        module.fail_json(
-            msg="The {namespace} namespace does not exist.".format(namespace=namespace)
-        )
+    if not module.get_object_path("organization/{orgname}", orgname=namespace):
+        if module.get_object_path("users/{username}", username=namespace):
+            # Make sure that the current user is the owner of that namespace
+            if namespace != my_name:
+                module.fail_json(
+                    msg="You ({user}) are not the owner of {namespace}'s namespace.".format(
+                        user=my_name, namespace=namespace
+                    )
+                )
+        else:
+            module.fail_json(
+                msg="The {namespace} namespace does not exist.".format(namespace=namespace)
+            )
 
     changed = False
     if not repo_details:
         # Create the repository
-        new_fields = {"namespace": namespace, "repository": name, "repo_kind": "image"}
+        new_fields = {
+            "namespace": namespace,
+            "repository": repo_shortname,
+            "repo_kind": "image",
+        }
         new_fields["description"] = description if description else ""
         new_fields["visibility"] = visibility if visibility else "private"
         module.create("repository", full_repo_name, "repository", new_fields, auto_exit=False)
@@ -333,6 +354,18 @@ def main():
     else:
         to_delete = current_team_perms - new_team_perms
 
+    # Checking that all the teams to add exist
+    teams_not_found = []
+    for team in to_add:
+        if module.team_exists(namespace, team[0]) is None:
+            teams_not_found.append(team[0])
+    if teams_not_found:
+        module.fail_json(
+            msg=(
+                "At least one team to associate to the repository does not exist: {teams}."
+            ).format(teams=", ".join(teams_not_found))
+        )
+
     for perm in to_delete:
         module.delete(
             True,
@@ -404,6 +437,18 @@ def main():
         to_delete = set()
     else:
         to_delete = current_user_perms - new_user_perms
+
+    # Checking that all the user account to add exist
+    accounts_not_found = []
+    for member in to_add:
+        if module.account_exists(member[0]) is None:
+            accounts_not_found.append(member[0])
+    if accounts_not_found:
+        module.fail_json(
+            msg="At least one user to add as team member does not exist: {users}.".format(
+                users=", ".join(accounts_not_found)
+            )
+        )
 
     for perm in to_delete:
         module.delete(

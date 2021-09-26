@@ -34,6 +34,18 @@
         - ansibletestuser5
         - ansibletestuser6
 
+    # Supporting robot accounts
+    - name: Ensure the robot accounts exist
+      herve4m.quay.quay_robot:
+        name: "{{ item }}"
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+      loop:
+        - ansibletestorg+ansibletestrobot1
+        - ansibletestorg+ansibletestrobot2
+
     # Supporting team
     - name: Ensure teams exist
       herve4m.quay.quay_team:
@@ -50,8 +62,7 @@
 
     - name: Ensure repository ansibletestrepo1 exists
       herve4m.quay.quay_repository:
-        name: ansibletestrepo1
-        namespace: ansibletestorg
+        name: ansibletestorg/ansibletestrepo1
         visibility: private
         description: |
           # My first repository
@@ -72,8 +83,7 @@
 
     - name: Ensure repository ansibletestrepo1 is updated (no change)
       herve4m.quay.quay_repository:
-        name: ansibletestrepo1
-        namespace: ansibletestorg
+        name: ansibletestorg/ansibletestrepo1
         visibility: private
         description: |
           # My first repository
@@ -94,8 +104,7 @@
 
     - name: Ensure repository ansibletestrepo2 exists
       herve4m.quay.quay_repository:
-        name: ansibletestrepo2
-        namespace: ansibletestorg
+        name: ansibletestorg/ansibletestrepo2
         visibility: public
         description: Test description
         perms:
@@ -109,14 +118,16 @@
 
     - name: Ensure repository ansibletestrepo2 is updated
       herve4m.quay.quay_repository:
-        name: ansibletestrepo2
-        namespace: ansibletestorg
+        name: ansibletestorg/ansibletestrepo2
         visibility: public
         description: ""
         perms:
           - name: ansibletestuser3
             type: user
             role: read
+          - name: ansibletestorg+ansibletestrobot1
+            type: user
+            role: admin
         append: false
         state: present
         quay_host: "{{ quay_url }}"
@@ -125,8 +136,7 @@
 
     - name: Ensure repository ansibletestrepo3 exists (in admin)
       herve4m.quay.quay_repository:
-        name: ansibletestrepo2
-        namespace: admin
+        name: ansibletestrepo3
         visibility: public
         description: "In user namespace"
         perms:
@@ -138,10 +148,9 @@
         quay_token: "{{ token }}"
         validate_certs: false
 
-    - name: Ensure repository ansibletestrepo3 is removed (in admin)
+    - name: Ensure repository ansibletestrepo3 is removed (from admin)
       herve4m.quay.quay_repository:
-        name: ansibletestrepo2
-        namespace: admin
+        name: ansibletestrepo3
         state: absent
         quay_host: "{{ quay_url }}"
         quay_token: "{{ token }}"
@@ -149,8 +158,7 @@
 
     - name: Ensure non-existing repository is deleted (no change)
       herve4m.quay.quay_repository:
-        name: nonexistingrepo
-        namespace: ansibletestorg
+        name: nonexistingorg/nonexistingrepo
         state: absent
         quay_host: "{{ quay_url }}"
         quay_token: "{{ token }}"
@@ -158,8 +166,7 @@
 
     - name: Ensure repositories are removed
       herve4m.quay.quay_repository:
-        name: "{{ item }}"
-        namespace: ansibletestorg
+        name: "ansibletestorg/{{ item }}"
         state: absent
         quay_host: "{{ quay_url }}"
         quay_token: "{{ token }}"
@@ -195,6 +202,17 @@
         - ansibletestuser4
         - ansibletestuser5
         - ansibletestuser6
+
+    - name: Ensure the robot accounts are removed
+      herve4m.quay.quay_robot:
+        name: "{{ item }}"
+        state: absent
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+      loop:
+        - ansibletestorg+ansibletestrobot1
+        - ansibletestorg+ansibletestrobot2
 
     - name: Ensure the organization is removed
       herve4m.quay.quay_organization:

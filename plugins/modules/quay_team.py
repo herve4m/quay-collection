@@ -53,7 +53,8 @@ options:
     type: str
   members:
     description:
-      - List of the users in the team.
+      - List of the user or robot accounts in the team. Use the syntax
+        C(organization)+C(robotshortname) for robot accounts.
     type: list
     elements: str
   append:
@@ -95,6 +96,7 @@ EXAMPLES = r"""
     members:
       - lvasquez
       - dwilde
+      - operators+automationrobot
     append: false
     state: present
     quay_host: https://quay.example.com
@@ -163,7 +165,7 @@ def main():
     #
     # GET /api/v1/organization/{orgname}
     # {
-    #   "name": "myorg",
+    #   "name": "production",
     #   "email": "f87e5706-54ad-4c47-ab5c-81867468e313",
     #   "avatar": {
     #     "name": "myorg",
@@ -206,7 +208,7 @@ def main():
     #     },
     #     "teamxyz": {
     #       "name": "teamxyz",
-    #       "description": "My super description",
+    #       "description": "My team description",
     #       "role": "member",
     #       "avatar": {
     #         "name": "teamxyz",
@@ -316,6 +318,18 @@ def main():
     #         "kind": "user"
     #       },
     #       "invited": false
+    #     },
+    #     {
+    #       "name": "production+automation",
+    #       "kind": "user",
+    #       "is_robot": true,
+    #       "avatar": {
+    #         "name": "production+automation",
+    #         "hash": "1543...a801",
+    #         "color": "#5254a3",
+    #         "kind": "robot"
+    #       },
+    #       "invited": false
     #     }
     #   ],
     #   "can_edit": true
@@ -340,6 +354,18 @@ def main():
         to_delete = set()
     else:
         to_delete = current_members - new_members
+
+    # Checking that all the user account to add exist
+    accounts_not_found = []
+    for member in to_add:
+        if module.account_exists(member) is None:
+            accounts_not_found.append(member)
+    if accounts_not_found:
+        module.fail_json(
+            msg="At least one user to add as team member does not exist: {users}.".format(
+                users=", ".join(accounts_not_found)
+            )
+        )
 
     for member in to_add:
         module.unconditional_update(

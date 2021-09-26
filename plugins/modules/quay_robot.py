@@ -18,7 +18,7 @@
 # Notes:
 #  - You cannot rename robot accounts.
 #  - You cannot update the description of robot accounts.
-#  - The current user can create/delete robot accounts in their personnal
+#  - The current user can create/delete robot accounts in their personal
 #    namespace, but not in the namespace of other users.
 
 from __future__ import absolute_import, division, print_function
@@ -39,12 +39,14 @@ options:
     description:
       - Name of the robot account to create or remove, in the format
         C(namespace)+C(shortname). The namespace can be an organization or a
-        personnal namespace.
+        personal namespace.
       - The short name (the part after the C(+) sign) must be in lowercase,
         must not contain white spaces, must not start by a digit, and must be
         at least two characters long.
-      - You can create and delete robot accounts in your personnal namespace,
-        but not in the personnal namespace of other users. The token you use in
+      - If you omit the namespace part in the name, then the module creates
+        the robot account in your personal namespace.
+      - You can create and delete robot accounts in your personal namespace,
+        but not in the personal namespace of other users. The token you use in
         C(quay_token) determines the user account you are using.
     required: true
     type: str
@@ -79,9 +81,9 @@ EXAMPLES = r"""
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-- name: Ensure robot account lvasquez+myrobot exists in my namespace
+- name: Ensure robot account myrobot exists in my namespace
   herve4m.quay.quay_robot:
-    name: lvasquez+myrobot
+    name: myrobot
     state: present
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
@@ -114,17 +116,16 @@ def main():
     description = module.params.get("description")
     state = module.params.get("state")
 
+    my_name = module.who_am_i()
     try:
         namespace, robot_shortname = name.split("+", 1)
     except ValueError:
-        module.fail_json(
-            msg=(
-                "{name}: wrong format for the robot account name:"
-                " `name' must be `namespace+robotshortname'."
-            ).format(name=name)
-        )
+        # No namespace part in the robot account name. Therefore, the robot
+        # account is in the user's personal namespace
+        namespace = my_name
+        robot_shortname = name
 
-    # Check whether namespace exists (organization or user account).
+    # Check whether the namespace exists (organization or user account).
     #
     # GET /api/v1/organization/{orgname}
     # GET /api/v1/users/{username}
@@ -134,12 +135,10 @@ def main():
         )
     elif module.get_object_path("users/{username}", username=namespace):
         # Make sure that the current user is the owner of that namespace
-        user = module.get_object_path("user/")
-        myname = user.get("username")
-        if namespace != myname:
+        if namespace != my_name:
             module.fail_json(
-                msg="You, {user}, are not the owner of the {namespace} namespace.".format(
-                    user=myname, namespace=namespace
+                msg="You ({user}) are not the owner of {namespace}'s namespace.".format(
+                    user=my_name, namespace=namespace
                 )
             )
         path_url = "user/robots/{robot_shortname}".format(robot_shortname=robot_shortname)

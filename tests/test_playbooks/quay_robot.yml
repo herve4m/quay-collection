@@ -50,6 +50,24 @@
         quay_token: "{{ token }}"
         validate_certs: false
 
+    - name: Ensure robot account ansibletestrobot4 exists in my namespace
+      herve4m.quay.quay_robot:
+        name: ansibletestrobot4
+        description: My robot
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure robot account ansibletestrobot4 is removed from my namespace
+      herve4m.quay.quay_robot:
+        name: ansibletestrobot4
+        description: My robot
+        state: absent
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
     - name: Ensure robot accounts are removed
       herve4m.quay.quay_robot:
         name: "{{ item }}"

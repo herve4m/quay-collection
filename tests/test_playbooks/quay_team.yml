@@ -34,6 +34,18 @@
         - ansibletestuser5
         - ansibletestuser6
 
+    # Supporting robot accounts
+    - name: Ensure the robot accounts exist
+      herve4m.quay.quay_robot:
+        name: "{{ item }}"
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+      loop:
+        - ansibletestorg+ansibletestrobot1
+        - ansibletestorg+ansibletestrobot2
+
     - name: Ensure team ansibletestteam1 exists
       herve4m.quay.quay_team:
         name: ansibletestteam1
@@ -56,6 +68,7 @@
         members:
           - ansibletestuser1
           - ansibletestuser2
+          - ansibletestorg+ansibletestrobot1
         state: present
         quay_host: "{{ quay_url }}"
         quay_token: "{{ token }}"
@@ -69,6 +82,7 @@
         members:
           - ansibletestuser4
           - ansibletestuser3
+          - ansibletestorg+ansibletestrobot2
         append: false
         state: present
         quay_host: "{{ quay_url }}"
@@ -142,6 +156,17 @@
         - ansibletestuser4
         - ansibletestuser5
         - ansibletestuser6
+
+    - name: Ensure the robot accounts are removed
+      herve4m.quay.quay_robot:
+        name: "{{ item }}"
+        state: absent
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+      loop:
+        - ansibletestorg+ansibletestrobot1
+        - ansibletestorg+ansibletestrobot2
 
     - name: Ensure the organization is removed
       herve4m.quay.quay_organization:

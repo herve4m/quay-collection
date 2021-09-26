@@ -89,6 +89,9 @@ class APIModule(AnsibleModule):
             validate_certs=self.params.get("validate_certs"), headers=headers
         )
 
+        # Cache returns from API calls that get organization details
+        self.cache_org = {}
+
     def build_url(self, endpoint, query_params=None):
         """Return a URL for the given endpoint.
 
@@ -114,13 +117,16 @@ class APIModule(AnsibleModule):
             url = url._replace(query=urlencode(query_params))
         return url
 
-    def make_request(self, method, url, **kwargs):
+    def make_request(self, method, url, ok_error_codes=[404], **kwargs):
         """Perform an API call and return the retrieved data.
 
         :param method: GET, PUT, POST, or DELETE
         :type method: str
         :param url: URL to the API endpoint
         :type url: :py:class:``urllib.parse.ParseResult``
+        :param ok_error_codes: HTTP error codes that are acceptable (not errors)
+                               when returned by the API.
+        :type ok_error_codes: list
         :param kwargs: Additionnal parameter to pass to the API (data
                        for PUT and POST requests, ...)
 
@@ -154,8 +160,10 @@ class APIModule(AnsibleModule):
                 )
             )
         except HTTPError as he:
+            if he.code in ok_error_codes:
+                response = he
             # Sanity check: Did the server send back some kind of internal error?
-            if he.code >= 500:
+            elif he.code >= 500:
                 raise APIModuleError(
                     (
                         "The host sent back a server error: {path}: {error}."
@@ -181,13 +189,6 @@ class APIModule(AnsibleModule):
             # Sanity check: Did we get a 404 response?
             # Requests with primary keys will return a 404 if there is no
             # response, and we want to consistently trap these.
-            elif he.code == 404:
-                response = he
-            # Sanity check: Did we get a 405 response?
-            # A 405 means we used a method that isn't allowed. Usually this is
-            # a bad request, but it requires special treatment because the API
-            # sends it as a logic error in a few situations (e.g. trying to
-            # cancel a job that isn't running).
             elif he.code == 405:
                 raise APIModuleError(
                     "Cannot make a {method} request to this endpoint {path}.".format(
@@ -326,7 +327,7 @@ class APIModule(AnsibleModule):
 
         url = self.build_url(endpoint, query_params=query_params)
         try:
-            response = self.make_request("GET", url)
+            response = self.make_request("GET", url, ok_error_codes=ok_error_codes)
         except APIModuleError as e:
             if exit_on_error:
                 self.fail_json(msg=str(e))
@@ -706,3 +707,166 @@ class APIModule(AnsibleModule):
         if auto_exit:
             self.exit_json(changed=True)
         return True
+
+    def who_am_i(self, exit_on_error=True):
+        """Return the current user name.
+
+        The user account used to access the API is defined by the token (who
+        generated the token).
+
+        :param exit_on_error: If ``True`` (the default), exit the module on API
+                              error. Otherwise, raise the
+                              :py:class:``APIModuleError`` exception.
+        :type exit_on_error: bool
+
+        :return: The name of the current user.
+        :rtype: str
+        """
+        user = self.get_object_path("user/", exit_on_error=exit_on_error)
+        return user.get("username")
+
+    def account_exists(self, account_name, exit_on_error=True):
+        """Search for the given user account (user or robot).
+
+        :param account_name: The account name to look for.
+        :type account_name: str
+        :param exit_on_error: If ``True`` (the default), exit the module on API
+                              error. Otherwise, raise the
+                              :py:class:``APIModuleError`` exception.
+        :type exit_on_error: bool
+
+        :return: The user description or None if the user account cannot be
+                 found. The returned dictionnary includes the ``kind`` which
+                indicates the type of the account (``robot` or ``user``)
+        :rtype: dict or None
+        """
+        # Robot account
+        try:
+            namespace, robot_shortname = account_name.split("+", 1)
+        except ValueError:
+            pass
+        else:
+            # Checking if it is an organization robot account
+            robot = self.get_object_path(
+                "organization/{orgname}/robots/{robot_shortname}",
+                ok_error_codes=[400, 404],
+                exit_on_error=exit_on_error,
+                orgname=namespace,
+                robot_shortname=robot_shortname,
+            )
+            if robot:
+                robot["kind"] = "robot"
+                return robot
+            # Checking if it is a robot account for the current user
+            if self.who_am_i(exit_on_error=exit_on_error) != namespace:
+                return None
+            robot = self.get_object_path(
+                "user/robots/{robot_shortname}",
+                ok_error_codes=[400, 404],
+                exit_on_error=exit_on_error,
+                robot_shortname=robot_shortname,
+            )
+            if robot:
+                robot["kind"] = "robot"
+                return robot
+            return None
+
+        # Robot account for the current user (no prefix `<namespace>+' in the
+        # given name)
+        robot = self.get_object_path(
+            "user/robots/{robot_shortname}",
+            ok_error_codes=[400, 404],
+            exit_on_error=exit_on_error,
+            robot_shortname=account_name,
+        )
+        if robot:
+            robot["kind"] = "robot"
+            return robot
+
+        # User account
+        user = self.get_object_path(
+            "users/{user}", exit_on_error=exit_on_error, user=account_name
+        )
+        return user if user else None
+
+    def team_exists(self, organization, team_name, exit_on_error=True):
+        """Search for the given team.
+
+        :param organization: The name of the organization to look for the team.
+        :type organization: str
+        :param team_name: The name of the team to look for.
+        :type team_name: str
+        :param exit_on_error: If ``True`` (the default), exit the module on API
+                              error. Otherwise, raise the
+                              :py:class:``APIModuleError`` exception.
+        :type exit_on_error: bool
+
+        :return: The team description or None if the team cannot be found.
+        :rtype: dict or None
+        """
+        if organization in self.cache_org:
+            org_details = self.cache_org[organization]
+        else:
+            # Get the organization details from the given name.
+            #
+            # GET /api/v1/organization/{orgname}
+            # {
+            #   "name": "production",
+            #   "email": "f87e5706-54ad-4c47-ab5c-81867468e313",
+            #   "avatar": {
+            #     "name": "myorg",
+            #     "hash": "66bf...1252",
+            #     "color": "#d62728",
+            #     "kind": "user"
+            #   },
+            #   "is_admin": true,
+            #   "is_member": true,
+            #   "teams": {
+            #     "owners": {
+            #       "name": "owners",
+            #       "description": "",
+            #       "role": "admin",
+            #       "avatar": {
+            #         "name": "owners",
+            #         "hash": "6f0e...8d90",
+            #         "color": "#c7c7c7",
+            #         "kind": "team"
+            #       },
+            #       "can_view": true,
+            #       "repo_count": 0,
+            #       "member_count": 1,
+            #       "is_synced": false
+            #     },
+            #     "teamxyz": {
+            #       "name": "teamxyz",
+            #       "description": "My team description",
+            #       "role": "member",
+            #       "avatar": {
+            #         "name": "teamxyz",
+            #         "hash": "bf1e...1414",
+            #         "color": "#a55194",
+            #         "kind": "team"
+            #       },
+            #       "can_view": true,
+            #       "repo_count": 0,
+            #       "member_count": 0,
+            #       "is_synced": false
+            #     }
+            #   },
+            #   "ordered_teams": [
+            #     "owners",
+            #     "team1",
+            #     "teamxyz"
+            #   ],
+            #   "invoice_email": false,
+            #   "invoice_email_address": null,
+            #   "tag_expiration_s": 86400,
+            #   "is_free_account": true
+            # }
+            org_details = self.get_object_path(
+                "organization/{orgname}", exit_on_error=exit_on_error, orgname=organization
+            )
+            self.cache_org[organization] = org_details
+        if not org_details:
+            return None
+        return org_details["teams"].get(team_name, None) if "teams" in org_details else None

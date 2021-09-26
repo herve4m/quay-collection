@@ -1,0 +1,71 @@
+---
+- name: Testing the quay_robot module
+  hosts: localhost
+  become: false
+  gather_facts: false
+  vars:
+    quay_url: http://localhost:8080
+    token: wQwO9gt0iv9eq1vjpc7POcMbKALhlKrF8Uw3rZGO
+
+  tasks:
+    # Supporting organization
+    - name: Ensure organization ansibletestorg exists
+      herve4m.quay.quay_organization:
+        name: ansibletestorg
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure robot account ansibletestrobot1 exists
+      herve4m.quay.quay_robot:
+        name: ansibletestorg+ansibletestrobot1
+        description: Test robot account in ansibletestorg
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure robot account ansibletestrobot1 exists (no change)
+      herve4m.quay.quay_robot:
+        name: ansibletestorg+ansibletestrobot1
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure robot account ansibletestrobot2 exists
+      herve4m.quay.quay_robot:
+        name: ansibletestorg+ansibletestrobot2
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure robot account ansibletestrobot3 does not exist (no change)
+      herve4m.quay.quay_robot:
+        name: ansibletestorg+ansibletestrobot3
+        state: absent
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure robot accounts are removed
+      herve4m.quay.quay_robot:
+        name: "{{ item }}"
+        state: absent
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+      loop:
+        - ansibletestorg+ansibletestrobot1
+        - ansibletestorg+ansibletestrobot2
+
+    - name: Ensure the organization is removed
+      herve4m.quay.quay_organization:
+        name: ansibletestorg
+        state: absent
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+...

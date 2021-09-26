@@ -183,11 +183,6 @@ class APIModule(AnsibleModule):
             # response, and we want to consistently trap these.
             elif he.code == 404:
                 response = he
-                # raise APIModuleError(
-                #     "The requested object could not be found at {path}.".format(
-                #         path=url.path
-                #     )
-                # )
             # Sanity check: Did we get a 405 response?
             # A 405 means we used a method that isn't allowed. Usually this is
             # a bad request, but it requires special treatment because the API
@@ -297,7 +292,9 @@ class APIModule(AnsibleModule):
             msg_fragments.append(detail)
         return ": ".join(msg_fragments)
 
-    def get_object_path(self, endpoint, query_params=None, exit_on_error=True, **kwargs):
+    def get_object_path(
+        self, endpoint, query_params=None, exit_on_error=True, ok_error_codes=[404], **kwargs
+    ):
         """Retrieve a single object from a GET API call.
 
         :param endpoint: API endpoint path. You can add path parameters in that
@@ -310,6 +307,9 @@ class APIModule(AnsibleModule):
                               error. Otherwise, raise the
                               :py:class:``APIModuleError`` exception.
         :type exit_on_error: bool
+        :param ok_error_codes: HTTP error codes that are acceptable (not errors)
+                               when returned by the API.
+        :type ok_error_codes: list
         :param kwargs: Dictionnary used to substitute parameters in the given
                        ``endpoint`` string. For example ``{"username":"jdoe"}``
         :type kwargs: dict
@@ -333,7 +333,7 @@ class APIModule(AnsibleModule):
             else:
                 raise
 
-        if response["status_code"] == 404:
+        if response["status_code"] in ok_error_codes:
             return None
 
         if response["status_code"] != 200:

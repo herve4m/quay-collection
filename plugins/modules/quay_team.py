@@ -96,7 +96,7 @@ EXAMPLES = r"""
     members:
       - lvasquez
       - dwilde
-      - operators+automationrobot
+      - production+automationrobot
     append: false
     state: present
     quay_host: https://quay.example.com

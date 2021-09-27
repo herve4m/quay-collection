@@ -787,7 +787,10 @@ class APIModule(AnsibleModule):
         user = self.get_object_path(
             "users/{user}", exit_on_error=exit_on_error, user=account_name
         )
-        return user if user else None
+        if user:
+            user["kind"] = "user"
+            return user
+        return None
 
     def team_exists(self, organization, team_name, exit_on_error=True):
         """Search for the given team.

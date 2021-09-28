@@ -166,64 +166,9 @@ def main():
     creator = module.params.get("creator")
     state = module.params.get("state")
 
-    # Get the organization details from the given name.
-    #
-    # GET /api/v1/organization/{orgname}
-    # {
-    #   "name": "production",
-    #   "email": "f87e5706-54ad-4c47-ab5c-81867468e313",
-    #   "avatar": {
-    #     "name": "myorg",
-    #     "hash": "66bf...1252",
-    #     "color": "#d62728",
-    #     "kind": "user"
-    #   },
-    #   "is_admin": true,
-    #   "is_member": true,
-    #   "teams": {
-    #     "owners": {
-    #       "name": "owners",
-    #       "description": "",
-    #       "role": "admin",
-    #       "avatar": {
-    #         "name": "owners",
-    #         "hash": "6f0e...8d90",
-    #         "color": "#c7c7c7",
-    #         "kind": "team"
-    #       },
-    #       "can_view": true,
-    #       "repo_count": 0,
-    #       "member_count": 1,
-    #       "is_synced": false
-    #     },
-    #     "teamxyz": {
-    #       "name": "teamxyz",
-    #       "description": "My team description",
-    #       "role": "member",
-    #       "avatar": {
-    #         "name": "teamxyz",
-    #         "hash": "bf1e...1414",
-    #         "color": "#a55194",
-    #         "kind": "team"
-    #       },
-    #       "can_view": true,
-    #       "repo_count": 0,
-    #       "member_count": 0,
-    #       "is_synced": false
-    #     }
-    #   },
-    #   "ordered_teams": [
-    #     "owners",
-    #     "team1",
-    #     "teamxyz"
-    #   ],
-    #   "invoice_email": false,
-    #   "invoice_email_address": null,
-    #   "tag_expiration_s": 86400,
-    #   "is_free_account": true
-    # }
-    org_details = module.get_object_path("organization/{orgname}", orgname=organization)
-    if not org_details:
+    if not module.get_organization(organization):
+        if state == "absent":
+            module.exit_json(changed=False)
         module.fail_json(
             msg="The {orgname} organization does not exist.".format(orgname=organization)
         )
@@ -342,23 +287,23 @@ def main():
 
     # Verify that the users and teams exist
     if kind == "user":
-        if not module.account_exists(name):
+        if not module.get_account(name):
             module.fail_json(
                 msg="The {user} user or robot account does not exist.".format(user=name)
             )
-    elif not module.team_exists(organization, name):
+    elif not module.get_team(organization, name):
         module.fail_json(
             msg="The {team} team does not exist in the {orgname} organization.".format(
                 team=name, orgname=organization
             )
         )
     if creator:
-        user_details = module.account_exists(creator)
+        user_details = module.get_account(creator)
         if not user_details:
             module.fail_json(
                 msg="The {user} user account does not exist.".format(user=creator)
             )
-        if user_details.get("kind") != "user":
+        if user_details.get("is_robot"):
             module.fail_json(
                 msg=(
                     "Robot accounts cannot be used for `creator':"

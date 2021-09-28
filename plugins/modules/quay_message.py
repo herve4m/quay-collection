@@ -65,7 +65,7 @@ options:
         U(https://docs.python.org/3/library/re.html).
       - Mutually exclusive with C(search_string).
     type: str
-    aliases: [ regex ]
+    aliases: [regex]
   search_string:
     description:
       - The literal string to look for in the existing messages. This does not

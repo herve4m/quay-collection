@@ -125,27 +125,30 @@ def main():
         namespace = my_name
         robot_shortname = name
 
-    # Check whether the namespace exists (organization or user account).
-    #
-    # GET /api/v1/organization/{orgname}
-    # GET /api/v1/users/{username}
-    if module.get_object_path("organization/{orgname}", orgname=namespace):
-        path_url = "organization/{orgname}/robots/{robot_shortname}".format(
-            orgname=namespace, robot_shortname=robot_shortname
-        )
-    elif module.get_object_path("users/{username}", username=namespace):
-        # Make sure that the current user is the owner of that namespace
-        if namespace != my_name:
-            module.fail_json(
-                msg="You ({user}) are not the owner of {namespace}'s namespace.".format(
-                    user=my_name, namespace=namespace
-                )
-            )
-        path_url = "user/robots/{robot_shortname}".format(robot_shortname=robot_shortname)
-    else:
+    # Check whether namespace exists (organization or user account)
+    namespace_details = module.get_namespace(namespace)
+    if not namespace_details:
         module.fail_json(
             msg="The {namespace} namespace does not exist.".format(namespace=namespace)
         )
+    # Make sure that the current user is the owner of that namespace
+    if (
+        not namespace_details.get("is_organization")
+        and namespace_details.get("name") != my_name
+    ):
+        module.fail_json(
+            msg="You ({user}) are not the owner of {namespace}'s namespace.".format(
+                user=my_name, namespace=namespace
+            )
+        )
+
+    # Build the API URL to access the robot object.
+    if namespace_details.get("is_organization"):
+        path_url = "organization/{orgname}/robots/{robot_shortname}".format(
+            orgname=namespace, robot_shortname=robot_shortname
+        )
+    else:
+        path_url = "user/robots/{robot_shortname}".format(robot_shortname=robot_shortname)
 
     # Get the robot account details.
     #

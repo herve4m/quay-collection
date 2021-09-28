@@ -232,8 +232,10 @@ def main():
     #   "tag_expiration_s": 86400,
     #   "is_free_account": true
     # }
-    org_details = module.get_object_path("organization/{orgname}", orgname=organization)
+    org_details = module.get_organization(organization)
     if not org_details:
+        if state == "absent":
+            module.exit_json(changed=False)
         module.fail_json(
             msg="The {orgname} organization does not exist.".format(orgname=organization)
         )
@@ -358,7 +360,7 @@ def main():
     # Checking that all the user account to add exist
     accounts_not_found = []
     for member in to_add:
-        if module.account_exists(member) is None:
+        if module.get_account(member) is None:
             accounts_not_found.append(member)
     if accounts_not_found:
         module.fail_json(

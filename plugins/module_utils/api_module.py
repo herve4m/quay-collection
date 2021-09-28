@@ -462,6 +462,7 @@ class APIModule(AnsibleModule):
         new_item,
         auto_exit=True,
         exit_on_error=True,
+        ok_error_codes=[200, 201],
         **kwargs
     ):
         """Create an object.
@@ -492,18 +493,23 @@ class APIModule(AnsibleModule):
 
         :raises APIModuleError: An API error occured. That exception is only
                                 raised when ``exit_on_error`` is ``False``.
+
+        :return: The data returned by the API call.
+        :rtype: dict
         """
         if self.check_mode:
             if auto_exit:
                 self.exit_json(changed=True)
-            return
+            return {}
 
         for k in kwargs:
             endpoint = endpoint.replace("{" + k + "}", kwargs[k])
 
         url = self.build_url(endpoint)
         try:
-            response = self.make_request("POST", url, data=new_item)
+            response = self.make_request(
+                "POST", url, ok_error_codes=ok_error_codes, data=new_item
+            )
         except APIModuleError as e:
             if exit_on_error:
                 self.fail_json(msg=str(e))
@@ -511,10 +517,10 @@ class APIModule(AnsibleModule):
                 raise
 
         # Success
-        if response["status_code"] in [200, 201]:
+        if response["status_code"] in ok_error_codes:
             if auto_exit:
                 self.exit_json(changed=True)
-            return
+            return response.get("json", {})
 
         # Failure
         error_msg = self.get_error_message(response)
@@ -725,7 +731,7 @@ class APIModule(AnsibleModule):
         user = self.get_object_path("user/", exit_on_error=exit_on_error)
         return user.get("username")
 
-    def account_exists(self, account_name, exit_on_error=True):
+    def get_account(self, account_name, exit_on_error=True):
         """Search for the given user account (user or robot).
 
         :param account_name: The account name to look for.
@@ -736,8 +742,9 @@ class APIModule(AnsibleModule):
         :type exit_on_error: bool
 
         :return: The user description or None if the user account cannot be
-                 found. The returned dictionnary includes the ``kind`` which
-                indicates the type of the account (``robot` or ``user``)
+                 found. The returned dictionnary includes the ``is_robot`` key
+                 which indicates if the account is a robot account (``True``)
+                 or a user account (``False``).
         :rtype: dict or None
         """
         # Robot account
@@ -755,7 +762,8 @@ class APIModule(AnsibleModule):
                 robot_shortname=robot_shortname,
             )
             if robot:
-                robot["kind"] = "robot"
+                robot["is_organization"] = False
+                robot["is_robot"] = True
                 return robot
             # Checking if it is a robot account for the current user
             if self.who_am_i(exit_on_error=exit_on_error) != namespace:
@@ -767,7 +775,8 @@ class APIModule(AnsibleModule):
                 robot_shortname=robot_shortname,
             )
             if robot:
-                robot["kind"] = "robot"
+                robot["is_organization"] = False
+                robot["is_robot"] = True
                 return robot
             return None
 
@@ -779,20 +788,23 @@ class APIModule(AnsibleModule):
             exit_on_error=exit_on_error,
             robot_shortname=account_name,
         )
-        if robot:
-            robot["kind"] = "robot"
+        if isinstance(robot, dict) and robot:
+            robot["is_organization"] = False
+            robot["is_robot"] = True
             return robot
 
         # User account
         user = self.get_object_path(
             "users/{user}", exit_on_error=exit_on_error, user=account_name
         )
-        if user:
-            user["kind"] = "user"
+        if isinstance(user, dict) and user:
+            user["name"] = user.get("username")
+            user["is_organization"] = False
+            user["is_robot"] = False
             return user
         return None
 
-    def team_exists(self, organization, team_name, exit_on_error=True):
+    def get_team(self, organization, team_name, exit_on_error=True):
         """Search for the given team.
 
         :param organization: The name of the organization to look for the team.
@@ -807,69 +819,117 @@ class APIModule(AnsibleModule):
         :return: The team description or None if the team cannot be found.
         :rtype: dict or None
         """
-        if organization in self.cache_org:
-            org_details = self.cache_org[organization]
-        else:
-            # Get the organization details from the given name.
-            #
-            # GET /api/v1/organization/{orgname}
-            # {
-            #   "name": "production",
-            #   "email": "f87e5706-54ad-4c47-ab5c-81867468e313",
-            #   "avatar": {
-            #     "name": "myorg",
-            #     "hash": "66bf...1252",
-            #     "color": "#d62728",
-            #     "kind": "user"
-            #   },
-            #   "is_admin": true,
-            #   "is_member": true,
-            #   "teams": {
-            #     "owners": {
-            #       "name": "owners",
-            #       "description": "",
-            #       "role": "admin",
-            #       "avatar": {
-            #         "name": "owners",
-            #         "hash": "6f0e...8d90",
-            #         "color": "#c7c7c7",
-            #         "kind": "team"
-            #       },
-            #       "can_view": true,
-            #       "repo_count": 0,
-            #       "member_count": 1,
-            #       "is_synced": false
-            #     },
-            #     "teamxyz": {
-            #       "name": "teamxyz",
-            #       "description": "My team description",
-            #       "role": "member",
-            #       "avatar": {
-            #         "name": "teamxyz",
-            #         "hash": "bf1e...1414",
-            #         "color": "#a55194",
-            #         "kind": "team"
-            #       },
-            #       "can_view": true,
-            #       "repo_count": 0,
-            #       "member_count": 0,
-            #       "is_synced": false
-            #     }
-            #   },
-            #   "ordered_teams": [
-            #     "owners",
-            #     "team1",
-            #     "teamxyz"
-            #   ],
-            #   "invoice_email": false,
-            #   "invoice_email_address": null,
-            #   "tag_expiration_s": 86400,
-            #   "is_free_account": true
-            # }
-            org_details = self.get_object_path(
-                "organization/{orgname}", exit_on_error=exit_on_error, orgname=organization
-            )
-            self.cache_org[organization] = org_details
+        org_details = self.get_organization(organization, exit_on_error=exit_on_error)
         if not org_details:
             return None
         return org_details["teams"].get(team_name, None) if "teams" in org_details else None
+
+    def get_organization(self, organization, exit_on_error=True):
+        """Search for the given organization.
+
+        :param organization: The name of the organization to look for.
+        :type organization: str
+        :param exit_on_error: If ``True`` (the default), exit the module on API
+                              error. Otherwise, raise the
+                              :py:class:``APIModuleError`` exception.
+        :type exit_on_error: bool
+
+        :return: The organization details or None if the organization cannot
+                 be found.
+        :rtype: dict or None
+        """
+        # Get the organization details from the given name.
+        #
+        # GET /api/v1/organization/{orgname}
+        # {
+        #   "name": "production",
+        #   "email": "f87e5706-54ad-4c47-ab5c-81867468e313",
+        #   "avatar": {
+        #     "name": "myorg",
+        #     "hash": "66bf...1252",
+        #     "color": "#d62728",
+        #     "kind": "user"
+        #   },
+        #   "is_admin": true,
+        #   "is_member": true,
+        #   "teams": {
+        #     "owners": {
+        #       "name": "owners",
+        #       "description": "",
+        #       "role": "admin",
+        #       "avatar": {
+        #         "name": "owners",
+        #         "hash": "6f0e...8d90",
+        #         "color": "#c7c7c7",
+        #         "kind": "team"
+        #       },
+        #       "can_view": true,
+        #       "repo_count": 0,
+        #       "member_count": 1,
+        #       "is_synced": false
+        #     },
+        #     "teamxyz": {
+        #       "name": "teamxyz",
+        #       "description": "My team description",
+        #       "role": "member",
+        #       "avatar": {
+        #         "name": "teamxyz",
+        #         "hash": "bf1e...1414",
+        #         "color": "#a55194",
+        #         "kind": "team"
+        #       },
+        #       "can_view": true,
+        #       "repo_count": 0,
+        #       "member_count": 0,
+        #       "is_synced": false
+        #     }
+        #   },
+        #   "ordered_teams": [
+        #     "owners",
+        #     "team1",
+        #     "teamxyz"
+        #   ],
+        #   "invoice_email": false,
+        #   "invoice_email_address": null,
+        #   "tag_expiration_s": 86400,
+        #   "is_free_account": true
+        # }
+        if organization in self.cache_org:
+            return self.cache_org[organization]
+        org_details = self.get_object_path(
+            "organization/{orgname}", exit_on_error=exit_on_error, orgname=organization
+        )
+        if isinstance(org_details, dict) and org_details:
+            org_details["is_organization"] = True
+        else:
+            org_details = None
+        self.cache_org[organization] = org_details
+        return org_details
+
+    def get_namespace(self, namespace, exit_on_error=True):
+        """Search for the given namespace.
+
+        A namespace can be an organization or a user private namespace.
+
+        :param namespace: The name of the namespace to look for.
+        :type namespace: str
+        :param exit_on_error: If ``True`` (the default), exit the module on API
+                              error. Otherwise, raise the
+                              :py:class:``APIModuleError`` exception.
+        :type exit_on_error: bool
+
+        :return: The namespace details or None if the namespace cannot be found.
+                 If the namespace has been found, then the returned dictionary
+                 includes the ``is_organization`` key which is ``True`` if the
+                 namespace is an organization, or ``False`` is the namespace
+                 is a user private namespace.
+        :rtype: dict or None
+        """
+        org_details = self.get_organization(namespace, exit_on_error=exit_on_error)
+        if org_details:
+            return org_details
+
+        user_details = self.get_account(namespace, exit_on_error=exit_on_error)
+        if user_details and not user_details.get("is_robot"):
+            return user_details
+        return None

@@ -252,23 +252,22 @@ def main():
             full_repo_name=full_repo_name,
         )
 
-    # Check whether namespace exists (organization or user account).
-    #
-    # GET /api/v1/organization/{orgname}
-    # GET /api/v1/users/{username}
-    if not module.get_object_path("organization/{orgname}", orgname=namespace):
-        if module.get_object_path("users/{username}", username=namespace):
-            # Make sure that the current user is the owner of that namespace
-            if namespace != my_name:
-                module.fail_json(
-                    msg="You ({user}) are not the owner of {namespace}'s namespace.".format(
-                        user=my_name, namespace=namespace
-                    )
-                )
-        else:
-            module.fail_json(
-                msg="The {namespace} namespace does not exist.".format(namespace=namespace)
+    # Check whether namespace exists (organization or user account)
+    namespace_details = module.get_namespace(namespace)
+    if not namespace_details:
+        module.fail_json(
+            msg="The {namespace} namespace does not exist.".format(namespace=namespace)
+        )
+    # Make sure that the current user is the owner of that namespace
+    if (
+        not namespace_details.get("is_organization")
+        and namespace_details.get("name") != my_name
+    ):
+        module.fail_json(
+            msg="You ({user}) are not the owner of {namespace}'s namespace.".format(
+                user=my_name, namespace=namespace
             )
+        )
 
     changed = False
     if not repo_details:
@@ -357,7 +356,7 @@ def main():
     # Checking that all the teams to add exist
     teams_not_found = []
     for team in to_add:
-        if module.team_exists(namespace, team[0]) is None:
+        if module.get_team(namespace, team[0]) is None:
             teams_not_found.append(team[0])
     if teams_not_found:
         module.fail_json(
@@ -441,7 +440,7 @@ def main():
     # Checking that all the user account to add exist
     accounts_not_found = []
     for member in to_add:
-        if module.account_exists(member[0]) is None:
+        if module.get_account(member[0]) is None:
             accounts_not_found.append(member[0])
     if accounts_not_found:
         module.fail_json(

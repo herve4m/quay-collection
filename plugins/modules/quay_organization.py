@@ -46,6 +46,13 @@ options:
       - The token you use to connect to the API (in C(quay_token)) must have
         the "Super User Access" permission.
     type: str
+  email:
+    description:
+      - Email address to associate with the new organization.
+      - If you have enabled the mailing capabily of your Quay installation,
+        then this C(email) parameter is mandatory.
+      - You cannot use the same address as your account email.
+    type: str
   time_machine_expiration:
     description:
       - The amount of time, after a tag is deleted, that the tag is accessible
@@ -76,6 +83,7 @@ EXAMPLES = r"""
 - name: Ensure the organization exists
   herve4m.quay.quay_organization:
     name: production
+    email: prodlist@example.com
     time_machine_expiration: "7d"
     state: present
     quay_host: https://quay.example.com
@@ -113,6 +121,7 @@ def main():
     argument_spec = dict(
         name=dict(required=True),
         new_name=dict(),
+        email=dict(),
         time_machine_expiration=dict(choices=tm_allowed_values.keys()),
         state=dict(choices=["present", "absent"], default="present"),
     )
@@ -123,54 +132,12 @@ def main():
     # Extract our parameters
     name = module.params.get("name")
     new_name = module.params.get("new_name")
+    email = module.params.get("email")
     tm_expiration = module.params.get("time_machine_expiration")
     state = module.params.get("state")
 
-    # Get the organization details from the given names.
-    #
-    # GET /api/v1/organization/{name}
-    # {
-    #   "name": "myorg",
-    #   "email": "63892453-46ac-42a3-bdf9-4fe2580429ef",
-    #   "avatar": {
-    #     "name": "myorg",
-    #     "hash": "761f...3000",
-    #     "color": "#6b6ecf",
-    #     "kind": "user"
-    #   },
-    #   "is_admin": true,
-    #   "is_member": true,
-    #   "teams": {
-    #     "owners": {
-    #       "name": "owners",
-    #       "description": "",
-    #       "role": "admin",
-    #       "avatar": {
-    #         "name": "owners",
-    #         "hash": "6f0e...8d90",
-    #         "color": "#c7c7c7",
-    #         "kind": "team"
-    #       },
-    #       "can_view": true,
-    #       "repo_count": 0,
-    #       "member_count": 1,
-    #       "is_synced": false
-    #     }
-    #   },
-    #   "ordered_teams": [
-    #     "owners"
-    #   ],
-    #   "invoice_email": false,
-    #   "invoice_email_address": null,
-    #   "tag_expiration_s": 1209600,
-    #   "is_free_account": true
-    # }
-    org_details = module.get_object_path("organization/{orgname}", orgname=name)
-    new_org_details = (
-        module.get_object_path("organization/{orgname}", orgname=new_name)
-        if new_name
-        else None
-    )
+    org_details = module.get_organization(name)
+    new_org_details = module.get_organization(new_name) if new_name else None
 
     # The destination organization already exists
     if org_details and new_org_details:
@@ -206,11 +173,14 @@ def main():
         if not org_details:
             # and neither the new organization. Create that new organization.
             if not new_org_details:
+                new_fields = {"name": new_name}
+                if email:
+                    new_fields["email"] = email
                 module.create(
                     "organization",
                     new_name,
                     "organization/",
-                    {"name": new_name},
+                    new_fields,
                     auto_exit=False,
                 )
                 created = True
@@ -237,11 +207,14 @@ def main():
             name = new_name
             new_name = None
     elif not org_details:
+        new_fields = {"name": name}
+        if email:
+            new_fields["email"] = email
         module.create(
             "organization",
             name,
             "organization/",
-            {"name": name},
+            new_fields,
             auto_exit=False,
         )
         created = True
@@ -250,8 +223,10 @@ def main():
     new_fields = {}
     if tm_expiration:
         new_fields["tag_expiration_s"] = tm_allowed_values[tm_expiration]
+    if email:
+        new_fields["email"] = email
 
-    # Create the data that gets sent for update
+    # Update the organization
     updated = module.update(
         org_details,
         "organization",

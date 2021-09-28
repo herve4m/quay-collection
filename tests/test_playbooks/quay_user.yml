@@ -21,6 +21,7 @@
     - name: Ensure user dwilde exists but account is disabled
       herve4m.quay.quay_user:
         username: dwilde
+        email: dwilde@example.com
         enabled: false
         quay_host: "{{ quay_url }}"
         quay_token: "{{ token }}"
@@ -30,6 +31,7 @@
       herve4m.quay.quay_user:
         username: jziglar
         state: present
+        email: jziglar@example.com
         # Only effective after a restart of the Red Hat Quay service.
         superuser: true
         enabled: false

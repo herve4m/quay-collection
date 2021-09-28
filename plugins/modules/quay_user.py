@@ -49,6 +49,8 @@ options:
   email:
     description:
       - User's email address.
+      - If you have enabled the mailing capabily of your Quay installation,
+        then this C(email) parameter is mandatory.
     type: str
   password:
     description:
@@ -113,6 +115,7 @@ EXAMPLES = r"""
 - name: Ensure the user is a superuser
   herve4m.quay.quay_user:
     username: jziglar
+    email: jziglar@example.com
     state: present
     # Only effective after a restart of the Red Hat Quay service.
     superuser: true
@@ -122,6 +125,7 @@ EXAMPLES = r"""
 - name: Ensure the user account is disabled
   herve4m.quay.quay_user:
     username: chorwitz
+    email: chorwitz@example.com
     state: present
     enabled: false
     quay_host: https://quay.example.com

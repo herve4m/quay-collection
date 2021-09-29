@@ -86,6 +86,11 @@ options:
         removing all others permissions from the repository.
     type: bool
     default: yes
+  star:
+    description:
+      - If C(true), then add a star to the repository. If C(false), then remove
+        the star.
+    type: bool
   state:
     description:
       - If C(absent), then the module deletes the repository.
@@ -147,7 +152,7 @@ EXAMPLES = r"""
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-- name: Ensure repository has the exact set of permissions
+- name: Ensure the repository has the exact set of permissions
   herve4m.quay.quay_repository:
     name: production/smallimage
     perms:
@@ -164,6 +169,14 @@ EXAMPLES = r"""
         type: user
         role: read
     append: false
+    state: present
+    quay_host: https://quay.example.com
+    quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+
+- name: Ensure the repository has a star
+  herve4m.quay.quay_repository:
+    name: production/smallimage
+    star: true
     state: present
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
@@ -189,6 +202,7 @@ def main():
             ),
         ),
         append=dict(type="bool", default=True),
+        star=dict(type="bool"),
         state=dict(choices=["present", "absent"], default="present"),
     )
 
@@ -201,6 +215,7 @@ def main():
     description = module.params.get("description")
     perms = module.params.get("perms")
     append = module.params.get("append")
+    star = module.params.get("star")
     state = module.params.get("state")
 
     my_name = module.who_am_i()
@@ -309,6 +324,27 @@ def main():
                 full_repo_name,
                 "repository/{full_repo_name}/changevisibility",
                 {"visibility": visibility},
+                auto_exit=False,
+                full_repo_name=full_repo_name,
+            )
+            changed = True
+
+    if star is not None:
+        if star and (not repo_details or not repo_details.get("is_starred")):
+            module.create(
+                "repository",
+                full_repo_name,
+                "user/starred",
+                {"namespace": namespace, "repository": repo_shortname},
+                auto_exit=False,
+            )
+            changed = True
+        if not star and repo_details and repo_details.get("is_starred"):
+            module.delete(
+                repo_details,
+                "repository",
+                full_repo_name,
+                "user/starred/{full_repo_name}",
                 auto_exit=False,
                 full_repo_name=full_repo_name,
             )

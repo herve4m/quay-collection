@@ -608,7 +608,6 @@ def main():
                     "repository/{full_repo_name}/notification/{uuid}/test",
                     {},
                     auto_exit=False,
-                    ok_error_codes=[200, 201, 204],
                     full_repo_name=full_repo_name,
                     uuid=uuid,
                 )
@@ -623,7 +622,6 @@ def main():
                         "repository/{full_repo_name}/notification/{uuid}",
                         {},
                         auto_exit=False,
-                        ok_error_codes=[200, 201, 204],
                         full_repo_name=full_repo_name,
                         uuid=uuid,
                     )

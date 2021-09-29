@@ -108,6 +108,7 @@
         name: ansibletestorg/ansibletestrepo2
         visibility: public
         description: Test description
+        star: true
         perms:
           - name: ansibletestuser2
             type: user
@@ -122,6 +123,7 @@
         name: ansibletestorg/ansibletestrepo2
         visibility: public
         description: ""
+        star: false
         perms:
           - name: ansibletestuser3
             type: user
@@ -144,6 +146,24 @@
           - name: ansibletestuser5
             type: user
             role: admin
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure repository ansibletestrepo3 has no star (no change)
+      herve4m.quay.quay_repository:
+        name: ansibletestrepo3
+        star: false
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure repository ansibletestrepo3 has a star
+      herve4m.quay.quay_repository:
+        name: ansibletestrepo3
+        star: true
         state: present
         quay_host: "{{ quay_url }}"
         quay_token: "{{ token }}"

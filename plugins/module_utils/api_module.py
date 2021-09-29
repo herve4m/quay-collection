@@ -462,7 +462,7 @@ class APIModule(AnsibleModule):
         new_item,
         auto_exit=True,
         exit_on_error=True,
-        ok_error_codes=[200, 201],
+        ok_error_codes=[200, 201, 204],
         **kwargs
     ):
         """Create an object.

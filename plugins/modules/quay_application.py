@@ -93,6 +93,10 @@ EXAMPLES = r"""
     state: present
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+  register: app_details
+
+- debug:
+    msg: "Client secret: {{ app_details['client_secret'] }}"
 
 - name: Ensure the application is renamed
   herve4m.quay.quay_application:
@@ -113,9 +117,46 @@ EXAMPLES = r"""
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 """
 
-RETURN = r""" # """
+RETURN = r"""
+name:
+  description: Application name.
+  returned: changed
+  type: str
+  sample: apiaccess
+client_id:
+  description: ID if the client associated with the application object.
+  returned: changed
+  type: str
+  sample: SUJVKUJN5WIP07CAIXAF
+client_secret:
+  description: Secret for the client associated with the application object.
+  returned: changed
+  type: str
+  sample: JBVXLG8XS7UCV1NFKDYPSNGJ4BUESU03GI5OXS2X
+ """
 
 from ..module_utils.api_module import APIModule
+
+
+def exit_module(module, changed, data):
+    """Exit the module and return data.
+
+    :param module: The module object.
+    :type module: :py:class:``APIModule``
+    :param changed: The changed status of the object.
+    :type changed: bool
+    :param data: The data returned by the API call.
+    :type data: dict
+    """
+    result = {"changed": changed}
+    if data:
+        if "name" in data:
+            result["name"] = data["name"]
+        if "client_id" in data:
+            result["client_id"] = data["client_id"]
+        if "client_secret" in data:
+            result["client_secret"] = data["client_secret"]
+    module.exit_json(**result)
 
 
 def main():
@@ -230,9 +271,12 @@ def main():
     if avatar_email is not None:
         new_fields["avatar_email"] = avatar_email
     elif new_app_details:
-        new_fields["avatar_email"] = new_app_details.get("avatar_email", "")
+        # The avatar_email attribute that the API returns might be None
+        if "avatar_email" in new_app_details and new_app_details["avatar_email"]:
+            new_fields["avatar_email"] = new_app_details["avatar_email"]
     elif app_details:
-        new_fields["avatar_email"] = app_details.get("avatar_email", "")
+        if "avatar_email" in app_details and app_details["avatar_email"]:
+            new_fields["avatar_email"] = app_details["avatar_email"]
 
     # Renaming the application
     if new_name:
@@ -241,56 +285,66 @@ def main():
         if not app_details:
             # and neither the new organization. Create that new organization.
             if not new_app_details:
-                module.create(
+                data = module.create(
                     "application",
                     new_name,
                     "organization/{orgname}/applications",
                     new_fields,
+                    auto_exit=False,
                     orgname=organization,
                 )
+                exit_module(module, True, data)
 
             # The original organization does not exists but the new one does.
             # Update that new organization.
-            module.update(
+            updated, data = module.update(
                 new_app_details,
                 "application",
                 new_name,
                 "organization/{orgname}/applications/{id}",
                 new_fields,
+                auto_exit=False,
                 orgname=organization,
                 id=new_app_details.get("client_id", ""),
             )
+            exit_module(module, updated, data if updated else new_app_details)
         # The original organization exists. Rename it.
-        module.update(
+        updated, data = module.update(
             app_details,
             "application",
             new_name,
             "organization/{orgname}/applications/{id}",
             new_fields,
+            auto_exit=False,
             orgname=organization,
             id=app_details.get("client_id", ""),
         )
+        exit_module(module, updated, data if updated else app_details)
 
     new_fields["name"] = name
 
     if app_details:
-        module.update(
+        updated, data = module.update(
             app_details,
             "application",
             name,
             "organization/{orgname}/applications/{id}",
             new_fields,
+            auto_exit=False,
             orgname=organization,
             id=app_details.get("client_id", ""),
         )
+        exit_module(module, updated, data if updated else app_details)
 
-    module.create(
+    data = module.create(
         "application",
         name,
         "organization/{orgname}/applications",
         new_fields,
+        auto_exit=False,
         orgname=organization,
     )
+    exit_module(module, True, data)
 
 
 if __name__ == "__main__":

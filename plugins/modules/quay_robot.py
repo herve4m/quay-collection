@@ -80,6 +80,10 @@ EXAMPLES = r"""
     state: present
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+  register: robot_details
+
+- debug:
+    msg: "Robot token: {{ robot_details['token'] }}"
 
 - name: Ensure robot account myrobot exists in my namespace
   herve4m.quay.quay_robot:
@@ -96,9 +100,39 @@ EXAMPLES = r"""
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 """
 
-RETURN = r""" # """
+RETURN = r"""
+name:
+  description: Token name.
+  returned: changed
+  type: str
+  sample: production+robotprod1
+token:
+  description: Robot credential (token).
+  returned: changed
+  type: str
+  sample: IWG3K5EW92KZLPP42PMOKM5CJ2DEAQMSCU33A35NR7MNL21004NKVP3BECOWSQP2
+"""
 
 from ..module_utils.api_module import APIModule
+
+
+def exit_module(module, changed, data):
+    """Exit the module and return data.
+
+    :param module: The module object.
+    :type module: :py:class:``APIModule``
+    :param changed: The changed status of the object.
+    :type changed: bool
+    :param data: The data returned by the API call.
+    :type data: dict
+    """
+    result = {"changed": changed}
+    if data:
+        if "name" in data:
+            result["name"] = data["name"]
+        if "token" in data:
+            result["token"] = data["token"]
+    module.exit_json(**result)
 
 
 def main():
@@ -182,15 +216,15 @@ def main():
         module.delete(robot_details, "robot account", name, path_url)
 
     if robot_details:
-        module.exit_json(changed=False)
+        exit_module(module, False, robot_details)
 
     # Prepare the data that gets set for create
     new_fields = {}
     if description:
         new_fields["description"] = description
 
-    module.unconditional_update("robot account", name, path_url, new_fields)
-    module.exit_json(changed=True)
+    data = module.unconditional_update("robot account", name, path_url, new_fields)
+    exit_module(module, True, data)
 
 
 if __name__ == "__main__":

@@ -298,16 +298,18 @@ def main():
         changed = True
     else:
         # Update description
-        if description is not None and module.update(
-            repo_details,
-            "repository",
-            full_repo_name,
-            "repository/{full_repo_name}",
-            {"description": description},
-            auto_exit=False,
-            full_repo_name=full_repo_name,
-        ):
-            changed = True
+        if description is not None:
+            updated, _ = module.update(
+                repo_details,
+                "repository",
+                full_repo_name,
+                "repository/{full_repo_name}",
+                {"description": description},
+                auto_exit=False,
+                full_repo_name=full_repo_name,
+            )
+            if updated:
+                changed = True
         # Update visibility
         if (
             visibility

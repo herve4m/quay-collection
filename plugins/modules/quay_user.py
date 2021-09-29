@@ -231,7 +231,7 @@ def main():
     if password:
         new_fields["password"] = password
 
-    updated = module.update(
+    updated, _ = module.update(
         user_details,
         "user",
         username,

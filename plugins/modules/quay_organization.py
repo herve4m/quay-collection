@@ -227,7 +227,7 @@ def main():
         new_fields["email"] = email
 
     # Update the organization
-    updated = module.update(
+    updated, _ = module.update(
         org_details,
         "organization",
         name,

@@ -487,6 +487,9 @@ class APIModule(AnsibleModule):
                               error. Otherwise, raise the
                               :py:class:``APIModuleError`` exception.
         :type exit_on_error: bool
+        :param ok_error_codes: HTTP error codes that are acceptable (not errors)
+                               when returned by the API.
+        :type ok_error_codes: list
         :param kwargs: Dictionnary used to substitute parameters in the given
                        ``endpoint`` string. For example ``{"orgname":"devel"}``
         :type kwargs: dict
@@ -568,9 +571,12 @@ class APIModule(AnsibleModule):
 
         :raises APIModuleError: An API error occured. That exception is only
                                 raised when ``exit_on_error`` is ``False``.
+
+        :return: The data returned by the API call.
+        :rtype: dict
         """
         if self.check_mode:
-            return
+            return {}
 
         for k in kwargs:
             endpoint = endpoint.replace("{" + k + "}", kwargs[k])
@@ -601,6 +607,8 @@ class APIModule(AnsibleModule):
                 self.fail_json(msg=fail_msg)
             else:
                 raise APIModuleError(fail_msg)
+
+        return response.get("json", {})
 
     def need_update(self, object_type, object_name, old, new):
         """Tell if the new dictionary is a subset of the old one.
@@ -682,9 +690,10 @@ class APIModule(AnsibleModule):
         :raises APIModuleError: An API error occured. That exception is only
                                 raised when ``exit_on_error`` is ``False``.
 
-        :return: ``True`` if something has changed (object updated), ``False``
-                 otherwise.
-        :rtype: bool
+        :return: A tuple. The first item is ``True`` if something has changed
+                 (object updated), ``False`` otherwise. The second item is a
+                 dictionary that contains the data sent back by the API call.
+        :rtype: list
         """
         needs_patch = self.need_update(object_type, object_name, object, new_item)
 
@@ -692,15 +701,15 @@ class APIModule(AnsibleModule):
         if not needs_patch:
             if auto_exit:
                 self.exit_json(changed=False)
-            return False
+            return (False, {})
 
         # Check mode
         if self.check_mode:
             if auto_exit:
                 self.exit_json(changed=True)
-            return True
+            return (True, new_item)
 
-        self.unconditional_update(
+        data = self.unconditional_update(
             object_type,
             object_name,
             endpoint,
@@ -712,7 +721,7 @@ class APIModule(AnsibleModule):
         # Success. Something has been changed
         if auto_exit:
             self.exit_json(changed=True)
-        return True
+        return (True, data)
 
     def who_am_i(self, exit_on_error=True):
         """Return the current user name.

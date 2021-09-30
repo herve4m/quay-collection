@@ -4,7 +4,7 @@ The collection provides modules for managing your Red Hat Quay deployment.
 
 ## Included Content
 
-The modules have been tested against version 3.5.6 of Red Quay.
+The modules have been tested against version 3.5.6 of Red Hat Quay.
 
 ### Modules
 Name | Description

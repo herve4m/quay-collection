@@ -42,15 +42,15 @@ options:
     description:
       - New name for the organization.
       - Setting this option changes the name of the organization which current
-        name is provided in C(name).
-      - The token you use to connect to the API (in C(quay_token)) must have
+        name is provided in I(name).
+      - The token you use to connect to the API (in I(quay_token)) must have
         the "Super User Access" permission.
     type: str
   email:
     description:
       - Email address to associate with the new organization.
       - If you have enabled the mailing capabily of your Quay installation,
-        then this C(email) parameter is mandatory.
+        then this I(email) parameter is mandatory.
       - You cannot use the same address as your account email.
     type: str
   time_machine_expiration:
@@ -72,7 +72,7 @@ options:
     choices: [absent, present]
 notes:
   - Supports C(check_mode).
-  - The token that you provide in C(quay_token) must have the "Administer
+  - The token that you provide in I(quay_token) must have the "Administer
     Organization" and "Administer User" permissions.
   - To rename organizations, the token must also have the "Super User Access"
     permission.

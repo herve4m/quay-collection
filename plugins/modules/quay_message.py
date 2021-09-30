@@ -48,11 +48,11 @@ options:
     choices: [info, warning, error]
   format:
     description:
-      - Format of the text in C(content).
+      - Format of the text in I(content).
       - If you do not set this parameter, then the module uses the C(plain)
         format.
     type: str
-    aliases: [ media_type ]
+    aliases: [media_type]
     choices: [markdown, plain]
   regexp:
     description:
@@ -63,7 +63,7 @@ options:
       - For C(state=absent), the module deletes all the messages that match.
       - Uses Python regular expressions. See
         U(https://docs.python.org/3/library/re.html).
-      - Mutually exclusive with C(search_string).
+      - Mutually exclusive with I(search_string).
     type: str
     aliases: [regex]
   search_string:
@@ -73,29 +73,29 @@ options:
       - For C(state=present), if several messages match then the module updates
         one and deletes the others.
       - For C(state=absent), the module deletes all the messages that match.
-      - Mutually exclusive with C(regexp).
+      - Mutually exclusive with I(regexp).
     type: str
   search_severity:
     description:
       - Search messages by their severity level.
-      - If you also set C(search_string), C(regexp), or C(content), messages
+      - If you also set I(search_string), I(regexp), or I(content), messages
         must match all those criteria.
     type: str
     choices: [info, warning, error]
   state:
     description:
       - If C(absent), then the module deletes all the messages which content
-        matches C(search_string), C(regexp), C(content), or C(search_severity).
+        matches I(search_string), I(regexp), I(content), or I(search_severity).
       - If C(present), then the module creates the message if it does not
-        already exist (that is, if no message matches C(search_string),
-        C(regexp), or C(content)). Is several messages match, only one is
+        already exist (that is, if no message matches I(search_string),
+        I(regexp), or I(content)). Is several messages match, only one is
         updated and the others are deleted.
     type: str
     default: present
     choices: [absent, present]
 notes:
   - Supports C(check_mode).
-  - The token that you provide in C(quay_token) must have the
+  - The token that you provide in I(quay_token) must have the
     "Super User Access" permission.
 extends_documentation_fragment: herve4m.quay.auth
 """

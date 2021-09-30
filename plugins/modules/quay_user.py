@@ -50,7 +50,7 @@ options:
     description:
       - User's email address.
       - If you have enabled the mailing capabily of your Quay installation,
-        then this C(email) parameter is mandatory.
+        then this I(email) parameter is mandatory.
     type: str
   password:
     description:
@@ -88,7 +88,7 @@ options:
     choices: [absent, present]
 notes:
   - Supports C(check_mode).
-  - The token that you provide in C(quay_token) must have the
+  - The token that you provide in I(quay_token) must have the
     "Super User Access" permission.
   - You cannot delete or modify superuser accounts.
   - You cannot revoke superuser privileges with this module.

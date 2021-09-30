@@ -48,7 +48,7 @@ options:
     type: str
   type:
     description:
-      - Specifies the type of the account defined in C(name). Choose C(user)
+      - Specifies the type of the account defined in I(name). Choose C(user)
         for both user and robot accounts.
     type: str
     choices: [user, team]
@@ -64,11 +64,11 @@ options:
   creator:
     description:
       - Quay applies the default permission only when repositories are created
-        by the user that you define in C(creator).
-      - By default, if you do not provide that C(creator) parameter, then Quay
+        by the user that you define in I(creator).
+      - By default, if you do not provide that I(creator) parameter, then Quay
         applies the default permission to all new repostories, whoever creates
         them.
-      - You cannot use robot accounts or teams for the C(creator) parameter.
+      - You cannot use robot accounts or teams for the I(creator) parameter.
         You can only use regular user accounts.
     type: str
   state:
@@ -83,7 +83,7 @@ options:
     choices: [absent, present]
 notes:
   - Supports C(check_mode).
-  - The token that you provide in C(quay_token) must have the "Administer
+  - The token that you provide in I(quay_token) must have the "Administer
     Organization" and "Administer User" permissions.
 extends_documentation_fragment: herve4m.quay.auth
 """

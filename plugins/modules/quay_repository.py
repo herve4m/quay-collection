@@ -39,7 +39,7 @@ options:
       - If you omit the namespace part in the name, then the module creates
         the repository in your personal namespace.
       - You can manage repositories in your personal namespace, but not in the
-        personal namespace of other users. The token you use in C(quay_token)
+        personal namespace of other users. The token you use in I(quay_token)
         determines the user account you are using.
     required: true
     type: str
@@ -80,15 +80,15 @@ options:
         default: read
   append:
     description:
-      - If C(yes), then add the permission defined in C(perms) to the
+      - If C(yes), then add the permission defined in I(perms) to the
         repository.
-      - If C(no), then the module sets the permissions specified in C(perms),
+      - If C(no), then the module sets the permissions specified in I(perms),
         removing all others permissions from the repository.
     type: bool
     default: yes
   star:
     description:
-      - If C(true), then add a star to the repository. If C(false), then remove
+      - If C(yes), then add a star to the repository. If C(no), then remove
         the star.
     type: bool
   state:
@@ -104,7 +104,7 @@ options:
     choices: [absent, present]
 notes:
   - Supports C(check_mode).
-  - The token that you provide in C(quay_token) must have the "Administer
+  - The token that you provide in I(quay_token) must have the "Administer
     Repositories" and "Create Repositories" permissions.
 extends_documentation_fragment: herve4m.quay.auth
 """

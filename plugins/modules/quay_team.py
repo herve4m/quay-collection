@@ -59,9 +59,9 @@ options:
     elements: str
   append:
     description:
-      - If C(yes), then add the users specified in C(members) to the team.
+      - If C(yes), then add the users specified in I(members) to the team.
       - If C(no), then the module sets the team members to users specified in
-        C(members), removing all others users from the team.
+        I(members), removing all others users from the team.
     type: bool
     default: yes
   state:
@@ -77,7 +77,7 @@ options:
     choices: [absent, present]
 notes:
   - Supports C(check_mode).
-  - The token that you provide in C(quay_token) must have the "Administer
+  - The token that you provide in I(quay_token) must have the "Administer
     Organization" and "Administer User" permissions.
 extends_documentation_fragment: herve4m.quay.auth
 """

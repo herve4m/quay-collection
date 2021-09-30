@@ -63,7 +63,7 @@ options:
   method:
     description:
       - Notification method. Each method requires a specific set of options
-        that you define by using the C(config) parameter.
+        that you define by using the I(config) parameter.
       - The email notification method is only available on Quay installations
         where the mailing capability has been activated.
     type: str
@@ -81,7 +81,7 @@ options:
     suboptions:
       type:
         description:
-          - Specifies the type of the account defined in C(name).
+          - Specifies the type of the account defined in I(name).
           - Only applies to the Quay Notification method.
         type: str
         choices: [user, team, org]
@@ -125,13 +125,13 @@ options:
       - The module uses that regular expression to select the notifications to
         process.
       - For C(state=present), the module resets the failure counter (if
-        C(reset_failcount) is C(true)) or initiates a test (if C(test) is
+        I(reset_failcount) is C(true)) or initiates a test (if I(test) is
         C(true)) of all the matching notifications.
       - For C(state=absent), the module deletes all the notifications that
         match.
       - Uses Python regular expressions. See
         U(https://docs.python.org/3/library/re.html).
-      - Mutually exclusive with C(search_string).
+      - Mutually exclusive with I(search_string).
     type: str
     aliases: [regex]
   search_string:
@@ -139,11 +139,11 @@ options:
       - The literal string to search in the title of the existing
         notifications. This does not have to match the entire line.
       - For C(state=present), the module resets the failure counter (if
-        C(reset_failcount) is C(true)) or initiates a test (if C(test) is
+        I(reset_failcount) is C(true)) or initiates a test (if I(test) is
         C(true)) of all the matching notifications.
       - For C(state=absent), the module deletes all the notifications that
         match.
-      - Mutually exclusive with C(regexp).
+      - Mutually exclusive with I(regexp).
     type: str
   reset_failcount:
     description:
@@ -158,14 +158,14 @@ options:
   state:
     description:
       - If C(absent), then the module deletes the notification.
-      - The module uses the C(title), C(regex), or C(search_string) parameters
+      - The module uses the I(title), I(regex), or I(search_string) parameters
         to select the notifications to process. You can also omit those
-        parameters and use instead the C(event) and C(method) options to select
+        parameters and use instead the I(event) and I(method) options to select
         all the notifications triggered by a specific event or using a specific
         method.
       - If C(present), then the module creates the notification if it does not
         already exist.
-      - If the notification already exists and C(reset_failcount) or C(test)
+      - If the notification already exists and I(reset_failcount) or I(test)
         are set, then the module resets the failure counter or initiates a test
         of the notification.
     type: str
@@ -173,7 +173,7 @@ options:
     choices: [absent, present]
 notes:
   - Supports C(check_mode).
-  - The token that you provide in C(quay_token) must have the "Administer
+  - The token that you provide in I(quay_token) must have the "Administer
     Repositories" and "Create Repositories" permissions.
 extends_documentation_fragment: herve4m.quay.auth
 """

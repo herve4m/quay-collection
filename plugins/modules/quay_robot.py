@@ -47,7 +47,7 @@ options:
         the robot account in your personal namespace.
       - You can create and delete robot accounts in your personal namespace,
         but not in the personal namespace of other users. The token you use in
-        C(quay_token) determines the user account you are using.
+        I(quay_token) determines the user account you are using.
     required: true
     type: str
   description:
@@ -67,7 +67,7 @@ options:
     choices: [absent, present]
 notes:
   - Supports C(check_mode).
-  - The token that you provide in C(quay_token) must have the "Administer
+  - The token that you provide in I(quay_token) must have the "Administer
     Organization" and "Administer User" permissions.
 extends_documentation_fragment: herve4m.quay.auth
 """

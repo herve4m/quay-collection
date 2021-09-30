@@ -45,7 +45,7 @@ options:
     description:
       - New name for the application.
       - Setting this option changes the name of the application which current
-        name is provided in C(name).
+        name is provided in I(name).
     type: str
   description:
     description:
@@ -76,7 +76,7 @@ options:
     choices: [absent, present]
 notes:
   - Supports C(check_mode).
-  - The token that you provide in C(quay_token) must have the "Administer
+  - The token that you provide in I(quay_token) must have the "Administer
     Organization" and "Administer User" permissions.
 extends_documentation_fragment: herve4m.quay.auth
 """

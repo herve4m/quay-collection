@@ -16,11 +16,11 @@ class ModuleDocFragment(object):
 options:
   quay_host:
     description:
-      - URL for accessing the API. C(https://quay.example.com:8443) for example.
+      - URL for accessing the API. U(https://quay.example.com:8443) for example.
       - If you do not set the parameter, then the module uses the C(QUAY_HOST)
         environment variable.
       - If you do no set the environment variable either, then the module uses
-        the C(http://127.0.0.1) URL.
+        the U(http://127.0.0.1) URL.
     type: str
     default: http://127.0.0.1
   quay_token:
@@ -38,5 +38,5 @@ options:
         yes, and C(no), C(0), C(False), and no value mean no).
     type: bool
     default: yes
-    aliases: [ verify_ssl ]
+    aliases: [verify_ssl]
 """

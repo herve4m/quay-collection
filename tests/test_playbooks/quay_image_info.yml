@@ -1,0 +1,56 @@
+---
+- name: Testing the quay_image_info module
+  hosts: localhost
+  become: false
+  gather_facts: false
+  vars:
+    quay_url: http://localhost:8080
+    token: 7W4OnD9yKfqNNnKM3BTuKAut4c4cRiyLGp2YR60V
+
+  tasks:
+    # Supporting organization
+    - name: Ensure organization ansibletestorg exists
+      herve4m.quay.quay_organization:
+        name: ansibletestorg
+        email: ansibletestorg@example.com
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    # Supporting repository
+    - name: Ensure repository ansibletestrepo1 exists
+      herve4m.quay.quay_repository:
+        name: ansibletestorg/ansibletestrepo1
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Getting the details of the images in the repository
+      herve4m.quay.quay_image_info:
+        repository: ansibletestorg/ansibletestrepo1
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+      register: imgs
+
+    - debug:
+        var: imgs
+
+    - name: Ensure the repository is removed
+      herve4m.quay.quay_repository:
+        name: ansibletestorg/ansibletestrepo1
+        state: absent
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure the organization is removed
+      herve4m.quay.quay_organization:
+        name: ansibletestorg
+        state: absent
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+...

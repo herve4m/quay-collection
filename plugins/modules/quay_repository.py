@@ -36,11 +36,8 @@ options:
         name is C(namespace)/C(shortname). The namespace can be an organization
         or a personal namespace.
       - The name must be in lowercase and must not contain white spaces.
-      - If you omit the namespace part in the name, then the module creates
-        the repository in your personal namespace.
-      - You can manage repositories in your personal namespace, but not in the
-        personal namespace of other users. The token you use in I(quay_token)
-        determines the user account you are using.
+      - If you omit the namespace part in the name, then the module uses your
+        personal namespace.
     required: true
     type: str
   visibility:
@@ -90,6 +87,9 @@ options:
     description:
       - If C(yes), then add a star to the repository. If C(no), then remove
         the star.
+      - To star or unstar a repository you must provide the I(quay_token)
+        parameter to authenticate. If you are not authenticated, then the
+        module ignores the I(star) parameter.
     type: bool
   state:
     description:
@@ -224,8 +224,16 @@ def main():
     except ValueError:
         # No namespace part in the repository name. Therefore, the repository
         # is in the user's personal namespace
-        namespace = my_name
-        repo_shortname = name
+        if my_name:
+            namespace = my_name
+            repo_shortname = name
+        else:
+            module.fail_json(
+                msg=(
+                    "The `name' parameter must include the"
+                    " organization: <organization>/{name}."
+                ).format(name=name)
+            )
 
     full_repo_name = "{namespace}/{repository}".format(
         namespace=namespace, repository=repo_shortname
@@ -272,16 +280,6 @@ def main():
     if not namespace_details:
         module.fail_json(
             msg="The {namespace} namespace does not exist.".format(namespace=namespace)
-        )
-    # Make sure that the current user is the owner of that namespace
-    if (
-        not namespace_details.get("is_organization")
-        and namespace_details.get("name") != my_name
-    ):
-        module.fail_json(
-            msg="You ({user}) are not the owner of {namespace}'s namespace.".format(
-                user=my_name, namespace=namespace
-            )
         )
 
     changed = False
@@ -331,7 +329,7 @@ def main():
             )
             changed = True
 
-    if star is not None:
+    if star is not None and module.authenticated:
         if star and (not repo_details or not repo_details.get("is_starred")):
             module.create(
                 "repository",

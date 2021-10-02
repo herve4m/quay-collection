@@ -37,9 +37,6 @@ options:
         personal namespace.
       - If you omit the namespace part, then the module looks for the
         repository in your personal namespace.
-      - You cannot list tags in the personal namespace of other users. The
-        token you use in I(quay_token) determines the user account you are
-        using.
     required: true
     type: str
   tag:
@@ -57,9 +54,6 @@ options:
         tag attributes. Those attributes provide the expiration date.
     type: bool
     default: no
-notes:
-  - The token that you provide in I(quay_token) must at least have the "View
-    all visible repositories" permission.
 extends_documentation_fragment: herve4m.quay.auth
 """
 
@@ -199,23 +193,21 @@ def main():
     except ValueError:
         # No namespace part in the repository name. Therefore, the repository
         # is in the user's personal namespace
-        namespace = my_name
-        repo_shortname = name
+        if my_name:
+            namespace = my_name
+            repo_shortname = name
+        else:
+            module.fail_json(
+                msg=(
+                    "The `repository' parameter must include the"
+                    " organization: <organization>/{name}."
+                ).format(name=name)
+            )
 
     # Check whether namespace exists (organization or user account)
     namespace_details = module.get_namespace(namespace)
     if not namespace_details:
         module.exit_json(changed=False, images=[])
-    # Make sure that the current user is the owner of that namespace
-    if (
-        not namespace_details.get("is_organization")
-        and namespace_details.get("name") != my_name
-    ):
-        module.fail_json(
-            msg="You ({user}) are not the owner of {namespace}'s namespace.".format(
-                user=my_name, namespace=namespace
-            )
-        )
 
     # Get the tags
     #

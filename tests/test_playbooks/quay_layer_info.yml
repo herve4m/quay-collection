@@ -1,0 +1,16 @@
+---
+- name: Testing the quay_layer_info module
+  hosts: localhost
+  become: false
+  gather_facts: false
+
+  tasks:
+    - name: Retrieve the layers of the coreos/dnsmasq:latest image
+      herve4m.quay.quay_layer_info:
+        image: coreos/dnsmasq:latest
+        quay_host: quay.io
+      register: layers
+
+    - debug:
+        var: layers
+...

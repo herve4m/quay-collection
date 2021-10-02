@@ -48,7 +48,17 @@ class APIModule(AnsibleModule):
     )
 
     def __init__(self, argument_spec, **kwargs):
-        """Initialize the object."""
+        """Initialize the object.
+
+        Sets:
+        * :py:attr:``self.host_url``: :py:class:``urllib.parse.ParseResult``
+          object that represents the base URL of the Quay server.
+        * :py:attr:``self.authenticated``: Indicate if authentication must be
+          performed (from the `quay_token' parameter) or if access is
+          anonymous.
+        * :py:attr:``self.cache_org``: Dictionary that is used to cache
+          organization details. Keys are organization names.
+        """
         full_argspec = {}
         full_argspec.update(APIModule.AUTH_ARGSPEC)
         full_argspec.update(argument_spec)
@@ -57,12 +67,15 @@ class APIModule(AnsibleModule):
 
         host = self.params.get("quay_host")
 
+        if not host.startswith("https://") and not host.startswith("http://"):
+            host = "https://{host}".format(host=host)
+
         # Try to parse the hostname as a URL
         try:
-            self.host_url = urlparse(host, scheme="https")
+            self.host_url = urlparse(host)
         except Exception as e:
             self.fail_json(
-                msg="Unable to parse quay_host as a URL ({host}): {error}".format(
+                msg="Unable to parse `quay_host' as a URL ({host}): {error}".format(
                     host=host, error=e
                 )
             )
@@ -72,7 +85,7 @@ class APIModule(AnsibleModule):
             socket.gethostbyname(self.host_url.hostname)
         except Exception as e:
             self.fail_json(
-                msg="Unable to resolve quay_host ({host}): {error}".format(
+                msg="Unable to resolve `quay_host' ({host}): {error}".format(
                     host=self.host_url.hostname, error=e
                 )
             )
@@ -84,6 +97,9 @@ class APIModule(AnsibleModule):
         token = self.params.get("quay_token")
         if token:
             headers["Authorization"] = "Bearer {token}".format(token=token)
+            self.authenticated = True
+        else:
+            self.authenticated = False
 
         self.session = Request(
             validate_certs=self.params.get("validate_certs"), headers=headers
@@ -174,9 +190,7 @@ class APIModule(AnsibleModule):
             # If so, fail out now; this is always a failure.
             elif he.code == 401:
                 raise APIModuleError(
-                    "Invalid authentication credentials for {path} (HTTP 401).".format(
-                        path=url.path
-                    )
+                    "Authentication required for {path} (HTTP 401).".format(path=url.path)
                 )
             # Sanity check: Did we get a forbidden response, which means that
             # the user isn't allowed to do this? Report that.
@@ -728,15 +742,20 @@ class APIModule(AnsibleModule):
 
         The user account used to access the API is defined by the token (who
         generated the token).
+        If the `quay_token' parameter has not been provided, then all the
+        API calls are anonymous and the method returns ``None``.
 
         :param exit_on_error: If ``True`` (the default), exit the module on API
                               error. Otherwise, raise the
                               :py:class:``APIModuleError`` exception.
         :type exit_on_error: bool
 
-        :return: The name of the current user.
+        :return: The name of the current user or None if access to the API is
+                 anonymous.
         :rtype: str
         """
+        if not self.authenticated:
+            return None
         user = self.get_object_path("user/", exit_on_error=exit_on_error)
         return user.get("username")
 
@@ -791,16 +810,17 @@ class APIModule(AnsibleModule):
 
         # Robot account for the current user (no prefix `<namespace>+' in the
         # given name)
-        robot = self.get_object_path(
-            "user/robots/{robot_shortname}",
-            ok_error_codes=[400, 404],
-            exit_on_error=exit_on_error,
-            robot_shortname=account_name,
-        )
-        if isinstance(robot, dict) and robot:
-            robot["is_organization"] = False
-            robot["is_robot"] = True
-            return robot
+        if self.authenticated:
+            robot = self.get_object_path(
+                "user/robots/{robot_shortname}",
+                ok_error_codes=[400, 404],
+                exit_on_error=exit_on_error,
+                robot_shortname=account_name,
+            )
+            if isinstance(robot, dict) and robot:
+                robot["is_organization"] = False
+                robot["is_robot"] = True
+                return robot
 
         # User account
         user = self.get_object_path(

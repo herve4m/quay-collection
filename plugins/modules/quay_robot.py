@@ -43,8 +43,8 @@ options:
       - The short name (the part after the C(+) sign) must be in lowercase,
         must not contain white spaces, must not start by a digit, and must be
         at least two characters long.
-      - If you omit the namespace part in the name, then the module creates
-        the robot account in your personal namespace.
+      - If you omit the namespace part in the name, then the module uses your
+        personal namespace.
       - You can create and delete robot accounts in your personal namespace,
         but not in the personal namespace of other users. The token you use in
         I(quay_token) determines the user account you are using.
@@ -156,12 +156,22 @@ def main():
     except ValueError:
         # No namespace part in the robot account name. Therefore, the robot
         # account is in the user's personal namespace
-        namespace = my_name
-        robot_shortname = name
+        if my_name:
+            namespace = my_name
+            robot_shortname = name
+        else:
+            module.fail_json(
+                msg=(
+                    "The `name' parameter must include the"
+                    " organization: <organization>+{name}."
+                ).format(name=name)
+            )
 
     # Check whether namespace exists (organization or user account)
     namespace_details = module.get_namespace(namespace)
     if not namespace_details:
+        if state == "absent":
+            module.exit_json(changed=False)
         module.fail_json(
             msg="The {namespace} namespace does not exist.".format(namespace=namespace)
         )
@@ -170,11 +180,13 @@ def main():
         not namespace_details.get("is_organization")
         and namespace_details.get("name") != my_name
     ):
-        module.fail_json(
-            msg="You ({user}) are not the owner of {namespace}'s namespace.".format(
+        if my_name:
+            msg = "You ({user}) are not the owner of {namespace}'s namespace.".format(
                 user=my_name, namespace=namespace
             )
-        )
+        else:
+            msg = "You cannot access {namespace}'s namespace.".format(namespace=namespace)
+        module.fail_json(msg=msg)
 
     # Build the API URL to access the robot object.
     if namespace_details.get("is_organization"):

@@ -341,8 +341,25 @@ def main():
     except ValueError:
         # No namespace part in the repository name. Therefore, the repository
         # is in the user's personal namespace
-        namespace = my_name
-        repo_shortname = repository
+        if my_name:
+            namespace = my_name
+            repo_shortname = repository
+        else:
+            module.fail_json(
+                msg=(
+                    "The `repository' parameter must include the"
+                    " organization: <organization>/{name}."
+                ).format(name=repository)
+            )
+
+    # Check whether namespace exists (organization or user account)
+    namespace_details = module.get_namespace(namespace)
+    if not namespace_details:
+        if state == "absent":
+            module.exit_json(changed=False)
+        module.fail_json(
+            msg="The {namespace} namespace does not exist.".format(namespace=namespace)
+        )
 
     full_repo_name = "{namespace}/{repository}".format(
         namespace=namespace, repository=repo_shortname

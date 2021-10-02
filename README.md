@@ -11,7 +11,7 @@ Name | Description
 ---: | :---
 quay_application |  Manage Red Hat Quay organizations
 quay_default_perm |  Manage Red Hat Quay default repository permissions
-quay_image_info |  Gather information about images in a Red Hat Quay repository
+quay_layer_info |  Gather information about image layers in Red Hat Quay
 quay_message |  Manage Red Hat Quay global messages
 quay_notification |  Manage Red Hat Quay repository notifications
 quay_organization |  Manage Red Hat Quay organizations

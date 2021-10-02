@@ -451,6 +451,12 @@ class APIModule(AnsibleModule):
                 self.exit_json(changed=True)
             return True
 
+        # Object not found
+        if response["status_code"] in [400, 404]:
+            if auto_exit:
+                self.exit_json(changed=False)
+            return False
+
         # Failure
         error_msg = self.get_error_message(response)
         if error_msg:

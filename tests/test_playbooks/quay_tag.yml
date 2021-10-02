@@ -1,0 +1,180 @@
+---
+- name: Testing the quay_tag module
+  hosts: localhost
+  become: false
+  gather_facts: false
+  vars:
+    quay_url: http://localhost:8080
+    token: 7W4OnD9yKfqNNnKM3BTuKAut4c4cRiyLGp2YR60V
+    fake_image: quay.io/ansible/http-test-container:latest
+    quay_hostname: localhost:8080
+    username: admin
+    password: redhat123
+    expiration: "{{ lookup('pipe', 'date -d now+1year +%Y%m%d0132.12') }}"
+
+  tasks:
+    # Supporting organization
+    - name: Ensure organization ansibletestorg exists
+      herve4m.quay.quay_organization:
+        name: ansibletestorg
+        email: ansibletestorg@example.com
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    # Preparing an image:
+    # - Pulling a small image from Quay (does not matter what image it is)
+    # - Tagging it so that it can be pushed to the local Red Hat Quay
+    # - Pushing the image
+    # - Deleting the images from the local system
+    # The tasks do not use the podman collection because it may not be
+    # available on the testing system.
+    - name: Ensure a small container image is available
+      command:
+        cmd: "podman pull {{ fake_image }}"
+      changed_when: true
+
+    - name: Ensure the image has the correct tag
+      command:
+        cmd: "podman tag {{ fake_image }}
+              {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
+      changed_when: true
+
+    - name: Ensure the image is pushed to Red Hat Quay
+      command:
+        cmd: "podman push --tls-verify=false --remove-signatures
+              --creds={{ username }}:{{ password }}
+              {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
+      changed_when: true
+
+    - name: Ensure the images are removed
+      command:
+        cmd: "podman rmi {{ fake_image }}
+              {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
+      changed_when: true
+
+    - name: Ensure the tag v1.0.0 is added to the image
+      herve4m.quay.quay_tag:
+        image: ansibletestorg/ansibletestrepo:latest
+        tag: v1.0.0
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure the tag v1.0.0 is added to the image 1 (no change)
+      herve4m.quay.quay_tag:
+        image: ansibletestorg/ansibletestrepo:latest
+        tag: v1.0.0
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure the tag v1.0.0 is added to the image 2 (no change)
+      herve4m.quay.quay_tag:
+        image: ansibletestorg/ansibletestrepo
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure the tag v1.0.0 is added to the image 3 (no change)
+      herve4m.quay.quay_tag:
+        image: ansibletestorg/ansibletestrepo:v1.0.0
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure the tag v1.0.0 is added to the image 4 (no change)
+      herve4m.quay.quay_tag:
+        image: ansibletestorg/ansibletestrepo:v1.0.0
+        tag: latest
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure the tag v1.0.0 is added to the image 5 (no change)
+      herve4m.quay.quay_tag:
+        image: ansibletestorg/ansibletestrepo:v1.0.0
+        tag: latest
+        expiration: ""
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure the tag v2.0.0 is added with expiration
+      herve4m.quay.quay_tag:
+        image: ansibletestorg/ansibletestrepo:v1.0.0
+        tag: v2.0.0
+        expiration: "{{ expiration }}"
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure the tag v2.0.0 is added with expiration (no change)
+      herve4m.quay.quay_tag:
+        image: ansibletestorg/ansibletestrepo:v2.0.0
+        expiration: "{{ expiration }}"
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure the tag v2.0.0 has no expiration
+      herve4m.quay.quay_tag:
+        image: ansibletestorg/ansibletestrepo:v2.0.0
+        expiration: ""
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure the tag v2.0.0 is removed
+      herve4m.quay.quay_tag:
+        image: ansibletestorg/ansibletestrepo:v2.0.0
+        expiration: ""
+        state: absent
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure the tag v1.0.0 is removed
+      herve4m.quay.quay_tag:
+        image: ansibletestorg/ansibletestrepo
+        tag: v1.0.0
+        state: absent
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure the tag latest is removed
+      herve4m.quay.quay_tag:
+        image: ansibletestorg/ansibletestrepo:latest
+        tag: latest
+        state: absent
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure the repository is removed
+      herve4m.quay.quay_repository:
+        name: ansibletestorg/ansibletestrepo
+        state: absent
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure the organization is removed
+      herve4m.quay.quay_organization:
+        name: ansibletestorg
+        state: absent
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+...

@@ -17,6 +17,7 @@ quay_notification |  Manage Red Hat Quay repository notifications
 quay_organization |  Manage Red Hat Quay organizations
 quay_repository |  Manage Red Hat Quay repositories
 quay_robot |  Manage Red Hat Quay robot accounts
+quay_tag | Manage Red Hat Quay image tags
 quay_tag_info |  Gather information about tags in a Red Hat Quay repository
 quay_team |  Manage Red Hat Quay teams
 quay_user |  Manage Red Hat Quay users

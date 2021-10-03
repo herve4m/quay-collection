@@ -9,18 +9,18 @@ The modules have been tested against version 3.5.6 of Red Hat Quay.
 ### Modules
 Name | Description
 ---: | :---
-quay_application |  Manage Red Hat Quay organizations
-quay_default_perm |  Manage Red Hat Quay default repository permissions
-quay_layer_info |  Gather information about image layers in Red Hat Quay
-quay_message |  Manage Red Hat Quay global messages
-quay_notification |  Manage Red Hat Quay repository notifications
-quay_organization |  Manage Red Hat Quay organizations
-quay_repository |  Manage Red Hat Quay repositories
-quay_robot |  Manage Red Hat Quay robot accounts
-quay_tag | Manage Red Hat Quay image tags
-quay_tag_info |  Gather information about tags in a Red Hat Quay repository
-quay_team |  Manage Red Hat Quay teams
-quay_user |  Manage Red Hat Quay users
+[quay_application](https://github.com/herve4m/quay-collection/blob/main/docs/quay_application_module.rst) |  Manage Red Hat Quay organizations
+[quay_default_perm](https://github.com/herve4m/quay-collection/blob/main/docs/quay_default_perm_module.rst) |  Manage Red Hat Quay default repository permissions
+[quay_layer_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_layer_info_module.rst) |  Gather information about image layers in Red Hat Quay
+[quay_message](https://github.com/herve4m/quay-collection/blob/main/docs/quay_message_module.rst) |  Manage Red Hat Quay global messages
+[quay_notification](https://github.com/herve4m/quay-collection/blob/main/docs/quay_notification_module.rst) |  Manage Red Hat Quay repository notifications
+[quay_organization](https://github.com/herve4m/quay-collection/blob/main/docs/quay_organization_module.rst) |  Manage Red Hat Quay organizations
+[quay_repository](https://github.com/herve4m/quay-collection/blob/main/docs/quay_repository_module.rst) |  Manage Red Hat Quay repositories
+[quay_robot](https://github.com/herve4m/quay-collection/blob/main/docs/quay_robot_module.rst) |  Manage Red Hat Quay robot accounts
+[quay_tag](https://github.com/herve4m/quay-collection/blob/main/docs/quay_tag_module.rst) | Manage Red Hat Quay image tags
+[quay_tag_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_tag_info_module.rst) |  Gather information about tags in a Red Hat Quay repository
+[quay_team](https://github.com/herve4m/quay-collection/blob/main/docs/quay_team_module.rst) |  Manage Red Hat Quay teams
+[quay_user](https://github.com/herve4m/quay-collection/blob/main/docs/quay_user_module.rst) |  Manage Red Hat Quay users
 
 
 ## Installing the Collection

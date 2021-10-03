@@ -1,0 +1,42 @@
+ancestor: null
+releases:
+  0.0.1:
+    changes:
+      release_summary: Initial public release.
+    fragments:
+    - v0.0.1_summary.yml
+    modules:
+    - description: Manage Red Hat Quay organizations
+      name: quay_application
+      namespace: ''
+    - description: Manage Red Hat Quay default repository permissions
+      name: quay_default_perm
+      namespace: ''
+    - description: Gather information about images in a Red Hat Quay repository
+      name: quay_image_info
+      namespace: ''
+    - description: Manage Red Hat Quay global messages
+      name: quay_message
+      namespace: ''
+    - description: Manage Red Hat Quay repository notifications
+      name: quay_notification
+      namespace: ''
+    - description: Manage Red Hat Quay organizations
+      name: quay_organization
+      namespace: ''
+    - description: Manage Red Hat Quay repositories
+      name: quay_repository
+      namespace: ''
+    - description: Manage Red Hat Quay robot accounts
+      name: quay_robot
+      namespace: ''
+    - description: Gather information about tags in a Red Hat Quay repository
+      name: quay_tag_info
+      namespace: ''
+    - description: Manage Red Hat Quay teams
+      name: quay_team
+      namespace: ''
+    - description: Manage Red Hat Quay users
+      name: quay_user
+      namespace: ''
+    release_date: '2021-10-03'

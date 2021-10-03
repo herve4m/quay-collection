@@ -5,6 +5,14 @@ Red Hat Quay Collection Release Notes
 .. contents:: Topics
 
 
+v0.0.2
+======
+
+Release Summary
+---------------
+
+Fix wrong project URLs
+
 v0.0.1
 ======
 

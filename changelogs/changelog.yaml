@@ -40,3 +40,9 @@ releases:
       name: quay_user
       namespace: ''
     release_date: '2021-10-03'
+  0.0.2:
+    changes:
+      release_summary: Fix wrong project URLs
+    fragments:
+    - v0.0.2_summary.yml
+    release_date: '2021-10-03'

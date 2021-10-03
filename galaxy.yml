@@ -11,7 +11,7 @@ license:
 tags:
   - quay
   - registry
-repository: https://github.com/hquatrem/quay-collection
+repository: https://github.com/herve4m/quay-collection
 
 # The URL to any online docs
 documentation: https://github.com/herve4m/quay-collection
@@ -20,5 +20,5 @@ documentation: https://github.com/herve4m/quay-collection
 homepage: https://github.com/herve4m/quay-collection
 
 # The URL to the collection issue tracker
-issues: https://github.com/hquatrem/quay-collection/issues
+issues: https://github.com/herve4m/quay-collection/issues
 ...

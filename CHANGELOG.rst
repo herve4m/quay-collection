@@ -5,6 +5,14 @@ Red Hat Quay Collection Release Notes
 .. contents:: Topics
 
 
+v0.0.3
+======
+
+Release Summary
+---------------
+
+New quay_vulnerability_info information module
+
 v0.0.2
 ======
 

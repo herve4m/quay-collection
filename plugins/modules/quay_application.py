@@ -24,9 +24,9 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: quay_application
-short_description: Manage Red Hat Quay organizations
+short_description: Manage Red Hat Quay applications
 description:
-  - Create, delete, and update organizations in Red Hat Quay.
+  - Create, delete, and update applications in Red Hat Quay organizations.
 version_added: '0.0.1'
 author: Herve Quatremain (@herve4m)
 options:

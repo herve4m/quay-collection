@@ -46,3 +46,9 @@ releases:
     fragments:
     - v0.0.2_summary.yml
     release_date: '2021-10-03'
+  0.0.3:
+    changes:
+      release_summary: New quay_vulnerability_info information module
+    fragments:
+    - v0.0.3_summary.yml
+    release_date: '2021-10-07'

@@ -24,13 +24,13 @@
 
 .. Title
 
-herve4m.quay.quay_application -- Manage Red Hat Quay organizations
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+herve4m.quay.quay_application -- Manage Red Hat Quay applications
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.1).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.3).
 
     To install it use: :code:`ansible-galaxy collection install herve4m.quay`.
 
@@ -52,7 +52,7 @@ Synopsis
 
 .. Description
 
-- Create, delete, and update organizations in Red Hat Quay.
+- Create, delete, and update applications in Red Hat Quay organizations.
 
 
 .. Aliases

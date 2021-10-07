@@ -30,7 +30,7 @@ herve4m.quay.quay_repository -- Manage Red Hat Quay repositories
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.1).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.3).
 
     To install it use: :code:`ansible-galaxy collection install herve4m.quay`.
 

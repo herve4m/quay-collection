@@ -102,6 +102,14 @@ options:
     type: str
     default: present
     choices: [absent, present]
+  repo_state:
+    description:
+      - If C(NORMAL), the repository is in the default state (read/write).
+      - If C(READ_ONLY), the repository is read only.
+      - If C(MIRROR), the repository is a mirror and can be configured with the quay_mirroring module.
+    type: str
+    default: NORMAL
+    choices: [READ_ONLY, MIRROR]    
 notes:
   - Supports C(check_mode).
   - The token that you provide in I(quay_token) must have the "Administer
@@ -180,6 +188,14 @@ EXAMPLES = r"""
     state: present
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+
+- name: Ensure the repository state as MIRROR
+  herve4m.quay.quay_repository:
+    name: production/smallimage
+    repo_state: MIRROR
+    state: present
+    quay_host: https://quay.example.com
+    quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 """
 
 RETURN = r""" # """
@@ -203,6 +219,7 @@ def main():
         ),
         append=dict(type="bool", default=True),
         star=dict(type="bool"),
+        repo_state=dict(choices=["NORMAL", "READ_ONLY", "MIRROR"], default="NORMAL"),
         state=dict(choices=["present", "absent"], default="present"),
     )
 
@@ -217,6 +234,7 @@ def main():
     append = module.params.get("append")
     star = module.params.get("star")
     state = module.params.get("state")
+    repo_state = module.params.get("repo_state")
 
     my_name = module.who_am_i()
     try:
@@ -317,7 +335,7 @@ def main():
                 and visibility == "private"
                 or not repo_details["is_public"]
                 and visibility == "public"
-            )
+            )            
         ):
             module.create(
                 "repository",
@@ -328,6 +346,19 @@ def main():
                 full_repo_name=full_repo_name,
             )
             changed = True
+        # Update repo_state
+        if repo_state is not None:
+            updated, _ = module.update(
+                repo_details,
+                "repository",
+                full_repo_name,
+                "repository/{full_repo_name}/changestate",
+                {"state": repo_state},
+                auto_exit=False,
+                full_repo_name=full_repo_name,
+            )
+            if updated:
+                changed = True
 
     if star is not None and module.authenticated:
         if star and (not repo_details or not repo_details.get("is_starred")):

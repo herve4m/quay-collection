@@ -1,0 +1,122 @@
+---
+- name: Testing the quay_repository module
+  hosts: localhost
+  become: false
+  gather_facts: false
+  vars:
+    quay_url: http://localhost:8080
+    token: 7W4OnD9yKfqNNnKM3BTuKAut4c4cRiyLGp2YR60V
+
+  tasks:
+    # Supporting organization
+    - name: Ensure organization ansibletestorg exists
+      herve4m.quay.quay_organization:
+        name: ansibletestorg
+        email: ansibletestorg@example.com
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    # Supporting robot accounts
+    - name: Ensure the robot accounts exist
+      herve4m.quay.quay_robot:
+        name: "{{ item }}"
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+      loop:
+        - ansibletestorg+ansibletestrobot1
+        - ansibletestorg+ansibletestrobot2
+
+    - name: Ensure repository ansibletestrepo1 exists
+      herve4m.quay.quay_repository:
+        name: ansibletestorg/ansibletestrepo1
+        visibility: private
+        description: |
+          # My first repository
+
+          * être ou ne pas être
+          * Testovací úložiště
+        perms:
+          - name: ansibletestorg+ansibletestrobot1
+            type: user
+            role: admin
+        state: present
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure repository ansibletestrepo1 set to MIRROR
+      herve4m.quay.quay_repository:
+        name: ansibletestorg/ansibletestrepo1
+        repo_state: MIRROR
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure repository mirror configuration for ansibletestrepo1 exists
+      herve4m.quay.quay_repository_mirror:
+        name: ansibletestorg/ansibletestrepo1
+        external_reference: docker.io/library/hello-world
+        robot_username: ansibletestorg+ansibletestrobot1
+        image_tags:
+          - latest
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure repository mirror configuration for ansibletestrepo1 is updated
+      herve4m.quay.quay_repository_mirror:
+        name: ansibletestorg/ansibletestrepo1
+        external_reference: docker.io/library/hello-world
+        robot_username: ansibletestorg+ansibletestrobot1
+        image_tags:
+          - linux
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure repository mirror configuration for ansibletestrepo1 is active
+      herve4m.quay.quay_repository_mirror:
+        name: ansibletestorg/ansibletestrepo1
+        is_enabled: true
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Force repository mirror configuration for ansibletestrepo1 to sync
+      herve4m.quay.quay_repository_mirror:
+        name: ansibletestorg/ansibletestrepo1
+        force_sync: true
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure repository ansibletestrepo3 is removed
+      herve4m.quay.quay_repository:
+        name: ansibletestorg/ansibletestrepo1
+        state: absent
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure the robot accounts are removed
+      herve4m.quay.quay_robot:
+        name: "{{ item }}"
+        state: absent
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+      loop:
+        - ansibletestorg+ansibletestrobot1
+        - ansibletestorg+ansibletestrobot2
+
+    - name: Ensure the organization is removed
+      herve4m.quay.quay_organization:
+        name: ansibletestorg
+        state: absent
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false

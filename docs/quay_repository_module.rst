@@ -30,9 +30,13 @@ herve4m.quay.quay_repository -- Manage Red Hat Quay repositories
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.3).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.4).
 
-    To install it use: :code:`ansible-galaxy collection install herve4m.quay`.
+    You might already have this collection installed if you are using the ``ansible`` package.
+    It is not included in ``ansible-core``.
+    To check whether it is installed, run :code:`ansible-galaxy collection list`.
+
+    To install it, use: :code:`ansible-galaxy collection install herve4m.quay`.
 
     To use it in a playbook, specify: :code:`herve4m.quay.quay_repository`.
 
@@ -235,6 +239,28 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-repo_state"></div>
+                    <b>repo_state</b>
+                    <a class="ansibleOptionLink" href="#parameter-repo_state" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                                        </td>
+                                <td>
+                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>READ_ONLY</li>
+                                                                                                                                                                                                <li>MIRROR</li>
+                                                                                    </ul>
+                                                                                    <b>Default:</b><br/><div style="color: blue">"NORMAL"</div>
+                                    </td>
+                                                                <td>
+                                            <div>If <code>NORMAL</code>, the repository is in the default state (read/write).</div>
+                                            <div>If <code>READ_ONLY</code>, the repository is read only.</div>
+                                            <div>If <code>MIRROR</code>, the repository is a mirror and can be configured with the quay_mirroring module.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-star"></div>
                     <b>star</b>
                     <a class="ansibleOptionLink" href="#parameter-star" title="Permalink to this option"></a>
@@ -410,6 +436,14 @@ Examples
       herve4m.quay.quay_repository:
         name: production/smallimage
         star: true
+        state: present
+        quay_host: https://quay.example.com
+        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+
+    - name: Ensure the repository state as MIRROR
+      herve4m.quay.quay_repository:
+        name: production/smallimage
+        repo_state: MIRROR
         state: present
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7

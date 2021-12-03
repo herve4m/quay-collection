@@ -52,3 +52,9 @@ releases:
     fragments:
     - v0.0.3_summary.yml
     release_date: '2021-10-07'
+  0.0.4:
+    changes:
+      release_summary: New quay_repository_mirror module
+    fragments:
+    - v0.0.4_summary.yml
+    release_date: '2021-12-03'

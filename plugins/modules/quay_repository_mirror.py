@@ -33,17 +33,17 @@ author: Herve Quatremain (@herve4m)
 options:
   name:
     description:
-      - Name of the repository to create, remove, or modify a mirror configuration. 
-        The format for the name is C(namespace)/C(shortname). The namespace can 
+      - Name of the repository to create, remove, or modify a mirror configuration.
+        The format for the name is C(namespace)/C(shortname). The namespace can
         only be an organization namespace.
       - The name must be in lowercase and must not contain white spaces.
     required: true
     type: str
   state:
     description:
-      - There is no API function to remove the configuration. The configuration 
-        can only be deactivated or the repository state can be changed. Note that 
-        when changing the state, the config remains in the current state. 
+      - There is no API function to remove the configuration. The configuration
+        can only be deactivated or the repository state can be changed. Note that
+        when changing the state, the config remains in the current state.
     type: str
     default: present
   is_enabled:
@@ -78,10 +78,10 @@ options:
     default: 2021-01-01T12:00:00.000000Z
   robot_username:
     description:
-      - Username of the robot that is authorised to sync. 
+      - Username of the robot that is authorised to sync.
     type: str
     required: true
-  image_tags: 
+  image_tags:
     description:
       - List of image tags to be synchronised from the remote repository.
     type: list
@@ -93,10 +93,11 @@ options:
     type: bool
     default: true
   force_sync:
+    description:
       - Triggers an immediate sync for the repository.
       - Be aware, if a sync is active configuration updates are skipped.
     type: bool
-    default: false  
+    default: false
 notes:
   - Supports C(check_mode).
   - The token that you provide in I(quay_token) must have the "Administer
@@ -105,7 +106,7 @@ extends_documentation_fragment: herve4m.quay.auth
 """
 
 EXAMPLES = r"""
-- name: Ensure repository mirror configuration for smallimage exists in the production organization
+- name: Ensure repository mirror conf for smallimage exists in the production organization
   herve4m.quay.quay_repository_mirror:
     name: production/smallimage
     external_reference: quay.io/projectquay/quay
@@ -148,12 +149,9 @@ def main():
         external_registry_username=dict(),
         external_registry_password=dict(no_log=True),
         verify_tls=dict(type="bool", default=True),
-        image_tags=dict(
-            type="list",
-            elements="str"
-        ),
+        image_tags=dict(type="list", elements="str"),
         sync_interval=dict(),
-        sync_start_date=dict()
+        sync_start_date=dict(),
     )
 
     # Create a module for ourselves
@@ -243,28 +241,45 @@ def main():
             "is_enabled": is_enabled,
             "robot_username": robot_username,
             "external_reference": external_reference,
-            "external_registry_config": {
-              "verify_tls": verify_tls
-            },
-            "root_rule": {
-              "rule_kind": "tag_glob_csv",
-              "rule_value": image_tags
-            }
+            "external_registry_config": {"verify_tls": verify_tls},
+            "root_rule": {"rule_kind": "tag_glob_csv", "rule_value": image_tags},
         }
         new_fields["sync_interval"] = sync_interval if sync_interval else 86400
-        new_fields["sync_start_date"] = sync_start_date if sync_start_date else datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
-        new_fields["external_registry_username"] = external_registry_username if external_registry_username else ""
-        new_fields["external_registry_password"] = external_registry_username if external_registry_username else ""
+        new_fields["sync_start_date"] = (
+            sync_start_date
+            if sync_start_date
+            else datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
+        )
+        new_fields["external_registry_username"] = (
+            external_registry_username if external_registry_username else ""
+        )
+        new_fields["external_registry_password"] = (
+            external_registry_username if external_registry_username else ""
+        )
 
-        module.create("repository", full_repo_name, "repository/{full_repo_name}/mirror", new_fields, auto_exit=False, full_repo_name=full_repo_name)
+        module.create(
+            "repository",
+            full_repo_name,
+            "repository/{full_repo_name}/mirror",
+            new_fields,
+            auto_exit=False,
+            full_repo_name=full_repo_name,
+        )
         changed = True
 
         if force_sync:
-            module.create("repository", full_repo_name, "repository/{full_repo_name}/mirror/sync-now", {}, auto_exit=False, full_repo_name=full_repo_name)
+            module.create(
+                "repository",
+                full_repo_name,
+                "repository/{full_repo_name}/mirror/sync-now",
+                {},
+                auto_exit=False,
+                full_repo_name=full_repo_name,
+            )
 
     else:
         if mirror_details["sync_status"] == "SYNCING":
-          module.exit_json(skipped=True)
+            module.exit_json(skipped=True)
 
         # Update external_registry_username
         if external_registry_password is not None:
@@ -278,7 +293,7 @@ def main():
                 full_repo_name=full_repo_name,
             )
             if updated:
-                changed = True        
+                changed = True
         # Update external_registry_username
         if sync_start_date is not None:
             updated, _ = module.update(
@@ -291,7 +306,7 @@ def main():
                 full_repo_name=full_repo_name,
             )
             if updated:
-                changed = True  
+                changed = True
         # Update sync_start_date
         if sync_start_date is not None:
             updated, _ = module.update(
@@ -304,7 +319,7 @@ def main():
                 full_repo_name=full_repo_name,
             )
             if updated:
-                changed = True      
+                changed = True
         # Update sync_interval
         if sync_interval is not None:
             updated, _ = module.update(
@@ -317,7 +332,7 @@ def main():
                 full_repo_name=full_repo_name,
             )
             if updated:
-                changed = True      
+                changed = True
         # Update image_tags
         if image_tags is not None:
             updated, _ = module.update(
@@ -325,7 +340,7 @@ def main():
                 "repository",
                 full_repo_name,
                 "repository/{full_repo_name}/mirror",
-                {"root_rule": { "rule_kind": "tag_glob_csv", "rule_value": image_tags }},
+                {"root_rule": {"rule_kind": "tag_glob_csv", "rule_value": image_tags}},
                 auto_exit=False,
                 full_repo_name=full_repo_name,
             )
@@ -338,7 +353,7 @@ def main():
                 "repository",
                 full_repo_name,
                 "repository/{full_repo_name}/mirror",
-                {"external_registry_config": { "verify_tls": verify_tls }},
+                {"external_registry_config": {"verify_tls": verify_tls}},
                 auto_exit=False,
                 full_repo_name=full_repo_name,
             )
@@ -385,9 +400,16 @@ def main():
                 changed = True
 
         if force_sync:
-            if mirror_details["sync_status"] is not "SYNC_NOW":
-              module.create("repository", full_repo_name, "repository/{full_repo_name}/mirror/sync-now", {}, auto_exit=False, full_repo_name=full_repo_name)
-              changed = True
+            if mirror_details["sync_status"] != "SYNC_NOW":
+                module.create(
+                    "repository",
+                    full_repo_name,
+                    "repository/{full_repo_name}/mirror/sync-now",
+                    {},
+                    auto_exit=False,
+                    full_repo_name=full_repo_name,
+                )
+                changed = True
 
     module.exit_json(changed=changed)
 

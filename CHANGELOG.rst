@@ -5,6 +5,14 @@ Red Hat Quay Collection Release Notes
 .. contents:: Topics
 
 
+v0.0.4
+======
+
+Release Summary
+---------------
+
+New quay_repository_mirror module
+
 v0.0.3
 ======
 

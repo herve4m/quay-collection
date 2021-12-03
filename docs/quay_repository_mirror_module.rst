@@ -14,7 +14,7 @@
 
 .. Anchors
 
-.. _ansible_collections.herve4m.quay.quay_application_module:
+.. _ansible_collections.herve4m.quay.quay_repository_mirror_module:
 
 .. Anchors: short name for ansible.builtin
 
@@ -24,8 +24,8 @@
 
 .. Title
 
-herve4m.quay.quay_application -- Manage Red Hat Quay applications
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+herve4m.quay.quay_repository_mirror -- Manage Red Hat Quay repositories mirrors
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. Collection note
 
@@ -38,7 +38,7 @@ herve4m.quay.quay_application -- Manage Red Hat Quay applications
 
     To install it, use: :code:`ansible-galaxy collection install herve4m.quay`.
 
-    To use it in a playbook, specify: :code:`herve4m.quay.quay_application`.
+    To use it in a playbook, specify: :code:`herve4m.quay.quay_repository_mirror`.
 
 .. version_added
 
@@ -56,7 +56,7 @@ Synopsis
 
 .. Description
 
-- Create, delete, and update applications in Red Hat Quay organizations.
+- Create, delete, and update mirror configuration in Red Hat Quay.
 
 
 .. Aliases
@@ -80,24 +80,25 @@ Parameters
         </tr>
                     <tr>
                                                                 <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-application_uri"></div>
-                    <b>application_uri</b>
-                    <a class="ansibleOptionLink" href="#parameter-application_uri" title="Permalink to this option"></a>
+                    <div class="ansibleOptionAnchor" id="parameter-external_reference"></div>
+                    <b>external_reference</b>
+                    <a class="ansibleOptionLink" href="#parameter-external_reference" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
+                                                 / <span style="color: red">required</span>                    </div>
                                                         </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>URL to the application home page.</div>
+                                            <div>Path to the remote container repository to sync.</div>
+                                            <div>e.g. quay.io/projectquay/quay</div>
                                                         </td>
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-avatar_email"></div>
-                    <b>avatar_email</b>
-                    <a class="ansibleOptionLink" href="#parameter-avatar_email" title="Permalink to this option"></a>
+                    <div class="ansibleOptionAnchor" id="parameter-external_registry_password"></div>
+                    <b>external_registry_password</b>
+                    <a class="ansibleOptionLink" href="#parameter-external_registry_password" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
                                                                     </div>
@@ -105,14 +106,14 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>Email address that represents the avatar for the application.</div>
+                                            <div>Password for the chosen remote registry to pull the images.</div>
                                                         </td>
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-description"></div>
-                    <b>description</b>
-                    <a class="ansibleOptionLink" href="#parameter-description" title="Permalink to this option"></a>
+                    <div class="ansibleOptionAnchor" id="parameter-external_registry_username"></div>
+                    <b>external_registry_username</b>
+                    <a class="ansibleOptionLink" href="#parameter-external_registry_username" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
                                                                     </div>
@@ -120,7 +121,61 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>Description for the application.</div>
+                                            <div>Username for the chosen remote registry to pull the images.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-force_sync"></div>
+                    <b>force_sync</b>
+                    <a class="ansibleOptionLink" href="#parameter-force_sync" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                                                    </div>
+                                                        </td>
+                                <td>
+                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>Triggers an immediate sync for the repository.</div>
+                                            <div>Be aware, if a sync is active configuration updates are skipped.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-image_tags"></div>
+                    <b>image_tags</b>
+                    <a class="ansibleOptionLink" href="#parameter-image_tags" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>                         / <span style="color: red">required</span>                    </div>
+                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>List of image tags to be synchronised from the remote repository.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-is_enabled"></div>
+                    <b>is_enabled</b>
+                    <a class="ansibleOptionLink" href="#parameter-is_enabled" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                                                    </div>
+                                                        </td>
+                                <td>
+                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>Defines whether the mirror configuration is active or inactive.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -135,38 +190,8 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>Name of the application to create, update, or delete. Application names must be at least two characters long.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-new_name"></div>
-                    <b>new_name</b>
-                    <a class="ansibleOptionLink" href="#parameter-new_name" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>New name for the application.</div>
-                                            <div>Setting this option changes the name of the application which current name is provided in <em>name</em>.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-organization"></div>
-                    <b>organization</b>
-                    <a class="ansibleOptionLink" href="#parameter-organization" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Name of the organization in which to manage the application.</div>
+                                            <div>Name of the repository to create, remove, or modify a mirror configuration. The format for the name is <code>namespace</code>/<code>shortname</code>. The namespace can only be an organization namespace.</div>
+                                            <div>The name must be in lowercase and must not contain white spaces.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -205,17 +230,17 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-redirect_uri"></div>
-                    <b>redirect_uri</b>
-                    <a class="ansibleOptionLink" href="#parameter-redirect_uri" title="Permalink to this option"></a>
+                    <div class="ansibleOptionAnchor" id="parameter-robot_username"></div>
+                    <b>robot_username</b>
+                    <a class="ansibleOptionLink" href="#parameter-robot_username" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
+                                                 / <span style="color: red">required</span>                    </div>
                                                         </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>Prefix of the application&#x27;s OAuth redirection/callback URLs.</div>
+                                            <div>Username of the robot that is authorised to sync.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -228,16 +253,43 @@ Parameters
                                                                     </div>
                                                         </td>
                                 <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>absent</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
-                                                                                    </ul>
-                                                                            </td>
+                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"present"</div>
+                                    </td>
                                                                 <td>
-                                            <div>If <code>absent</code>, then the module deletes the application.</div>
-                                            <div>The module does not fail if the application does not exist because the state is already as expected.</div>
-                                            <div>If <code>present</code>, then the module creates the application if it does not already exist.</div>
-                                            <div>If the application already exists, then the module updates its state.</div>
+                                            <div>There is no API function to remove the configuration. The configuration can only be deactivated or the repository state can be changed. Note that when changing the state, the config remains in the current state.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-sync_interval"></div>
+                    <b>sync_interval</b>
+                    <a class="ansibleOptionLink" href="#parameter-sync_interval" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                                        </td>
+                                <td>
+                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">86400</div>
+                                    </td>
+                                                                <td>
+                                            <div>Sync interval for this repository mirror in seconds.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-sync_start_date"></div>
+                    <b>sync_start_date</b>
+                    <a class="ansibleOptionLink" href="#parameter-sync_start_date" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                                        </td>
+                                <td>
+                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"2021-01-01T12:00:00+00:00"</div>
+                                    </td>
+                                                                <td>
+                                            <div>The time from which the sync should run (ISO 8601 UTC).</div>
+                                            <div>eg. 2021-12-02T21:06:00.977021Z</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -262,6 +314,25 @@ Parameters
                                                                 <div style="font-size: small; color: darkgreen"><br/>aliases: verify_ssl</div>
                                     </td>
             </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-verify_tls"></div>
+                    <b>verify_tls</b>
+                    <a class="ansibleOptionLink" href="#parameter-verify_tls" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                                                    </div>
+                                                        </td>
+                                <td>
+                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>no</li>
+                                                                                                                                                                                                <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>Defines whether TLS of the external registry should be verified.</div>
+                                                        </td>
+            </tr>
                         </table>
     <br/>
 
@@ -275,7 +346,7 @@ Notes
 
 .. note::
    - Supports ``check_mode``.
-   - The token that you provide in *quay_token* must have the "Administer Organization" and "Administer User" permissions.
+   - The token that you provide in *quay_token* must have the "Administer Repositories" and "Create Repositories" permissions.
 
 .. Seealso
 
@@ -288,39 +359,32 @@ Examples
 .. code-block:: yaml+jinja
 
 
-    - name: Ensure the application extapp exists
-      herve4m.quay.quay_application:
-        organization: production
-        name: extapp
-        description: External application
-        application_uri: http://applicationuri.example.com
-        redirect_uri: http://redirecturi.example.com
-        avatar_email: avatarextapp@example.com
-        state: present
-        quay_host: https://quay.example.com
-        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
-      register: app_details
-
-    - debug:
-        msg: "Client secret: {{ app_details['client_secret'] }}"
-
-    - name: Ensure the application is renamed
-      herve4m.quay.quay_application:
-        organization: production
-        name: extapp
-        new_name: apiaccess
-        description: Application dedicated to API access
-        state: present
+    - name: Ensure repository mirror configuration for smallimage exists in the production organization
+      herve4m.quay.quay_repository_mirror:
+        name: production/smallimage
+        external_reference: quay.io/projectquay/quay
+        robot_username: production+auditrobot
+        is_enabled: true
+        tags:
+          - latest
+          - v3.5.2
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-    - name: Ensure the application is removed
-      herve4m.quay.quay_application:
-        organization: production
-        name: apiaccess
-        state: absent
+    - name: Ensure repository mirror configuration for production/smallimage is disabled
+      herve4m.quay.quay_repository_mirror:
+        name: production/smallimage
+        is_enabled: false
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+
+    - name: Immediate trigger a sync of the repository
+      herve4m.quay.quay_repository_mirror:
+        name: production/smallimage
+        force_sync: true
+        quay_host: https://quay.example.com
+        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+
 
 
 
@@ -330,71 +394,6 @@ Examples
 
 .. Return values
 
-Return Values
--------------
-Common return values are documented :ref:`here <common_return_values>`, the following are the fields unique to this module:
-
-.. raw:: html
-
-    <table border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Key</th>
-            <th>Returned</th>
-            <th width="100%">Description</th>
-        </tr>
-                    <tr>
-                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-client_id"></div>
-                    <b>client_id</b>
-                    <a class="ansibleOptionLink" href="#return-client_id" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
-                <td>changed</td>
-                <td>
-                                            <div>ID if the client associated with the application object.</div>
-                                        <br/>
-                                                                <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">SUJVKUJN5WIP07CAIXAF</div>
-                                    </td>
-            </tr>
-                                <tr>
-                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-client_secret"></div>
-                    <b>client_secret</b>
-                    <a class="ansibleOptionLink" href="#return-client_secret" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
-                <td>changed</td>
-                <td>
-                                            <div>Secret for the client associated with the application object.</div>
-                                        <br/>
-                                                                <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">JBVXLG8XS7UCV1NFKDYPSNGJ4BUESU03GI5OXS2X</div>
-                                    </td>
-            </tr>
-                                <tr>
-                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-name"></div>
-                    <b>name</b>
-                    <a class="ansibleOptionLink" href="#return-name" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
-                <td>changed</td>
-                <td>
-                                            <div>Application name.</div>
-                                        <br/>
-                                                                <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">apiaccess</div>
-                                    </td>
-            </tr>
-                        </table>
-    <br/><br/>
 
 ..  Status (Presently only deprecated)
 

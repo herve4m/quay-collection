@@ -30,9 +30,13 @@ herve4m.quay.quay_team -- Manage Red Hat Quay teams
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.3).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.4).
 
-    To install it use: :code:`ansible-galaxy collection install herve4m.quay`.
+    You might already have this collection installed if you are using the ``ansible`` package.
+    It is not included in ``ansible-core``.
+    To check whether it is installed, run :code:`ansible-galaxy collection list`.
+
+    To install it, use: :code:`ansible-galaxy collection install herve4m.quay`.
 
     To use it in a playbook, specify: :code:`herve4m.quay.quay_team`.
 

@@ -30,9 +30,13 @@ herve4m.quay.quay_tag_info -- Gather information about tags in a Red Hat Quay re
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.3).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.4).
 
-    To install it use: :code:`ansible-galaxy collection install herve4m.quay`.
+    You might already have this collection installed if you are using the ``ansible`` package.
+    It is not included in ``ansible-core``.
+    To check whether it is installed, run :code:`ansible-galaxy collection list`.
+
+    To install it, use: :code:`ansible-galaxy collection install herve4m.quay`.
 
     To use it in a playbook, specify: :code:`herve4m.quay.quay_tag_info`.
 
@@ -250,7 +254,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
                 <td>
                                             <div>List of the tags in the repository.</div>
                                         <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                                <div style="font-size: smaller"><b>Sample:</b></div>
                                                 <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[{&#x27;docker_image_id&#x27;: &#x27;be3e...29d4&#x27;, &#x27;image_id&#x27;: &#x27;be3e...29d4&#x27;, &#x27;is_manifest_list&#x27;: False, &#x27;last_modified&#x27;: &#x27;Thu, 30 Sep 2021 06:10:23 -0000&#x27;, &#x27;manifest_digest&#x27;: &#x27;sha256:9ce9...f3c7&#x27;, &#x27;name&#x27;: &#x27;1.33.1&#x27;, &#x27;reversion&#x27;: False, &#x27;size&#x27;: 784538, &#x27;start_ts&#x27;: 1632982223}, {&#x27;docker_image_id&#x27;: &#x27;be3e...29d4&#x27;, &#x27;image_id&#x27;: &#x27;be3e...29d4&#x27;, &#x27;is_manifest_list&#x27;: False, &#x27;last_modified&#x27;: &#x27;Thu, 30 Sep 2021 06:10:22 -0000&#x27;, &#x27;manifest_digest&#x27;: &#x27;sha256:9ce9...f3c7&#x27;, &#x27;name&#x27;: &#x27;latest&#x27;, &#x27;reversion&#x27;: False, &#x27;size&#x27;: 784538, &#x27;start_ts&#x27;: 1632982222}, {&#x27;docker_image_id&#x27;: &#x27;bda4...29b2&#x27;, &#x27;end_ts&#x27;: 1640336040, &#x27;expiration&#x27;: &#x27;Fri, 24 Dec 2021 08:54:00 -0000&#x27;, &#x27;image_id&#x27;: &#x27;bda4...29b2&#x27;, &#x27;is_manifest_list&#x27;: False, &#x27;last_modified&#x27;: &#x27;Thu, 30 Sep 2021 06:10:21 -0000&#x27;, &#x27;manifest_digest&#x27;: &#x27;sha256:a8f2...5ea7&#x27;, &#x27;name&#x27;: &#x27;1.34.0&#x27;, &#x27;reversion&#x27;: False, &#x27;size&#x27;: 802700, &#x27;start_ts&#x27;: 1632982221}]</div>
                                     </td>
             </tr>
@@ -269,7 +273,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
                                             <div>Time in seconds since the epoch of the tag expiration.</div>
                                             <div>The module only returns expired tags when the <em>only_active_tags</em> parameter is <code>no</code>.</div>
                                         <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                                <div style="font-size: smaller"><b>Sample:</b></div>
                                                 <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">1640336040</div>
                                     </td>
             </tr>
@@ -287,7 +291,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
                 <td>
                                             <div>Expiration date and time in a human readable format.</div>
                                         <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                                <div style="font-size: smaller"><b>Sample:</b></div>
                                                 <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Fri, 24 Dec 2021 08:54:00 -0000</div>
                                     </td>
             </tr>
@@ -305,7 +309,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
                 <td>
                                             <div>Identifier of the image associated with the tag.</div>
                                         <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                                <div style="font-size: smaller"><b>Sample:</b></div>
                                                 <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">d53469b7e6ba9295a4b7a7d9e29537ab879e1582e64d534b6ed2637453dade25</div>
                                     </td>
             </tr>
@@ -323,7 +327,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
                 <td>
                                             <div>Date and time of the last tag modification in a human readable format.</div>
                                         <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                                <div style="font-size: smaller"><b>Sample:</b></div>
                                                 <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Thu, 30 Sep 2021 06:10:22 -0000</div>
                                     </td>
             </tr>
@@ -342,7 +346,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
                                             <div>SHA256 digest for the tag.</div>
                                             <div>You can use that digest to pull the image instead of using the tag name. For example, <code>podman pull quay.example.com/production/smallimage@sha256:a8f2...5ea7</code></div>
                                         <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                                <div style="font-size: smaller"><b>Sample:</b></div>
                                                 <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">sha256:a8f231c07da40107543d74ed1e9a1938a004b498377dbefcf29082c7a9e55ea7</div>
                                     </td>
             </tr>
@@ -360,7 +364,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
                 <td>
                                             <div>Tag identifier.</div>
                                         <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                                <div style="font-size: smaller"><b>Sample:</b></div>
                                                 <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">0.1.2</div>
                                     </td>
             </tr>
@@ -378,7 +382,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
                 <td>
                                             <div>Size of the associated image in bytes.</div>
                                         <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                                <div style="font-size: smaller"><b>Sample:</b></div>
                                                 <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">802700</div>
                                     </td>
             </tr>
@@ -396,7 +400,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
                 <td>
                                             <div>Time in seconds since the epoch of the last tag modification.</div>
                                         <br/>
-                                            <div style="font-size: smaller"><b>Sample:</b></div>
+                                                                <div style="font-size: smaller"><b>Sample:</b></div>
                                                 <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">1632982222</div>
                                     </td>
             </tr>

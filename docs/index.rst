@@ -4,7 +4,7 @@
 Herve4M.Quay
 ============
 
-Collection version 0.0.3
+Collection version 0.0.4
 
 .. toctree::
     :maxdepth: 1
@@ -26,6 +26,7 @@ Modules
 * :ref:`quay_notification <ansible_collections.herve4m.quay.quay_notification_module>` -- Manage Red Hat Quay repository notifications
 * :ref:`quay_organization <ansible_collections.herve4m.quay.quay_organization_module>` -- Manage Red Hat Quay organizations
 * :ref:`quay_repository <ansible_collections.herve4m.quay.quay_repository_module>` -- Manage Red Hat Quay repositories
+* :ref:`quay_repository_mirror <ansible_collections.herve4m.quay.quay_repository_mirror_module>` -- Manage Red Hat Quay repositories mirrors
 * :ref:`quay_robot <ansible_collections.herve4m.quay.quay_robot_module>` -- Manage Red Hat Quay robot accounts
 * :ref:`quay_tag <ansible_collections.herve4m.quay.quay_tag_module>` -- Manage Red Hat Quay image tags
 * :ref:`quay_tag_info <ansible_collections.herve4m.quay.quay_tag_info_module>` -- Gather information about tags in a Red Hat Quay repository
@@ -50,6 +51,7 @@ Modules
     quay_notification_module
     quay_organization_module
     quay_repository_module
+    quay_repository_mirror_module
     quay_robot_module
     quay_tag_module
     quay_tag_info_module

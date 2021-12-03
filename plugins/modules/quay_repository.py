@@ -106,10 +106,11 @@ options:
     description:
       - If C(NORMAL), the repository is in the default state (read/write).
       - If C(READ_ONLY), the repository is read only.
-      - If C(MIRROR), the repository is a mirror and can be configured with the quay_mirroring module.
+      - If C(MIRROR), the repository is a mirror and can be configured with the
+        quay_mirroring module.
     type: str
     default: NORMAL
-    choices: [READ_ONLY, MIRROR]    
+    choices: [READ_ONLY, MIRROR]
 notes:
   - Supports C(check_mode).
   - The token that you provide in I(quay_token) must have the "Administer
@@ -335,7 +336,7 @@ def main():
                 and visibility == "private"
                 or not repo_details["is_public"]
                 and visibility == "public"
-            )            
+            )
         ):
             module.create(
                 "repository",

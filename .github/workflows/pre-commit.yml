@@ -15,6 +15,6 @@ jobs:
         run: |
           sudo apt install software-properties-common
           pip install -Iv ansible ansible-lint flake8 yamllint black
-          ansible-config view -vvv
+          # ansible-config view -vvv
       - uses: pre-commit/action@v2.0.0
 ...

@@ -11,10 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
       - name: Install required packages
         run: |
           sudo apt install software-properties-common
           pip install -Iv ansible ansible-lint flake8 yamllint black
           # ansible-config view -vvv
-      - uses: pre-commit/action@v2.0.0
+      - uses: pre-commit/action@v2.0.3
 ...

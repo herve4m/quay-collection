@@ -1,0 +1,20 @@
+---
+# This workflow action runs pre-commit, which executes Ansible and yaml linting
+# See .pre-commit-config.yaml for more details
+name: pre-commit
+
+on: [push, pull_request]
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - name: Install required packages
+        run: |
+          sudo apt install software-properties-common
+          pip install -Iv ansible ansible-lint flake8 yamllint black
+          ansible-config view -vvv
+      - uses: pre-commit/action@v2.0.0
+...

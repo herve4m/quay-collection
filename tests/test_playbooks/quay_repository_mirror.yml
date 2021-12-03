@@ -67,7 +67,7 @@
         quay_token: "{{ token }}"
         validate_certs: false
 
-    - name: Ensure repository mirror configuration for ansibletestrepo1 is updated
+    - name: Ensure repository mirror conf for ansibletestrepo1 is updated
       herve4m.quay.quay_repository_mirror:
         name: ansibletestorg/ansibletestrepo1
         external_reference: docker.io/library/hello-world
@@ -78,7 +78,7 @@
         quay_token: "{{ token }}"
         validate_certs: false
 
-    - name: Ensure repository mirror configuration for ansibletestrepo1 is active
+    - name: Ensure repository mirror conf for ansibletestrepo1 is active
       herve4m.quay.quay_repository_mirror:
         name: ansibletestorg/ansibletestrepo1
         is_enabled: true

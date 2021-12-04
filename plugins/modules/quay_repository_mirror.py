@@ -25,27 +25,19 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: quay_repository_mirror
-short_description: Manage Red Hat Quay repositories mirrors
+short_description: Manage Red Hat Quay repository mirror configurations
 description:
-  - Create, delete, and update mirror configuration in Red Hat Quay.
-version_added: '0.0.1'
+  - Configure and synchronize repository mirrors in Red Hat Quay.
+version_added: '0.0.4'
 author: Herve Quatremain (@herve4m)
 options:
   name:
     description:
-      - Name of the repository to create, remove, or modify a mirror configuration.
-        The format for the name is C(namespace)/C(shortname). The namespace can
-        only be an organization namespace.
-      - The name must be in lowercase and must not contain white spaces.
+      - Name of the existing repository for which the mirror parameters are
+        configured. The format for the name is C(namespace)/C(shortname). The
+        namespace can only be an organization namespace.
     required: true
     type: str
-  state:
-    description:
-      - There is no API function to remove the configuration. The configuration
-        can only be deactivated or the repository state can be changed. Note that
-        when changing the state, the config remains in the current state.
-    type: str
-    default: present
   is_enabled:
     description:
       - Defines whether the mirror configuration is active or inactive.
@@ -53,10 +45,10 @@ options:
     default: false
   external_reference:
     description:
-      - Path to the remote container repository to sync.
-      - e.g. quay.io/projectquay/quay
+      - Path to the remote container repository to synchronize, such as
+        quay.io/projectquay/quay for example.
+      - That parameter is required when creating the mirroring configuration.
     type: str
-    required: true
   external_registry_username:
     description:
       - Username for the chosen remote registry to pull the images.
@@ -72,21 +64,20 @@ options:
     default: 86400
   sync_start_date:
     description:
-      - The time from which the sync should run (ISO 8601 UTC).
-      - eg. 2021-12-02T21:06:00.977021Z
+      - The time from which the sync should run (ISO 8601 UTC), such as
+        2021-12-02T21:06:00.977021Z for example.
     type: str
     default: 2021-01-01T12:00:00.000000Z
   robot_username:
     description:
-      - Username of the robot that is authorised to sync.
+      - Username of the robot account that is authorised to sync.
+      - That parameter is required when creating the mirroring configuration.
     type: str
-    required: true
   image_tags:
     description:
       - List of image tags to be synchronised from the remote repository.
     type: list
     elements: str
-    required: true
   verify_tls:
     description:
       - Defines whether TLS of the external registry should be verified.
@@ -99,6 +90,13 @@ options:
     type: bool
     default: false
 notes:
+  - You must enable the mirroring capability of your Quay installation
+    (C(FEATURE_REPO_MIRROR) in C(config.yaml)) to use that module.
+  - There is no API function to remove the configuration. However, you can
+    deactivate mirroring by setting the I(is_enabled) parameter to C(false) or
+    by changing the repository mirror state (see the I(repo_state) parameter in
+    the M(quay_repository) module).
+    The configuration is preserved when you disable mirroring.
   - Supports C(check_mode).
   - The token that you provide in I(quay_token) must have the "Administer
     Repositories" and "Create Repositories" permissions.
@@ -106,19 +104,19 @@ extends_documentation_fragment: herve4m.quay.auth
 """
 
 EXAMPLES = r"""
-- name: Ensure repository mirror conf for smallimage exists in the production organization
+- name: Ensure mirroring configuration is set for the existing production/smallimage repo
   herve4m.quay.quay_repository_mirror:
     name: production/smallimage
     external_reference: quay.io/projectquay/quay
     robot_username: production+auditrobot
     is_enabled: true
-    tags:
+    image_tags:
       - latest
       - v3.5.2
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-- name: Ensure repository mirror configuration for production/smallimage is disabled
+- name: Ensure mirroring is disabled for the production/smallimage repository
   herve4m.quay.quay_repository_mirror:
     name: production/smallimage
     is_enabled: false
@@ -144,8 +142,8 @@ def main():
         name=dict(required=True),
         is_enabled=dict(type="bool", default=False),
         force_sync=dict(type="bool", default=False),
-        robot_username=dict(required=True),
-        external_reference=dict(required=True),
+        robot_username=dict(),
+        external_reference=dict(),
         external_registry_username=dict(),
         external_registry_password=dict(no_log=True),
         verify_tls=dict(type="bool", default=True),
@@ -236,6 +234,20 @@ def main():
 
     changed = False
     if not mirror_details:
+
+        # Verify the mandatory parameters for creation
+        missing_req_params = []
+        if external_reference is None:
+            missing_req_params.append("external_reference")
+        if robot_username is None:
+            missing_req_params.append("robot_username")
+        if missing_req_params:
+            module.fail_json(
+                msg="missing required arguments: {args}".format(
+                    args=", ".join(missing_req_params)
+                )
+            )
+
         # Create the repository mirror configuration
         new_fields = {
             "is_enabled": is_enabled,

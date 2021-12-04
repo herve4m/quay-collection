@@ -18,40 +18,25 @@
         quay_token: "{{ token }}"
         validate_certs: false
 
-    # Supporting robot accounts
+    # Supporting robot account
     - name: Ensure the robot accounts exist
       herve4m.quay.quay_robot:
-        name: "{{ item }}"
+        name: ansibletestorg+ansibletestrobot1
         state: present
         quay_host: "{{ quay_url }}"
         quay_token: "{{ token }}"
         validate_certs: false
-      loop:
-        - ansibletestorg+ansibletestrobot1
-        - ansibletestorg+ansibletestrobot2
 
     - name: Ensure repository ansibletestrepo1 exists
       herve4m.quay.quay_repository:
         name: ansibletestorg/ansibletestrepo1
+        repo_state: MIRROR
         visibility: private
-        description: |
-          # My first repository
-
-          * être ou ne pas être
-          * Testovací úložiště
         perms:
           - name: ansibletestorg+ansibletestrobot1
             type: user
             role: admin
         state: present
-        quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
-        validate_certs: false
-
-    - name: Ensure repository ansibletestrepo1 set to MIRROR
-      herve4m.quay.quay_repository:
-        name: ansibletestorg/ansibletestrepo1
-        repo_state: MIRROR
         quay_host: "{{ quay_url }}"
         quay_token: "{{ token }}"
         validate_certs: false
@@ -67,7 +52,18 @@
         quay_token: "{{ token }}"
         validate_certs: false
 
-    - name: Ensure repository mirror conf for ansibletestrepo1 is updated
+    - name: Ensure repository mirror configutation is updated (no change)
+      herve4m.quay.quay_repository_mirror:
+        name: ansibletestorg/ansibletestrepo1
+        external_reference: docker.io/library/hello-world
+        robot_username: ansibletestorg+ansibletestrobot1
+        image_tags:
+          - latest
+        quay_host: "{{ quay_url }}"
+        quay_token: "{{ token }}"
+        validate_certs: false
+
+    - name: Ensure repository mirror configutation is updated (tags)
       herve4m.quay.quay_repository_mirror:
         name: ansibletestorg/ansibletestrepo1
         external_reference: docker.io/library/hello-world
@@ -94,7 +90,7 @@
         quay_token: "{{ token }}"
         validate_certs: false
 
-    - name: Ensure repository ansibletestrepo3 is removed
+    - name: Ensure repository ansibletestrepo1 is removed
       herve4m.quay.quay_repository:
         name: ansibletestorg/ansibletestrepo1
         state: absent
@@ -102,16 +98,13 @@
         quay_token: "{{ token }}"
         validate_certs: false
 
-    - name: Ensure the robot accounts are removed
+    - name: Ensure the robot account is removed
       herve4m.quay.quay_robot:
-        name: "{{ item }}"
+        name: ansibletestorg+ansibletestrobot1
         state: absent
         quay_host: "{{ quay_url }}"
         quay_token: "{{ token }}"
         validate_certs: false
-      loop:
-        - ansibletestorg+ansibletestrobot1
-        - ansibletestorg+ansibletestrobot2
 
     - name: Ensure the organization is removed
       herve4m.quay.quay_organization:
@@ -120,3 +113,4 @@
         quay_host: "{{ quay_url }}"
         quay_token: "{{ token }}"
         validate_certs: false
+...

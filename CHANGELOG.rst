@@ -5,6 +5,14 @@ Red Hat Quay Collection Release Notes
 .. contents:: Topics
 
 
+v0.0.5
+======
+
+Release Summary
+---------------
+
+Collection tested against Red Hat Quay v3.6.1
+
 v0.0.4
 ======
 

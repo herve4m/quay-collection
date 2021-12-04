@@ -104,14 +104,18 @@ options:
     choices: [absent, present]
   repo_state:
     description:
-      - If C(NORMAL), the repository is in the default state (read/write).
-      - If C(READ_ONLY), the repository is read only.
-      - If C(MIRROR), the repository is a mirror and can be configured with the
-        quay_mirroring module.
+      - If C(NORMAL), then the repository is in the default state (read/write).
+      - If C(READ_ONLY), then the repository is read-only.
+      - If C(MIRROR), then the repository is a mirror and you can configure it
+        by using the M(quay_repository_mirror) module.
+      - You must enable the mirroring capability of your Quay installation to
+        use this I(repo_state) parameter.
     type: str
-    default: NORMAL
-    choices: [READ_ONLY, MIRROR]
+    choices: [NORMAL, READ_ONLY, MIRROR]
 notes:
+  - You must enable the mirroring capability of your Quay installation
+    (C(FEATURE_REPO_MIRROR) in C(config.yaml)) to use the I(repo_state)
+    parameter.
   - Supports C(check_mode).
   - The token that you provide in I(quay_token) must have the "Administer
     Repositories" and "Create Repositories" permissions.
@@ -190,7 +194,9 @@ EXAMPLES = r"""
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-- name: Ensure the repository state as MIRROR
+# You must enable the mirroring capability of your Quay installation
+# to use the repo_state parameter.
+- name: Ensure the repository is prepared for mirroring
   herve4m.quay.quay_repository:
     name: production/smallimage
     repo_state: MIRROR
@@ -220,7 +226,7 @@ def main():
         ),
         append=dict(type="bool", default=True),
         star=dict(type="bool"),
-        repo_state=dict(choices=["NORMAL", "READ_ONLY", "MIRROR"], default="NORMAL"),
+        repo_state=dict(choices=["NORMAL", "READ_ONLY", "MIRROR"]),
         state=dict(choices=["present", "absent"], default="present"),
     )
 
@@ -347,19 +353,22 @@ def main():
                 full_repo_name=full_repo_name,
             )
             changed = True
+
+    if repo_state is not None and (
+        not repo_details
+        and repo_state != "NORMAL"
+        or repo_details
+        and repo_details.get("state") != repo_state
+    ):
         # Update repo_state
-        if repo_state is not None:
-            updated, _ = module.update(
-                repo_details,
-                "repository",
-                full_repo_name,
-                "repository/{full_repo_name}/changestate",
-                {"state": repo_state},
-                auto_exit=False,
-                full_repo_name=full_repo_name,
-            )
-            if updated:
-                changed = True
+        module.unconditional_update(
+            "repository",
+            full_repo_name,
+            "repository/{full_repo_name}/changestate",
+            {"state": repo_state},
+            full_repo_name=full_repo_name,
+        )
+        changed = True
 
     if star is not None and module.authenticated:
         if star and (not repo_details or not repo_details.get("is_starred")):

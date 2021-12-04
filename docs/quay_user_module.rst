@@ -30,7 +30,7 @@ herve4m.quay.quay_user -- Manage Red Hat Quay users
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.4).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.5).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -91,7 +91,7 @@ Parameters
                                                                                                                                                             </td>
                                                                 <td>
                                             <div>User&#x27;s email address.</div>
-                                            <div>If you have enabled the mailing capabily of your Quay installation, then this <em>email</em> parameter is mandatory.</div>
+                                            <div>If you have enabled the mailing capability of your Quay installation, then this <em>email</em> parameter is mandatory.</div>
                                                         </td>
             </tr>
                                 <tr>

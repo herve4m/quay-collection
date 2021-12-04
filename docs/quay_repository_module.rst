@@ -30,7 +30,7 @@ herve4m.quay.quay_repository -- Manage Red Hat Quay repositories
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.4).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.5).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -248,15 +248,16 @@ Parameters
                                                         </td>
                                 <td>
                                                                                                                             <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>READ_ONLY</li>
+                                                                                                                                                                <li>NORMAL</li>
+                                                                                                                                                                                                <li>READ_ONLY</li>
                                                                                                                                                                                                 <li>MIRROR</li>
                                                                                     </ul>
-                                                                                    <b>Default:</b><br/><div style="color: blue">"NORMAL"</div>
-                                    </td>
+                                                                            </td>
                                                                 <td>
-                                            <div>If <code>NORMAL</code>, the repository is in the default state (read/write).</div>
-                                            <div>If <code>READ_ONLY</code>, the repository is read only.</div>
-                                            <div>If <code>MIRROR</code>, the repository is a mirror and can be configured with the quay_mirroring module.</div>
+                                            <div>If <code>NORMAL</code>, then the repository is in the default state (read/write).</div>
+                                            <div>If <code>READ_ONLY</code>, then the repository is read-only.</div>
+                                            <div>If <code>MIRROR</code>, then the repository is a mirror and you can configure it by using the M(quay_repository_mirror) module.</div>
+                                            <div>You must enable the mirroring capability of your Quay installation to use this <em>repo_state</em> parameter.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -355,6 +356,7 @@ Notes
 -----
 
 .. note::
+   - You must enable the mirroring capability of your Quay installation (``FEATURE_REPO_MIRROR`` in ``config.yaml``) to use the *repo_state* parameter.
    - Supports ``check_mode``.
    - The token that you provide in *quay_token* must have the "Administer Repositories" and "Create Repositories" permissions.
 
@@ -440,7 +442,9 @@ Examples
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-    - name: Ensure the repository state as MIRROR
+    # You must enable the mirroring capability of your Quay installation
+    # to use the repo_state parameter.
+    - name: Ensure the repository is prepared for mirroring
       herve4m.quay.quay_repository:
         name: production/smallimage
         repo_state: MIRROR

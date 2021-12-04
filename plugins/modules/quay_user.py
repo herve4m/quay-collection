@@ -49,7 +49,7 @@ options:
   email:
     description:
       - User's email address.
-      - If you have enabled the mailing capabily of your Quay installation,
+      - If you have enabled the mailing capability of your Quay installation,
         then this I(email) parameter is mandatory.
     type: str
   password:

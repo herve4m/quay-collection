@@ -58,3 +58,9 @@ releases:
     fragments:
     - v0.0.4_summary.yml
     release_date: '2021-12-03'
+  0.0.5:
+    changes:
+      release_summary: Collection tested against Red Hat Quay v3.6.1
+    fragments:
+    - v0.0.5_summary.yml
+    release_date: '2021-12-04'

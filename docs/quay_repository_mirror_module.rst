@@ -24,13 +24,13 @@
 
 .. Title
 
-herve4m.quay.quay_repository_mirror -- Manage Red Hat Quay repositories mirrors
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+herve4m.quay.quay_repository_mirror -- Manage Red Hat Quay repository mirror configurations
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.4).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.5).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -42,7 +42,7 @@ herve4m.quay.quay_repository_mirror -- Manage Red Hat Quay repositories mirrors
 
 .. version_added
 
-.. versionadded:: 0.0.1 of herve4m.quay
+.. versionadded:: 0.0.4 of herve4m.quay
 
 .. contents::
    :local:
@@ -56,7 +56,7 @@ Synopsis
 
 .. Description
 
-- Create, delete, and update mirror configuration in Red Hat Quay.
+- Configure and synchronize repository mirrors in Red Hat Quay.
 
 
 .. Aliases
@@ -85,13 +85,13 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-external_reference" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
+                                                                    </div>
                                                         </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>Path to the remote container repository to sync.</div>
-                                            <div>e.g. quay.io/projectquay/quay</div>
+                                            <div>Path to the remote container repository to synchronize, such as quay.io/projectquay/quay for example.</div>
+                                            <div>That parameter is required when creating the mirroring configuration.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -151,7 +151,7 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-image_tags" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=string</span>                         / <span style="color: red">required</span>                    </div>
+                         / <span style="color: purple">elements=string</span>                                            </div>
                                                         </td>
                                 <td>
                                                                                                                                                             </td>
@@ -190,8 +190,7 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>Name of the repository to create, remove, or modify a mirror configuration. The format for the name is <code>namespace</code>/<code>shortname</code>. The namespace can only be an organization namespace.</div>
-                                            <div>The name must be in lowercase and must not contain white spaces.</div>
+                                            <div>Name of the existing repository for which the mirror parameters are configured. The format for the name is <code>namespace</code>/<code>shortname</code>. The namespace can only be an organization namespace.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -235,28 +234,13 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-robot_username" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
+                                                                    </div>
                                                         </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>Username of the robot that is authorised to sync.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-state"></div>
-                    <b>state</b>
-                    <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"present"</div>
-                                    </td>
-                                                                <td>
-                                            <div>There is no API function to remove the configuration. The configuration can only be deactivated or the repository state can be changed. Note that when changing the state, the config remains in the current state.</div>
+                                            <div>Username of the robot account that is authorised to sync.</div>
+                                            <div>That parameter is required when creating the mirroring configuration.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -288,8 +272,7 @@ Parameters
                                                                                                                                                                     <b>Default:</b><br/><div style="color: blue">"2021-01-01T12:00:00+00:00"</div>
                                     </td>
                                                                 <td>
-                                            <div>The time from which the sync should run (ISO 8601 UTC).</div>
-                                            <div>eg. 2021-12-02T21:06:00.977021Z</div>
+                                            <div>The time from which the sync should run (ISO 8601 UTC), such as 2021-12-02T21:06:00.977021Z for example.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -345,6 +328,8 @@ Notes
 -----
 
 .. note::
+   - You must enable the mirroring capability of your Quay installation (``FEATURE_REPO_MIRROR`` in ``config.yaml``) to use that module.
+   - There is no API function to remove the configuration. However, you can deactivate mirroring by setting the *is_enabled* parameter to ``false`` or by changing the repository mirror state (see the *repo_state* parameter in the M(quay_repository) module). The configuration is preserved when you disable mirroring.
    - Supports ``check_mode``.
    - The token that you provide in *quay_token* must have the "Administer Repositories" and "Create Repositories" permissions.
 
@@ -359,19 +344,19 @@ Examples
 .. code-block:: yaml+jinja
 
 
-    - name: Ensure repository mirror configuration for smallimage exists in the production organization
+    - name: Ensure mirroring configuration is set for the existing production/smallimage repo
       herve4m.quay.quay_repository_mirror:
         name: production/smallimage
         external_reference: quay.io/projectquay/quay
         robot_username: production+auditrobot
         is_enabled: true
-        tags:
+        image_tags:
           - latest
           - v3.5.2
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-    - name: Ensure repository mirror configuration for production/smallimage is disabled
+    - name: Ensure mirroring is disabled for the production/smallimage repository
       herve4m.quay.quay_repository_mirror:
         name: production/smallimage
         is_enabled: false

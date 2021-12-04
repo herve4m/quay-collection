@@ -30,7 +30,7 @@ herve4m.quay.quay_organization -- Manage Red Hat Quay organizations
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.4).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.5).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -91,7 +91,7 @@ Parameters
                                                                                                                                                             </td>
                                                                 <td>
                                             <div>Email address to associate with the new organization.</div>
-                                            <div>If you have enabled the mailing capabily of your Quay installation, then this <em>email</em> parameter is mandatory.</div>
+                                            <div>If you have enabled the mailing capability of your Quay installation, then this <em>email</em> parameter is mandatory.</div>
                                             <div>You cannot use the same address as your account email.</div>
                                                         </td>
             </tr>

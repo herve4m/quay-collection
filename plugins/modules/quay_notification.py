@@ -118,6 +118,19 @@ options:
         description:
           - API token required for the Flowdock notification method.
         type: str
+  severity_level:
+    description:
+      - Optional for the vulnerability_found event.
+      - A vulnerability must have a severity of the chosen level
+        (or higher) for this notification to fire.
+      - 0: Critical
+      - 1: High
+      - 2: Medium
+      - 3: Low
+      - 4: Negligible
+      - 5: Unknown
+    type: int
+    choices: [0, 1, 2, 3, 4, 5]
   regexp:
     description:
       - The regular expression to search in the title of the existing
@@ -267,6 +280,7 @@ def main():
         method=dict(
             choices=["email", "flowdock", "hipchat", "quay_notification", "slack", "webhook"]
         ),
+        severity_level=dict(),
         config=dict(
             type="dict",
             options=dict(
@@ -601,6 +615,11 @@ def main():
                         " does not exist."
                     ).format(orgname=name)
                 )
+
+        if event == "vulnerability_found":
+            severity_level = config.get("severity_level")
+            if severity_level:
+                new_fields["eventConfig"]["level"] = severity_level
 
         match_notifications.append(
             module.create(

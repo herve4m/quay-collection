@@ -5,6 +5,14 @@ Red Hat Quay Collection Release Notes
 .. contents:: Topics
 
 
+v0.0.6
+======
+
+Minor Changes
+-------------
+
+- quay_notification - add the ``vulnerability_level`` parameter.
+
 v0.0.5
 ======
 

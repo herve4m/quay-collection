@@ -64,3 +64,10 @@ releases:
     fragments:
     - v0.0.5_summary.yml
     release_date: '2021-12-04'
+  0.0.6:
+    changes:
+      minor_changes:
+      - quay_notification - add the ``vulnerability_level`` parameter.
+    fragments:
+    - v0.0.6_summary.yml
+    release_date: '2021-12-06'

@@ -4,7 +4,7 @@
 Herve4M.Quay
 ============
 
-Collection version 0.0.5
+Collection version 0.0.6
 
 .. toctree::
     :maxdepth: 1

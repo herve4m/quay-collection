@@ -205,6 +205,20 @@ EXAMPLES = r"""
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
+- name: Ensure notification of type webhook exists
+  herve4m.quay.quay_notification:
+    repository: production/smallimage
+    title: Webhook notification on critical image vulnerability
+    event: vulnerability_found
+    vulnerability_level: critical
+    method: webhook
+    config:
+      url: https://webhook.example.com/webhook/12345
+      template: "{{ lookup('file', 'post.json') | string }}"
+    state: present
+    quay_host: https://quay.example.com
+    quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+
 - name: Ensure notification of type Slack exists
   herve4m.quay.quay_notification:
     repository: production/smallimage

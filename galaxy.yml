@@ -1,7 +1,7 @@
 ---
 namespace: herve4m
 name: quay
-version: 0.0.5
+version: 0.0.6
 readme: README.md
 authors:
   - Hervé Quatremain <rv4m@yahoo.co.uk>

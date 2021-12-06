@@ -30,7 +30,7 @@ herve4m.quay.quay_notification -- Manage Red Hat Quay repository notifications
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.5).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.6).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -468,6 +468,30 @@ Parameters
                                                                 <div style="font-size: small; color: darkgreen"><br/>aliases: verify_ssl</div>
                                     </td>
             </tr>
+                                <tr>
+                                                                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-vulnerability_level"></div>
+                    <b>vulnerability_level</b>
+                    <a class="ansibleOptionLink" href="#parameter-vulnerability_level" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                                        </td>
+                                <td>
+                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>critical</li>
+                                                                                                                                                                                                <li>high</li>
+                                                                                                                                                                                                <li>medium</li>
+                                                                                                                                                                                                <li>low</li>
+                                                                                                                                                                                                <li>negligible</li>
+                                                                                                                                                                                                <li>unknown</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>Only used when <em>event</em> is <code>vulnerability_found</code>.</div>
+                                            <div>The notification is triggered when the vulnerability has a level equal or higher to the level you define is <em>vulnerability_level</em>.</div>
+                                                        </td>
+            </tr>
                         </table>
     <br/>
 
@@ -503,6 +527,20 @@ Examples
         config:
           name: operators
           type: team
+        state: present
+        quay_host: https://quay.example.com
+        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+
+    - name: Ensure notification of type webhook exists
+      herve4m.quay.quay_notification:
+        repository: production/smallimage
+        title: Webhook notification on critical image vulnerability
+        event: vulnerability_found
+        vulnerability_level: critical
+        method: webhook
+        config:
+          url: https://webhook.example.com/webhook/12345
+          template: "{{ lookup('file', 'post.json') | string }}"
         state: present
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7

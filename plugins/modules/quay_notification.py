@@ -118,19 +118,19 @@ options:
         description:
           - API token required for the Flowdock notification method.
         type: str
-  severity_level:
+  vulnerability_level:
     description:
-      - Optional for the vulnerability_found event.
-      - A vulnerability must have a severity of the chosen level
-        (or higher) for this notification to fire.
-      - 0: Critical
-      - 1: High
-      - 2: Medium
-      - 3: Low
-      - 4: Negligible
-      - 5: Unknown
-    type: int
-    choices: [0, 1, 2, 3, 4, 5]
+      - Only used when I(event) is C(vulnerability_found).
+      - The notification is triggered when the vulnerability has a level equal
+        or higher to the level you define is I(vulnerability_level).
+    type: str
+    choices:
+      - critical
+      - high
+      - medium
+      - low
+      - negligible
+      - unknown
   regexp:
     description:
       - The regular expression to search in the title of the existing
@@ -260,6 +260,11 @@ from ..module_utils.api_module import APIModule
 
 
 def main():
+    # Ordered list of the vulnerability levels. This list is also used to map
+    # each level name to its ID. The ID is the index the level in the list.
+    # The ID is used in the POST request.
+    vulnerability_level_names = ["critical", "high", "medium", "low", "negligible", "unknown"]
+
     argument_spec = dict(
         repository=dict(required=True),
         title=dict(),
@@ -280,7 +285,7 @@ def main():
         method=dict(
             choices=["email", "flowdock", "hipchat", "quay_notification", "slack", "webhook"]
         ),
-        severity_level=dict(),
+        vulnerability_level=dict(choices=vulnerability_level_names),
         config=dict(
             type="dict",
             options=dict(
@@ -347,6 +352,7 @@ def main():
     test = module.params.get("test")
     reset_failcount = module.params.get("reset_failcount")
     state = module.params.get("state")
+    vulnerability_level = module.params.get("vulnerability_level")
 
     # Extract namespace and repository from the repository parameter
     my_name = module.who_am_i()
@@ -616,10 +622,10 @@ def main():
                     ).format(orgname=name)
                 )
 
-        if event == "vulnerability_found":
-            severity_level = config.get("severity_level")
-            if severity_level:
-                new_fields["eventConfig"]["level"] = severity_level
+        if event == "vulnerability_found" and vulnerability_level is not None:
+            new_fields["eventConfig"]["level"] = str(
+                vulnerability_level_names.index(vulnerability_level)
+            )
 
         match_notifications.append(
             module.create(

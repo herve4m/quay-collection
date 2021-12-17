@@ -256,7 +256,7 @@ def main():
             "external_registry_config": {"verify_tls": verify_tls},
             "root_rule": {"rule_kind": "tag_glob_csv", "rule_value": image_tags},
         }
-        new_fields["sync_interval"] = sync_interval if sync_interval else 86400
+        new_fields["sync_interval"] = int(sync_interval) if sync_interval else 86400
         new_fields["sync_start_date"] = (
             sync_start_date
             if sync_start_date
@@ -339,7 +339,7 @@ def main():
                 "repository",
                 full_repo_name,
                 "repository/{full_repo_name}/mirror",
-                {"sync_interval": sync_interval},
+                {"sync_interval": int(sync_interval)},
                 auto_exit=False,
                 full_repo_name=full_repo_name,
             )

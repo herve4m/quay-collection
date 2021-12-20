@@ -108,7 +108,7 @@ Parameters
                                     </td>
                                                                 <td>
                                             <div>Indicate the time format used in the <em>expiration</em> parameter.</div>
-                                            <div>Based on default Python format (see time.strftime doc).</div>
+                                            <div>Based on default Python format (see <a href='https://docs.python.org/3/library/time.html#time.strftime'>https://docs.python.org/3/library/time.html#time.strftime</a>).</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -194,7 +194,7 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>When <code>state=present</code>, the <em>tag</em> parameter provides the new tag to add to the image. If another image already uses that tag, then the module removes the tag from that image first.</div>
+                                            <div>When <code>state=present</code>, the <em>tag</em> parameter provides the new tag to add to the image. If another image already uses that tag, then the module removes the tag from that other image first.</div>
                                             <div>When <code>state=absent</code>, the <em>tag</em> parameter indicates the tag to remove. If you do not set that <em>tag</em> parameter, then the module removes the tag that you give in the image name with the <em>image</em> parameter.</div>
                                                         </td>
             </tr>

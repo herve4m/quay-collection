@@ -161,7 +161,7 @@ Parameters
                                                                                                                                                             </td>
                                                                 <td>
                                             <div>The regular expression to look for in the existing messages. This does not have to match an entire line.</div>
-                                            <div>For <code>state=present</code>, if several messages match then the module updates one and deletes the others.</div>
+                                            <div>For <code>state=present</code>, if several messages match, then the module updates one and deletes the others.</div>
                                             <div>For <code>state=absent</code>, the module deletes all the messages that match.</div>
                                             <div>Uses Python regular expressions. See <a href='https://docs.python.org/3/library/re.html'>https://docs.python.org/3/library/re.html</a>.</div>
                                             <div>Mutually exclusive with <em>search_string</em>.</div>
@@ -202,7 +202,7 @@ Parameters
                                                                                                                                                             </td>
                                                                 <td>
                                             <div>The literal string to look for in the existing messages. This does not have to match an entire line.</div>
-                                            <div>For <code>state=present</code>, if several messages match then the module updates one and deletes the others.</div>
+                                            <div>For <code>state=present</code>, if several messages match, then the module updates one and deletes the others.</div>
                                             <div>For <code>state=absent</code>, the module deletes all the messages that match.</div>
                                             <div>Mutually exclusive with <em>regexp</em>.</div>
                                                         </td>

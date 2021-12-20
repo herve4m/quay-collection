@@ -44,7 +44,7 @@ options:
     description:
       - When C(state=present), the I(tag) parameter provides the new tag to add
         to the image. If another image already uses that tag, then the module
-        removes the tag from that image first.
+        removes the tag from that other image first.
       - When C(state=absent), the I(tag) parameter indicates the tag to remove.
         If you do not set that I(tag) parameter, then the module removes the
         tag that you give in the image name with the I(image) parameter.
@@ -59,7 +59,8 @@ options:
   expiration_format:
     description:
       - Indicate the time format used in the I(expiration) parameter.
-      - Based on default Python format (see time.strftime doc).
+      - Based on default Python format (see
+        U(https://docs.python.org/3/library/time.html#time.strftime)).
     type: str
     default: "%Y%m%d%H%M.%S"
   state:

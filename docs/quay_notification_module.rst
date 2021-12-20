@@ -531,6 +531,8 @@ Examples
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
+    # You must enable the security scanner capability of your Quay installation
+    # to use the vulnerability_found event.
     - name: Ensure notification of type webhook exists
       herve4m.quay.quay_notification:
         repository: production/smallimage

@@ -51,31 +51,33 @@ options:
     type: str
   external_registry_username:
     description:
-      - Username for the chosen remote registry to pull the images.
+      - Username to use for pulling the image from the remote registry.
     type: str
   external_registry_password:
     description:
-      - Password for the chosen remote registry to pull the images.
+      - Password to use for pulling the image from the remote registry.
     type: str
   sync_interval:
     description:
-      - Sync interval for this repository mirror in seconds.
+      - Synchronization interval for this repository mirror in seconds.
     type: int
     default: 86400
   sync_start_date:
     description:
-      - The time from which the sync should run (ISO 8601 UTC), such as
-        2021-12-02T21:06:00.977021Z for example.
+      - The date and time at which the first synchronization should be
+        initiated.
+      - The format for the I(sync_start_date) parameter is ISO 8601 UTC, such
+        as 2021-12-02T21:06:00.977021Z.
     type: str
     default: 2021-01-01T12:00:00.000000Z
   robot_username:
     description:
-      - Username of the robot account that is authorised to sync.
+      - Username of the robot account that is used for synchronization.
       - That parameter is required when creating the mirroring configuration.
     type: str
   image_tags:
     description:
-      - List of image tags to be synchronised from the remote repository.
+      - List of image tags to be synchronized from the remote repository.
     type: list
     elements: str
   verify_tls:
@@ -85,13 +87,14 @@ options:
     default: true
   force_sync:
     description:
-      - Triggers an immediate sync for the repository.
-      - Be aware, if a sync is active configuration updates are skipped.
+      - Triggers an immediate image synchronization.
     type: bool
     default: false
 notes:
   - You must enable the mirroring capability of your Quay installation
     (C(FEATURE_REPO_MIRROR) in C(config.yaml)) to use that module.
+  - You cannot modify a repository mirroring configuration if a synchronization
+    is in progress.
   - There is no API function to remove the configuration. However, you can
     deactivate mirroring by setting the I(is_enabled) parameter to C(false) or
     by changing the repository mirror state (see the I(repo_state) parameter in
@@ -123,7 +126,7 @@ EXAMPLES = r"""
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-- name: Immediate trigger a sync of the repository
+- name: Immediate trigger a synchronization of the repository
   herve4m.quay.quay_repository_mirror:
     name: production/smallimage
     force_sync: true
@@ -148,7 +151,7 @@ def main():
         external_registry_password=dict(no_log=True),
         verify_tls=dict(type="bool", default=True),
         image_tags=dict(type="list", elements="str"),
-        sync_interval=dict(),
+        sync_interval=dict(type="int"),
         sync_start_date=dict(),
     )
 

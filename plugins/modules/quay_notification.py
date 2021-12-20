@@ -205,6 +205,8 @@ EXAMPLES = r"""
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
+# You must enable the security scanner capability of your Quay installation
+# to use the vulnerability_found event.
 - name: Ensure notification of type webhook exists
   herve4m.quay.quay_notification:
     repository: production/smallimage
@@ -277,7 +279,14 @@ def main():
     # Ordered list of the vulnerability levels. This list is also used to map
     # each level name to its ID. The ID is the index the level in the list.
     # The ID is used in the POST request.
-    vulnerability_level_names = ["critical", "high", "medium", "low", "negligible", "unknown"]
+    vulnerability_level_names = [
+        "critical",
+        "high",
+        "medium",
+        "low",
+        "negligible",
+        "unknown",
+    ]
 
     argument_spec = dict(
         repository=dict(required=True),
@@ -297,7 +306,14 @@ def main():
             ]
         ),
         method=dict(
-            choices=["email", "flowdock", "hipchat", "quay_notification", "slack", "webhook"]
+            choices=[
+                "email",
+                "flowdock",
+                "hipchat",
+                "quay_notification",
+                "slack",
+                "webhook",
+            ]
         ),
         vulnerability_level=dict(choices=vulnerability_level_names),
         config=dict(

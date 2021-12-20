@@ -106,7 +106,7 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>Password for the chosen remote registry to pull the images.</div>
+                                            <div>Password to use for pulling the image from the remote registry.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -121,7 +121,7 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>Username for the chosen remote registry to pull the images.</div>
+                                            <div>Username to use for pulling the image from the remote registry.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -140,8 +140,7 @@ Parameters
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                            <div>Triggers an immediate sync for the repository.</div>
-                                            <div>Be aware, if a sync is active configuration updates are skipped.</div>
+                                            <div>Triggers an immediate image synchronization.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -156,7 +155,7 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>List of image tags to be synchronised from the remote repository.</div>
+                                            <div>List of image tags to be synchronized from the remote repository.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -239,7 +238,7 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>Username of the robot account that is authorised to sync.</div>
+                                            <div>Username of the robot account that is used for synchronization.</div>
                                             <div>That parameter is required when creating the mirroring configuration.</div>
                                                         </td>
             </tr>
@@ -256,7 +255,7 @@ Parameters
                                                                                                                                                                     <b>Default:</b><br/><div style="color: blue">86400</div>
                                     </td>
                                                                 <td>
-                                            <div>Sync interval for this repository mirror in seconds.</div>
+                                            <div>Synchronization interval for this repository mirror in seconds.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -272,7 +271,8 @@ Parameters
                                                                                                                                                                     <b>Default:</b><br/><div style="color: blue">"2021-01-01T12:00:00+00:00"</div>
                                     </td>
                                                                 <td>
-                                            <div>The time from which the sync should run (ISO 8601 UTC), such as 2021-12-02T21:06:00.977021Z for example.</div>
+                                            <div>The date and time at which the first synchronization should be initiated.</div>
+                                            <div>The format for the <em>sync_start_date</em> parameter is ISO 8601 UTC, such as 2021-12-02T21:06:00.977021Z.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -329,6 +329,7 @@ Notes
 
 .. note::
    - You must enable the mirroring capability of your Quay installation (``FEATURE_REPO_MIRROR`` in ``config.yaml``) to use that module.
+   - You cannot modify a repository mirroring configuration if a synchronization is in progress.
    - There is no API function to remove the configuration. However, you can deactivate mirroring by setting the *is_enabled* parameter to ``false`` or by changing the repository mirror state (see the *repo_state* parameter in the M(quay_repository) module). The configuration is preserved when you disable mirroring.
    - Supports ``check_mode``.
    - The token that you provide in *quay_token* must have the "Administer Repositories" and "Create Repositories" permissions.
@@ -363,7 +364,7 @@ Examples
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-    - name: Immediate trigger a sync of the repository
+    - name: Immediate trigger a synchronization of the repository
       herve4m.quay.quay_repository_mirror:
         name: production/smallimage
         force_sync: true

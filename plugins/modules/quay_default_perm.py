@@ -48,7 +48,7 @@ options:
     type: str
   type:
     description:
-      - Specifies the type of the account defined in I(name). Choose C(user)
+      - Type of the account defined in I(name). Choose C(user)
         for both user and robot accounts.
     type: str
     choices: [user, team]
@@ -66,7 +66,7 @@ options:
       - Quay applies the default permission only when repositories are created
         by the user that you define in I(creator).
       - By default, if you do not provide that I(creator) parameter, then Quay
-        applies the default permission to all new repostories, whoever creates
+        applies the default permission to all new repositories, whoever creates
         them.
       - You cannot use robot accounts or teams for the I(creator) parameter.
         You can only use regular user accounts.

@@ -91,7 +91,7 @@ Parameters
                                                                                                                                                             </td>
                                                                 <td>
                                             <div>Quay applies the default permission only when repositories are created by the user that you define in <em>creator</em>.</div>
-                                            <div>By default, if you do not provide that <em>creator</em> parameter, then Quay applies the default permission to all new repostories, whoever creates them.</div>
+                                            <div>By default, if you do not provide that <em>creator</em> parameter, then Quay applies the default permission to all new repositories, whoever creates them.</div>
                                             <div>You cannot use robot accounts or teams for the <em>creator</em> parameter. You can only use regular user accounts.</div>
                                                         </td>
             </tr>
@@ -218,7 +218,7 @@ Parameters
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                            <div>Specifies the type of the account defined in <em>name</em>. Choose <code>user</code> for both user and robot accounts.</div>
+                                            <div>Type of the account defined in <em>name</em>. Choose <code>user</code> for both user and robot accounts.</div>
                                                         </td>
             </tr>
                                 <tr>

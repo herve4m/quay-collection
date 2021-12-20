@@ -58,8 +58,8 @@ options:
     description:
       - The regular expression to look for in the existing messages. This does
         not have to match an entire line.
-      - For C(state=present), if several messages match then the module updates
-        one and deletes the others.
+      - For C(state=present), if several messages match, then the module
+        updates one and deletes the others.
       - For C(state=absent), the module deletes all the messages that match.
       - Uses Python regular expressions. See
         U(https://docs.python.org/3/library/re.html).
@@ -70,8 +70,8 @@ options:
     description:
       - The literal string to look for in the existing messages. This does not
         have to match an entire line.
-      - For C(state=present), if several messages match then the module updates
-        one and deletes the others.
+      - For C(state=present), if several messages match, then the module
+        updates one and deletes the others.
       - For C(state=absent), the module deletes all the messages that match.
       - Mutually exclusive with I(regexp).
     type: str

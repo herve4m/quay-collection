@@ -73,7 +73,7 @@ extends_documentation_fragment: herve4m.quay.auth
 """
 
 EXAMPLES = r"""
-- name: Ensure robot account production+robotprod1 exists
+- name: Ensure the robot account production+robotprod1 exists
   herve4m.quay.quay_robot:
     name: production+robotprod1
     description: Robot account for production
@@ -85,14 +85,14 @@ EXAMPLES = r"""
 - debug:
     msg: "Robot token: {{ robot_details['token'] }}"
 
-- name: Ensure robot account myrobot exists in my namespace
+- name: Ensure the robot account myrobot exists in my namespace
   herve4m.quay.quay_robot:
     name: myrobot
     state: present
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-- name: Ensure robot account production+robotdev1 doest not exists
+- name: Ensure the robot account production+robotdev1 does not exists
   herve4m.quay.quay_robot:
     name: production+robotdev1
     state: absent

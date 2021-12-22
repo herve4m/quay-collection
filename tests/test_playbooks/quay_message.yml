@@ -1,11 +1,13 @@
 ---
+- name: Get the OAuth token
+  import_playbook: get_token.yml
+
 - name: Testing the quay_message module
   hosts: localhost
   become: false
   gather_facts: false
-  vars:
-    quay_url: http://localhost:8080
-    token: BQi2UH35DjB1D65zRFQ4FzuhNFkCyJtvO0HMCou7
+  vars_files:
+    - variables.yml
 
   tasks:
     - name: Ensure the info messages exist
@@ -15,7 +17,7 @@
         format: plain
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
       loop:
         - That is an information 1
@@ -33,7 +35,7 @@
         format: markdown
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the warning message (text) exists
@@ -42,7 +44,7 @@
         severity: warning
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the error message (text) exists
@@ -52,7 +54,7 @@
         format: plain
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the error message (text) exists (no change)
@@ -61,7 +63,7 @@
         severity: error
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the info message is now an error message
@@ -74,7 +76,7 @@
         severity: error
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the new error message has new content
@@ -87,7 +89,7 @@
         search_string: être ou ne pas être
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the new error message has another content
@@ -100,7 +102,7 @@
         regexp: " +message +[0-9]"
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the error message (text) is now a warning
@@ -109,7 +111,7 @@
         severity: warning
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure some messages are deleted (no change)
@@ -117,7 +119,7 @@
         search_string: no such message
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure some other messages are deleted (no change)
@@ -125,7 +127,7 @@
         regexp: "no.*such.*message"
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure messages are deleted (regex)
@@ -133,7 +135,7 @@
         regexp: " +message"
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure message is deleted (content)
@@ -141,7 +143,7 @@
         content: Αυτό είναι ένα μήνυμα δοκιμής κειμένου
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure all info messages are deleted (severity)
@@ -149,6 +151,6 @@
         search_severity: info
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 ...

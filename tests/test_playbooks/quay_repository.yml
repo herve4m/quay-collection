@@ -1,11 +1,13 @@
 ---
+- name: Get the OAuth token
+  import_playbook: get_token.yml
+
 - name: Testing the quay_repository module
   hosts: localhost
   become: false
   gather_facts: false
-  vars:
-    quay_url: http://localhost:8080
-    token: 7W4OnD9yKfqNNnKM3BTuKAut4c4cRiyLGp2YR60V
+  vars_files:
+    - variables.yml
 
   tasks:
     # Supporting organization
@@ -15,7 +17,7 @@
         email: ansibletestorg@example.com
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     # Supporting user accounts
@@ -25,7 +27,7 @@
         email: "{{ item }}@example.com"
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
       loop:
         - ansibletestuser1
@@ -41,7 +43,7 @@
         name: "{{ item }}"
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
       loop:
         - ansibletestorg+ansibletestrobot1
@@ -55,7 +57,7 @@
         role: admin
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
       loop:
         - ansibletestteam1
@@ -79,7 +81,7 @@
             role: admin
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure repository ansibletestrepo1 is updated (no change)
@@ -100,7 +102,7 @@
             role: admin
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure repository ansibletestrepo2 exists
@@ -115,7 +117,7 @@
             role: admin
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure repository ansibletestrepo2 is updated
@@ -134,7 +136,7 @@
         append: false
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure repository ansibletestrepo3 exists (in admin)
@@ -148,7 +150,7 @@
             role: admin
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure repository ansibletestrepo3 has no star (no change)
@@ -157,7 +159,7 @@
         star: false
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure repository ansibletestrepo3 has a star
@@ -166,7 +168,7 @@
         star: true
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure repository ansibletestrepo3 is removed (from admin)
@@ -174,7 +176,7 @@
         name: ansibletestrepo3
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure non-existing repository is deleted (no change)
@@ -182,7 +184,7 @@
         name: nonexistingorg/nonexistingrepo
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure repositories are removed
@@ -190,7 +192,7 @@
         name: "ansibletestorg/{{ item }}"
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
       loop:
         - ansibletestrepo1
@@ -203,7 +205,7 @@
         organization: ansibletestorg
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
       loop:
         - ansibletestteam1
@@ -214,7 +216,7 @@
         username: "{{ item }}"
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
       loop:
         - ansibletestuser1
@@ -229,7 +231,7 @@
         name: "{{ item }}"
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
       loop:
         - ansibletestorg+ansibletestrobot1
@@ -240,6 +242,6 @@
         name: ansibletestorg
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 ...

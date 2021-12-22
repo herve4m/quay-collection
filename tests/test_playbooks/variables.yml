@@ -1,0 +1,12 @@
+---
+quay_hostname: localhost:8080
+quay_url: "http://{{ quay_hostname }}"
+
+admin_username: admin
+admin_password: redhat123
+
+# If you do not define your OAuth token in the following default_token
+# variable, then the test framework tries to get an OAuth token by creating the
+# first user (defined in admin_username).
+default_token: ""
+...

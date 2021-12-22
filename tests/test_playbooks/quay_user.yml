@@ -1,11 +1,13 @@
 ---
+- name: Get the OAuth token
+  import_playbook: get_token.yml
+
 - name: Testing the quay_user module
   hosts: localhost
   become: false
   gather_facts: false
-  vars:
-    quay_url: http://localhost:8080
-    token: BQi2UH35DjB1D65zRFQ4FzuhNFkCyJtvO0HMCou7
+  vars_files:
+    - variables.yml
 
   tasks:
     - name: Ensure user lvasquez exists
@@ -15,7 +17,7 @@
         password: vs9mrD55NP
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure user dwilde exists but account is disabled
@@ -24,7 +26,7 @@
         email: dwilde@example.com
         enabled: false
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure user jziglar is a superuser but account is disabled
@@ -36,7 +38,7 @@
         superuser: true
         enabled: false
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure user jziglar is not a superuser and their account is enabled
@@ -48,7 +50,7 @@
         enabled: true
         password: vs9mrD55NP
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure user jziglar is a superuser
@@ -57,7 +59,7 @@
         state: present
         superuser: true
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure non-existing user is deleted (no change)
@@ -65,7 +67,7 @@
         username: nonexistinguser
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the users are removed
@@ -74,7 +76,7 @@
         state: absent
         enabled: false
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
       loop:
         - lvasquez

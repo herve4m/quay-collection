@@ -1,11 +1,13 @@
 ---
+- name: Get the OAuth token
+  import_playbook: get_token.yml
+
 - name: Testing the quay_notification module
   hosts: localhost
   become: false
   gather_facts: false
-  vars:
-    quay_url: http://localhost:8080
-    token: 7W4OnD9yKfqNNnKM3BTuKAut4c4cRiyLGp2YR60V
+  vars_files:
+    - variables.yml
 
   tasks:
     # Supporting organization
@@ -15,7 +17,7 @@
         email: ansibletestorg@example.com
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     # Supporting user account
@@ -25,7 +27,7 @@
         email: "ansibletestuser1@example.com"
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     # Supporting team
@@ -36,7 +38,7 @@
         role: admin
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     # Supporting repository
@@ -53,7 +55,7 @@
             role: admin
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure notification of type Quay Notification exists
@@ -67,7 +69,7 @@
           type: team
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure notification of type Quay Notification exists (no change)
@@ -81,7 +83,7 @@
           type: team
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure notification of type Slack exists (+test)
@@ -95,7 +97,7 @@
         test: true
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure another notification of type Slack exists (+test)
@@ -109,7 +111,7 @@
         test: true
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Wait to ensure the tests have failed
@@ -123,7 +125,7 @@
         reset_failcount: true
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
 
     - name: Ensure failure counter is reset for all Slack notifications
       herve4m.quay.quay_notification:
@@ -132,7 +134,7 @@
         reset_failcount: true
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
 
     - name: Ensure non-existing notification is removed - method (no change)
       herve4m.quay.quay_notification:
@@ -141,7 +143,7 @@
         reset_failcount: true
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
 
     - name: Ensure non-existing notification is removed - event (no change)
       herve4m.quay.quay_notification:
@@ -150,7 +152,7 @@
         reset_failcount: true
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
 
     - name: Ensure Quay Notification is removed
       herve4m.quay.quay_notification:
@@ -159,7 +161,7 @@
         reset_failcount: true
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
 
     - name: Ensure the Slack notifications are removed
       herve4m.quay.quay_notification:
@@ -167,14 +169,14 @@
         method: slack
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
 
     - name: Ensure the repository is removed
       herve4m.quay.quay_repository:
         name: ansibletestorg/ansibletestrepo
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the team is removed
@@ -183,7 +185,7 @@
         organization: ansibletestorg
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure user account is removed
@@ -191,7 +193,7 @@
         username: ansibletestuser1
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the organization is removed
@@ -199,6 +201,6 @@
         name: ansibletestorg
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 ...

@@ -1,15 +1,15 @@
 ---
+- name: Get the OAuth token
+  import_playbook: get_token.yml
+
 - name: Testing the quay_tag module
   hosts: localhost
   become: false
   gather_facts: false
+  vars_files:
+    - variables.yml
   vars:
-    quay_url: http://localhost:8080
-    token: 7W4OnD9yKfqNNnKM3BTuKAut4c4cRiyLGp2YR60V
     fake_image: quay.io/ansible/http-test-container:latest
-    quay_hostname: localhost:8080
-    username: admin
-    password: redhat123
     expiration: "{{ lookup('pipe', 'date -d now+1year +%Y%m%d0132.12') }}"
 
   tasks:
@@ -20,7 +20,7 @@
         email: ansibletestorg@example.com
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     # Preparing an image:
@@ -44,7 +44,7 @@
     - name: Ensure the image is pushed to Red Hat Quay
       command:
         cmd: "podman push --tls-verify=false --remove-signatures
-              --creds={{ username }}:{{ password }}
+              --creds={{ admin_username }}:{{ admin_password }}
               {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
       changed_when: true
 
@@ -60,7 +60,7 @@
         tag: v1.0.0
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the tag v1.0.0 is added to the image 1 (no change)
@@ -69,7 +69,7 @@
         tag: v1.0.0
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the tag v1.0.0 is added to the image 2 (no change)
@@ -77,7 +77,7 @@
         image: ansibletestorg/ansibletestrepo
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the tag v1.0.0 is added to the image 3 (no change)
@@ -85,7 +85,7 @@
         image: ansibletestorg/ansibletestrepo:v1.0.0
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the tag v1.0.0 is added to the image 4 (no change)
@@ -94,7 +94,7 @@
         tag: latest
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the tag v1.0.0 is added to the image 5 (no change)
@@ -104,7 +104,7 @@
         expiration: ""
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the tag v2.0.0 is added with expiration
@@ -114,7 +114,7 @@
         expiration: "{{ expiration }}"
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the tag v2.0.0 is added with expiration (no change)
@@ -123,7 +123,7 @@
         expiration: "{{ expiration }}"
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the tag v2.0.0 has no expiration
@@ -132,7 +132,7 @@
         expiration: ""
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the tag v2.0.0 is removed
@@ -141,7 +141,7 @@
         expiration: ""
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the tag v1.0.0 is removed
@@ -150,7 +150,7 @@
         tag: v1.0.0
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the tag latest is removed
@@ -159,7 +159,7 @@
         tag: latest
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the repository is removed
@@ -167,7 +167,7 @@
         name: ansibletestorg/ansibletestrepo
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the organization is removed
@@ -175,6 +175,6 @@
         name: ansibletestorg
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 ...

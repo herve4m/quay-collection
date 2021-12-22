@@ -5,6 +5,19 @@ Red Hat Quay Collection Release Notes
 .. contents:: Topics
 
 
+v0.0.7
+======
+
+Release Summary
+---------------
+
+New quay_first_user module
+
+New Modules
+-----------
+
+- herve4m.quay.quay_first_user - Create the first user account
+
 v0.0.6
 ======
 

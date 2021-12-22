@@ -71,3 +71,13 @@ releases:
     fragments:
     - v0.0.6_summary.yml
     release_date: '2021-12-06'
+  0.0.7:
+    changes:
+      release_summary: New quay_first_user module
+    fragments:
+    - v0.0.7_summary.yml
+    modules:
+    - description: Create the first user account
+      name: quay_first_user
+      namespace: ''
+    release_date: '2021-12-22'

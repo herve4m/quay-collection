@@ -14,7 +14,7 @@
 
 .. Anchors
 
-.. _ansible_collections.herve4m.quay.quay_robot_module:
+.. _ansible_collections.herve4m.quay.quay_first_user_module:
 
 .. Anchors: short name for ansible.builtin
 
@@ -24,7 +24,7 @@
 
 .. Title
 
-herve4m.quay.quay_robot -- Manage Red Hat Quay robot accounts
+herve4m.quay.quay_first_user -- Create the first user account
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. Collection note
@@ -38,11 +38,11 @@ herve4m.quay.quay_robot -- Manage Red Hat Quay robot accounts
 
     To install it, use: :code:`ansible-galaxy collection install herve4m.quay`.
 
-    To use it in a playbook, specify: :code:`herve4m.quay.quay_robot`.
+    To use it in a playbook, specify: :code:`herve4m.quay.quay_first_user`.
 
 .. version_added
 
-.. versionadded:: 0.0.1 of herve4m.quay
+.. versionadded:: 0.0.7 of herve4m.quay
 
 .. contents::
    :local:
@@ -56,7 +56,7 @@ Synopsis
 
 .. Description
 
-- Create and delete robot accounts.
+- Create the first user just after installing Red Hat Quay.
 
 
 .. Aliases
@@ -80,9 +80,29 @@ Parameters
         </tr>
                     <tr>
                                                                 <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-description"></div>
-                    <b>description</b>
-                    <a class="ansibleOptionLink" href="#parameter-description" title="Permalink to this option"></a>
+                    <div class="ansibleOptionAnchor" id="parameter-create_token"></div>
+                    <b>create_token</b>
+                    <a class="ansibleOptionLink" href="#parameter-create_token" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                                                    </div>
+                                                        </td>
+                                <td>
+                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>If <code>yes</code>, then an access token is created and returned. You can use that returned token with the other Quay modules, by setting it in their <em>quay_token</em> parameter.</div>
+                                            <div>If <code>no</code>, then no access token is created.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-email"></div>
+                    <b>email</b>
+                    <a class="ansibleOptionLink" href="#parameter-email" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
                                                                     </div>
@@ -90,14 +110,15 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>Description of the robot account. You cannot update the description of existing robot accounts.</div>
+                                            <div>User&#x27;s email address.</div>
+                                            <div>If you have enabled the mailing capability of your Quay installation, then this <em>email</em> parameter is mandatory.</div>
                                                         </td>
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-name"></div>
-                    <b>name</b>
-                    <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
+                    <div class="ansibleOptionAnchor" id="parameter-password"></div>
+                    <b>password</b>
+                    <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
                                                  / <span style="color: red">required</span>                    </div>
@@ -105,10 +126,8 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>Name of the robot account to create or remove, in the format <code>namespace</code>+<code>shortname</code>. The namespace can be an organization or a personal namespace.</div>
-                                            <div>The short name (the part after the <code>+</code> sign) must be in lowercase, must not contain white spaces, must not start by a digit, and must be at least two characters long.</div>
-                                            <div>If you omit the namespace part in the name, then the module uses your personal namespace.</div>
-                                            <div>You can create and delete robot accounts in your personal namespace, but not in the personal namespace of other users. The token you use in <em>quay_token</em> determines the user account you are using.</div>
+                                            <div>User&#x27;s password as a clear string.</div>
+                                            <div>The password must be at least eight characters long and must not contain white spaces.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -131,39 +150,17 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
-                    <b>quay_token</b>
-                    <a class="ansibleOptionLink" href="#parameter-quay_token" title="Permalink to this option"></a>
+                    <div class="ansibleOptionAnchor" id="parameter-username"></div>
+                    <b>username</b>
+                    <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
-                                                                    </div>
+                                                 / <span style="color: red">required</span>                    </div>
                                                         </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>Token for authenticating with the API.</div>
-                                            <div>If you do not set the parameter, then the module tries the <code>QUAY_TOKEN</code> environment variable.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-state"></div>
-                    <b>state</b>
-                    <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>absent</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>If <code>absent</code>, then the module deletes the robot account.</div>
-                                            <div>The module does not fail if the account does not exist because the state is already as expected.</div>
-                                            <div>If <code>present</code>, then the module creates the robot account if it does not already exist.</div>
+                                            <div>Name of the user account to create.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -200,8 +197,11 @@ Notes
 -----
 
 .. note::
+   - The module requires Red Hat Quay 3.6 or later.
+   - To use the module, you must enable the first user creation feature of your Quay installation (``FEATURE_USER_INITIALIZE`` in ``config.yaml``).
+   - You must also use the internal database of your Quay installation for authentication (``AUTHENTICATION_TYPE`` to ``Database`` in ``config.yaml``).
+   - Use the module just after installing Quay, when the database is empty. The module fails if user accounts are already defined in the database.
    - Supports ``check_mode``.
-   - The token that you provide in *quay_token* must have the "Administer Organization" and "Administer User" permissions.
 
 .. Seealso
 
@@ -214,31 +214,17 @@ Examples
 .. code-block:: yaml+jinja
 
 
-    - name: Ensure the robot account production+robotprod1 exists
-      herve4m.quay.quay_robot:
-        name: production+robotprod1
-        description: Robot account for production
-        state: present
+    - name: Ensure the initial user exists
+      herve4m.quay.quay_first_user:
+        username: admin
+        email: admin@example.com
+        password: S6tGwo13
+        create_token: true
         quay_host: https://quay.example.com
-        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
-      register: robot_details
+      register: result
 
     - debug:
-        msg: "Robot token: {{ robot_details['token'] }}"
-
-    - name: Ensure the robot account myrobot exists in my namespace
-      herve4m.quay.quay_robot:
-        name: myrobot
-        state: present
-        quay_host: https://quay.example.com
-        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
-
-    - name: Ensure the robot account production+robotdev1 does not exists
-      herve4m.quay.quay_robot:
-        name: production+robotdev1
-        state: absent
-        quay_host: https://quay.example.com
-        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+        msg: "Access token: {{ result['access_token'] }}"
 
 
 
@@ -262,36 +248,70 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
         </tr>
                     <tr>
                                 <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-name"></div>
-                    <b>name</b>
-                    <a class="ansibleOptionLink" href="#return-name" title="Permalink to this return value"></a>
+                    <div class="ansibleOptionAnchor" id="return-access_token"></div>
+                    <b>access_token</b>
+                    <a class="ansibleOptionLink" href="#return-access_token" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
                                           </div>
                                     </td>
-                <td>changed</td>
+                <td>only when you set the <em>create_token</em> parameter to <code>yes</code></td>
                 <td>
-                                            <div>Token name.</div>
+                                            <div>The access token that you can use for subsequent module calls.</div>
                                         <br/>
                                                                 <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">production+robotprod1</div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">W2YX0V838JZ5FHHUH82Q25FZZMRX8YTB1MTN56P3</div>
                                     </td>
             </tr>
                                 <tr>
                                 <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-token"></div>
-                    <b>token</b>
-                    <a class="ansibleOptionLink" href="#return-token" title="Permalink to this return value"></a>
+                    <div class="ansibleOptionAnchor" id="return-email"></div>
+                    <b>email</b>
+                    <a class="ansibleOptionLink" href="#return-email" title="Permalink to this return value"></a>
                     <div style="font-size: small">
                       <span style="color: purple">string</span>
                                           </div>
                                     </td>
-                <td>changed</td>
+                <td>always</td>
                 <td>
-                                            <div>Robot credential (token).</div>
+                                            <div>User&#x27;s email address.</div>
                                         <br/>
                                                                 <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">IWG3K5EW92KZLPP42PMOKM5CJ2DEAQMSCU33A35NR7MNL21004NKVP3BECOWSQP2</div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">admin@example.com</div>
+                                    </td>
+            </tr>
+                                <tr>
+                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-encrypted_password"></div>
+                    <b>encrypted_password</b>
+                    <a class="ansibleOptionLink" href="#return-encrypted_password" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">string</span>
+                                          </div>
+                                    </td>
+                <td>always</td>
+                <td>
+                                            <div>Encrypted user&#x27;s password.</div>
+                                        <br/>
+                                                                <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">/pbR5LPYx4Y3w/SSf2dAwNxCCNgwmmZk+x04TKn6xEKL2At5wblOy7wA1tNZEhRc</div>
+                                    </td>
+            </tr>
+                                <tr>
+                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-username"></div>
+                    <b>username</b>
+                    <a class="ansibleOptionLink" href="#return-username" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">string</span>
+                                          </div>
+                                    </td>
+                <td>always</td>
+                <td>
+                                            <div>Name of the created user account.</div>
+                                        <br/>
+                                                                <div style="font-size: smaller"><b>Sample:</b></div>
+                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">admin</div>
                                     </td>
             </tr>
                         </table>

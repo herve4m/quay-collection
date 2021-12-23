@@ -1,0 +1,40 @@
+---
+version: "3.7"
+services:
+  postgres:
+    image: quay.io/centos7/postgresql-12-centos7
+    environment:
+      POSTGRESQL_USER: quayuser
+      POSTGRESQL_PASSWORD: quaypass
+      POSTGRESQL_DATABASE: quay
+      POSTGRESQL_ADMIN_PASSWORD: adminpass
+      PGPASSWORD: adminpass
+    volumes:
+      - "./postgresql-extension.sh:/opt/app-root/src/postgresql-start/postgresq\
+        l-extension.sh:ro"
+
+  redis:
+    image: quay.io/centos7/redis-5-centos7
+    environment:
+      REDIS_PASSWORD: strongpassword
+
+  mail:
+    image: docker.io/eaudeweb/mailtrap
+
+  clair:
+    image: quay.io/centos7/httpd-24-centos7
+    ports:
+      - "8089:8080"
+
+  quay:
+    image: quay.io/projectquay/quay:v3.6.2
+    volumes:
+      - "./quay-config:/conf/stack:Z"
+      - "./quay-delay.sh:/quay-registry/conf/init/a-delay.sh:ro"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+      - mail
+      - clair
+      - postgres

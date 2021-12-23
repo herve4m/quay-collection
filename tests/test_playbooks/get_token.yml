@@ -28,7 +28,7 @@
         - default_token|length > 0
 
     - name: Ensure the quay_token fact is set
-      meta: end_play
+      meta: end_host
       when:
         - quay_token is defined
         - quay_token|length > 0
@@ -44,7 +44,7 @@
       when: default_token is defined
 
     - name: Ensure the quay_token fact is set
-      meta: end_play
+      meta: end_host
       when:
         - quay_token is defined
         - quay_token|length > 0

@@ -44,6 +44,12 @@
         quay_host: "{{ quay_url }}"
         quay_token: "{{ quay_token }}"
         validate_certs: false
+      register: result
+
+    - name: Ensure that the task did not change anything
+      assert:
+        that: not result['changed']
+        fail_msg: The preceding task should not have changed anything
 
     - name: Ensure organization testansible3 has a new time machine expiration
       herve4m.quay.quay_organization:
@@ -60,6 +66,12 @@
         quay_host: "{{ quay_url }}"
         quay_token: "{{ quay_token }}"
         validate_certs: false
+      register: result
+
+    - name: Ensure that the task did not change anything
+      assert:
+        that: not result['changed']
+        fail_msg: The preceding task should not have changed anything
 
     - name: Ensure organization testansible4 exists
       herve4m.quay.quay_organization:
@@ -79,6 +91,12 @@
         quay_host: "{{ quay_url }}"
         quay_token: "{{ quay_token }}"
         validate_certs: false
+      register: result
+
+    - name: Ensure that the task did not change anything
+      assert:
+        that: not result['changed']
+        fail_msg: The preceding task should not have changed anything
 
     - name: Ensure the organizations are removed
       herve4m.quay.quay_organization:

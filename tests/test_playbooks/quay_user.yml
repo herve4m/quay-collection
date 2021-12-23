@@ -69,6 +69,12 @@
         quay_host: "{{ quay_url }}"
         quay_token: "{{ quay_token }}"
         validate_certs: false
+      register: result
+
+    - name: Ensure that the task did not change anything
+      assert:
+        that: not result['changed']
+        fail_msg: The preceding task should not have changed anything
 
     - name: Ensure the users are removed
       herve4m.quay.quay_user:

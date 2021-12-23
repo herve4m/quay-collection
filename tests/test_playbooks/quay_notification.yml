@@ -85,6 +85,12 @@
         quay_host: "{{ quay_url }}"
         quay_token: "{{ quay_token }}"
         validate_certs: false
+      register: result
+
+    - name: Ensure that the task did not change anything
+      assert:
+        that: not result['changed']
+        fail_msg: The preceding task should not have changed anything
 
     - name: Ensure notification of type Slack exists (+test)
       herve4m.quay.quay_notification:
@@ -126,6 +132,12 @@
         state: present
         quay_host: "{{ quay_url }}"
         quay_token: "{{ quay_token }}"
+      register: result
+
+    - name: Ensure that the task did not change anything
+      assert:
+        that: not result['changed']
+        fail_msg: The preceding task should not have changed anything
 
     - name: Ensure failure counter is reset for all Slack notifications
       herve4m.quay.quay_notification:
@@ -144,6 +156,12 @@
         state: absent
         quay_host: "{{ quay_url }}"
         quay_token: "{{ quay_token }}"
+      register: result
+
+    - name: Ensure that the task did not change anything
+      assert:
+        that: not result['changed']
+        fail_msg: The preceding task should not have changed anything
 
     - name: Ensure non-existing notification is removed - event (no change)
       herve4m.quay.quay_notification:
@@ -153,6 +171,12 @@
         state: absent
         quay_host: "{{ quay_url }}"
         quay_token: "{{ quay_token }}"
+      register: result
+
+    - name: Ensure that the task did not change anything
+      assert:
+        that: not result['changed']
+        fail_msg: The preceding task should not have changed anything
 
     - name: Ensure Quay Notification is removed
       herve4m.quay.quay_notification:

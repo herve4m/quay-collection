@@ -65,6 +65,12 @@
         quay_host: "{{ quay_url }}"
         quay_token: "{{ quay_token }}"
         validate_certs: false
+      register: result
+
+    - name: Ensure that the task did not change anything
+      assert:
+        that: not result['changed']
+        fail_msg: The preceding task should not have changed anything
 
     - name: Ensure the info message is now an error message
       herve4m.quay.quay_message:
@@ -121,6 +127,12 @@
         quay_host: "{{ quay_url }}"
         quay_token: "{{ quay_token }}"
         validate_certs: false
+      register: result
+
+    - name: Ensure that the task did not change anything
+      assert:
+        that: not result['changed']
+        fail_msg: The preceding task should not have changed anything
 
     - name: Ensure some other messages are deleted (no change)
       herve4m.quay.quay_message:
@@ -129,6 +141,12 @@
         quay_host: "{{ quay_url }}"
         quay_token: "{{ quay_token }}"
         validate_certs: false
+      register: result
+
+    - name: Ensure that the task did not change anything
+      assert:
+        that: not result['changed']
+        fail_msg: The preceding task should not have changed anything
 
     - name: Ensure messages are deleted (regex)
       herve4m.quay.quay_message:

@@ -20,7 +20,7 @@ jobs:
           python-version: '3.9'
 
       - name: Install required packages
-        run: pip install -Iv ansible ansible-lint flake8 yamllint black
+        run: pip install -Iv ansible-core ansible-lint flake8 yamllint black
 
       - uses: pre-commit/action@v2.0.3
 ...

@@ -50,7 +50,7 @@
         robot_username: ansibletestorg+ansibletestrobot1
         image_tags:
           - latest
-        sync_interval: 86400
+        sync_interval: 43200
         sync_start_date: "2021-01-01T12:00:00Z"
         quay_host: "{{ quay_url }}"
         quay_token: "{{ quay_token }}"
@@ -60,7 +60,6 @@
       herve4m.quay.quay_repository_mirror:
         name: ansibletestorg/ansibletestrepo1
         external_reference: docker.io/library/hello-world
-        robot_username: ansibletestorg+ansibletestrobot1
         image_tags:
           - latest
         quay_host: "{{ quay_url }}"
@@ -73,11 +72,12 @@
         that: not result['changed']
         fail_msg: The preceding task should not have changed anything
 
-    - name: Ensure repository mirror configutation is updated (tags)
+    - name: Ensure repository mirror configutation is updated (tags, interval)
       herve4m.quay.quay_repository_mirror:
         name: ansibletestorg/ansibletestrepo1
         external_reference: docker.io/library/hello-world
         robot_username: ansibletestorg+ansibletestrobot1
+        sync_interval: 21600
         image_tags:
           - linux
         quay_host: "{{ quay_url }}"

@@ -1,11 +1,13 @@
 ---
+- name: Get the OAuth token
+  import_playbook: get_token.yml
+
 - name: Testing the quay_team module
   hosts: localhost
   become: false
   gather_facts: false
-  vars:
-    quay_url: http://localhost:8080
-    token: wQwO9gt0iv9eq1vjpc7POcMbKALhlKrF8Uw3rZGO
+  vars_files:
+    - variables.yml
 
   tasks:
     # Supporting organization
@@ -15,7 +17,7 @@
         email: ansibletestorg@example.com
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     # Supporting user accounts
@@ -25,7 +27,7 @@
         email: "{{ item }}@example.com"
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
       loop:
         - ansibletestuser1
@@ -41,7 +43,7 @@
         name: "{{ item }}"
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
       loop:
         - ansibletestorg+ansibletestrobot1
@@ -53,7 +55,7 @@
         organization: ansibletestorg
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure team ansibletestteam2 exists
@@ -72,7 +74,7 @@
           - ansibletestorg+ansibletestrobot1
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure team ansibletestteam2 is updated
@@ -87,7 +89,7 @@
         append: false
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure team ansibletestteam2 has no members
@@ -99,7 +101,7 @@
         append: false
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure team ansibletestteam3 exists
@@ -108,7 +110,7 @@
         organization: ansibletestorg
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure team ansibletestteam3 exists (no change)
@@ -118,8 +120,14 @@
         role: member
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
+      register: result
+
+    - name: Ensure that the task did not change anything
+      assert:
+        that: not result['changed']
+        fail_msg: The preceding task should not have changed anything
 
     - name: Ensure non-existing team is deleted (no change)
       herve4m.quay.quay_team:
@@ -127,8 +135,14 @@
         organization: ansibletestorg
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
+      register: result
+
+    - name: Ensure that the task did not change anything
+      assert:
+        that: not result['changed']
+        fail_msg: The preceding task should not have changed anything
 
     - name: Ensure the teams are removed
       herve4m.quay.quay_team:
@@ -136,7 +150,7 @@
         organization: ansibletestorg
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
       loop:
         - ansibletestteam1
@@ -148,7 +162,7 @@
         username: "{{ item }}"
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
       loop:
         - ansibletestuser1
@@ -163,7 +177,7 @@
         name: "{{ item }}"
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
       loop:
         - ansibletestorg+ansibletestrobot1
@@ -174,6 +188,6 @@
         name: ansibletestorg
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 ...

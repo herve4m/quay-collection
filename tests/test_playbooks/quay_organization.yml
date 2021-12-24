@@ -1,11 +1,13 @@
 ---
+- name: Get the OAuth token
+  import_playbook: get_token.yml
+
 - name: Testing the quay_organization module
   hosts: localhost
   become: false
   gather_facts: false
-  vars:
-    quay_url: http://localhost:8080
-    token: wQwO9gt0iv9eq1vjpc7POcMbKALhlKrF8Uw3rZGO
+  vars_files:
+    - variables.yml
 
   tasks:
     - name: Ensure organization testansible1 exists
@@ -14,7 +16,7 @@
         email: testansible1@example.com
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure organization testansible2 exists
@@ -23,7 +25,7 @@
         email: testansible2@example.com
         time_machine_expiration: "7d"
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     # Renaming requires superuser permissions
@@ -32,7 +34,7 @@
         name: testansible2
         new_name: testansible3
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure organization testansible2 is renamed (no change)
@@ -40,15 +42,21 @@
         name: testansible2
         new_name: testansible3
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
+      register: result
+
+    - name: Ensure that the task did not change anything
+      assert:
+        that: not result['changed']
+        fail_msg: The preceding task should not have changed anything
 
     - name: Ensure organization testansible3 has a new time machine expiration
       herve4m.quay.quay_organization:
         name: testansible3
         time_machine_expiration: "1d"
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure organization testansible3 has the same expiration (no change)
@@ -56,8 +64,14 @@
         name: testansible3
         time_machine_expiration: "1d"
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
+      register: result
+
+    - name: Ensure that the task did not change anything
+      assert:
+        that: not result['changed']
+        fail_msg: The preceding task should not have changed anything
 
     - name: Ensure organization testansible4 exists
       herve4m.quay.quay_organization:
@@ -67,7 +81,7 @@
         state: present
         time_machine_expiration: "1month"
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure non-existing organization is deleted (no change)
@@ -75,15 +89,21 @@
         name: nonexistingorganization
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
+      register: result
+
+    - name: Ensure that the task did not change anything
+      assert:
+        that: not result['changed']
+        fail_msg: The preceding task should not have changed anything
 
     - name: Ensure the organizations are removed
       herve4m.quay.quay_organization:
         name: "{{ item }}"
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
       loop:
         - testansible1

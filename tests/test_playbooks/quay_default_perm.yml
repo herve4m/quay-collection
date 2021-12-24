@@ -1,11 +1,13 @@
 ---
+- name: Get the OAuth token
+  import_playbook: get_token.yml
+
 - name: Testing the quay_default_perm module
   hosts: localhost
   become: false
   gather_facts: false
-  vars:
-    quay_url: http://localhost:8080
-    token: 7W4OnD9yKfqNNnKM3BTuKAut4c4cRiyLGp2YR60V
+  vars_files:
+    - variables.yml
 
   tasks:
     # Supporting organization
@@ -15,7 +17,7 @@
         email: ansibletestorg@example.com
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     # Supporting user accounts
@@ -25,7 +27,7 @@
         email: "{{ item }}@example.com"
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
       loop:
         - ansibletestuser1
@@ -41,7 +43,7 @@
         name: "{{ item }}"
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
       loop:
         - ansibletestorg+ansibletestrobot1
@@ -55,7 +57,7 @@
         role: admin
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
       loop:
         - ansibletestteam1
@@ -69,7 +71,7 @@
         role: read
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure default perm anon-read-ansibletestuser1 exists (no change)
@@ -79,8 +81,14 @@
         type: user
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
+      register: result
+
+    - name: Ensure that the task did not change anything
+      assert:
+        that: not result['changed']
+        fail_msg: The preceding task should not have changed anything
 
     - name: Ensure default perm anon-write-robot exists
       herve4m.quay.quay_default_perm:
@@ -90,7 +98,7 @@
         role: write
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure default perm anon-admin-ansibletestteam1 exists
@@ -101,7 +109,7 @@
         role: admin
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure default perm is updated to anon-write-ansibletestteam1
@@ -112,7 +120,7 @@
         role: write
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure default perm ansibletestuser6-read-ansibletestuser1 exists
@@ -124,7 +132,7 @@
         creator: ansibletestuser6
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure default perm ansibletestuser6-write-robot exists
@@ -136,7 +144,7 @@
         creator: ansibletestuser6
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure default perm ansibletestuser6-admin-ansibletestteam1 exists
@@ -148,7 +156,7 @@
         creator: ansibletestuser6
         state: present
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure default perm is removed (no change)
@@ -160,8 +168,14 @@
         creator: ansibletestuser6
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
+      register: result
+
+    - name: Ensure that the task did not change anything
+      assert:
+        that: not result['changed']
+        fail_msg: The preceding task should not have changed anything
 
     - name: Ensure default perm anon-read-ansibletestuser1 is removed
       herve4m.quay.quay_default_perm:
@@ -171,7 +185,7 @@
         role: read
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure default perm anon-write-robot is removed
@@ -181,7 +195,7 @@
         type: user
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure default perm anon-admin-ansibletestteam1 is removed
@@ -192,7 +206,7 @@
         role: admin
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure perm ansibletestuser6-read-ansibletestuser1 is removed
@@ -204,7 +218,7 @@
         creator: ansibletestuser6
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure default perm ansibletestuser6-write-robot is removed
@@ -216,7 +230,7 @@
         creator: ansibletestuser6
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure perm ansibletestuser6-admin-ansibletestteam1 is removed
@@ -228,7 +242,7 @@
         creator: ansibletestuser6
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 
     - name: Ensure the teams are removed
@@ -237,7 +251,7 @@
         organization: ansibletestorg
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
       loop:
         - ansibletestteam1
@@ -248,7 +262,7 @@
         username: "{{ item }}"
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
       loop:
         - ansibletestuser1
@@ -263,7 +277,7 @@
         name: "{{ item }}"
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
       loop:
         - ansibletestorg+ansibletestrobot1
@@ -274,6 +288,6 @@
         name: ansibletestorg
         state: absent
         quay_host: "{{ quay_url }}"
-        quay_token: "{{ token }}"
+        quay_token: "{{ quay_token }}"
         validate_certs: false
 ...

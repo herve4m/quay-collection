@@ -97,7 +97,9 @@ notes:
   - Supports C(check_mode).
   - The token that you provide in I(quay_token) must have the
     "Super User Access" permission.
-extends_documentation_fragment: herve4m.quay.auth
+extends_documentation_fragment:
+  - herve4m.quay.auth
+  - herve4m.quay.auth.token
 """
 
 EXAMPLES = r"""

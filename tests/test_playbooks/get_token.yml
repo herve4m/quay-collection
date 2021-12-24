@@ -33,7 +33,7 @@
         - quay_token is defined
         - quay_token|length > 0
 
-    - name: Get the OAuth token from the /tmp/quay_collection_TOKEN.yml file
+    - name: Get the OAuth access token from /tmp/quay_collection_TOKEN.yml
       include_vars:
         file: /tmp/quay_collection_TOKEN.yml
       failed_when: false
@@ -65,15 +65,15 @@
       register: result
       failed_when: false
 
-    - name: Ensure that the OAuth token is defined
+    - name: Ensure that the OAuth access token is defined
       assert:
         that: "result is defined and 'access_token' in result"
         fail_msg: >
-          I cannot create an OAuth token for you.
+          I cannot create an OAuth access token for you.
           Please define your token in the variables.yml file.
         quiet: true
 
-    - name: Store the OAuth token in the quay_token fact
+    - name: Store the OAuth access token in the quay_token fact
       set_fact:
         quay_token: "{{ result['access_token'] }}"
 
@@ -83,7 +83,7 @@
         content: "---\ndefault_token: {{ quay_token }}\n"
         mode: 0600
 
-    - name: Display the OAuth token
+    - name: Display the OAuth access token
       debug:
-        msg: "OAuth token: {{ quay_token }}"
+        msg: "OAuth access token: {{ quay_token }}"
 ...

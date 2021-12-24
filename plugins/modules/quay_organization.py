@@ -76,7 +76,9 @@ notes:
     Organization" and "Administer User" permissions.
   - To rename organizations, the token must also have the "Super User Access"
     permission.
-extends_documentation_fragment: herve4m.quay.auth
+extends_documentation_fragment:
+  - herve4m.quay.auth
+  - herve4m.quay.auth.token
 """
 
 EXAMPLES = r"""

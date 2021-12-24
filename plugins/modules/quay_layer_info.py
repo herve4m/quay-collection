@@ -39,7 +39,9 @@ options:
       - If you omit the tag, then it defaults to C(latest).
     required: true
     type: str
-extends_documentation_fragment: herve4m.quay.auth
+extends_documentation_fragment:
+  - herve4m.quay.auth
+  - herve4m.quay.auth.token
 """
 
 EXAMPLES = r"""

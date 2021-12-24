@@ -9,7 +9,7 @@ Use a fresh Quay installation to perform the tests.
 Edit the `variables.yml` file to provide the connection parameters to your Quay installation.
 
 If you are using a fresh Quay installation that you have not configured yet, then you only need to modify the `quay_url` variable.
-The test framework will try to create the first user account and use its OAuth token for later authentications.
+The test framework will try to create the first user account and use its OAuth access token for later authentications.
 This mechanism requires:
 
 * Red Hat Quay version 3.6 or later.
@@ -19,7 +19,7 @@ This mechanism requires:
 * The `SUPER_USERS` parameter in `config.yaml` must include the `admin` user.
   The test playbooks use that user account.
 
-Otherwise, you need to create an OAuth 2 token by using the Quay web UI and paste that token into the `default_token` variable.
+Otherwise, you need to create an OAuth access token by using the Quay web UI and paste that token into the `default_token` variable.
 
 ## Running the Tests
 

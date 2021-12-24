@@ -23,12 +23,6 @@ options:
         the U(http://127.0.0.1) URL.
     type: str
     default: http://127.0.0.1
-  quay_token:
-    description:
-      - Token for authenticating with the API.
-      - If you do not set the parameter, then the module tries the C(QUAY_TOKEN)
-        environment variable.
-    type: str
   validate_certs:
     description:
       - Whether to allow insecure connections to the API.
@@ -39,4 +33,14 @@ options:
     type: bool
     default: yes
     aliases: [verify_ssl]
+"""
+
+    TOKEN = r"""
+options:
+  quay_token:
+    description:
+      - OAuth access token for authenticating with the API.
+      - If you do not set the parameter, then the module tries the C(QUAY_TOKEN)
+        environment variable.
+    type: str
 """

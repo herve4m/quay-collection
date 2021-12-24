@@ -69,7 +69,9 @@ notes:
   - Supports C(check_mode).
   - The token that you provide in I(quay_token) must have the "Administer
     Organization" and "Administer User" permissions.
-extends_documentation_fragment: herve4m.quay.auth
+extends_documentation_fragment:
+  - herve4m.quay.auth
+  - herve4m.quay.auth.token
 """
 
 EXAMPLES = r"""

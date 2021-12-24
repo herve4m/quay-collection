@@ -55,19 +55,19 @@ See [Ansible -- Using collections](https://docs.ansible.com/ansible/latest/user_
 ## Using the Collection
 
 The modules in the collection access Red Hat Quay through its REST API.
-To use the API, Red Hat Quay requires an OAuth 2 access token.
+To use the API, Red Hat Quay requires an OAuth access token.
 You cannot use a user name and a password for authenticating.
 
-There are two ways to get an OAuth 2 access token:
+There are two ways to get an OAuth access token:
 
 * Use the Red Hat Quay web UI.
 * Use the `herve4m.quay.quay_first_user` Ansible module to create the first user account just after you installed Red Hat Quay.
-  The module creates and then returns the OAuth 2 access token for the user.
+  The module creates and then returns the OAuth access token for the user.
 
 
-### Creating an OAuth 2 Access Token by Using the Web UI
+### Creating an OAuth Access Token by Using the Web UI
 
-Before you can use the collection, you must generate an OAuth 2 access token.
+Before you can use the collection, you must generate an OAuth access token.
 To do so, follow those steps:
 
 1. Log in to the Red Hat Quay web UI.
@@ -79,16 +79,16 @@ To do so, follow those steps:
 6. Click `Generate Token`.
 7. Copy and then paste the token string into the `quay_token` module parameter.
 
-The OAuth 2 access token is linked to the user account you use to create it.
+The OAuth access token is linked to the user account you use to create it.
 Your user account needs to have superuser permissions for some modules to operate correctly.
 For example, to manage user accounts, the `herve4m.quay.quay_user` module needs a token created by a user that have superuser permissions.
 
 See the [Quay.io API](https://docs.quay.io/api/) documentation for more details.
 
 
-### Getting an OAuth 2 Access Token when Creating the First User
+### Getting an OAuth Access Token when Creating the First User
 
-Just after you installed Red Hat Quay, and before you do anything else, you can create the first user and generate an OAuth 2 Access Token for that user.
+Just after you installed Red Hat Quay, and before you do anything else, you can create the first user and generate an OAuth access token for that user.
 
 The following playbook example uses the `herve4m.quay.quay_first_user` module to create the first user:
 
@@ -108,11 +108,11 @@ The following playbook example uses the `herve4m.quay.quay_first_user` module to
         validate_certs: true
       register: result
 
-    - name: Display the generated OAuth 2 access token
+    - name: Display the generated OAuth access token
       debug:
         msg: "Access token: {{ result['access_token'] }}"
 
-    # Using the OAuth 2 access token to continue configuring Red Hat Quay
+    # Using the OAuth access token to continue configuring Red Hat Quay
     - name: Ensure the user exists
       herve4m.quay.quay_user:
         username: lvasquez

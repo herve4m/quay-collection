@@ -60,31 +60,12 @@ options:
     type: str
   create_token:
     description:
-      - If C(yes), then an access token is created and returned. You can use
-        that returned token with the other Quay modules, by setting it in their
-        I(quay_token) parameter.
+      - If C(yes), then an OAuth access token is created and returned. You can
+        use that returned token with the other Quay modules, by setting it in
+        the I(quay_token) parameter.
       - If C(no), then no access token is created.
     type: bool
     default: no
-  quay_host:
-    description:
-      - URL for accessing the API. U(https://quay.example.com:8443) for example.
-      - If you do not set the parameter, then the module uses the C(QUAY_HOST)
-        environment variable.
-      - If you do no set the environment variable either, then the module uses
-        the U(http://127.0.0.1) URL.
-    type: str
-    default: http://127.0.0.1
-  validate_certs:
-    description:
-      - Whether to allow insecure connections to the API.
-      - If C(no), then the module does not validate SSL certificates.
-      - If you do not set the parameter, then the module tries the
-        C(QUAY_VERIFY_SSL) environment variable (C(yes), C(1), and C(True) mean
-        yes, and C(no), C(0), C(False), and no value mean no).
-    type: bool
-    default: yes
-    aliases: [verify_ssl]
 notes:
   - The module requires Red Hat Quay 3.6 or later.
   - To use the module, you must enable the first user creation feature of your
@@ -94,6 +75,8 @@ notes:
   - Use the module just after installing Quay, when the database is empty.
     The module fails if user accounts are already defined in the database.
   - Supports C(check_mode).
+extends_documentation_fragment:
+  - herve4m.quay.auth
 """
 
 EXAMPLES = r"""

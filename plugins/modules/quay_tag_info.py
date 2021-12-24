@@ -54,7 +54,9 @@ options:
         tag attributes. Those attributes provide the expiration date.
     type: bool
     default: no
-extends_documentation_fragment: herve4m.quay.auth
+extends_documentation_fragment:
+  - herve4m.quay.auth
+  - herve4m.quay.auth.token
 """
 
 EXAMPLES = r"""

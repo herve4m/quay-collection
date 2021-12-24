@@ -1,5 +1,5 @@
 ---
-- name: Get the OAuth token
+- name: Get the OAuth access token
   import_playbook: get_token.yml
 
 - name: Testing the quay_repository module

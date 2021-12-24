@@ -50,6 +50,8 @@
         robot_username: ansibletestorg+ansibletestrobot1
         image_tags:
           - latest
+        sync_interval: 86400
+        sync_start_date: "2021-01-01T12:00:00Z"
         quay_host: "{{ quay_url }}"
         quay_token: "{{ quay_token }}"
         validate_certs: false

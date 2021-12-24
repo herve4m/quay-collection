@@ -137,14 +137,8 @@ def main():
         state=dict(choices=["present", "absent"], default="present"),
     )
 
-    mutually_exclusive = [("regexp", "search_string")]
-
     # Create a module for ourselves
-    module = APIModule(
-        argument_spec=argument_spec,
-        mutually_exclusive=mutually_exclusive,
-        supports_check_mode=True,
-    )
+    module = APIModule(argument_spec=argument_spec, supports_check_mode=True)
 
     # Extract our parameters
     image = module.params.get("image").strip("/")
@@ -331,7 +325,7 @@ def main():
 
     if expiration is not None:
         new_fields["expiration"] = expiration_epoch if expiration_epoch else None
-    updated, _ = module.update(
+    updated, _not_used = module.update(
         new_tag_details,
         "tag",
         tag,

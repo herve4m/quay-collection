@@ -17,7 +17,6 @@
 
 
 from __future__ import absolute_import, division, print_function
-from datetime import datetime
 
 __metaclass__ = type
 
@@ -67,9 +66,9 @@ options:
       - The date and time at which the first synchronization should be
         initiated.
       - The format for the I(sync_start_date) parameter is ISO 8601 UTC, such
-        as 2021-12-02T21:06:00.977021Z.
+        as 2021-12-02T21:06:00Z.
     type: str
-    default: 2021-01-01T12:00:00.000000Z
+    default: "2021-01-01T12:00:00Z"
   robot_username:
     description:
       - Username of the robot account that is used for synchronization.
@@ -139,6 +138,8 @@ EXAMPLES = r"""
 
 RETURN = r""" # """
 
+from datetime import datetime
+
 from ..module_utils.api_module import APIModule
 
 
@@ -153,8 +154,8 @@ def main():
         external_registry_password=dict(no_log=True),
         verify_tls=dict(type="bool", default=True),
         image_tags=dict(type="list", elements="str"),
-        sync_interval=dict(type="int"),
-        sync_start_date=dict(),
+        sync_interval=dict(type="int", default=86400),
+        sync_start_date=dict(default="2021-01-01T12:00:00Z"),
     )
 
     # Create a module for ourselves
@@ -300,7 +301,7 @@ def main():
 
         # Update external_registry_username
         if external_registry_password is not None:
-            updated, _ = module.update(
+            updated, _not_used = module.update(
                 mirror_details,
                 "repository",
                 full_repo_name,
@@ -313,7 +314,7 @@ def main():
                 changed = True
         # Update external_registry_username
         if sync_start_date is not None:
-            updated, _ = module.update(
+            updated, _not_used = module.update(
                 mirror_details,
                 "repository",
                 full_repo_name,
@@ -326,7 +327,7 @@ def main():
                 changed = True
         # Update sync_start_date
         if sync_start_date is not None:
-            updated, _ = module.update(
+            updated, _not_used = module.update(
                 mirror_details,
                 "repository",
                 full_repo_name,
@@ -339,7 +340,7 @@ def main():
                 changed = True
         # Update sync_interval
         if sync_interval is not None:
-            updated, _ = module.update(
+            updated, _not_used = module.update(
                 mirror_details,
                 "repository",
                 full_repo_name,
@@ -352,7 +353,7 @@ def main():
                 changed = True
         # Update image_tags
         if image_tags is not None:
-            updated, _ = module.update(
+            updated, _not_used = module.update(
                 mirror_details,
                 "repository",
                 full_repo_name,
@@ -365,7 +366,7 @@ def main():
                 changed = True
         # Update verify_tls
         if verify_tls is not None:
-            updated, _ = module.update(
+            updated, _not_used = module.update(
                 mirror_details,
                 "repository",
                 full_repo_name,
@@ -378,7 +379,7 @@ def main():
                 changed = True
         # Update robot_username
         if robot_username is not None:
-            updated, _ = module.update(
+            updated, _not_used = module.update(
                 mirror_details,
                 "repository",
                 full_repo_name,
@@ -391,7 +392,7 @@ def main():
                 changed = True
         # Update mirror active state
         if is_enabled is not None:
-            updated, _ = module.update(
+            updated, _not_used = module.update(
                 mirror_details,
                 "repository",
                 full_repo_name,
@@ -404,7 +405,7 @@ def main():
                 changed = True
         # Update external_reference
         if external_reference is not None:
-            updated, _ = module.update(
+            updated, _not_used = module.update(
                 mirror_details,
                 "repository",
                 full_repo_name,

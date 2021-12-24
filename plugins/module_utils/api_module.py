@@ -60,7 +60,7 @@ class APIModule(AnsibleModule):
           organization details. Keys are organization names.
         """
         full_argspec = {}
-        full_argspec.update(APIModule.AUTH_ARGSPEC)
+        full_argspec.update(self.AUTH_ARGSPEC)
         full_argspec.update(argument_spec)
 
         super(APIModule, self).__init__(argument_spec=full_argspec, **kwargs)
@@ -133,7 +133,7 @@ class APIModule(AnsibleModule):
             url = url._replace(query=urlencode(query_params))
         return url
 
-    def make_request(self, method, url, ok_error_codes=[404], **kwargs):
+    def make_request(self, method, url, ok_error_codes=None, **kwargs):
         """Perform an API call and return the retrieved data.
 
         :param method: GET, PUT, POST, or DELETE
@@ -141,7 +141,7 @@ class APIModule(AnsibleModule):
         :param url: URL to the API endpoint
         :type url: :py:class:``urllib.parse.ParseResult``
         :param ok_error_codes: HTTP error codes that are acceptable (not errors)
-                               when returned by the API.
+                               when returned by the API. 404 by default.
         :type ok_error_codes: list
         :param kwargs: Additionnal parameter to pass to the API (data
                        for PUT and POST requests, ...)
@@ -153,6 +153,8 @@ class APIModule(AnsibleModule):
                  in JSON format.
         :rtype: dict
         """
+        if ok_error_codes is None:
+            ok_error_codes = [404]
         # In case someone is calling us directly; make sure we were given a
         # method, let's not just assume a GET
         if not method:
@@ -308,7 +310,7 @@ class APIModule(AnsibleModule):
         return ": ".join(msg_fragments)
 
     def get_object_path(
-        self, endpoint, query_params=None, exit_on_error=True, ok_error_codes=[404], **kwargs
+        self, endpoint, query_params=None, exit_on_error=True, ok_error_codes=None, **kwargs
     ):
         """Retrieve a single object from a GET API call.
 
@@ -323,7 +325,7 @@ class APIModule(AnsibleModule):
                               :py:class:``APIModuleError`` exception.
         :type exit_on_error: bool
         :param ok_error_codes: HTTP error codes that are acceptable (not errors)
-                               when returned by the API.
+                               when returned by the API. 404 by default.
         :type ok_error_codes: list
         :param kwargs: Dictionnary used to substitute parameters in the given
                        ``endpoint`` string. For example ``{"username":"jdoe"}``
@@ -336,6 +338,8 @@ class APIModule(AnsibleModule):
                  exist.
         :rtype: dict
         """
+        if ok_error_codes is None:
+            ok_error_codes = [404]
         for k in kwargs:
             endpoint = endpoint.replace("{" + k + "}", kwargs[k])
 
@@ -482,7 +486,7 @@ class APIModule(AnsibleModule):
         new_item,
         auto_exit=True,
         exit_on_error=True,
-        ok_error_codes=[200, 201, 204],
+        ok_error_codes=None,
         **kwargs
     ):
         """Create an object.
@@ -508,7 +512,8 @@ class APIModule(AnsibleModule):
                               :py:class:``APIModuleError`` exception.
         :type exit_on_error: bool
         :param ok_error_codes: HTTP error codes that are acceptable (not errors)
-                               when returned by the API.
+                               when returned by the API. 200, 201, and 204 by
+                               default.
         :type ok_error_codes: list
         :param kwargs: Dictionnary used to substitute parameters in the given
                        ``endpoint`` string. For example ``{"orgname":"devel"}``
@@ -520,6 +525,8 @@ class APIModule(AnsibleModule):
         :return: The data returned by the API call.
         :rtype: dict
         """
+        if ok_error_codes is None:
+            ok_error_codes = [200, 201, 204]
         if self.check_mode:
             if auto_exit:
                 self.exit_json(changed=True)
@@ -968,3 +975,15 @@ class APIModule(AnsibleModule):
         if user_details and not user_details.get("is_robot"):
             return user_details
         return None
+
+
+class APIModuleFirtUser(APIModule):
+    AUTH_ARGSPEC = dict(
+        quay_host=dict(fallback=(env_fallback, ["QUAY_HOST"]), default="http://127.0.0.1"),
+        validate_certs=dict(
+            type="bool",
+            aliases=["verify_ssl"],
+            default=True,
+            fallback=(env_fallback, ["QUAY_VERIFY_SSL"]),
+        ),
+    )

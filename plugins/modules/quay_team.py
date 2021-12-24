@@ -282,7 +282,7 @@ def main():
         new_fields["role"] = "member"
 
     # Same PUT request for creating or updating the object
-    updated, _ = module.update(
+    updated, _not_used = module.update(
         team_details,
         "team",
         name,

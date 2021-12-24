@@ -124,7 +124,7 @@ def main():
         name=dict(required=True),
         new_name=dict(),
         email=dict(),
-        time_machine_expiration=dict(choices=tm_allowed_values.keys()),
+        time_machine_expiration=dict(choices=list(tm_allowed_values.keys())),
         state=dict(choices=["present", "absent"], default="present"),
     )
 
@@ -229,7 +229,7 @@ def main():
         new_fields["email"] = email
 
     # Update the organization
-    updated, _ = module.update(
+    updated, _not_used = module.update(
         org_details,
         "organization",
         name,

@@ -1,5 +1,7 @@
 # Red Hat Quay Collection for Ansible
 
+[![Code linting](https://github.com/herve4m/quay-collection/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/herve4m/quay-collection/actions/workflows/pre-commit.yml)
+
 The collection provides modules for managing your Red Hat Quay deployment.
 
 ## Included Content

@@ -233,7 +233,7 @@ def main():
     if password:
         new_fields["password"] = password
 
-    updated, _ = module.update(
+    updated, _not_used = module.update(
         user_details,
         "user",
         username,

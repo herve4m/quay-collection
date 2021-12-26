@@ -17,7 +17,6 @@
 
 
 from __future__ import absolute_import, division, print_function
-from datetime import datetime
 
 __metaclass__ = type
 
@@ -41,8 +40,8 @@ options:
   is_enabled:
     description:
       - Defines whether the mirror configuration is active or inactive.
+      - C(false) by default.
     type: bool
-    default: false
   external_reference:
     description:
       - Path to the remote container repository to synchronize, such as
@@ -60,16 +59,19 @@ options:
   sync_interval:
     description:
       - Synchronization interval for this repository mirror in seconds.
+      - 86400 (one day) by default.
     type: int
-    default: 86400
   sync_start_date:
     description:
       - The date and time at which the first synchronization should be
         initiated.
       - The format for the I(sync_start_date) parameter is ISO 8601 UTC, such
-        as 2021-12-02T21:06:00.977021Z.
+        as 2021-12-02T21:06:00Z.
+      - If you do not provide the I(sync_start_date) parameter when you
+        configure a new repository mirror, then the synchronization is
+        immediately active, and a synchronization is initiated if the
+        I(is_enabled) parameter is C(true).
     type: str
-    default: 2021-01-01T12:00:00.000000Z
   robot_username:
     description:
       - Username of the robot account that is used for synchronization.
@@ -83,8 +85,27 @@ options:
   verify_tls:
     description:
       - Defines whether TLS of the external registry should be verified.
+      - C(true) by default.
     type: bool
-    default: true
+  http_proxy:
+    description:
+      - HTTP proxy to use for accessing the remote container registry.
+      - See the C(curl) documentation for more details.
+      - By default, no proxy is used.
+    type: str
+  https_proxy:
+    description:
+      - HTTPS proxy to use for accessing the remote container registry.
+      - See the C(curl) documentation for more details.
+      - By default, no proxy is used.
+    type: str
+  no_proxy:
+    description:
+      - Comma-separated list of hosts for which the proxy should not be used.
+      - Only relevant when you also specify a proxy configuration by setting
+        the I(http_proxy) or I(https_proxy) variables.
+      - See the C(curl) documentation for more details.
+    type: str
   force_sync:
     description:
       - Triggers an immediate image synchronization.
@@ -113,6 +134,7 @@ EXAMPLES = r"""
   herve4m.quay.quay_repository_mirror:
     name: production/smallimage
     external_reference: quay.io/projectquay/quay
+    http_proxy: http://proxy.example.com:3128
     robot_username: production+auditrobot
     is_enabled: true
     image_tags:
@@ -139,22 +161,28 @@ EXAMPLES = r"""
 
 RETURN = r""" # """
 
+import copy
+from datetime import datetime
+
 from ..module_utils.api_module import APIModule
 
 
 def main():
     argument_spec = dict(
         name=dict(required=True),
-        is_enabled=dict(type="bool", default=False),
+        is_enabled=dict(type="bool"),
         force_sync=dict(type="bool", default=False),
         robot_username=dict(),
         external_reference=dict(),
         external_registry_username=dict(),
         external_registry_password=dict(no_log=True),
-        verify_tls=dict(type="bool", default=True),
+        verify_tls=dict(type="bool"),
         image_tags=dict(type="list", elements="str"),
         sync_interval=dict(type="int"),
         sync_start_date=dict(),
+        http_proxy=dict(),
+        https_proxy=dict(),
+        no_proxy=dict(),
     )
 
     # Create a module for ourselves
@@ -172,6 +200,9 @@ def main():
     image_tags = module.params.get("image_tags")
     sync_interval = module.params.get("sync_interval")
     sync_start_date = module.params.get("sync_start_date")
+    http_proxy = module.params.get("http_proxy")
+    https_proxy = module.params.get("https_proxy")
+    no_proxy = module.params.get("no_proxy")
 
     my_name = module.who_am_i()
     try:
@@ -189,6 +220,13 @@ def main():
                     " organization: <organization>/{name}."
                 ).format(name=name)
             )
+
+    # Check whether namespace exists (organization or user account)
+    namespace_details = module.get_namespace(namespace)
+    if not namespace_details:
+        module.fail_json(
+            msg="The {namespace} namespace does not exist.".format(namespace=namespace)
+        )
 
     full_repo_name = "{namespace}/{repository}".format(
         namespace=namespace, repository=repo_shortname
@@ -211,7 +249,7 @@ def main():
     #         }
     #     },
     #     "sync_interval": 86400,
-    #     "sync_start_date": "2021-12-02T21:06:00.977021Z",
+    #     "sync_start_date": "2021-01-01T12:00:00Z",
     #     "sync_expiration_date": null,
     #     "sync_retries_remaining": 3,
     #     "sync_status": "NEVER_RUN",
@@ -230,14 +268,7 @@ def main():
         full_repo_name=full_repo_name,
     )
 
-    # Check whether namespace exists (organization or user account)
-    namespace_details = module.get_namespace(namespace)
-    if not namespace_details:
-        module.fail_json(
-            msg="The {namespace} namespace does not exist.".format(namespace=namespace)
-        )
-
-    changed = False
+    # Create a new synchronization configuration
     if not mirror_details:
 
         # Verify the mandatory parameters for creation
@@ -246,6 +277,8 @@ def main():
             missing_req_params.append("external_reference")
         if robot_username is None:
             missing_req_params.append("robot_username")
+        if image_tags is None:
+            missing_req_params.append("image_tags")
         if missing_req_params:
             module.fail_json(
                 msg="missing required arguments: {args}".format(
@@ -255,24 +288,28 @@ def main():
 
         # Create the repository mirror configuration
         new_fields = {
-            "is_enabled": is_enabled,
+            "is_enabled": is_enabled if is_enabled is not None else False,
             "robot_username": robot_username,
             "external_reference": external_reference,
-            "external_registry_config": {"verify_tls": verify_tls},
             "root_rule": {"rule_kind": "tag_glob_csv", "rule_value": image_tags},
-        }
-        new_fields["sync_interval"] = int(sync_interval) if sync_interval else 86400
-        new_fields["sync_start_date"] = (
-            sync_start_date
+            "sync_interval": int(sync_interval) if sync_interval is not None else 86400,
+            "sync_start_date": sync_start_date
             if sync_start_date
-            else datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
-        )
-        new_fields["external_registry_username"] = (
-            external_registry_username if external_registry_username else ""
-        )
-        new_fields["external_registry_password"] = (
-            external_registry_username if external_registry_username else ""
-        )
+            else datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "external_registry_username": external_registry_username
+            if external_registry_username
+            else None,
+            "external_registry_config": {
+                "verify_tls": verify_tls if verify_tls is not None else True,
+                "proxy": {
+                    "http_proxy": http_proxy if http_proxy else None,
+                    "https_proxy": https_proxy if https_proxy else None,
+                    "no_proxy": no_proxy if no_proxy else None,
+                },
+            },
+        }
+        if external_registry_password:
+            new_fields["external_registry_password"] = external_registry_password
 
         module.create(
             "repository",
@@ -282,7 +319,6 @@ def main():
             auto_exit=False,
             full_repo_name=full_repo_name,
         )
-        changed = True
 
         if force_sync:
             module.create(
@@ -294,139 +330,78 @@ def main():
                 full_repo_name=full_repo_name,
             )
 
-    else:
+        module.exit_json(changed=True)
+
+    # Update the repository mirror configuration
+    new_fields = {}
+    if external_registry_password is not None:
+        new_fields["external_registry_password"] = external_registry_password
+    if external_registry_username is not None:
+        new_fields["external_registry_username"] = external_registry_username
+    if sync_start_date is not None:
+        new_fields["sync_start_date"] = sync_start_date
+    if sync_interval is not None:
+        new_fields["sync_interval"] = int(sync_interval)
+    if robot_username is not None:
+        new_fields["robot_username"] = robot_username
+    if external_reference is not None:
+        new_fields["external_reference"] = external_reference
+    if is_enabled is not None:
+        new_fields["is_enabled"] = is_enabled
+    if image_tags is not None:
+        new_fields["root_rule"] = {"rule_kind": "tag_glob_csv", "rule_value": image_tags}
+
+    try:
+        registry_config = copy.deepcopy(mirror_details["external_registry_config"])
+    except KeyError:
+        registry_config = {}
+    if verify_tls is not None:
+        registry_config["verify_tls"] = verify_tls
+    if http_proxy is not None:
+        if "proxy" not in registry_config:
+            registry_config["proxy"] = {}
+        registry_config["proxy"]["http_proxy"] = http_proxy if http_proxy else None
+    if https_proxy is not None:
+        if "proxy" not in registry_config:
+            registry_config["proxy"] = {}
+        registry_config["proxy"]["https_proxy"] = https_proxy if https_proxy else None
+    if no_proxy is not None:
+        if "proxy" not in registry_config:
+            registry_config["proxy"] = {}
+        registry_config["proxy"]["no_proxy"] = no_proxy if no_proxy else None
+    if registry_config:
+        new_fields["external_registry_config"] = registry_config
+
+    changed = False
+    if new_fields:
+        # Cannot update the configuration when a synchronization is in progress
         if mirror_details["sync_status"] == "SYNCING":
-            module.exit_json(skipped=True)
+            module.exit_json(
+                skipped=True,
+                msg="cannot update the configuration while a synchronization is in progress",
+            )
+        updated, _not_used = module.update(
+            mirror_details,
+            "repository",
+            full_repo_name,
+            "repository/{full_repo_name}/mirror",
+            new_fields,
+            auto_exit=False,
+            full_repo_name=full_repo_name,
+        )
+        if updated:
+            changed = True
 
-        # Update external_registry_username
-        if external_registry_password is not None:
-            updated, _ = module.update(
-                mirror_details,
-                "repository",
-                full_repo_name,
-                "repository/{full_repo_name}/mirror",
-                {"external_registry_password": external_registry_password},
-                auto_exit=False,
-                full_repo_name=full_repo_name,
-            )
-            if updated:
-                changed = True
-        # Update external_registry_username
-        if sync_start_date is not None:
-            updated, _ = module.update(
-                mirror_details,
-                "repository",
-                full_repo_name,
-                "repository/{full_repo_name}/mirror",
-                {"external_registry_username": external_registry_username},
-                auto_exit=False,
-                full_repo_name=full_repo_name,
-            )
-            if updated:
-                changed = True
-        # Update sync_start_date
-        if sync_start_date is not None:
-            updated, _ = module.update(
-                mirror_details,
-                "repository",
-                full_repo_name,
-                "repository/{full_repo_name}/mirror",
-                {"sync_start_date": sync_start_date},
-                auto_exit=False,
-                full_repo_name=full_repo_name,
-            )
-            if updated:
-                changed = True
-        # Update sync_interval
-        if sync_interval is not None:
-            updated, _ = module.update(
-                mirror_details,
-                "repository",
-                full_repo_name,
-                "repository/{full_repo_name}/mirror",
-                {"sync_interval": int(sync_interval)},
-                auto_exit=False,
-                full_repo_name=full_repo_name,
-            )
-            if updated:
-                changed = True
-        # Update image_tags
-        if image_tags is not None:
-            updated, _ = module.update(
-                mirror_details,
-                "repository",
-                full_repo_name,
-                "repository/{full_repo_name}/mirror",
-                {"root_rule": {"rule_kind": "tag_glob_csv", "rule_value": image_tags}},
-                auto_exit=False,
-                full_repo_name=full_repo_name,
-            )
-            if updated:
-                changed = True
-        # Update verify_tls
-        if verify_tls is not None:
-            updated, _ = module.update(
-                mirror_details,
-                "repository",
-                full_repo_name,
-                "repository/{full_repo_name}/mirror",
-                {"external_registry_config": {"verify_tls": verify_tls}},
-                auto_exit=False,
-                full_repo_name=full_repo_name,
-            )
-            if updated:
-                changed = True
-        # Update robot_username
-        if robot_username is not None:
-            updated, _ = module.update(
-                mirror_details,
-                "repository",
-                full_repo_name,
-                "repository/{full_repo_name}/mirror",
-                {"robot_username": robot_username},
-                auto_exit=False,
-                full_repo_name=full_repo_name,
-            )
-            if updated:
-                changed = True
-        # Update mirror active state
-        if is_enabled is not None:
-            updated, _ = module.update(
-                mirror_details,
-                "repository",
-                full_repo_name,
-                "repository/{full_repo_name}/mirror",
-                {"is_enabled": is_enabled},
-                auto_exit=False,
-                full_repo_name=full_repo_name,
-            )
-            if updated:
-                changed = True
-        # Update external_reference
-        if external_reference is not None:
-            updated, _ = module.update(
-                mirror_details,
-                "repository",
-                full_repo_name,
-                "repository/{full_repo_name}/mirror",
-                {"external_reference": external_reference},
-                auto_exit=False,
-                full_repo_name=full_repo_name,
-            )
-            if updated:
-                changed = True
-
-        if force_sync:
-            if mirror_details["sync_status"] != "SYNC_NOW":
-                module.create(
-                    "repository",
-                    full_repo_name,
-                    "repository/{full_repo_name}/mirror/sync-now",
-                    {},
-                    auto_exit=False,
-                    full_repo_name=full_repo_name,
-                )
-                changed = True
+    if force_sync and mirror_details["sync_status"] not in ("SYNCING", "SYNC_NOW"):
+        module.create(
+            "repository",
+            full_repo_name,
+            "repository/{full_repo_name}/mirror/sync-now",
+            {},
+            auto_exit=False,
+            full_repo_name=full_repo_name,
+        )
+        changed = True
 
     module.exit_json(changed=changed)
 

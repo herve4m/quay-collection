@@ -68,6 +68,7 @@ options:
         description:
           - Name of the account. The format for robot accounts is
             C(namespace)+C(shortrobotname).
+        required: true
         type: str
       role:
         description:
@@ -324,7 +325,7 @@ def main():
     else:
         # Update description
         if description is not None:
-            updated, _ = module.update(
+            updated, _not_used = module.update(
                 repo_details,
                 "repository",
                 full_repo_name,
@@ -420,7 +421,7 @@ def main():
 
     # Set of (<team>, <perm>) tuples
     current_team_perms = set(
-        [(p["name"], p["role"]) for _, p in team_perms.get("permissions", {}).items()]
+        [(p["name"], p["role"]) for _not_used, p in team_perms.get("permissions", {}).items()]
     )
     new_team_perms = set(
         [(p["name"], p["role"]) for p in perms if p.get("type", "user") == "team"]
@@ -504,7 +505,7 @@ def main():
 
     # Set of (<user>, <perm>) tuples
     current_user_perms = set(
-        [(p["name"], p["role"]) for _, p in user_perms.get("permissions", {}).items()]
+        [(p["name"], p["role"]) for _not_used, p in user_perms.get("permissions", {}).items()]
     )
     new_user_perms = set(
         [(p["name"], p["role"]) for p in perms if p.get("type", "user") == "user"]

@@ -332,9 +332,9 @@ def main():
                 template=dict(),
                 # HipChat notification
                 room_id=dict(),
-                notification_token=dict(),
+                notification_token=dict(no_log=True),
                 # Flowdock notification
-                flow_api_token=dict(),
+                flow_api_token=dict(no_log=True),
             ),
             required_together=[("room_id", "notification_token")],
             mutually_exclusive=[

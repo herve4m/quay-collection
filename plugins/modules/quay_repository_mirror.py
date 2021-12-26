@@ -40,8 +40,7 @@ options:
   is_enabled:
     description:
       - Defines whether the mirror configuration is active or inactive.
-      - When you configure a new repository mirror, the I(is_enabled) parameter
-        is C(false) by default.
+      - C(false) by default.
     type: bool
   external_reference:
     description:
@@ -60,8 +59,7 @@ options:
   sync_interval:
     description:
       - Synchronization interval for this repository mirror in seconds.
-      - When you configure a new repository mirror, the I(sync_interval)
-        parameter defaults to 86400 (one day).
+      - 86400 (one day) by default.
     type: int
   sync_start_date:
     description:
@@ -87,9 +85,27 @@ options:
   verify_tls:
     description:
       - Defines whether TLS of the external registry should be verified.
-      - When you configure a new repository mirror, the I(verify_tls) parameter
-        is C(true) by default.
+      - C(true) by default.
     type: bool
+  http_proxy:
+    description:
+      - HTTP proxy to use for accessing the remote container registry.
+      - See the C(curl) documentation for more details.
+      - By default, no proxy is used.
+    type: str
+  https_proxy:
+    description:
+      - HTTPS proxy to use for accessing the remote container registry.
+      - See the C(curl) documentation for more details.
+      - By default, no proxy is used.
+    type: str
+  no_proxy:
+    description:
+      - Comma-separated list of hosts for which the proxy should not be used.
+      - Only relevant when you also specify a proxy configuration by setting
+        the I(http_proxy) or I(https_proxy) variables.
+      - See the C(curl) documentation for more details.
+    type: str
   force_sync:
     description:
       - Triggers an immediate image synchronization.
@@ -118,6 +134,7 @@ EXAMPLES = r"""
   herve4m.quay.quay_repository_mirror:
     name: production/smallimage
     external_reference: quay.io/projectquay/quay
+    http_proxy: http://proxy.example.com:3128
     robot_username: production+auditrobot
     is_enabled: true
     image_tags:
@@ -144,6 +161,7 @@ EXAMPLES = r"""
 
 RETURN = r""" # """
 
+import copy
 from datetime import datetime
 
 from ..module_utils.api_module import APIModule
@@ -162,6 +180,9 @@ def main():
         image_tags=dict(type="list", elements="str"),
         sync_interval=dict(type="int"),
         sync_start_date=dict(),
+        http_proxy=dict(),
+        https_proxy=dict(),
+        no_proxy=dict(),
     )
 
     # Create a module for ourselves
@@ -179,6 +200,9 @@ def main():
     image_tags = module.params.get("image_tags")
     sync_interval = module.params.get("sync_interval")
     sync_start_date = module.params.get("sync_start_date")
+    http_proxy = module.params.get("http_proxy")
+    https_proxy = module.params.get("https_proxy")
+    no_proxy = module.params.get("no_proxy")
 
     my_name = module.who_am_i()
     try:
@@ -253,6 +277,8 @@ def main():
             missing_req_params.append("external_reference")
         if robot_username is None:
             missing_req_params.append("robot_username")
+        if image_tags is None:
+            missing_req_params.append("image_tags")
         if missing_req_params:
             module.fail_json(
                 msg="missing required arguments: {args}".format(
@@ -265,25 +291,25 @@ def main():
             "is_enabled": is_enabled if is_enabled is not None else False,
             "robot_username": robot_username,
             "external_reference": external_reference,
-            "external_registry_config": {
-                "verify_tls": verify_tls if verify_tls is not None else True
-            },
             "root_rule": {"rule_kind": "tag_glob_csv", "rule_value": image_tags},
-        }
-        new_fields["sync_interval"] = (
-            int(sync_interval) if sync_interval is not None else 86400
-        )
-        new_fields["sync_start_date"] = (
-            sync_start_date
+            "sync_interval": int(sync_interval) if sync_interval is not None else 86400,
+            "sync_start_date": sync_start_date
             if sync_start_date
-            else datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
-        )
-        new_fields["external_registry_username"] = (
-            external_registry_username if external_registry_username else ""
-        )
-        new_fields["external_registry_password"] = (
-            external_registry_username if external_registry_username else ""
-        )
+            else datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "external_registry_username": external_registry_username
+            if external_registry_username
+            else None,
+            "external_registry_config": {
+                "verify_tls": verify_tls if verify_tls is not None else True,
+                "proxy": {
+                    "http_proxy": http_proxy if http_proxy else None,
+                    "https_proxy": https_proxy if https_proxy else None,
+                    "no_proxy": no_proxy if no_proxy else None,
+                },
+            },
+        }
+        if external_registry_password:
+            new_fields["external_registry_password"] = external_registry_password
 
         module.create(
             "repository",
@@ -324,8 +350,27 @@ def main():
         new_fields["is_enabled"] = is_enabled
     if image_tags is not None:
         new_fields["root_rule"] = {"rule_kind": "tag_glob_csv", "rule_value": image_tags}
+
+    try:
+        registry_config = copy.deepcopy(mirror_details["external_registry_config"])
+    except KeyError:
+        registry_config = {}
     if verify_tls is not None:
-        new_fields["external_registry_config"] = {"verify_tls": verify_tls}
+        registry_config["verify_tls"] = verify_tls
+    if http_proxy is not None:
+        if "proxy" not in registry_config:
+            registry_config["proxy"] = {}
+        registry_config["proxy"]["http_proxy"] = http_proxy if http_proxy else None
+    if https_proxy is not None:
+        if "proxy" not in registry_config:
+            registry_config["proxy"] = {}
+        registry_config["proxy"]["https_proxy"] = https_proxy if https_proxy else None
+    if no_proxy is not None:
+        if "proxy" not in registry_config:
+            registry_config["proxy"] = {}
+        registry_config["proxy"]["no_proxy"] = no_proxy if no_proxy else None
+    if registry_config:
+        new_fields["external_registry_config"] = registry_config
 
     changed = False
     if new_fields:

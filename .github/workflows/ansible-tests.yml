@@ -15,7 +15,9 @@ jobs:
           path: ansible_collections/herve4m/quay
 
       - name: Set access rights to Quay configuration file
-        run: chmod -R 777 quay-config
+        run: |
+          chmod 777 quay-config
+          chmod 666 quay-config/config.yaml
         working-directory: ./ansible_collections/herve4m/quay/tests
 
       - name: Deploy Quay

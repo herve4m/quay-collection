@@ -1,0 +1,34 @@
+---
+name: Ansible tests
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: ansible_collections/herve4m/quay
+
+      - name: Set access rights to Quay configuration file
+        run: chmod -R 777 quay-config
+        working-directory: ./ansible_collections/herve4m/quay/tests
+
+      - name: Deploy Quay
+        run: docker-compose up -d
+        working-directory: ./ansible_collections/herve4m/quay/tests
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+
+      - name: Install required packages
+        run: pip install -Iv ansible-core ansible-test
+
+      - name: Run sanity tests
+        run: ansible-test sanity --docker -v --color
+        working-directory: ./ansible_collections/herve4m/quay

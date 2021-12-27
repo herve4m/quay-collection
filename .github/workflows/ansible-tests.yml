@@ -35,7 +35,7 @@ jobs:
         run: ansible-test sanity --docker -v --color
         working-directory: ./ansible_collections/herve4m/quay
 
-      - uses: ifaxity/wait-on-action
+      - uses: ifaxity/wait-on-action@v1
         with:
           resource: http://localhost:8080
           log: true

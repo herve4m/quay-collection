@@ -1,0 +1,268 @@
+---
+# Supporting organization
+- name: Ensure organization ansibletestorg exists
+  herve4m.quay.quay_organization:
+    name: ansibletestorg
+    email: ansibletestorg@example.com
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+# Supporting user accounts
+- name: Ensure user accounts exist
+  herve4m.quay.quay_user:
+    username: "{{ item }}"
+    email: "{{ item }}@example.com"
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  loop:
+    - ansibletestuser1
+    - ansibletestuser2
+
+# Supporting robot accounts
+- name: Ensure the robot accounts exist
+  herve4m.quay.quay_robot:
+    name: ansibletestorg+ansibletestrobot1
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+# Supporting team
+- name: Ensure teams exist
+  herve4m.quay.quay_team:
+    name: "{{ item }}"
+    organization: ansibletestorg
+    role: admin
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  loop:
+    - ansibletestteam1
+    - ansibletestteam2
+
+- name: Ensure default perm anon-read-ansibletestuser1 exists
+  herve4m.quay.quay_default_perm:
+    organization: ansibletestorg
+    name: ansibletestuser1
+    type: user
+    role: read
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure default perm anon-read-ansibletestuser1 exists (no change)
+  herve4m.quay.quay_default_perm:
+    organization: ansibletestorg
+    name: ansibletestuser1
+    type: user
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure default perm anon-write-robot exists
+  herve4m.quay.quay_default_perm:
+    organization: ansibletestorg
+    name: ansibletestorg+ansibletestrobot1
+    type: user
+    role: write
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure default perm anon-admin-ansibletestteam1 exists
+  herve4m.quay.quay_default_perm:
+    organization: ansibletestorg
+    name: ansibletestteam1
+    type: team
+    role: admin
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure default perm is updated to anon-write-ansibletestteam1
+  herve4m.quay.quay_default_perm:
+    organization: ansibletestorg
+    name: ansibletestteam1
+    type: team
+    role: write
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure default perm ansibletestuser2-read-ansibletestuser1 exists
+  herve4m.quay.quay_default_perm:
+    organization: ansibletestorg
+    name: ansibletestuser1
+    type: user
+    role: read
+    creator: ansibletestuser2
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure default perm ansibletestuser2-write-robot exists
+  herve4m.quay.quay_default_perm:
+    organization: ansibletestorg
+    name: ansibletestorg+ansibletestrobot1
+    type: user
+    role: write
+    creator: ansibletestuser2
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure default perm ansibletestuser2-admin-ansibletestteam1 exists
+  herve4m.quay.quay_default_perm:
+    organization: ansibletestorg
+    name: ansibletestteam1
+    type: team
+    role: admin
+    creator: ansibletestuser2
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure default perm is removed (no change)
+  herve4m.quay.quay_default_perm:
+    organization: ansibletestorg
+    name: ansibletestteam2
+    type: team
+    role: admin
+    creator: ansibletestuser2
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure default perm anon-read-ansibletestuser1 is removed
+  herve4m.quay.quay_default_perm:
+    organization: ansibletestorg
+    name: ansibletestuser1
+    type: user
+    role: read
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure default perm anon-write-robot is removed
+  herve4m.quay.quay_default_perm:
+    organization: ansibletestorg
+    name: ansibletestorg+ansibletestrobot1
+    type: user
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure default perm anon-admin-ansibletestteam1 is removed
+  herve4m.quay.quay_default_perm:
+    organization: ansibletestorg
+    name: ansibletestteam1
+    type: team
+    role: admin
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure perm ansibletestuser2-read-ansibletestuser1 is removed
+  herve4m.quay.quay_default_perm:
+    organization: ansibletestorg
+    name: ansibletestuser1
+    type: user
+    role: read
+    creator: ansibletestuser2
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure default perm ansibletestuser2-write-robot is removed
+  herve4m.quay.quay_default_perm:
+    organization: ansibletestorg
+    name: ansibletestorg+ansibletestrobot1
+    type: user
+    role: write
+    creator: ansibletestuser2
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure perm ansibletestuser2-admin-ansibletestteam1 is removed
+  herve4m.quay.quay_default_perm:
+    organization: ansibletestorg
+    name: ansibletestteam1
+    type: team
+    role: admin
+    creator: ansibletestuser2
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure the teams are removed
+  herve4m.quay.quay_team:
+    name: "{{ item }}"
+    organization: ansibletestorg
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  loop:
+    - ansibletestteam1
+    - ansibletestteam2
+
+- name: Ensure user accounts are removed
+  herve4m.quay.quay_user:
+    username: "{{ item }}"
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  loop:
+    - ansibletestuser1
+    - ansibletestuser2
+
+- name: Ensure the robot accounts are removed
+  herve4m.quay.quay_robot:
+    name: ansibletestorg+ansibletestrobot1
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure the organization is removed
+  herve4m.quay.quay_organization:
+    name: ansibletestorg
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+...

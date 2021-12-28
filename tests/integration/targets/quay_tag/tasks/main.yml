@@ -1,0 +1,250 @@
+---
+# Supporting organization
+- name: Ensure organization ansibletestorg exists
+  herve4m.quay.quay_organization:
+    name: ansibletestorg
+    email: ansibletestorg@example.com
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Check whether podman is available
+  command:
+    cmd: podman --version
+  failed_when: false
+  changed_when: false
+  register: podman
+
+# Preparing an image:
+# - Pulling a small image from Quay (does not matter what image it is)
+# - Tagging it so that it can be pushed to the local Red Hat Quay
+# - Pushing the image
+# - Deleting the images from the local system
+# The tasks do not use the podman collection because it may not be
+# available on the testing system.
+- name: Ensure the image is prepared with podman
+  when: "podman['rc'] == 0"
+  block:
+    - name: Ensure a small container image is available
+      command:
+        cmd: "podman pull {{ fake_image }}"
+      changed_when: true
+
+    - name: Ensure the image has the correct tag
+      command:
+        cmd: "podman tag {{ fake_image }}
+              {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
+      changed_when: true
+
+    - name: Ensure the image is pushed to Red Hat Quay
+      command:
+        cmd: "podman push --tls-verify=false --remove-signatures
+              --creds={{ admin_username }}:{{ admin_password }}
+              {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
+      changed_when: true
+
+    - name: Ensure the images are removed
+      command:
+        cmd: "podman rmi {{ fake_image }}
+              {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
+      changed_when: true
+
+- name: Ensure the image is prepared with docker
+  when: "podman['rc'] != 0"
+  block:
+    - name: Ensure a small container image is available
+      command:
+        cmd: "docker pull {{ fake_image }}"
+      changed_when: true
+
+    - name: Ensure the image has the correct tag
+      command:
+        cmd: "docker tag {{ fake_image }}
+              {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
+      changed_when: true
+
+    - name: Ensure docker is logged in
+      command:
+        cmd: "docker login --username {{ admin_username }}
+              --password {{ admin_password }} {{ quay_hostname }}"
+      changed_when: true
+
+    - name: Ensure the image is pushed to Red Hat Quay
+      command:
+        cmd: "docker push
+              {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
+      changed_when: true
+
+    - name: Ensure the images are removed
+      command:
+        cmd: "docker rmi {{ fake_image }}
+              {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
+      changed_when: true
+
+    - name: Ensure docker is logged out
+      command:
+        cmd: "docker logout {{ quay_hostname }}"
+      changed_when: true
+      failed_when: false
+
+- name: Ensure the tag v1.0.0 is added to the image
+  herve4m.quay.quay_tag:
+    image: ansibletestorg/ansibletestrepo:latest
+    tag: v1.0.0
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure the tag v1.0.0 is added to the image 1 (no change)
+  herve4m.quay.quay_tag:
+    image: ansibletestorg/ansibletestrepo:latest
+    tag: v1.0.0
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure the tag v1.0.0 is added to the image 2 (no change)
+  herve4m.quay.quay_tag:
+    image: ansibletestorg/ansibletestrepo
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure the tag v1.0.0 is added to the image 3 (no change)
+  herve4m.quay.quay_tag:
+    image: ansibletestorg/ansibletestrepo:v1.0.0
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure the tag v1.0.0 is added to the image 4 (no change)
+  herve4m.quay.quay_tag:
+    image: ansibletestorg/ansibletestrepo:v1.0.0
+    tag: latest
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure the tag v1.0.0 is added to the image 5 (no change)
+  herve4m.quay.quay_tag:
+    image: ansibletestorg/ansibletestrepo:v1.0.0
+    tag: latest
+    expiration: ""
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure the tag v2.0.0 is added with expiration
+  herve4m.quay.quay_tag:
+    image: ansibletestorg/ansibletestrepo:v1.0.0
+    tag: v2.0.0
+    expiration: "{{ expiration }}"
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure the tag v2.0.0 is added with expiration (no change)
+  herve4m.quay.quay_tag:
+    image: ansibletestorg/ansibletestrepo:v2.0.0
+    expiration: "{{ expiration }}"
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure the tag v2.0.0 has no expiration
+  herve4m.quay.quay_tag:
+    image: ansibletestorg/ansibletestrepo:v2.0.0
+    expiration: ""
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure the tag v2.0.0 is removed
+  herve4m.quay.quay_tag:
+    image: ansibletestorg/ansibletestrepo:v2.0.0
+    expiration: ""
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure the tag v1.0.0 is removed
+  herve4m.quay.quay_tag:
+    image: ansibletestorg/ansibletestrepo
+    tag: v1.0.0
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure the tag latest is removed
+  herve4m.quay.quay_tag:
+    image: ansibletestorg/ansibletestrepo:latest
+    tag: latest
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure the repository is removed
+  herve4m.quay.quay_repository:
+    name: ansibletestorg/ansibletestrepo
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure the organization is removed
+  herve4m.quay.quay_organization:
+    name: ansibletestorg
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+...

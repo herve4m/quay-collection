@@ -1,0 +1,21 @@
+---
+- name: Running a test playbook (role)
+  hosts: localhost
+  become: false
+  gather_facts: false
+
+  tasks:
+    - name: Test the role
+      include_role:
+        # Specify the role to test
+        name: integration/targets/quay_user
+      vars:
+        # Set the connection parameters to your Quay installation with the
+        # following variables. If you do not set the default_token parameter,
+        # then the role tries to create the admin user (password: redhat123)
+        # and gets a token for that user (only works with a fresh Quay 3.6 or
+        # later installation).
+        quay_hostname: localhost:8080
+        quay_url: "http://{{ quay_hostname }}"
+        default_token: ""
+...

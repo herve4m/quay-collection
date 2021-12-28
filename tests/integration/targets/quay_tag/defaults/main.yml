@@ -1,0 +1,4 @@
+---
+fake_image: quay.io/ansible/http-test-container:latest
+expiration: "{{ lookup('pipe', 'date -d now+1year +%Y%m%d0132.12') }}"
+...

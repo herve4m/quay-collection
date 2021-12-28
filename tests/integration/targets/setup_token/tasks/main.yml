@@ -1,0 +1,77 @@
+---
+# Set the quay_token fact.
+#
+# Set the quay_token parameter is build from (in order):
+# 1) The default_token parameter from the defaults/main.yml file.
+# 2) If the default_token parameter in defaults/main.yml is missing or empty,
+#    then the default_token parameter from the /tmp/quay_collection_TOKEN.yml
+#    file is used instead.
+# 3) If the default_token parameter is stil not set (not in defaults/main.yml
+#    and not in /tmp/quay_collection_TOKEN.yml), then the module
+#    herve4m.quay.quay_first_user is used to create the first user account and
+#    get its token. If that fails, then an error is reported
+# 4) The retrieved token is stored in /tmp/quay_collection_TOKEN.yml so that it
+#    can be reused by other playbooks.
+- name: Set the quay_token fact from defaults/main.yml
+  set_fact:
+    quay_token: "{{ default_token }}"
+  when:
+    - default_token is defined
+    - default_token|length > 0
+
+- name: Set the quay_token fact from /tmp/quay_collection_TOKEN.yml
+  when: quay_token is not defined or quay_token|length == 0
+  block:
+    - name: Get the OAuth access token from /tmp/quay_collection_TOKEN.yml
+      include_vars:
+        file: /tmp/quay_collection_TOKEN.yml
+      failed_when: false
+
+    - name: Set the quay_token fact
+      set_fact:
+        quay_token: "{{ default_token }}"
+      when:
+        - default_token is defined
+        - default_token|length > 0
+
+- name: Get the quay_token fact from first user creation
+  when: quay_token is not defined or quay_token|length == 0
+  block:
+    # Create the first user after Quay installation. The task may fail if:
+    # * the database is not empty (Quay has already been used)
+    # * the Quay version is not 3.6 or later
+    # * the configuration does not allow first user creation
+    #   (FEATURE_USER_INITIALIZE is false or not set in config.yaml)
+    - name: Ensure the initial user exists
+      herve4m.quay.quay_first_user:
+        username: "{{ admin_username }}"
+        email: "{{ admin_username }}@example.com"
+        password: "{{ admin_password }}"
+        create_token: true
+        quay_host: "{{ quay_url }}"
+        validate_certs: false
+      register: result
+      failed_when: false
+
+    - name: Ensure that the OAuth access token is defined
+      assert:
+        that: "result is defined and 'access_token' in result"
+        fail_msg: >
+          I cannot create an OAuth access token for you.
+          Please define your token in the defaults/main.yml file.
+        quiet: true
+
+    - name: Ensure the /tmp/quay_collection_TOKEN.yml file is created
+      copy:
+        dest: /tmp/quay_collection_TOKEN.yml
+        content: "---\ndefault_token: {{ result['access_token'] }}\n"
+        mode: 0600
+
+    - name: Store the OAuth access token in the quay_token fact
+      set_fact:
+        quay_token: "{{ result['access_token'] }}"
+
+- name: Display the OAuth access token
+  debug:
+    msg: "OAuth access token: {{ quay_token }}"
+...

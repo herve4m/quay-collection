@@ -17,5 +17,5 @@
         # later installation).
         quay_hostname: localhost:8080
         quay_url: "http://{{ quay_hostname }}"
-        default_token: ""
+        # default_token: AAAABBBBCCCCDDDDEEEEFFFFGGGGHHHHIIII
 ...

@@ -29,6 +29,32 @@
 - debug:
     var: tags
 
+- name: Getting the details of the coreos/dnsmasq latest tag
+  herve4m.quay.quay_tag_info:
+    repository: coreos/dnsmasq
+    tag: latest
+    quay_host: quay.io
+  register: tags
+
+- debug:
+    var: tags
+
+- name: Getting the details of the tags in a non-existing repository
+  herve4m.quay.quay_tag_info:
+    repository: nosuchrepository
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: tags
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not tags['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- debug:
+    var: tags
+
 - name: Ensure the repository is removed
   herve4m.quay.quay_repository:
     name: ansibletestorg/ansibletestrepo1

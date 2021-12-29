@@ -51,6 +51,14 @@
     quay_token: "{{ quay_token }}"
     validate_certs: false
 
+- name: Ensure user jziglar has a new password
+  herve4m.quay.quay_user:
+    username: jziglar
+    password: 7BbB8T6c
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
 - name: Ensure non-existing user is deleted (no change)
   herve4m.quay.quay_user:
     username: nonexistinguser

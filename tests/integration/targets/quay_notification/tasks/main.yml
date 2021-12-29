@@ -47,6 +47,42 @@
     quay_token: "{{ quay_token }}"
     validate_certs: false
 
+- name: Ensure notification exists (but repo does not exist)
+  herve4m.quay.quay_notification:
+    repository: myansibletestrepo
+    title: Test Quay Notification
+    event: repo_push
+    method: quay_notification
+    config:
+      name: ansibletestteam1
+      type: team
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (no such repository)
+
+- name: Ensure notification exists (but with missing required parameters)
+  herve4m.quay.quay_notification:
+    repository: ansibletestorg/ansibletestrepo
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (missing parameters)
+
 - name: Ensure notification of type Quay Notification exists
   herve4m.quay.quay_notification:
     repository: ansibletestorg/ansibletestrepo

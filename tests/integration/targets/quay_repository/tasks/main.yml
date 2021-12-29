@@ -1,0 +1,238 @@
+---
+# Supporting organization
+- name: Ensure organization ansibletestorg exists
+  herve4m.quay.quay_organization:
+    name: ansibletestorg
+    email: ansibletestorg@example.com
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+# Supporting user accounts
+- name: Ensure user accounts exist
+  herve4m.quay.quay_user:
+    username: "{{ item }}"
+    email: "{{ item }}@example.com"
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  loop:
+    - ansibletestuser1
+    - ansibletestuser2
+    - ansibletestuser3
+    - ansibletestuser5
+
+# Supporting robot accounts
+- name: Ensure the robot accounts exist
+  herve4m.quay.quay_robot:
+    name: ansibletestorg+ansibletestrobot1
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+# Supporting team
+- name: Ensure teams exist
+  herve4m.quay.quay_team:
+    name: ansibletestteam1
+    organization: ansibletestorg
+    role: admin
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure repository ansibletestrepo1 exists
+  herve4m.quay.quay_repository:
+    name: ansibletestorg/ansibletestrepo1
+    visibility: private
+    description: |
+      # My first repository
+
+      * être ou ne pas être
+      * Testovací úložiště
+    perms:
+      - name: ansibletestuser1
+        type: user
+        role: write
+      - name: ansibletestteam1
+        type: team
+        role: admin
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure repository ansibletestrepo1 is updated (no change)
+  herve4m.quay.quay_repository:
+    name: ansibletestorg/ansibletestrepo1
+    visibility: private
+    description: |
+      # My first repository
+
+      * être ou ne pas être
+      * Testovací úložiště
+    perms:
+      - name: ansibletestuser1
+        type: user
+        role: write
+      - name: ansibletestteam1
+        type: team
+        role: admin
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure repository ansibletestrepo2 exists
+  herve4m.quay.quay_repository:
+    name: ansibletestorg/ansibletestrepo2
+    visibility: public
+    description: Test description
+    star: true
+    perms:
+      - name: ansibletestuser2
+        type: user
+        role: admin
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure repository ansibletestrepo2 is updated
+  herve4m.quay.quay_repository:
+    name: ansibletestorg/ansibletestrepo2
+    visibility: public
+    description: ""
+    star: false
+    perms:
+      - name: ansibletestuser3
+        type: user
+        role: read
+      - name: ansibletestorg+ansibletestrobot1
+        type: user
+        role: admin
+    append: false
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure repository ansibletestrepo3 exists (in admin)
+  herve4m.quay.quay_repository:
+    name: ansibletestrepo3
+    visibility: public
+    description: "In user namespace"
+    perms:
+      - name: ansibletestuser5
+        type: user
+        role: admin
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure repository ansibletestrepo3 has no star (no change)
+  herve4m.quay.quay_repository:
+    name: ansibletestrepo3
+    star: false
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure repository ansibletestrepo3 has a star
+  herve4m.quay.quay_repository:
+    name: ansibletestrepo3
+    star: true
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure repository ansibletestrepo3 is removed (from admin)
+  herve4m.quay.quay_repository:
+    name: ansibletestrepo3
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure non-existing repository is deleted (no change)
+  herve4m.quay.quay_repository:
+    name: nonexistingorg/nonexistingrepo
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure repositories are removed
+  herve4m.quay.quay_repository:
+    name: "ansibletestorg/{{ item }}"
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  loop:
+    - ansibletestrepo1
+    - ansibletestrepo2
+    - ansibletestrepo3
+
+- name: Ensure the teams are removed
+  herve4m.quay.quay_team:
+    name: ansibletestteam1
+    organization: ansibletestorg
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure user accounts are removed
+  herve4m.quay.quay_user:
+    username: "{{ item }}"
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  loop:
+    - ansibletestuser1
+    - ansibletestuser2
+    - ansibletestuser3
+    - ansibletestuser5
+
+- name: Ensure the robot accounts are removed
+  herve4m.quay.quay_robot:
+    name: ansibletestorg+ansibletestrobot1
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure the organization is removed
+  herve4m.quay.quay_organization:
+    name: ansibletestorg
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+...

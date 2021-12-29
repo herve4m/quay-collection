@@ -1,6 +1,9 @@
 # Red Hat Quay Collection for Ansible
 
-[![Code linting](https://github.com/herve4m/quay-collection/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/herve4m/quay-collection/actions/workflows/pre-commit.yml)
+[![Code Linting](https://github.com/herve4m/quay-collection/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/herve4m/quay-collection/actions/workflows/pre-commit.yml)
+[![Sanity Test](https://github.com/herve4m/quay-collection/actions/workflows/ansible-sanity.yml/badge.svg)](https://github.com/herve4m/quay-collection/actions/workflows/ansible-sanity.yml)
+[![Integration Test](https://github.com/herve4m/quay-collection/actions/workflows/ansible-integration.yml/badge.svg)](https://github.com/herve4m/quay-collection/actions/workflows/ansible-integration.yml)
+
 
 The collection provides modules for managing your Red Hat Quay deployment.
 

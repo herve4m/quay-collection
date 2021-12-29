@@ -1,0 +1,57 @@
+---
+name: Integration Test
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          path: ansible_collections/herve4m/quay
+
+      - name: Set access rights to Quay configuration file
+        run: |
+          chmod 777 quay-config
+          chmod 666 quay-config/config.yaml
+        working-directory: ./ansible_collections/herve4m/quay/tests
+
+      - name: Deploy Quay
+        run: docker-compose up -d
+        working-directory: ./ansible_collections/herve4m/quay/tests
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+
+      - name: Install required packages
+        run: pip install -Iv ansible-core ansible-test
+
+      - uses: ifaxity/wait-on-action@v1
+        with:
+          resource: http://localhost:8080
+          log: true
+          interval: 5000
+          timeout: 300000
+
+      - name: Run integration test
+        run: >
+          ansible-test integration -v --color --continue-on-error --diff
+          --requirements --coverage
+        working-directory: ./ansible_collections/herve4m/quay
+
+      - name: Generate coverage report
+        run: >
+          ansible-test coverage xml -v --requirements --group-by command
+          --group-by version
+        working-directory: ./ansible_collections/herve4m/quay
+
+      # See the repots at https://codecov.io/gh/herve4m/quay
+      - uses: codecov/codecov-action@v2
+        with:
+          fail_ci_if_error: false
+...

@@ -519,6 +519,17 @@ def main():
 
     # Create a notification
     if not match_notifications:
+
+        # Verify that the repository exists
+        repo_details = module.get_object_path(
+            "repository/{full_repo_name}",
+            full_repo_name=full_repo_name,
+        )
+        if not repo_details:
+            module.fail_json(
+                msg="The {repo} repository does not exist.".format(repo=full_repo_name)
+            )
+
         # Gather and verify the parameters
         new_fields = {"eventConfig": {}, "config": {}}
         missing_parameters = []

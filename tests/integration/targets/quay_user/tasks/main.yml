@@ -1,0 +1,90 @@
+---
+- name: Ensure user lvasquez exists
+  herve4m.quay.quay_user:
+    username: lvasquez
+    email: lvasquez@example.com
+    password: vs9mrD55NP
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure user dwilde exists but account is disabled
+  herve4m.quay.quay_user:
+    username: dwilde
+    email: dwilde@example.com
+    enabled: false
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure user jziglar is a superuser but account is disabled
+  herve4m.quay.quay_user:
+    username: jziglar
+    state: present
+    email: jziglar@example.com
+    # Only effective after a restart of the Red Hat Quay service.
+    superuser: true
+    enabled: false
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure user jziglar is not a superuser and their account is enabled
+  herve4m.quay.quay_user:
+    username: jziglar
+    state: present
+    # Works because the Red Hat Quay service has not been restarted yet.
+    superuser: false
+    enabled: true
+    password: vs9mrD55NP
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure user jziglar is a superuser
+  herve4m.quay.quay_user:
+    username: jziglar
+    state: present
+    superuser: true
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure user jziglar has a new password
+  herve4m.quay.quay_user:
+    username: jziglar
+    password: 7BbB8T6c
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure non-existing user is deleted (no change)
+  herve4m.quay.quay_user:
+    username: nonexistinguser
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure the users are removed
+  herve4m.quay.quay_user:
+    username: "{{ item }}"
+    state: absent
+    enabled: false
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  loop:
+    - lvasquez
+    # Deleting a disabled user account
+    - dwilde
+    # Deleting a superuser account
+    - jziglar
+...

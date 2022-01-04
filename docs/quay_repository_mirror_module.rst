@@ -30,7 +30,7 @@ herve4m.quay.quay_repository_mirror -- Manage Red Hat Quay repository mirror con
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.7).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.8).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -145,6 +145,40 @@ Parameters
             </tr>
                                 <tr>
                                                                 <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-http_proxy"></div>
+                    <b>http_proxy</b>
+                    <a class="ansibleOptionLink" href="#parameter-http_proxy" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>HTTP proxy to use for accessing the remote container registry.</div>
+                                            <div>See the <code>curl</code> documentation for more details.</div>
+                                            <div>By default, no proxy is used.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-https_proxy"></div>
+                    <b>https_proxy</b>
+                    <a class="ansibleOptionLink" href="#parameter-https_proxy" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>HTTPS proxy to use for accessing the remote container registry.</div>
+                                            <div>See the <code>curl</code> documentation for more details.</div>
+                                            <div>By default, no proxy is used.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-image_tags"></div>
                     <b>image_tags</b>
                     <a class="ansibleOptionLink" href="#parameter-image_tags" title="Permalink to this option"></a>
@@ -168,13 +202,14 @@ Parameters
                                                                     </div>
                                                         </td>
                                 <td>
-                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>no</li>
                                                                                                                                                                                                 <li>yes</li>
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
                                             <div>Defines whether the mirror configuration is active or inactive.</div>
+                                            <div><code>false</code> by default.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -190,6 +225,23 @@ Parameters
                                                                                                                                                             </td>
                                                                 <td>
                                             <div>Name of the existing repository for which the mirror parameters are configured. The format for the name is <code>namespace</code>/<code>shortname</code>. The namespace can only be an organization namespace.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-no_proxy"></div>
+                    <b>no_proxy</b>
+                    <a class="ansibleOptionLink" href="#parameter-no_proxy" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                                        </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Comma-separated list of hosts for which the proxy should not be used.</div>
+                                            <div>Only relevant when you also specify a proxy configuration by setting the <em>http_proxy</em> or <em>https_proxy</em> variables.</div>
+                                            <div>See the <code>curl</code> documentation for more details.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -222,7 +274,7 @@ Parameters
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>Token for authenticating with the API.</div>
+                                            <div>OAuth access token for authenticating with the API.</div>
                                             <div>If you do not set the parameter, then the module tries the <code>QUAY_TOKEN</code> environment variable.</div>
                                                         </td>
             </tr>
@@ -252,10 +304,10 @@ Parameters
                                                                     </div>
                                                         </td>
                                 <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">86400</div>
-                                    </td>
+                                                                                                                                                            </td>
                                                                 <td>
                                             <div>Synchronization interval for this repository mirror in seconds.</div>
+                                            <div>86400 (one day) by default.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -268,11 +320,11 @@ Parameters
                                                                     </div>
                                                         </td>
                                 <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"2021-01-01T12:00:00+00:00"</div>
-                                    </td>
+                                                                                                                                                            </td>
                                                                 <td>
                                             <div>The date and time at which the first synchronization should be initiated.</div>
-                                            <div>The format for the <em>sync_start_date</em> parameter is ISO 8601 UTC, such as 2021-12-02T21:06:00.977021Z.</div>
+                                            <div>The format for the <em>sync_start_date</em> parameter is ISO 8601 UTC, such as 2021-12-02T21:06:00Z.</div>
+                                            <div>If you do not provide the <em>sync_start_date</em> parameter when you configure a new repository mirror, then the synchronization is immediately active, and a synchronization is initiated if the <em>is_enabled</em> parameter is <code>true</code>.</div>
                                                         </td>
             </tr>
                                 <tr>
@@ -307,13 +359,14 @@ Parameters
                                                                     </div>
                                                         </td>
                                 <td>
-                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                                                                                                                                                 <li>no</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                                                                                                                                                                                                <li>yes</li>
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
                                             <div>Defines whether TLS of the external registry should be verified.</div>
+                                            <div><code>true</code> by default.</div>
                                                         </td>
             </tr>
                         </table>
@@ -349,6 +402,7 @@ Examples
       herve4m.quay.quay_repository_mirror:
         name: production/smallimage
         external_reference: quay.io/projectquay/quay
+        http_proxy: http://proxy.example.com:3128
         robot_username: production+auditrobot
         is_enabled: true
         image_tags:

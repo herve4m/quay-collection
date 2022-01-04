@@ -5,6 +5,19 @@ Red Hat Quay Collection Release Notes
 .. contents:: Topics
 
 
+v0.0.8
+======
+
+Minor Changes
+-------------
+
+- Tests - add integration tests.
+
+Bugfixes
+--------
+
+- quay_notification - add a check to verify that the repository exists.
+
 v0.0.7
 ======
 

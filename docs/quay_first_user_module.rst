@@ -30,7 +30,7 @@ herve4m.quay.quay_first_user -- Create the first user account
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.7).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.8).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -94,7 +94,7 @@ Parameters
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                            <div>If <code>yes</code>, then an access token is created and returned. You can use that returned token with the other Quay modules, by setting it in their <em>quay_token</em> parameter.</div>
+                                            <div>If <code>yes</code>, then an OAuth access token is created and returned. You can use that returned token with the other Quay modules, by setting it in the <em>quay_token</em> parameter.</div>
                                             <div>If <code>no</code>, then no access token is created.</div>
                                                         </td>
             </tr>

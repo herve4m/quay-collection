@@ -81,3 +81,12 @@ releases:
       name: quay_first_user
       namespace: ''
     release_date: '2021-12-22'
+  0.0.8:
+    changes:
+      bugfixes:
+      - quay_notification - add a check to verify that the repository exists.
+      minor_changes:
+      - Tests - add integration tests.
+    fragments:
+    - v0.0.8_summary.yml
+    release_date: '2022-01-04'

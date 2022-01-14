@@ -1,4 +1,4 @@
-# Copyright: (c) 2021, Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2021, 2022, Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 
@@ -835,14 +835,83 @@ class APIModule(AnsibleModule):
                 robot["is_robot"] = True
                 return robot
 
-        # User account
+        # User account.
+        #
+        # Uses the "entities" (search) endpoint rather than the "users"
+        # endpoint because the "users" endpoint only returns the users already
+        # defined in the internal database. LDAP users that have not yet been
+        # used in Quay are not in the internal database and are not returned
+        # when using the "users" endpoint.
+        #
+        # GET /api/v1/entities/user9
+        # {
+        #   "results": [
+        #     {
+        #       "name": "user9",
+        #       "kind": "external",
+        #       "title": "user9@example.com",
+        #       "avatar": {
+        #         "name": "user9",
+        #         "hash": "b1e7...098e",
+        #         "color": "#1f77b4",
+        #         "kind": "user"
+        #       }
+        #     },
+        #     {
+        #       "name": "user911",
+        #       "kind": "external",
+        #       "title": "user911@example.com",
+        #       "avatar": {
+        #         "name": "user911",
+        #         "hash": "5f67...3016",
+        #         "color": "#a55194",
+        #         "kind": "user"
+        #       }
+        #     },
+        #     {
+        #       "name": "user912",
+        #       "kind": "external",
+        #       "title": "user912@example.com",
+        #       "avatar": {
+        #         "name": "user912",
+        #         "hash": "7587...20ab",
+        #         "color": "#5254a3",
+        #         "kind": "user"
+        #       }
+        #     }
+        #   ]
+        # }
         user = self.get_object_path(
-            "users/{user}", exit_on_error=exit_on_error, user=account_name
+            "entities/{user}",
+            query_params={"includeOrgs": False, "includeTeams": False},
+            exit_on_error=exit_on_error,
+            user=account_name,
         )
-        if isinstance(user, dict) and user:
-            user["name"] = user.get("username")
+        if isinstance(user, dict) and len(user.get("results", [])) != 0:
+            # Search for an exact match for the username
+            for res in user["results"]:
+                if res.get("name") == account_name:
+                    break
+            else:
+                return None
+            user["name"] = account_name
             user["is_organization"] = False
             user["is_robot"] = False
+            # The LDAP user account is not yet declared into the Quay internal
+            # database. Add it.
+            if res.get("kind") == "external":
+                try:
+                    self.create(
+                        "user",
+                        user["name"],
+                        "entities/link/{user}",
+                        {},
+                        auto_exit=False,
+                        exit_on_error=False,
+                        user=user["name"],
+                    )
+                except APIModuleError:
+                    pass
             return user
         return None
 

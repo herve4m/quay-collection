@@ -843,17 +843,39 @@ class APIModule(AnsibleModule):
         # used in Quay are not in the internal database and are not returned
         # when using the "users" endpoint.
         #
-        # GET /api/v1/entities/user2
+        # GET /api/v1/entities/user9
         # {
         #   "results": [
         #     {
-        #       "name": "user2",
+        #       "name": "user9",
         #       "kind": "external",
-        #       "title": "user2@example.com",
+        #       "title": "user9@example.com",
         #       "avatar": {
-        #         "name": "user2",
-        #         "hash": "2b3b...95b5",
-        #         "color": "#c49c94",
+        #         "name": "user9",
+        #         "hash": "b1e7...098e",
+        #         "color": "#1f77b4",
+        #         "kind": "user"
+        #       }
+        #     },
+        #     {
+        #       "name": "user911",
+        #       "kind": "external",
+        #       "title": "user911@example.com",
+        #       "avatar": {
+        #         "name": "user911",
+        #         "hash": "5f67...3016",
+        #         "color": "#a55194",
+        #         "kind": "user"
+        #       }
+        #     },
+        #     {
+        #       "name": "user912",
+        #       "kind": "external",
+        #       "title": "user912@example.com",
+        #       "avatar": {
+        #         "name": "user912",
+        #         "hash": "7587...20ab",
+        #         "color": "#5254a3",
         #         "kind": "user"
         #       }
         #     }
@@ -865,14 +887,19 @@ class APIModule(AnsibleModule):
             exit_on_error=exit_on_error,
             user=account_name,
         )
-        if isinstance(user, dict) and len(user.get("results", [])) == 1:
-            res = user["results"][0]
-            user["name"] = res["name"]
+        if isinstance(user, dict) and len(user.get("results", [])) != 0:
+            # Search for an exact match for the username
+            for res in user["results"]:
+                if res.get("name") == account_name:
+                    break
+            else:
+                return None
+            user["name"] = account_name
             user["is_organization"] = False
             user["is_robot"] = False
             # The LDAP user account is not yet declared into the Quay internal
             # database. Add it.
-            if res["kind"] == "external":
+            if res.get("kind") == "external":
                 try:
                     self.create(
                         "user",

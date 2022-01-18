@@ -26,7 +26,7 @@
 
 .. Anchors
 
-.. _ansible_collections.herve4m.quay.quay_team_module:
+.. _ansible_collections.herve4m.quay.quay_team_ldap_module:
 
 .. Anchors: short name for ansible.builtin
 
@@ -36,8 +36,8 @@
 
 .. Title
 
-herve4m.quay.quay_team -- Manage Red Hat Quay teams
-+++++++++++++++++++++++++++++++++++++++++++++++++++
+herve4m.quay.quay_team_ldap -- Synchronize Red Hat Quay teams with LDAP groups
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. Collection note
 
@@ -50,11 +50,11 @@ herve4m.quay.quay_team -- Manage Red Hat Quay teams
 
     To install it, use: :code:`ansible-galaxy collection install herve4m.quay`.
 
-    To use it in a playbook, specify: :code:`herve4m.quay.quay_team`.
+    To use it in a playbook, specify: :code:`herve4m.quay.quay_team_ldap`.
 
 .. version_added
 
-.. versionadded:: 0.0.1 of herve4m.quay
+.. versionadded:: 0.0.9 of herve4m.quay
 
 .. contents::
    :local:
@@ -68,7 +68,7 @@ Synopsis
 
 .. Description
 
-- Create, delete, and update teams in organizations.
+- Synchronize and unsynchronize teams in organizations with LDAP groups.
 
 
 .. Aliases
@@ -95,17 +95,55 @@ Parameters
   * - .. raw:: html
 
         <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-append"></div>
+        <div class="ansibleOptionAnchor" id="parameter-group_dn"></div>
 
-      .. _ansible_collections.herve4m.quay.quay_team_module__parameter-append:
+      .. _ansible_collections.herve4m.quay.quay_team_ldap_module__parameter-group_dn:
 
       .. rst-class:: ansible-option-title
 
-      **append**
+      **group_dn**
 
       .. raw:: html
 
-        <a class="ansibleOptionLink" href="#parameter-append" title="Permalink to this option"></a>
+        <a class="ansibleOptionLink" href="#parameter-group_dn" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      LDAP group distinguished name (DN), relative to the base DN that you defined in the \ :literal:`config.yaml`\  Quay configuration file with the \ :literal:`LDAP\_BASE\_DN`\  parameter.
+
+      For example, if the LDAP group DN is \ :literal:`cn=group1,ou=groups,dc=example,dc=org`\  and the base DN is \ :literal:`dc=example,dc=org`\ , then you must set \ :emphasis:`group\_dn`\  to \ :literal:`cn=group1,ou=groups`\ .
+
+      \ :emphasis:`group\_dn`\  is required when \ :emphasis:`sync`\  is \ :literal:`yes`\ .
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-keep_users"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_team_ldap_module__parameter-keep_users:
+
+      .. rst-class:: ansible-option-title
+
+      **keep_users**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-keep_users" title="Permalink to this option"></a>
 
       .. rst-class:: ansible-option-type-line
 
@@ -119,9 +157,11 @@ Parameters
 
         <div class="ansible-option-cell">
 
-      If \ :literal:`yes`\ , then add the users specified in \ :emphasis:`members`\  to the team.
+      If \ :literal:`yes`\ , then the current team members are kept after the synchronization is disabled.
 
-      If \ :literal:`no`\ , then the module sets the team members to users specified in \ :emphasis:`members`\ , removing all others users from the team.
+      If \ :literal:`no`\ , then the team members are removed (except robot accounts)
+
+      \ :emphasis:`keep\_users`\  is only used when \ :emphasis:`sync`\  is \ :literal:`no`\ .
 
 
       .. rst-class:: ansible-option-line
@@ -138,79 +178,9 @@ Parameters
   * - .. raw:: html
 
         <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-description"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_team_module__parameter-description:
-
-      .. rst-class:: ansible-option-title
-
-      **description**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-description" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      Text in Markdown format that describes the team.
-
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-members"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_team_module__parameter-members:
-
-      .. rst-class:: ansible-option-title
-
-      **members**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-members" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`list` / :ansible-option-elements:`elements=string`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      List of the user or robot accounts in the team. Use the syntax \ :literal:`organization`\ +\ :literal:`robotshortname`\  for robot accounts.
-
-      If the team is synchronized with an LDAP group (see the M(quay_team_ldap) module), then you can only add or remove robot accounts.
-
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
         <div class="ansibleOptionAnchor" id="parameter-name"></div>
 
-      .. _ansible_collections.herve4m.quay.quay_team_module__parameter-name:
+      .. _ansible_collections.herve4m.quay.quay_team_ldap_module__parameter-name:
 
       .. rst-class:: ansible-option-title
 
@@ -232,9 +202,7 @@ Parameters
 
         <div class="ansible-option-cell">
 
-      Name of the team to create, remove, or modify.
-
-      The name must be in lowercase, must not contain white spaces, must not start by a digit, and must be at least two characters long.
+      Name of the team to synchronize or unsynchronize with an LDAP group. That team must exist (see the M(quay_team) module to create it).
 
 
       .. raw:: html
@@ -246,7 +214,7 @@ Parameters
         <div class="ansible-option-cell">
         <div class="ansibleOptionAnchor" id="parameter-organization"></div>
 
-      .. _ansible_collections.herve4m.quay.quay_team_module__parameter-organization:
+      .. _ansible_collections.herve4m.quay.quay_team_ldap_module__parameter-organization:
 
       .. rst-class:: ansible-option-title
 
@@ -280,7 +248,7 @@ Parameters
         <div class="ansible-option-cell">
         <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
 
-      .. _ansible_collections.herve4m.quay.quay_team_module__parameter-quay_host:
+      .. _ansible_collections.herve4m.quay.quay_team_ldap_module__parameter-quay_host:
 
       .. rst-class:: ansible-option-title
 
@@ -322,7 +290,7 @@ Parameters
         <div class="ansible-option-cell">
         <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
 
-      .. _ansible_collections.herve4m.quay.quay_team_module__parameter-quay_token:
+      .. _ansible_collections.herve4m.quay.quay_team_ldap_module__parameter-quay_token:
 
       .. rst-class:: ansible-option-title
 
@@ -356,21 +324,21 @@ Parameters
   * - .. raw:: html
 
         <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-role"></div>
+        <div class="ansibleOptionAnchor" id="parameter-sync"></div>
 
-      .. _ansible_collections.herve4m.quay.quay_team_module__parameter-role:
+      .. _ansible_collections.herve4m.quay.quay_team_ldap_module__parameter-sync:
 
       .. rst-class:: ansible-option-title
 
-      **role**
+      **sync**
 
       .. raw:: html
 
-        <a class="ansibleOptionLink" href="#parameter-role" title="Permalink to this option"></a>
+        <a class="ansibleOptionLink" href="#parameter-sync" title="Permalink to this option"></a>
 
       .. rst-class:: ansible-option-type-line
 
-      :ansible-option-type:`string`
+      :ansible-option-type:`boolean`
 
       .. raw:: html
 
@@ -380,63 +348,17 @@ Parameters
 
         <div class="ansible-option-cell">
 
-      Role of the team within the organization.
+      If \ :literal:`yes`\ , then the team members are retrieved from the LDAP group that you define in \ :emphasis:`group\_dn`\ . The pre-existing members are removed from the team before the synchronization process starts. Existing robot account members are not removed.
+
+      If \ :literal:`no`\ , then the synchronization from LDAP is disabled. Existing team members (from LDAP) are kept, except if you set \ :emphasis:`keep\_users`\  to \ :literal:`no`\ .
 
 
       .. rst-class:: ansible-option-line
 
       :ansible-option-choices:`Choices:`
 
-      - :ansible-option-choices-entry:`member`
-      - :ansible-option-choices-entry:`creator`
-      - :ansible-option-choices-entry:`admin`
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-state"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_team_module__parameter-state:
-
-      .. rst-class:: ansible-option-title
-
-      **state**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      If \ :literal:`absent`\ , then the module deletes the team.
-
-      The module does not fail if the team does not exist because the state is already as expected.
-
-      If \ :literal:`present`\ , then the module creates the team if it does not already exist.
-
-      If the team already exists, then the module updates its state.
-
-
-      .. rst-class:: ansible-option-line
-
-      :ansible-option-choices:`Choices:`
-
-      - :ansible-option-choices-entry:`absent`
-      - :ansible-option-default-bold:`present` :ansible-option-default:`← (default)`
+      - :ansible-option-choices-entry:`no`
+      - :ansible-option-default-bold:`yes` :ansible-option-default:`← (default)`
 
       .. raw:: html
 
@@ -448,8 +370,8 @@ Parameters
         <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
         <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div>
 
-      .. _ansible_collections.herve4m.quay.quay_team_module__parameter-validate_certs:
-      .. _ansible_collections.herve4m.quay.quay_team_module__parameter-verify_ssl:
+      .. _ansible_collections.herve4m.quay.quay_team_ldap_module__parameter-validate_certs:
+      .. _ansible_collections.herve4m.quay.quay_team_ldap_module__parameter-verify_ssl:
 
       .. rst-class:: ansible-option-title
 
@@ -503,7 +425,7 @@ Notes
 -----
 
 .. note::
-   - To synchronize teams with LDAP groups, see the M(quay_team_ldap) module.
+   - The module requires that you configure the Quay authentication method to LDAP (\ :literal:`AUTHENTICATION\_TYPE`\  to \ :literal:`LDAP`\  in \ :literal:`config.yaml`\  and the \ :literal:`LDAP\_\*`\  parameters correctly set).
    - Supports \ :literal:`check\_mode`\ .
    - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Administer Organization" and "Administer User" permissions.
 
@@ -518,52 +440,37 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Ensure team operators exists in the production organization
+    - name: Ensure team operators exists before activating LDAP synchronization
       herve4m.quay.quay_team:
         name: operators
         organization: production
-        description: |
-            # Operation Team
-
-            * Operators can create repositories
-            * Operators can store their images in those repositories
         role: creator
+        # Only robot accounts can be added to a team you prepare for LDAP
+        # synchonization. User accounts that you might add are removed when the
+        # synchronization is activated
         members:
-          - lvasquez
-          - dwilde
           - production+automationrobot
         append: false
         state: present
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-    - name: Ensure team developers does not exist in the production organization
-      herve4m.quay.quay_team:
-        name: developers
-        organization: production
-        state: absent
-        quay_host: https://quay.example.com
-        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
-
-    - name: Ensure team administrators has no members
-      herve4m.quay.quay_team:
-        name: administrators
-        organization: production
-        members: []
-        append: false
-        state: present
-        quay_host: https://quay.example.com
-        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
-
-    - name: Ensure team operators has additionnal members
-      herve4m.quay.quay_team:
+    - name: Ensure team operators is synchronized with the op1 LDAP group
+      herve4m.quay.quay_team_ldap:
         name: operators
         organization: production
-        members:
-          - jziglar
-          - chorwitz
-        append: true
-        state: present
+        sync: true
+        group_dn: cn=op1,ou=groups
+        quay_host: https://quay.example.com
+        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+
+    - name: Ensure team operators is not synchronized anymore with an LDAP group
+      herve4m.quay.quay_team_ldap:
+        name: operators
+        organization: production
+        sync: false
+        # Remove all the users from the team synchronized from the LDAP group
+        keep_users: false
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 

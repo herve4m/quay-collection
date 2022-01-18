@@ -11,6 +11,18 @@
 .. role:: ansible-attribute-support-partial
 .. role:: ansible-attribute-support-none
 .. role:: ansible-attribute-support-na
+.. role:: ansible-option-type
+.. role:: ansible-option-elements
+.. role:: ansible-option-required
+.. role:: ansible-option-versionadded
+.. role:: ansible-option-aliases
+.. role:: ansible-option-choices
+.. role:: ansible-option-choices-entry
+.. role:: ansible-option-default
+.. role:: ansible-option-default-bold
+.. role:: ansible-option-configuration
+.. role:: ansible-option-returned-bold
+.. role:: ansible-option-sample-bold
 
 .. Anchors
 
@@ -30,7 +42,7 @@ herve4m.quay.quay_repository_mirror -- Manage Red Hat Quay repository mirror con
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.8).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.9).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -70,307 +82,668 @@ Synopsis
 Parameters
 ----------
 
-.. raw:: html
+.. rst-class:: ansible-option-table
 
-    <table  border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Parameter</th>
-            <th>Choices/<font color="blue">Defaults</font></th>
-                        <th width="100%">Comments</th>
-        </tr>
-                    <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-external_reference"></div>
-                    <b>external_reference</b>
-                    <a class="ansibleOptionLink" href="#parameter-external_reference" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Path to the remote container repository to synchronize, such as quay.io/projectquay/quay for example.</div>
-                                            <div>That parameter is required when creating the mirroring configuration.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-external_registry_password"></div>
-                    <b>external_registry_password</b>
-                    <a class="ansibleOptionLink" href="#parameter-external_registry_password" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Password to use for pulling the image from the remote registry.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-external_registry_username"></div>
-                    <b>external_registry_username</b>
-                    <a class="ansibleOptionLink" href="#parameter-external_registry_username" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Username to use for pulling the image from the remote registry.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-force_sync"></div>
-                    <b>force_sync</b>
-                    <a class="ansibleOptionLink" href="#parameter-force_sync" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                <li>yes</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Triggers an immediate image synchronization.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-http_proxy"></div>
-                    <b>http_proxy</b>
-                    <a class="ansibleOptionLink" href="#parameter-http_proxy" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>HTTP proxy to use for accessing the remote container registry.</div>
-                                            <div>See the <code>curl</code> documentation for more details.</div>
-                                            <div>By default, no proxy is used.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-https_proxy"></div>
-                    <b>https_proxy</b>
-                    <a class="ansibleOptionLink" href="#parameter-https_proxy" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>HTTPS proxy to use for accessing the remote container registry.</div>
-                                            <div>See the <code>curl</code> documentation for more details.</div>
-                                            <div>By default, no proxy is used.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-image_tags"></div>
-                    <b>image_tags</b>
-                    <a class="ansibleOptionLink" href="#parameter-image_tags" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=string</span>                                            </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>List of image tags to be synchronized from the remote repository.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-is_enabled"></div>
-                    <b>is_enabled</b>
-                    <a class="ansibleOptionLink" href="#parameter-is_enabled" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>no</li>
-                                                                                                                                                                                                <li>yes</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Defines whether the mirror configuration is active or inactive.</div>
-                                            <div><code>false</code> by default.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-name"></div>
-                    <b>name</b>
-                    <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Name of the existing repository for which the mirror parameters are configured. The format for the name is <code>namespace</code>/<code>shortname</code>. The namespace can only be an organization namespace.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-no_proxy"></div>
-                    <b>no_proxy</b>
-                    <a class="ansibleOptionLink" href="#parameter-no_proxy" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Comma-separated list of hosts for which the proxy should not be used.</div>
-                                            <div>Only relevant when you also specify a proxy configuration by setting the <em>http_proxy</em> or <em>https_proxy</em> variables.</div>
-                                            <div>See the <code>curl</code> documentation for more details.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
-                    <b>quay_host</b>
-                    <a class="ansibleOptionLink" href="#parameter-quay_host" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"http://127.0.0.1"</div>
-                                    </td>
-                                                                <td>
-                                            <div>URL for accessing the API. <a href='https://quay.example.com:8443'>https://quay.example.com:8443</a> for example.</div>
-                                            <div>If you do not set the parameter, then the module uses the <code>QUAY_HOST</code> environment variable.</div>
-                                            <div>If you do no set the environment variable either, then the module uses the <a href='http://127.0.0.1'>http://127.0.0.1</a> URL.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
-                    <b>quay_token</b>
-                    <a class="ansibleOptionLink" href="#parameter-quay_token" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>OAuth access token for authenticating with the API.</div>
-                                            <div>If you do not set the parameter, then the module tries the <code>QUAY_TOKEN</code> environment variable.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-robot_username"></div>
-                    <b>robot_username</b>
-                    <a class="ansibleOptionLink" href="#parameter-robot_username" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Username of the robot account that is used for synchronization.</div>
-                                            <div>That parameter is required when creating the mirroring configuration.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-sync_interval"></div>
-                    <b>sync_interval</b>
-                    <a class="ansibleOptionLink" href="#parameter-sync_interval" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Synchronization interval for this repository mirror in seconds.</div>
-                                            <div>86400 (one day) by default.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-sync_start_date"></div>
-                    <b>sync_start_date</b>
-                    <a class="ansibleOptionLink" href="#parameter-sync_start_date" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The date and time at which the first synchronization should be initiated.</div>
-                                            <div>The format for the <em>sync_start_date</em> parameter is ISO 8601 UTC, such as 2021-12-02T21:06:00Z.</div>
-                                            <div>If you do not provide the <em>sync_start_date</em> parameter when you configure a new repository mirror, then the synchronization is immediately active, and a synchronization is initiated if the <em>is_enabled</em> parameter is <code>true</code>.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
-                    <b>validate_certs</b>
-                    <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>no</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Whether to allow insecure connections to the API.</div>
-                                            <div>If <code>no</code>, then the module does not validate SSL certificates.</div>
-                                            <div>If you do not set the parameter, then the module tries the <code>QUAY_VERIFY_SSL</code> environment variable (<code>yes</code>, <code>1</code>, and <code>True</code> mean yes, and <code>no</code>, <code>0</code>, <code>False</code>, and no value mean no).</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: verify_ssl</div>
-                                    </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-verify_tls"></div>
-                    <b>verify_tls</b>
-                    <a class="ansibleOptionLink" href="#parameter-verify_tls" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>no</li>
-                                                                                                                                                                                                <li>yes</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Defines whether TLS of the external registry should be verified.</div>
-                                            <div><code>true</code> by default.</div>
-                                                        </td>
-            </tr>
-                        </table>
-    <br/>
+.. list-table::
+  :width: 100%
+  :widths: auto
+  :header-rows: 1
+
+  * - Parameter
+    - Comments
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-external_reference"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_mirror_module__parameter-external_reference:
+
+      .. rst-class:: ansible-option-title
+
+      **external_reference**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-external_reference" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Path to the remote container repository to synchronize, such as quay.io/projectquay/quay for example.
+
+      That parameter is required when creating the mirroring configuration.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-external_registry_password"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_mirror_module__parameter-external_registry_password:
+
+      .. rst-class:: ansible-option-title
+
+      **external_registry_password**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-external_registry_password" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Password to use for pulling the image from the remote registry.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-external_registry_username"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_mirror_module__parameter-external_registry_username:
+
+      .. rst-class:: ansible-option-title
+
+      **external_registry_username**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-external_registry_username" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Username to use for pulling the image from the remote registry.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-force_sync"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_mirror_module__parameter-force_sync:
+
+      .. rst-class:: ansible-option-title
+
+      **force_sync**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-force_sync" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`boolean`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Triggers an immediate image synchronization.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-default-bold:`no` :ansible-option-default:`← (default)`
+      - :ansible-option-choices-entry:`yes`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-http_proxy"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_mirror_module__parameter-http_proxy:
+
+      .. rst-class:: ansible-option-title
+
+      **http_proxy**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-http_proxy" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      HTTP proxy to use for accessing the remote container registry.
+
+      See the \ :literal:`curl`\  documentation for more details.
+
+      By default, no proxy is used.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-https_proxy"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_mirror_module__parameter-https_proxy:
+
+      .. rst-class:: ansible-option-title
+
+      **https_proxy**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-https_proxy" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      HTTPS proxy to use for accessing the remote container registry.
+
+      See the \ :literal:`curl`\  documentation for more details.
+
+      By default, no proxy is used.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-image_tags"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_mirror_module__parameter-image_tags:
+
+      .. rst-class:: ansible-option-title
+
+      **image_tags**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-image_tags" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`list` / :ansible-option-elements:`elements=string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      List of image tags to be synchronized from the remote repository.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-is_enabled"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_mirror_module__parameter-is_enabled:
+
+      .. rst-class:: ansible-option-title
+
+      **is_enabled**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-is_enabled" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`boolean`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Defines whether the mirror configuration is active or inactive.
+
+      \ :literal:`false`\  by default.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-choices-entry:`no`
+      - :ansible-option-choices-entry:`yes`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-name"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_mirror_module__parameter-name:
+
+      .. rst-class:: ansible-option-title
+
+      **name**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string` / :ansible-option-required:`required`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Name of the existing repository for which the mirror parameters are configured. The format for the name is \ :literal:`namespace`\ /\ :literal:`shortname`\ . The namespace can only be an organization namespace.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-no_proxy"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_mirror_module__parameter-no_proxy:
+
+      .. rst-class:: ansible-option-title
+
+      **no_proxy**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-no_proxy" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Comma-separated list of hosts for which the proxy should not be used.
+
+      Only relevant when you also specify a proxy configuration by setting the \ :emphasis:`http\_proxy`\  or \ :emphasis:`https\_proxy`\  variables.
+
+      See the \ :literal:`curl`\  documentation for more details.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_mirror_module__parameter-quay_host:
+
+      .. rst-class:: ansible-option-title
+
+      **quay_host**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-quay_host" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      URL for accessing the API. \ https://quay.example.com:8443\  for example.
+
+      If you do not set the parameter, then the module uses the \ :literal:`QUAY\_HOST`\  environment variable.
+
+      If you do no set the environment variable either, then the module uses the \ http://127.0.0.1\  URL.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-default-bold:`Default:` :ansible-option-default:`"http://127.0.0.1"`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_mirror_module__parameter-quay_token:
+
+      .. rst-class:: ansible-option-title
+
+      **quay_token**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-quay_token" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      OAuth access token for authenticating with the API.
+
+      If you do not set the parameter, then the module tries the \ :literal:`QUAY\_TOKEN`\  environment variable.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-robot_username"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_mirror_module__parameter-robot_username:
+
+      .. rst-class:: ansible-option-title
+
+      **robot_username**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-robot_username" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Username of the robot account that is used for synchronization.
+
+      That parameter is required when creating the mirroring configuration.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-sync_interval"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_mirror_module__parameter-sync_interval:
+
+      .. rst-class:: ansible-option-title
+
+      **sync_interval**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-sync_interval" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`integer`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Synchronization interval for this repository mirror in seconds.
+
+      86400 (one day) by default.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-sync_start_date"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_mirror_module__parameter-sync_start_date:
+
+      .. rst-class:: ansible-option-title
+
+      **sync_start_date**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-sync_start_date" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      The date and time at which the first synchronization should be initiated.
+
+      The format for the \ :emphasis:`sync\_start\_date`\  parameter is ISO 8601 UTC, such as 2021-12-02T21:06:00Z.
+
+      If you do not provide the \ :emphasis:`sync\_start\_date`\  parameter when you configure a new repository mirror, then the synchronization is immediately active, and a synchronization is initiated if the \ :emphasis:`is\_enabled`\  parameter is \ :literal:`true`\ .
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
+        <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_mirror_module__parameter-validate_certs:
+      .. _ansible_collections.herve4m.quay.quay_repository_mirror_module__parameter-verify_ssl:
+
+      .. rst-class:: ansible-option-title
+
+      **validate_certs**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-aliases:`aliases: verify_ssl`
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`boolean`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Whether to allow insecure connections to the API.
+
+      If \ :literal:`no`\ , then the module does not validate SSL certificates.
+
+      If you do not set the parameter, then the module tries the \ :literal:`QUAY\_VERIFY\_SSL`\  environment variable (\ :literal:`yes`\ , \ :literal:`1`\ , and \ :literal:`True`\  mean yes, and \ :literal:`no`\ , \ :literal:`0`\ , \ :literal:`False`\ , and no value mean no).
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-choices-entry:`no`
+      - :ansible-option-default-bold:`yes` :ansible-option-default:`← (default)`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-verify_tls"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_mirror_module__parameter-verify_tls:
+
+      .. rst-class:: ansible-option-title
+
+      **verify_tls**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-verify_tls" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`boolean`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Defines whether TLS of the external registry should be verified.
+
+      \ :literal:`true`\  by default.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-choices-entry:`no`
+      - :ansible-option-choices-entry:`yes`
+
+      .. raw:: html
+
+        </div>
+
 
 .. Attributes
 
@@ -381,11 +754,11 @@ Notes
 -----
 
 .. note::
-   - You must enable the mirroring capability of your Quay installation (``FEATURE_REPO_MIRROR`` in ``config.yaml``) to use that module.
+   - You must enable the mirroring capability of your Quay installation (\ :literal:`FEATURE\_REPO\_MIRROR`\  in \ :literal:`config.yaml`\ ) to use that module.
    - You cannot modify a repository mirroring configuration if a synchronization is in progress.
-   - There is no API function to remove the configuration. However, you can deactivate mirroring by setting the *is_enabled* parameter to ``false`` or by changing the repository mirror state (see the *repo_state* parameter in the M(quay_repository) module). The configuration is preserved when you disable mirroring.
-   - Supports ``check_mode``.
-   - The token that you provide in *quay_token* must have the "Administer Repositories" and "Create Repositories" permissions.
+   - There is no API function to remove the configuration. However, you can deactivate mirroring by setting the \ :emphasis:`is\_enabled`\  parameter to \ :literal:`false`\  or by changing the repository mirror state (see the \ :emphasis:`repo\_state`\  parameter in the M(quay_repository) module). The configuration is preserved when you disable mirroring.
+   - Supports \ :literal:`check\_mode`\ .
+   - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Administer Repositories" and "Create Repositories" permissions.
 
 .. Seealso
 
@@ -397,7 +770,7 @@ Examples
 
 .. code-block:: yaml+jinja
 
-
+    
     - name: Ensure mirroring configuration is set for the existing production/smallimage repo
       herve4m.quay.quay_repository_mirror:
         name: production/smallimage
@@ -448,3 +821,4 @@ Authors
 
 
 .. Parsing errors
+

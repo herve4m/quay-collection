@@ -11,6 +11,18 @@
 .. role:: ansible-attribute-support-partial
 .. role:: ansible-attribute-support-none
 .. role:: ansible-attribute-support-na
+.. role:: ansible-option-type
+.. role:: ansible-option-elements
+.. role:: ansible-option-required
+.. role:: ansible-option-versionadded
+.. role:: ansible-option-aliases
+.. role:: ansible-option-choices
+.. role:: ansible-option-choices-entry
+.. role:: ansible-option-default
+.. role:: ansible-option-default-bold
+.. role:: ansible-option-configuration
+.. role:: ansible-option-returned-bold
+.. role:: ansible-option-sample-bold
 
 .. Anchors
 
@@ -30,7 +42,7 @@ herve4m.quay.quay_message -- Manage Red Hat Quay global messages
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.8).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.9).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -70,208 +82,447 @@ Synopsis
 Parameters
 ----------
 
-.. raw:: html
+.. rst-class:: ansible-option-table
 
-    <table  border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Parameter</th>
-            <th>Choices/<font color="blue">Defaults</font></th>
-                        <th width="100%">Comments</th>
-        </tr>
-                    <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-content"></div>
-                    <b>content</b>
-                    <a class="ansibleOptionLink" href="#parameter-content" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Text of the message to display on each web UI page.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-format"></div>
-                    <b>format</b>
-                    <a class="ansibleOptionLink" href="#parameter-format" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>markdown</li>
-                                                                                                                                                                                                <li>plain</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Format of the text in <em>content</em>.</div>
-                                            <div>If you do not set this parameter, then the module uses the <code>plain</code> format.</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: media_type</div>
-                                    </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
-                    <b>quay_host</b>
-                    <a class="ansibleOptionLink" href="#parameter-quay_host" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"http://127.0.0.1"</div>
-                                    </td>
-                                                                <td>
-                                            <div>URL for accessing the API. <a href='https://quay.example.com:8443'>https://quay.example.com:8443</a> for example.</div>
-                                            <div>If you do not set the parameter, then the module uses the <code>QUAY_HOST</code> environment variable.</div>
-                                            <div>If you do no set the environment variable either, then the module uses the <a href='http://127.0.0.1'>http://127.0.0.1</a> URL.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
-                    <b>quay_token</b>
-                    <a class="ansibleOptionLink" href="#parameter-quay_token" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>OAuth access token for authenticating with the API.</div>
-                                            <div>If you do not set the parameter, then the module tries the <code>QUAY_TOKEN</code> environment variable.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-regexp"></div>
-                    <b>regexp</b>
-                    <a class="ansibleOptionLink" href="#parameter-regexp" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The regular expression to look for in the existing messages. This does not have to match an entire line.</div>
-                                            <div>For <code>state=present</code>, if several messages match, then the module updates one and deletes the others.</div>
-                                            <div>For <code>state=absent</code>, the module deletes all the messages that match.</div>
-                                            <div>Uses Python regular expressions. See <a href='https://docs.python.org/3/library/re.html'>https://docs.python.org/3/library/re.html</a>.</div>
-                                            <div>Mutually exclusive with <em>search_string</em>.</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: regex</div>
-                                    </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-search_severity"></div>
-                    <b>search_severity</b>
-                    <a class="ansibleOptionLink" href="#parameter-search_severity" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>info</li>
-                                                                                                                                                                                                <li>warning</li>
-                                                                                                                                                                                                <li>error</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Search messages by their severity level.</div>
-                                            <div>If you also set <em>search_string</em>, <em>regexp</em>, or <em>content</em>, messages must match all those criteria.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-search_string"></div>
-                    <b>search_string</b>
-                    <a class="ansibleOptionLink" href="#parameter-search_string" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>The literal string to look for in the existing messages. This does not have to match an entire line.</div>
-                                            <div>For <code>state=present</code>, if several messages match, then the module updates one and deletes the others.</div>
-                                            <div>For <code>state=absent</code>, the module deletes all the messages that match.</div>
-                                            <div>Mutually exclusive with <em>regexp</em>.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-severity"></div>
-                    <b>severity</b>
-                    <a class="ansibleOptionLink" href="#parameter-severity" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>info</li>
-                                                                                                                                                                                                <li>warning</li>
-                                                                                                                                                                                                <li>error</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Severity of the message.</div>
-                                            <div>If you do not set this parameter, then the module creates the message with the <code>info</code> severity.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-state"></div>
-                    <b>state</b>
-                    <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>absent</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>If <code>absent</code>, then the module deletes all the messages which content matches <em>search_string</em>, <em>regexp</em>, <em>content</em>, or <em>search_severity</em>.</div>
-                                            <div>If <code>present</code>, then the module creates the message if it does not already exist (that is, if no message matches <em>search_string</em>, <em>regexp</em>, or <em>content</em>). Is several messages match, only one is updated and the others are deleted.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
-                    <b>validate_certs</b>
-                    <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>no</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Whether to allow insecure connections to the API.</div>
-                                            <div>If <code>no</code>, then the module does not validate SSL certificates.</div>
-                                            <div>If you do not set the parameter, then the module tries the <code>QUAY_VERIFY_SSL</code> environment variable (<code>yes</code>, <code>1</code>, and <code>True</code> mean yes, and <code>no</code>, <code>0</code>, <code>False</code>, and no value mean no).</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: verify_ssl</div>
-                                    </td>
-            </tr>
-                        </table>
-    <br/>
+.. list-table::
+  :width: 100%
+  :widths: auto
+  :header-rows: 1
+
+  * - Parameter
+    - Comments
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-content"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_message_module__parameter-content:
+
+      .. rst-class:: ansible-option-title
+
+      **content**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-content" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Text of the message to display on each web UI page.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-format"></div>
+        <div class="ansibleOptionAnchor" id="parameter-media_type"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_message_module__parameter-format:
+      .. _ansible_collections.herve4m.quay.quay_message_module__parameter-media_type:
+
+      .. rst-class:: ansible-option-title
+
+      **format**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-format" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-aliases:`aliases: media_type`
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Format of the text in \ :emphasis:`content`\ .
+
+      If you do not set this parameter, then the module uses the \ :literal:`plain`\  format.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-choices-entry:`markdown`
+      - :ansible-option-choices-entry:`plain`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_message_module__parameter-quay_host:
+
+      .. rst-class:: ansible-option-title
+
+      **quay_host**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-quay_host" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      URL for accessing the API. \ https://quay.example.com:8443\  for example.
+
+      If you do not set the parameter, then the module uses the \ :literal:`QUAY\_HOST`\  environment variable.
+
+      If you do no set the environment variable either, then the module uses the \ http://127.0.0.1\  URL.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-default-bold:`Default:` :ansible-option-default:`"http://127.0.0.1"`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_message_module__parameter-quay_token:
+
+      .. rst-class:: ansible-option-title
+
+      **quay_token**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-quay_token" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      OAuth access token for authenticating with the API.
+
+      If you do not set the parameter, then the module tries the \ :literal:`QUAY\_TOKEN`\  environment variable.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-regexp"></div>
+        <div class="ansibleOptionAnchor" id="parameter-regex"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_message_module__parameter-regexp:
+      .. _ansible_collections.herve4m.quay.quay_message_module__parameter-regex:
+
+      .. rst-class:: ansible-option-title
+
+      **regexp**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-regexp" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-aliases:`aliases: regex`
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      The regular expression to look for in the existing messages. This does not have to match an entire line.
+
+      For \ :literal:`state=present`\ , if several messages match, then the module updates one and deletes the others.
+
+      For \ :literal:`state=absent`\ , the module deletes all the messages that match.
+
+      Uses Python regular expressions. See \ https://docs.python.org/3/library/re.html\ .
+
+      Mutually exclusive with \ :emphasis:`search\_string`\ .
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-search_severity"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_message_module__parameter-search_severity:
+
+      .. rst-class:: ansible-option-title
+
+      **search_severity**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-search_severity" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Search messages by their severity level.
+
+      If you also set \ :emphasis:`search\_string`\ , \ :emphasis:`regexp`\ , or \ :emphasis:`content`\ , messages must match all those criteria.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-choices-entry:`info`
+      - :ansible-option-choices-entry:`warning`
+      - :ansible-option-choices-entry:`error`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-search_string"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_message_module__parameter-search_string:
+
+      .. rst-class:: ansible-option-title
+
+      **search_string**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-search_string" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      The literal string to look for in the existing messages. This does not have to match an entire line.
+
+      For \ :literal:`state=present`\ , if several messages match, then the module updates one and deletes the others.
+
+      For \ :literal:`state=absent`\ , the module deletes all the messages that match.
+
+      Mutually exclusive with \ :emphasis:`regexp`\ .
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-severity"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_message_module__parameter-severity:
+
+      .. rst-class:: ansible-option-title
+
+      **severity**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-severity" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Severity of the message.
+
+      If you do not set this parameter, then the module creates the message with the \ :literal:`info`\  severity.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-choices-entry:`info`
+      - :ansible-option-choices-entry:`warning`
+      - :ansible-option-choices-entry:`error`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-state"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_message_module__parameter-state:
+
+      .. rst-class:: ansible-option-title
+
+      **state**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      If \ :literal:`absent`\ , then the module deletes all the messages which content matches \ :emphasis:`search\_string`\ , \ :emphasis:`regexp`\ , \ :emphasis:`content`\ , or \ :emphasis:`search\_severity`\ .
+
+      If \ :literal:`present`\ , then the module creates the message if it does not already exist (that is, if no message matches \ :emphasis:`search\_string`\ , \ :emphasis:`regexp`\ , or \ :emphasis:`content`\ ). Is several messages match, only one is updated and the others are deleted.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-choices-entry:`absent`
+      - :ansible-option-default-bold:`present` :ansible-option-default:`← (default)`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
+        <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_message_module__parameter-validate_certs:
+      .. _ansible_collections.herve4m.quay.quay_message_module__parameter-verify_ssl:
+
+      .. rst-class:: ansible-option-title
+
+      **validate_certs**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-aliases:`aliases: verify_ssl`
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`boolean`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Whether to allow insecure connections to the API.
+
+      If \ :literal:`no`\ , then the module does not validate SSL certificates.
+
+      If you do not set the parameter, then the module tries the \ :literal:`QUAY\_VERIFY\_SSL`\  environment variable (\ :literal:`yes`\ , \ :literal:`1`\ , and \ :literal:`True`\  mean yes, and \ :literal:`no`\ , \ :literal:`0`\ , \ :literal:`False`\ , and no value mean no).
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-choices-entry:`no`
+      - :ansible-option-default-bold:`yes` :ansible-option-default:`← (default)`
+
+      .. raw:: html
+
+        </div>
+
 
 .. Attributes
 
@@ -282,8 +533,8 @@ Notes
 -----
 
 .. note::
-   - Supports ``check_mode``.
-   - The token that you provide in *quay_token* must have the "Super User Access" permission.
+   - Supports \ :literal:`check\_mode`\ .
+   - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Super User Access" permission.
 
 .. Seealso
 
@@ -295,7 +546,7 @@ Examples
 
 .. code-block:: yaml+jinja
 
-
+    
     - name: Ensure the message of the day is published
       herve4m.quay.quay_message:
         content: |
@@ -403,3 +654,4 @@ Authors
 
 
 .. Parsing errors
+

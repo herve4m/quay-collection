@@ -11,6 +11,18 @@
 .. role:: ansible-attribute-support-partial
 .. role:: ansible-attribute-support-none
 .. role:: ansible-attribute-support-na
+.. role:: ansible-option-type
+.. role:: ansible-option-elements
+.. role:: ansible-option-required
+.. role:: ansible-option-versionadded
+.. role:: ansible-option-aliases
+.. role:: ansible-option-choices
+.. role:: ansible-option-choices-entry
+.. role:: ansible-option-default
+.. role:: ansible-option-default-bold
+.. role:: ansible-option-configuration
+.. role:: ansible-option-returned-bold
+.. role:: ansible-option-sample-bold
 
 .. Anchors
 
@@ -30,7 +42,7 @@ herve4m.quay.quay_robot -- Manage Red Hat Quay robot accounts
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.8).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.9).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -70,126 +82,264 @@ Synopsis
 Parameters
 ----------
 
-.. raw:: html
+.. rst-class:: ansible-option-table
 
-    <table  border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Parameter</th>
-            <th>Choices/<font color="blue">Defaults</font></th>
-                        <th width="100%">Comments</th>
-        </tr>
-                    <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-description"></div>
-                    <b>description</b>
-                    <a class="ansibleOptionLink" href="#parameter-description" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Description of the robot account. You cannot update the description of existing robot accounts.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-name"></div>
-                    <b>name</b>
-                    <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Name of the robot account to create or remove, in the format <code>namespace</code>+<code>shortname</code>. The namespace can be an organization or a personal namespace.</div>
-                                            <div>The short name (the part after the <code>+</code> sign) must be in lowercase, must not contain white spaces, must not start by a digit, and must be at least two characters long.</div>
-                                            <div>If you omit the namespace part in the name, then the module uses your personal namespace.</div>
-                                            <div>You can create and delete robot accounts in your personal namespace, but not in the personal namespace of other users. The token you use in <em>quay_token</em> determines the user account you are using.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
-                    <b>quay_host</b>
-                    <a class="ansibleOptionLink" href="#parameter-quay_host" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"http://127.0.0.1"</div>
-                                    </td>
-                                                                <td>
-                                            <div>URL for accessing the API. <a href='https://quay.example.com:8443'>https://quay.example.com:8443</a> for example.</div>
-                                            <div>If you do not set the parameter, then the module uses the <code>QUAY_HOST</code> environment variable.</div>
-                                            <div>If you do no set the environment variable either, then the module uses the <a href='http://127.0.0.1'>http://127.0.0.1</a> URL.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
-                    <b>quay_token</b>
-                    <a class="ansibleOptionLink" href="#parameter-quay_token" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>OAuth access token for authenticating with the API.</div>
-                                            <div>If you do not set the parameter, then the module tries the <code>QUAY_TOKEN</code> environment variable.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-state"></div>
-                    <b>state</b>
-                    <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>absent</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>If <code>absent</code>, then the module deletes the robot account.</div>
-                                            <div>The module does not fail if the account does not exist because the state is already as expected.</div>
-                                            <div>If <code>present</code>, then the module creates the robot account if it does not already exist.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
-                    <b>validate_certs</b>
-                    <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>no</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Whether to allow insecure connections to the API.</div>
-                                            <div>If <code>no</code>, then the module does not validate SSL certificates.</div>
-                                            <div>If you do not set the parameter, then the module tries the <code>QUAY_VERIFY_SSL</code> environment variable (<code>yes</code>, <code>1</code>, and <code>True</code> mean yes, and <code>no</code>, <code>0</code>, <code>False</code>, and no value mean no).</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: verify_ssl</div>
-                                    </td>
-            </tr>
-                        </table>
-    <br/>
+.. list-table::
+  :width: 100%
+  :widths: auto
+  :header-rows: 1
+
+  * - Parameter
+    - Comments
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-description"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_robot_module__parameter-description:
+
+      .. rst-class:: ansible-option-title
+
+      **description**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-description" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Description of the robot account. You cannot update the description of existing robot accounts.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-name"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_robot_module__parameter-name:
+
+      .. rst-class:: ansible-option-title
+
+      **name**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string` / :ansible-option-required:`required`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Name of the robot account to create or remove, in the format \ :literal:`namespace`\ +\ :literal:`shortname`\ . The namespace can be an organization or a personal namespace.
+
+      The short name (the part after the \ :literal:`+`\  sign) must be in lowercase, must not contain white spaces, must not start by a digit, and must be at least two characters long.
+
+      If you omit the namespace part in the name, then the module uses your personal namespace.
+
+      You can create and delete robot accounts in your personal namespace, but not in the personal namespace of other users. The token you use in \ :emphasis:`quay\_token`\  determines the user account you are using.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_robot_module__parameter-quay_host:
+
+      .. rst-class:: ansible-option-title
+
+      **quay_host**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-quay_host" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      URL for accessing the API. \ https://quay.example.com:8443\  for example.
+
+      If you do not set the parameter, then the module uses the \ :literal:`QUAY\_HOST`\  environment variable.
+
+      If you do no set the environment variable either, then the module uses the \ http://127.0.0.1\  URL.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-default-bold:`Default:` :ansible-option-default:`"http://127.0.0.1"`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_robot_module__parameter-quay_token:
+
+      .. rst-class:: ansible-option-title
+
+      **quay_token**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-quay_token" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      OAuth access token for authenticating with the API.
+
+      If you do not set the parameter, then the module tries the \ :literal:`QUAY\_TOKEN`\  environment variable.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-state"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_robot_module__parameter-state:
+
+      .. rst-class:: ansible-option-title
+
+      **state**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      If \ :literal:`absent`\ , then the module deletes the robot account.
+
+      The module does not fail if the account does not exist because the state is already as expected.
+
+      If \ :literal:`present`\ , then the module creates the robot account if it does not already exist.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-choices-entry:`absent`
+      - :ansible-option-default-bold:`present` :ansible-option-default:`← (default)`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
+        <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_robot_module__parameter-validate_certs:
+      .. _ansible_collections.herve4m.quay.quay_robot_module__parameter-verify_ssl:
+
+      .. rst-class:: ansible-option-title
+
+      **validate_certs**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-aliases:`aliases: verify_ssl`
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`boolean`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Whether to allow insecure connections to the API.
+
+      If \ :literal:`no`\ , then the module does not validate SSL certificates.
+
+      If you do not set the parameter, then the module tries the \ :literal:`QUAY\_VERIFY\_SSL`\  environment variable (\ :literal:`yes`\ , \ :literal:`1`\ , and \ :literal:`True`\  mean yes, and \ :literal:`no`\ , \ :literal:`0`\ , \ :literal:`False`\ , and no value mean no).
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-choices-entry:`no`
+      - :ansible-option-default-bold:`yes` :ansible-option-default:`← (default)`
+
+      .. raw:: html
+
+        </div>
+
 
 .. Attributes
 
@@ -200,8 +350,8 @@ Notes
 -----
 
 .. note::
-   - Supports ``check_mode``.
-   - The token that you provide in *quay_token* must have the "Administer Organization" and "Administer User" permissions.
+   - Supports \ :literal:`check\_mode`\ .
+   - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Administer Organization" and "Administer User" permissions.
 
 .. Seealso
 
@@ -213,7 +363,7 @@ Examples
 
 .. code-block:: yaml+jinja
 
-
+    
     - name: Ensure the robot account production+robotprod1 exists
       herve4m.quay.quay_robot:
         name: production+robotprod1
@@ -252,50 +402,106 @@ Return Values
 -------------
 Common return values are documented :ref:`here <common_return_values>`, the following are the fields unique to this module:
 
-.. raw:: html
+.. rst-class:: ansible-option-table
 
-    <table border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Key</th>
-            <th>Returned</th>
-            <th width="100%">Description</th>
-        </tr>
-                    <tr>
-                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-name"></div>
-                    <b>name</b>
-                    <a class="ansibleOptionLink" href="#return-name" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
-                <td>changed</td>
-                <td>
-                                            <div>Token name.</div>
-                                        <br/>
-                                                                <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">production+robotprod1</div>
-                                    </td>
-            </tr>
-                                <tr>
-                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-token"></div>
-                    <b>token</b>
-                    <a class="ansibleOptionLink" href="#return-token" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
-                <td>changed</td>
-                <td>
-                                            <div>Robot credential (token).</div>
-                                        <br/>
-                                                                <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">IWG3K5EW92KZLPP42PMOKM5CJ2DEAQMSCU33A35NR7MNL21004NKVP3BECOWSQP2</div>
-                                    </td>
-            </tr>
-                        </table>
-    <br/><br/>
+.. list-table::
+  :width: 100%
+  :widths: auto
+  :header-rows: 1
+
+  * - Key
+    - Description
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="return-name"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_robot_module__return-name:
+
+      .. rst-class:: ansible-option-title
+
+      **name**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#return-name" title="Permalink to this return value"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Token name.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-returned-bold:`Returned:` changed
+
+      .. rst-class:: ansible-option-line
+      .. rst-class:: ansible-option-sample
+
+      :ansible-option-sample-bold:`Sample:` "production+robotprod1"
+
+
+      .. raw:: html
+
+        </div>
+
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="return-token"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_robot_module__return-token:
+
+      .. rst-class:: ansible-option-title
+
+      **token**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#return-token" title="Permalink to this return value"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Robot credential (token).
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-returned-bold:`Returned:` changed
+
+      .. rst-class:: ansible-option-line
+      .. rst-class:: ansible-option-sample
+
+      :ansible-option-sample-bold:`Sample:` "IWG3K5EW92KZLPP42PMOKM5CJ2DEAQMSCU33A35NR7MNL21004NKVP3BECOWSQP2"
+
+
+      .. raw:: html
+
+        </div>
+
+
 
 ..  Status (Presently only deprecated)
 
@@ -310,3 +516,4 @@ Authors
 
 
 .. Parsing errors
+

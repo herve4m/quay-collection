@@ -11,6 +11,18 @@
 .. role:: ansible-attribute-support-partial
 .. role:: ansible-attribute-support-none
 .. role:: ansible-attribute-support-na
+.. role:: ansible-option-type
+.. role:: ansible-option-elements
+.. role:: ansible-option-required
+.. role:: ansible-option-versionadded
+.. role:: ansible-option-aliases
+.. role:: ansible-option-choices
+.. role:: ansible-option-choices-entry
+.. role:: ansible-option-default
+.. role:: ansible-option-default-bold
+.. role:: ansible-option-configuration
+.. role:: ansible-option-returned-bold
+.. role:: ansible-option-sample-bold
 
 .. Anchors
 
@@ -30,7 +42,7 @@ herve4m.quay.quay_first_user -- Create the first user account
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.8).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.9).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -70,123 +82,258 @@ Synopsis
 Parameters
 ----------
 
-.. raw:: html
+.. rst-class:: ansible-option-table
 
-    <table  border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Parameter</th>
-            <th>Choices/<font color="blue">Defaults</font></th>
-                        <th width="100%">Comments</th>
-        </tr>
-                    <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-create_token"></div>
-                    <b>create_token</b>
-                    <a class="ansibleOptionLink" href="#parameter-create_token" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                <li>yes</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>If <code>yes</code>, then an OAuth access token is created and returned. You can use that returned token with the other Quay modules, by setting it in the <em>quay_token</em> parameter.</div>
-                                            <div>If <code>no</code>, then no access token is created.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-email"></div>
-                    <b>email</b>
-                    <a class="ansibleOptionLink" href="#parameter-email" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>User&#x27;s email address.</div>
-                                            <div>If you have enabled the mailing capability of your Quay installation, then this <em>email</em> parameter is mandatory.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-password"></div>
-                    <b>password</b>
-                    <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>User&#x27;s password as a clear string.</div>
-                                            <div>The password must be at least eight characters long and must not contain white spaces.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
-                    <b>quay_host</b>
-                    <a class="ansibleOptionLink" href="#parameter-quay_host" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"http://127.0.0.1"</div>
-                                    </td>
-                                                                <td>
-                                            <div>URL for accessing the API. <a href='https://quay.example.com:8443'>https://quay.example.com:8443</a> for example.</div>
-                                            <div>If you do not set the parameter, then the module uses the <code>QUAY_HOST</code> environment variable.</div>
-                                            <div>If you do no set the environment variable either, then the module uses the <a href='http://127.0.0.1'>http://127.0.0.1</a> URL.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-username"></div>
-                    <b>username</b>
-                    <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Name of the user account to create.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
-                    <b>validate_certs</b>
-                    <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>no</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Whether to allow insecure connections to the API.</div>
-                                            <div>If <code>no</code>, then the module does not validate SSL certificates.</div>
-                                            <div>If you do not set the parameter, then the module tries the <code>QUAY_VERIFY_SSL</code> environment variable (<code>yes</code>, <code>1</code>, and <code>True</code> mean yes, and <code>no</code>, <code>0</code>, <code>False</code>, and no value mean no).</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: verify_ssl</div>
-                                    </td>
-            </tr>
-                        </table>
-    <br/>
+.. list-table::
+  :width: 100%
+  :widths: auto
+  :header-rows: 1
+
+  * - Parameter
+    - Comments
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-create_token"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_first_user_module__parameter-create_token:
+
+      .. rst-class:: ansible-option-title
+
+      **create_token**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-create_token" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`boolean`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      If \ :literal:`yes`\ , then an OAuth access token is created and returned. You can use that returned token with the other Quay modules, by setting it in the \ :emphasis:`quay\_token`\  parameter.
+
+      If \ :literal:`no`\ , then no access token is created.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-default-bold:`no` :ansible-option-default:`← (default)`
+      - :ansible-option-choices-entry:`yes`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-email"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_first_user_module__parameter-email:
+
+      .. rst-class:: ansible-option-title
+
+      **email**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-email" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      User's email address.
+
+      If you have enabled the mailing capability of your Quay installation, then this \ :emphasis:`email`\  parameter is mandatory.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-password"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_first_user_module__parameter-password:
+
+      .. rst-class:: ansible-option-title
+
+      **password**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string` / :ansible-option-required:`required`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      User's password as a clear string.
+
+      The password must be at least eight characters long and must not contain white spaces.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_first_user_module__parameter-quay_host:
+
+      .. rst-class:: ansible-option-title
+
+      **quay_host**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-quay_host" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      URL for accessing the API. \ https://quay.example.com:8443\  for example.
+
+      If you do not set the parameter, then the module uses the \ :literal:`QUAY\_HOST`\  environment variable.
+
+      If you do no set the environment variable either, then the module uses the \ http://127.0.0.1\  URL.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-default-bold:`Default:` :ansible-option-default:`"http://127.0.0.1"`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-username"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_first_user_module__parameter-username:
+
+      .. rst-class:: ansible-option-title
+
+      **username**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string` / :ansible-option-required:`required`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Name of the user account to create.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
+        <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_first_user_module__parameter-validate_certs:
+      .. _ansible_collections.herve4m.quay.quay_first_user_module__parameter-verify_ssl:
+
+      .. rst-class:: ansible-option-title
+
+      **validate_certs**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-aliases:`aliases: verify_ssl`
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`boolean`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Whether to allow insecure connections to the API.
+
+      If \ :literal:`no`\ , then the module does not validate SSL certificates.
+
+      If you do not set the parameter, then the module tries the \ :literal:`QUAY\_VERIFY\_SSL`\  environment variable (\ :literal:`yes`\ , \ :literal:`1`\ , and \ :literal:`True`\  mean yes, and \ :literal:`no`\ , \ :literal:`0`\ , \ :literal:`False`\ , and no value mean no).
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-choices-entry:`no`
+      - :ansible-option-default-bold:`yes` :ansible-option-default:`← (default)`
+
+      .. raw:: html
+
+        </div>
+
 
 .. Attributes
 
@@ -198,10 +345,10 @@ Notes
 
 .. note::
    - The module requires Red Hat Quay 3.6 or later.
-   - To use the module, you must enable the first user creation feature of your Quay installation (``FEATURE_USER_INITIALIZE`` in ``config.yaml``).
-   - You must also use the internal database of your Quay installation for authentication (``AUTHENTICATION_TYPE`` to ``Database`` in ``config.yaml``).
+   - To use the module, you must enable the first user creation feature of your Quay installation (\ :literal:`FEATURE\_USER\_INITIALIZE`\  in \ :literal:`config.yaml`\ ).
+   - You must also use the internal database of your Quay installation for authentication (\ :literal:`AUTHENTICATION\_TYPE`\  to \ :literal:`Database`\  in \ :literal:`config.yaml`\ ).
    - Use the module just after installing Quay, when the database is empty. The module fails if user accounts are already defined in the database.
-   - Supports ``check_mode``.
+   - Supports \ :literal:`check\_mode`\ .
 
 .. Seealso
 
@@ -213,7 +360,7 @@ Examples
 
 .. code-block:: yaml+jinja
 
-
+    
     - name: Ensure the initial user exists
       herve4m.quay.quay_first_user:
         username: admin
@@ -238,84 +385,196 @@ Return Values
 -------------
 Common return values are documented :ref:`here <common_return_values>`, the following are the fields unique to this module:
 
-.. raw:: html
+.. rst-class:: ansible-option-table
 
-    <table border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Key</th>
-            <th>Returned</th>
-            <th width="100%">Description</th>
-        </tr>
-                    <tr>
-                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-access_token"></div>
-                    <b>access_token</b>
-                    <a class="ansibleOptionLink" href="#return-access_token" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
-                <td>only when you set the <em>create_token</em> parameter to <code>yes</code></td>
-                <td>
-                                            <div>The access token that you can use for subsequent module calls.</div>
-                                        <br/>
-                                                                <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">W2YX0V838JZ5FHHUH82Q25FZZMRX8YTB1MTN56P3</div>
-                                    </td>
-            </tr>
-                                <tr>
-                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-email"></div>
-                    <b>email</b>
-                    <a class="ansibleOptionLink" href="#return-email" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
-                <td>always</td>
-                <td>
-                                            <div>User&#x27;s email address.</div>
-                                        <br/>
-                                                                <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">admin@example.com</div>
-                                    </td>
-            </tr>
-                                <tr>
-                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-encrypted_password"></div>
-                    <b>encrypted_password</b>
-                    <a class="ansibleOptionLink" href="#return-encrypted_password" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
-                <td>always</td>
-                <td>
-                                            <div>Encrypted user&#x27;s password.</div>
-                                        <br/>
-                                                                <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">/pbR5LPYx4Y3w/SSf2dAwNxCCNgwmmZk+x04TKn6xEKL2At5wblOy7wA1tNZEhRc</div>
-                                    </td>
-            </tr>
-                                <tr>
-                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-username"></div>
-                    <b>username</b>
-                    <a class="ansibleOptionLink" href="#return-username" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
-                <td>always</td>
-                <td>
-                                            <div>Name of the created user account.</div>
-                                        <br/>
-                                                                <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">admin</div>
-                                    </td>
-            </tr>
-                        </table>
-    <br/><br/>
+.. list-table::
+  :width: 100%
+  :widths: auto
+  :header-rows: 1
+
+  * - Key
+    - Description
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="return-access_token"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_first_user_module__return-access_token:
+
+      .. rst-class:: ansible-option-title
+
+      **access_token**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#return-access_token" title="Permalink to this return value"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      The access token that you can use for subsequent module calls.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-returned-bold:`Returned:` only when you set the \ :emphasis:`create\_token`\  parameter to \ :literal:`yes`\ 
+
+      .. rst-class:: ansible-option-line
+      .. rst-class:: ansible-option-sample
+
+      :ansible-option-sample-bold:`Sample:` "W2YX0V838JZ5FHHUH82Q25FZZMRX8YTB1MTN56P3"
+
+
+      .. raw:: html
+
+        </div>
+
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="return-email"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_first_user_module__return-email:
+
+      .. rst-class:: ansible-option-title
+
+      **email**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#return-email" title="Permalink to this return value"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      User's email address.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-returned-bold:`Returned:` always
+
+      .. rst-class:: ansible-option-line
+      .. rst-class:: ansible-option-sample
+
+      :ansible-option-sample-bold:`Sample:` "admin@example.com"
+
+
+      .. raw:: html
+
+        </div>
+
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="return-encrypted_password"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_first_user_module__return-encrypted_password:
+
+      .. rst-class:: ansible-option-title
+
+      **encrypted_password**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#return-encrypted_password" title="Permalink to this return value"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Encrypted user's password.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-returned-bold:`Returned:` always
+
+      .. rst-class:: ansible-option-line
+      .. rst-class:: ansible-option-sample
+
+      :ansible-option-sample-bold:`Sample:` "/pbR5LPYx4Y3w/SSf2dAwNxCCNgwmmZk+x04TKn6xEKL2At5wblOy7wA1tNZEhRc"
+
+
+      .. raw:: html
+
+        </div>
+
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="return-username"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_first_user_module__return-username:
+
+      .. rst-class:: ansible-option-title
+
+      **username**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#return-username" title="Permalink to this return value"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Name of the created user account.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-returned-bold:`Returned:` always
+
+      .. rst-class:: ansible-option-line
+      .. rst-class:: ansible-option-sample
+
+      :ansible-option-sample-bold:`Sample:` "admin"
+
+
+      .. raw:: html
+
+        </div>
+
+
 
 ..  Status (Presently only deprecated)
 
@@ -330,3 +589,4 @@ Authors
 
 
 .. Parsing errors
+

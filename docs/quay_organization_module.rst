@@ -11,6 +11,18 @@
 .. role:: ansible-attribute-support-partial
 .. role:: ansible-attribute-support-none
 .. role:: ansible-attribute-support-na
+.. role:: ansible-option-type
+.. role:: ansible-option-elements
+.. role:: ansible-option-required
+.. role:: ansible-option-versionadded
+.. role:: ansible-option-aliases
+.. role:: ansible-option-choices
+.. role:: ansible-option-choices-entry
+.. role:: ansible-option-default
+.. role:: ansible-option-default-bold
+.. role:: ansible-option-configuration
+.. role:: ansible-option-returned-bold
+.. role:: ansible-option-sample-bold
 
 .. Anchors
 
@@ -30,7 +42,7 @@ herve4m.quay.quay_organization -- Manage Red Hat Quay organizations
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.8).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.9).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -70,166 +82,348 @@ Synopsis
 Parameters
 ----------
 
-.. raw:: html
+.. rst-class:: ansible-option-table
 
-    <table  border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Parameter</th>
-            <th>Choices/<font color="blue">Defaults</font></th>
-                        <th width="100%">Comments</th>
-        </tr>
-                    <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-email"></div>
-                    <b>email</b>
-                    <a class="ansibleOptionLink" href="#parameter-email" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Email address to associate with the new organization.</div>
-                                            <div>If you have enabled the mailing capability of your Quay installation, then this <em>email</em> parameter is mandatory.</div>
-                                            <div>You cannot use the same address as your account email.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-name"></div>
-                    <b>name</b>
-                    <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Name of the organization to create, remove, or modify.</div>
-                                            <div>The name must be in lowercase and must not contain white spaces. For compatibility with earlier versions of Docker, the name must be at least four characters long.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-new_name"></div>
-                    <b>new_name</b>
-                    <a class="ansibleOptionLink" href="#parameter-new_name" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>New name for the organization.</div>
-                                            <div>Setting this option changes the name of the organization which current name is provided in <em>name</em>.</div>
-                                            <div>The token you use to connect to the API (in <em>quay_token</em>) must have the &quot;Super User Access&quot; permission.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
-                    <b>quay_host</b>
-                    <a class="ansibleOptionLink" href="#parameter-quay_host" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"http://127.0.0.1"</div>
-                                    </td>
-                                                                <td>
-                                            <div>URL for accessing the API. <a href='https://quay.example.com:8443'>https://quay.example.com:8443</a> for example.</div>
-                                            <div>If you do not set the parameter, then the module uses the <code>QUAY_HOST</code> environment variable.</div>
-                                            <div>If you do no set the environment variable either, then the module uses the <a href='http://127.0.0.1'>http://127.0.0.1</a> URL.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
-                    <b>quay_token</b>
-                    <a class="ansibleOptionLink" href="#parameter-quay_token" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>OAuth access token for authenticating with the API.</div>
-                                            <div>If you do not set the parameter, then the module tries the <code>QUAY_TOKEN</code> environment variable.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-state"></div>
-                    <b>state</b>
-                    <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>absent</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>If <code>absent</code>, then the module deletes the organization.</div>
-                                            <div>The module does not fail if the organization does not exist because the state is already as expected.</div>
-                                            <div>If <code>present</code>, then the module creates the organization if it does not already exist.</div>
-                                            <div>If the organization already exists, then the module updates its state.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-time_machine_expiration"></div>
-                    <b>time_machine_expiration</b>
-                    <a class="ansibleOptionLink" href="#parameter-time_machine_expiration" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>0s</li>
-                                                                                                                                                                                                <li>1d</li>
-                                                                                                                                                                                                <li>7d</li>
-                                                                                                                                                                                                <li>14d</li>
-                                                                                                                                                                                                <li>1month</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>The amount of time, after a tag is deleted, that the tag is accessible in time machine before being garbage collected.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
-                    <b>validate_certs</b>
-                    <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>no</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Whether to allow insecure connections to the API.</div>
-                                            <div>If <code>no</code>, then the module does not validate SSL certificates.</div>
-                                            <div>If you do not set the parameter, then the module tries the <code>QUAY_VERIFY_SSL</code> environment variable (<code>yes</code>, <code>1</code>, and <code>True</code> mean yes, and <code>no</code>, <code>0</code>, <code>False</code>, and no value mean no).</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: verify_ssl</div>
-                                    </td>
-            </tr>
-                        </table>
-    <br/>
+.. list-table::
+  :width: 100%
+  :widths: auto
+  :header-rows: 1
+
+  * - Parameter
+    - Comments
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-email"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_organization_module__parameter-email:
+
+      .. rst-class:: ansible-option-title
+
+      **email**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-email" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Email address to associate with the new organization.
+
+      If you have enabled the mailing capability of your Quay installation, then this \ :emphasis:`email`\  parameter is mandatory.
+
+      You cannot use the same address as your account email.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-name"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_organization_module__parameter-name:
+
+      .. rst-class:: ansible-option-title
+
+      **name**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string` / :ansible-option-required:`required`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Name of the organization to create, remove, or modify.
+
+      The name must be in lowercase and must not contain white spaces. For compatibility with earlier versions of Docker, the name must be at least four characters long.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-new_name"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_organization_module__parameter-new_name:
+
+      .. rst-class:: ansible-option-title
+
+      **new_name**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-new_name" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      New name for the organization.
+
+      Setting this option changes the name of the organization which current name is provided in \ :emphasis:`name`\ .
+
+      The token you use to connect to the API (in \ :emphasis:`quay\_token`\ ) must have the "Super User Access" permission.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_organization_module__parameter-quay_host:
+
+      .. rst-class:: ansible-option-title
+
+      **quay_host**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-quay_host" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      URL for accessing the API. \ https://quay.example.com:8443\  for example.
+
+      If you do not set the parameter, then the module uses the \ :literal:`QUAY\_HOST`\  environment variable.
+
+      If you do no set the environment variable either, then the module uses the \ http://127.0.0.1\  URL.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-default-bold:`Default:` :ansible-option-default:`"http://127.0.0.1"`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_organization_module__parameter-quay_token:
+
+      .. rst-class:: ansible-option-title
+
+      **quay_token**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-quay_token" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      OAuth access token for authenticating with the API.
+
+      If you do not set the parameter, then the module tries the \ :literal:`QUAY\_TOKEN`\  environment variable.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-state"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_organization_module__parameter-state:
+
+      .. rst-class:: ansible-option-title
+
+      **state**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      If \ :literal:`absent`\ , then the module deletes the organization.
+
+      The module does not fail if the organization does not exist because the state is already as expected.
+
+      If \ :literal:`present`\ , then the module creates the organization if it does not already exist.
+
+      If the organization already exists, then the module updates its state.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-choices-entry:`absent`
+      - :ansible-option-default-bold:`present` :ansible-option-default:`← (default)`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-time_machine_expiration"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_organization_module__parameter-time_machine_expiration:
+
+      .. rst-class:: ansible-option-title
+
+      **time_machine_expiration**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-time_machine_expiration" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      The amount of time, after a tag is deleted, that the tag is accessible in time machine before being garbage collected.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-choices-entry:`0s`
+      - :ansible-option-choices-entry:`1d`
+      - :ansible-option-choices-entry:`7d`
+      - :ansible-option-choices-entry:`14d`
+      - :ansible-option-choices-entry:`1month`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
+        <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_organization_module__parameter-validate_certs:
+      .. _ansible_collections.herve4m.quay.quay_organization_module__parameter-verify_ssl:
+
+      .. rst-class:: ansible-option-title
+
+      **validate_certs**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-aliases:`aliases: verify_ssl`
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`boolean`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Whether to allow insecure connections to the API.
+
+      If \ :literal:`no`\ , then the module does not validate SSL certificates.
+
+      If you do not set the parameter, then the module tries the \ :literal:`QUAY\_VERIFY\_SSL`\  environment variable (\ :literal:`yes`\ , \ :literal:`1`\ , and \ :literal:`True`\  mean yes, and \ :literal:`no`\ , \ :literal:`0`\ , \ :literal:`False`\ , and no value mean no).
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-choices-entry:`no`
+      - :ansible-option-default-bold:`yes` :ansible-option-default:`← (default)`
+
+      .. raw:: html
+
+        </div>
+
 
 .. Attributes
 
@@ -240,8 +434,8 @@ Notes
 -----
 
 .. note::
-   - Supports ``check_mode``.
-   - The token that you provide in *quay_token* must have the "Administer Organization" and "Administer User" permissions.
+   - Supports \ :literal:`check\_mode`\ .
+   - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Administer Organization" and "Administer User" permissions.
    - To rename organizations, the token must also have the "Super User Access" permission.
 
 .. Seealso
@@ -254,7 +448,7 @@ Examples
 
 .. code-block:: yaml+jinja
 
-
+    
     - name: Ensure the organization exists
       herve4m.quay.quay_organization:
         name: production
@@ -301,3 +495,4 @@ Authors
 
 
 .. Parsing errors
+

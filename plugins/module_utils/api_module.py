@@ -450,7 +450,7 @@ class APIModule(AnsibleModule):
                 raise
 
         # Success
-        if response["status_code"] in [202, 204]:
+        if response["status_code"] in [200, 202, 204]:
             if auto_exit:
                 self.exit_json(changed=True)
             return True

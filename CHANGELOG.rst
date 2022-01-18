@@ -5,6 +5,14 @@ Red Hat Quay Collection Release Notes
 .. contents:: Topics
 
 
+v0.0.9
+======
+
+New Modules
+-----------
+
+- herve4m.quay.quay_team_ldap - Synchronize Red Hat Quay teams with LDAP groups
+
 v0.0.8
 ======
 

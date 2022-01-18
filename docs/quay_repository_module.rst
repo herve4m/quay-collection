@@ -11,6 +11,18 @@
 .. role:: ansible-attribute-support-partial
 .. role:: ansible-attribute-support-none
 .. role:: ansible-attribute-support-na
+.. role:: ansible-option-type
+.. role:: ansible-option-elements
+.. role:: ansible-option-required
+.. role:: ansible-option-versionadded
+.. role:: ansible-option-aliases
+.. role:: ansible-option-choices
+.. role:: ansible-option-choices-entry
+.. role:: ansible-option-default
+.. role:: ansible-option-default-bold
+.. role:: ansible-option-configuration
+.. role:: ansible-option-returned-bold
+.. role:: ansible-option-sample-bold
 
 .. Anchors
 
@@ -30,7 +42,7 @@ herve4m.quay.quay_repository -- Manage Red Hat Quay repositories
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.8).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.9).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -70,282 +82,593 @@ Synopsis
 Parameters
 ----------
 
-.. raw:: html
+.. rst-class:: ansible-option-table
 
-    <table  border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="2">Parameter</th>
-            <th>Choices/<font color="blue">Defaults</font></th>
-                        <th width="100%">Comments</th>
-        </tr>
-                    <tr>
-                                                                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-append"></div>
-                    <b>append</b>
-                    <a class="ansibleOptionLink" href="#parameter-append" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>no</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>If <code>yes</code>, then add the permission defined in <em>perms</em> to the repository.</div>
-                                            <div>If <code>no</code>, then the module sets the permissions specified in <em>perms</em>, removing all others permissions from the repository.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-description"></div>
-                    <b>description</b>
-                    <a class="ansibleOptionLink" href="#parameter-description" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Text in Markdown format that describes the repository.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-name"></div>
-                    <b>name</b>
-                    <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Name of the repository to create, remove, or modify. The format for the name is <code>namespace</code>/<code>shortname</code>. The namespace can be an organization or a personal namespace.</div>
-                                            <div>The name must be in lowercase and must not contain white spaces.</div>
-                                            <div>If you omit the namespace part in the name, then the module uses your personal namespace.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-perms"></div>
-                    <b>perms</b>
-                    <a class="ansibleOptionLink" href="#parameter-perms" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">list</span>
-                         / <span style="color: purple">elements=dictionary</span>                                            </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>User, robot, and team permissions to associate with the repository.</div>
-                                                        </td>
-            </tr>
-                                        <tr>
-                                                    <td class="elbow-placeholder"></td>
-                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-perms/name"></div>
-                    <b>name</b>
-                    <a class="ansibleOptionLink" href="#parameter-perms/name" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Name of the account. The format for robot accounts is <code>namespace</code>+<code>shortrobotname</code>.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                    <td class="elbow-placeholder"></td>
-                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-perms/role"></div>
-                    <b>role</b>
-                    <a class="ansibleOptionLink" href="#parameter-perms/role" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li><div style="color: blue"><b>read</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                <li>write</li>
-                                                                                                                                                                                                <li>admin</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Type of permission to grant.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                    <td class="elbow-placeholder"></td>
-                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-perms/type"></div>
-                    <b>type</b>
-                    <a class="ansibleOptionLink" href="#parameter-perms/type" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li><div style="color: blue"><b>user</b>&nbsp;&larr;</div></li>
-                                                                                                                                                                                                <li>team</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Specifies the type of the account. Choose <code>user</code> for both user and robot accounts.</div>
-                                                        </td>
-            </tr>
+.. list-table::
+  :width: 100%
+  :widths: auto
+  :header-rows: 1
 
-                                <tr>
-                                                                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
-                    <b>quay_host</b>
-                    <a class="ansibleOptionLink" href="#parameter-quay_host" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"http://127.0.0.1"</div>
-                                    </td>
-                                                                <td>
-                                            <div>URL for accessing the API. <a href='https://quay.example.com:8443'>https://quay.example.com:8443</a> for example.</div>
-                                            <div>If you do not set the parameter, then the module uses the <code>QUAY_HOST</code> environment variable.</div>
-                                            <div>If you do no set the environment variable either, then the module uses the <a href='http://127.0.0.1'>http://127.0.0.1</a> URL.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
-                    <b>quay_token</b>
-                    <a class="ansibleOptionLink" href="#parameter-quay_token" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>OAuth access token for authenticating with the API.</div>
-                                            <div>If you do not set the parameter, then the module tries the <code>QUAY_TOKEN</code> environment variable.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-repo_state"></div>
-                    <b>repo_state</b>
-                    <a class="ansibleOptionLink" href="#parameter-repo_state" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>NORMAL</li>
-                                                                                                                                                                                                <li>READ_ONLY</li>
-                                                                                                                                                                                                <li>MIRROR</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>If <code>NORMAL</code>, then the repository is in the default state (read/write).</div>
-                                            <div>If <code>READ_ONLY</code>, then the repository is read-only.</div>
-                                            <div>If <code>MIRROR</code>, then the repository is a mirror and you can configure it by using the M(quay_repository_mirror) module.</div>
-                                            <div>You must enable the mirroring capability of your Quay installation to use this <em>repo_state</em> parameter.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-star"></div>
-                    <b>star</b>
-                    <a class="ansibleOptionLink" href="#parameter-star" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>no</li>
-                                                                                                                                                                                                <li>yes</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>If <code>yes</code>, then add a star to the repository. If <code>no</code>, then remove the star.</div>
-                                            <div>To star or unstar a repository you must provide the <em>quay_token</em> parameter to authenticate. If you are not authenticated, then the module ignores the <em>star</em> parameter.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-state"></div>
-                    <b>state</b>
-                    <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>absent</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>present</b>&nbsp;&larr;</div></li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>If <code>absent</code>, then the module deletes the repository.</div>
-                                            <div>The module does not fail if the repository does not exist because the state is already as expected.</div>
-                                            <div>If <code>present</code>, then the module creates the repository if it does not already exist.</div>
-                                            <div>If the repository already exists, then the module updates its state.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
-                    <b>validate_certs</b>
-                    <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>no</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Whether to allow insecure connections to the API.</div>
-                                            <div>If <code>no</code>, then the module does not validate SSL certificates.</div>
-                                            <div>If you do not set the parameter, then the module tries the <code>QUAY_VERIFY_SSL</code> environment variable (<code>yes</code>, <code>1</code>, and <code>True</code> mean yes, and <code>no</code>, <code>0</code>, <code>False</code>, and no value mean no).</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: verify_ssl</div>
-                                    </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-visibility"></div>
-                    <b>visibility</b>
-                    <a class="ansibleOptionLink" href="#parameter-visibility" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                            <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>public</li>
-                                                                                                                                                                                                <li>private</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>If <code>public</code>, then anyone can pull images from the repository.</div>
-                                            <div>If <code>private</code>, then nobody can access the repository and you need to explicitly grant access to users, robots, and teams.</div>
-                                                        </td>
-            </tr>
-                        </table>
-    <br/>
+  * - Parameter
+    - Comments
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-append"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_module__parameter-append:
+
+      .. rst-class:: ansible-option-title
+
+      **append**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-append" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`boolean`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      If \ :literal:`yes`\ , then add the permission defined in \ :emphasis:`perms`\  to the repository.
+
+      If \ :literal:`no`\ , then the module sets the permissions specified in \ :emphasis:`perms`\ , removing all others permissions from the repository.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-choices-entry:`no`
+      - :ansible-option-default-bold:`yes` :ansible-option-default:`← (default)`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-description"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_module__parameter-description:
+
+      .. rst-class:: ansible-option-title
+
+      **description**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-description" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Text in Markdown format that describes the repository.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-name"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_module__parameter-name:
+
+      .. rst-class:: ansible-option-title
+
+      **name**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string` / :ansible-option-required:`required`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Name of the repository to create, remove, or modify. The format for the name is \ :literal:`namespace`\ /\ :literal:`shortname`\ . The namespace can be an organization or a personal namespace.
+
+      The name must be in lowercase and must not contain white spaces.
+
+      If you omit the namespace part in the name, then the module uses your personal namespace.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-perms"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_module__parameter-perms:
+
+      .. rst-class:: ansible-option-title
+
+      **perms**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-perms" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`list` / :ansible-option-elements:`elements=dictionary`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      User, robot, and team permissions to associate with the repository.
+
+
+      .. raw:: html
+
+        </div>
+    
+  * - .. raw:: html
+
+        <div class="ansible-option-indent"></div><div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-perms/name"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_module__parameter-perms/name:
+
+      .. rst-class:: ansible-option-title
+
+      **name**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-perms/name" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string` / :ansible-option-required:`required`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
+
+      Name of the account. The format for robot accounts is \ :literal:`namespace`\ +\ :literal:`shortrobotname`\ .
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-indent"></div><div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-perms/role"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_module__parameter-perms/role:
+
+      .. rst-class:: ansible-option-title
+
+      **role**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-perms/role" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
+
+      Type of permission to grant.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-default-bold:`read` :ansible-option-default:`← (default)`
+      - :ansible-option-choices-entry:`write`
+      - :ansible-option-choices-entry:`admin`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-indent"></div><div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-perms/type"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_module__parameter-perms/type:
+
+      .. rst-class:: ansible-option-title
+
+      **type**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-perms/type" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
+
+      Specifies the type of the account. Choose \ :literal:`user`\  for both user and robot accounts.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-default-bold:`user` :ansible-option-default:`← (default)`
+      - :ansible-option-choices-entry:`team`
+
+      .. raw:: html
+
+        </div>
+
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_module__parameter-quay_host:
+
+      .. rst-class:: ansible-option-title
+
+      **quay_host**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-quay_host" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      URL for accessing the API. \ https://quay.example.com:8443\  for example.
+
+      If you do not set the parameter, then the module uses the \ :literal:`QUAY\_HOST`\  environment variable.
+
+      If you do no set the environment variable either, then the module uses the \ http://127.0.0.1\  URL.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-default-bold:`Default:` :ansible-option-default:`"http://127.0.0.1"`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_module__parameter-quay_token:
+
+      .. rst-class:: ansible-option-title
+
+      **quay_token**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-quay_token" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      OAuth access token for authenticating with the API.
+
+      If you do not set the parameter, then the module tries the \ :literal:`QUAY\_TOKEN`\  environment variable.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-repo_state"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_module__parameter-repo_state:
+
+      .. rst-class:: ansible-option-title
+
+      **repo_state**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-repo_state" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      If \ :literal:`NORMAL`\ , then the repository is in the default state (read/write).
+
+      If \ :literal:`READ\_ONLY`\ , then the repository is read-only.
+
+      If \ :literal:`MIRROR`\ , then the repository is a mirror and you can configure it by using the M(quay_repository_mirror) module.
+
+      You must enable the mirroring capability of your Quay installation to use this \ :emphasis:`repo\_state`\  parameter.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-choices-entry:`NORMAL`
+      - :ansible-option-choices-entry:`READ\_ONLY`
+      - :ansible-option-choices-entry:`MIRROR`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-star"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_module__parameter-star:
+
+      .. rst-class:: ansible-option-title
+
+      **star**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-star" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`boolean`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      If \ :literal:`yes`\ , then add a star to the repository. If \ :literal:`no`\ , then remove the star.
+
+      To star or unstar a repository you must provide the \ :emphasis:`quay\_token`\  parameter to authenticate. If you are not authenticated, then the module ignores the \ :emphasis:`star`\  parameter.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-choices-entry:`no`
+      - :ansible-option-choices-entry:`yes`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-state"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_module__parameter-state:
+
+      .. rst-class:: ansible-option-title
+
+      **state**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      If \ :literal:`absent`\ , then the module deletes the repository.
+
+      The module does not fail if the repository does not exist because the state is already as expected.
+
+      If \ :literal:`present`\ , then the module creates the repository if it does not already exist.
+
+      If the repository already exists, then the module updates its state.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-choices-entry:`absent`
+      - :ansible-option-default-bold:`present` :ansible-option-default:`← (default)`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
+        <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_module__parameter-validate_certs:
+      .. _ansible_collections.herve4m.quay.quay_repository_module__parameter-verify_ssl:
+
+      .. rst-class:: ansible-option-title
+
+      **validate_certs**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-aliases:`aliases: verify_ssl`
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`boolean`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Whether to allow insecure connections to the API.
+
+      If \ :literal:`no`\ , then the module does not validate SSL certificates.
+
+      If you do not set the parameter, then the module tries the \ :literal:`QUAY\_VERIFY\_SSL`\  environment variable (\ :literal:`yes`\ , \ :literal:`1`\ , and \ :literal:`True`\  mean yes, and \ :literal:`no`\ , \ :literal:`0`\ , \ :literal:`False`\ , and no value mean no).
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-choices-entry:`no`
+      - :ansible-option-default-bold:`yes` :ansible-option-default:`← (default)`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-visibility"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_repository_module__parameter-visibility:
+
+      .. rst-class:: ansible-option-title
+
+      **visibility**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-visibility" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      If \ :literal:`public`\ , then anyone can pull images from the repository.
+
+      If \ :literal:`private`\ , then nobody can access the repository and you need to explicitly grant access to users, robots, and teams.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-choices-entry:`public`
+      - :ansible-option-choices-entry:`private`
+
+      .. raw:: html
+
+        </div>
+
 
 .. Attributes
 
@@ -356,9 +679,9 @@ Notes
 -----
 
 .. note::
-   - You must enable the mirroring capability of your Quay installation (``FEATURE_REPO_MIRROR`` in ``config.yaml``) to use the *repo_state* parameter.
-   - Supports ``check_mode``.
-   - The token that you provide in *quay_token* must have the "Administer Repositories" and "Create Repositories" permissions.
+   - You must enable the mirroring capability of your Quay installation (\ :literal:`FEATURE\_REPO\_MIRROR`\  in \ :literal:`config.yaml`\ ) to use the \ :emphasis:`repo\_state`\  parameter.
+   - Supports \ :literal:`check\_mode`\ .
+   - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Administer Repositories" and "Create Repositories" permissions.
 
 .. Seealso
 
@@ -370,7 +693,7 @@ Examples
 
 .. code-block:: yaml+jinja
 
-
+    
     - name: Ensure repository smallimage exists in the production organization
       herve4m.quay.quay_repository:
         name: production/smallimage
@@ -474,3 +797,4 @@ Authors
 
 
 .. Parsing errors
+

@@ -27,6 +27,7 @@ Name | Description
 [quay_tag](https://github.com/herve4m/quay-collection/blob/main/docs/quay_tag_module.rst) | Manage Red Hat Quay image tags
 [quay_tag_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_tag_info_module.rst) |  Gather information about tags in a Red Hat Quay repository
 [quay_team](https://github.com/herve4m/quay-collection/blob/main/docs/quay_team_module.rst) |  Manage Red Hat Quay teams
+[quay_team_ldap](https://github.com/herve4m/quay-collection/blob/main/docs/quay_team_ldap_module.rst) |  Synchronize Red Hat Quay teams with LDAP groups
 [quay_user](https://github.com/herve4m/quay-collection/blob/main/docs/quay_user_module.rst) |  Manage Red Hat Quay users
 [quay_vulnerability_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_vulnerability_info_module.rst) | Gather information about image vulnerabilities in Red Hat Quay
 

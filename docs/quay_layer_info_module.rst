@@ -11,6 +11,18 @@
 .. role:: ansible-attribute-support-partial
 .. role:: ansible-attribute-support-none
 .. role:: ansible-attribute-support-na
+.. role:: ansible-option-type
+.. role:: ansible-option-elements
+.. role:: ansible-option-required
+.. role:: ansible-option-versionadded
+.. role:: ansible-option-aliases
+.. role:: ansible-option-choices
+.. role:: ansible-option-choices-entry
+.. role:: ansible-option-default
+.. role:: ansible-option-default-bold
+.. role:: ansible-option-configuration
+.. role:: ansible-option-returned-bold
+.. role:: ansible-option-sample-bold
 
 .. Anchors
 
@@ -30,7 +42,7 @@ herve4m.quay.quay_layer_info -- Gather information about image layers in Red Hat
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.8).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.9).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -70,89 +82,183 @@ Synopsis
 Parameters
 ----------
 
-.. raw:: html
+.. rst-class:: ansible-option-table
 
-    <table  border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="1">Parameter</th>
-            <th>Choices/<font color="blue">Defaults</font></th>
-                        <th width="100%">Comments</th>
-        </tr>
-                    <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-image"></div>
-                    <b>image</b>
-                    <a class="ansibleOptionLink" href="#parameter-image" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                 / <span style="color: red">required</span>                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>Name of the image. The format is <code>namespace</code>/<code>repository</code>:<code>tag</code>. The namespace can be an organization or a personal namespace.</div>
-                                            <div>If you omit the namespace part, then the module looks for the repository in your personal namespace.</div>
-                                            <div>If you omit the tag, then it defaults to <code>latest</code>.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
-                    <b>quay_host</b>
-                    <a class="ansibleOptionLink" href="#parameter-quay_host" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                                    <b>Default:</b><br/><div style="color: blue">"http://127.0.0.1"</div>
-                                    </td>
-                                                                <td>
-                                            <div>URL for accessing the API. <a href='https://quay.example.com:8443'>https://quay.example.com:8443</a> for example.</div>
-                                            <div>If you do not set the parameter, then the module uses the <code>QUAY_HOST</code> environment variable.</div>
-                                            <div>If you do no set the environment variable either, then the module uses the <a href='http://127.0.0.1'>http://127.0.0.1</a> URL.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
-                    <b>quay_token</b>
-                    <a class="ansibleOptionLink" href="#parameter-quay_token" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                            </td>
-                                                                <td>
-                                            <div>OAuth access token for authenticating with the API.</div>
-                                            <div>If you do not set the parameter, then the module tries the <code>QUAY_TOKEN</code> environment variable.</div>
-                                                        </td>
-            </tr>
-                                <tr>
-                                                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
-                    <b>validate_certs</b>
-                    <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                                                                    </div>
-                                                        </td>
-                                <td>
-                                                                                                                                                                                                                    <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>no</li>
-                                                                                                                                                                                                <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Whether to allow insecure connections to the API.</div>
-                                            <div>If <code>no</code>, then the module does not validate SSL certificates.</div>
-                                            <div>If you do not set the parameter, then the module tries the <code>QUAY_VERIFY_SSL</code> environment variable (<code>yes</code>, <code>1</code>, and <code>True</code> mean yes, and <code>no</code>, <code>0</code>, <code>False</code>, and no value mean no).</div>
-                                                                <div style="font-size: small; color: darkgreen"><br/>aliases: verify_ssl</div>
-                                    </td>
-            </tr>
-                        </table>
-    <br/>
+.. list-table::
+  :width: 100%
+  :widths: auto
+  :header-rows: 1
+
+  * - Parameter
+    - Comments
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-image"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_layer_info_module__parameter-image:
+
+      .. rst-class:: ansible-option-title
+
+      **image**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-image" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string` / :ansible-option-required:`required`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Name of the image. The format is \ :literal:`namespace`\ /\ :literal:`repository`\ :\ :literal:`tag`\ . The namespace can be an organization or a personal namespace.
+
+      If you omit the namespace part, then the module looks for the repository in your personal namespace.
+
+      If you omit the tag, then it defaults to \ :literal:`latest`\ .
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_layer_info_module__parameter-quay_host:
+
+      .. rst-class:: ansible-option-title
+
+      **quay_host**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-quay_host" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      URL for accessing the API. \ https://quay.example.com:8443\  for example.
+
+      If you do not set the parameter, then the module uses the \ :literal:`QUAY\_HOST`\  environment variable.
+
+      If you do no set the environment variable either, then the module uses the \ http://127.0.0.1\  URL.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-default-bold:`Default:` :ansible-option-default:`"http://127.0.0.1"`
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_layer_info_module__parameter-quay_token:
+
+      .. rst-class:: ansible-option-title
+
+      **quay_token**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-quay_token" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      OAuth access token for authenticating with the API.
+
+      If you do not set the parameter, then the module tries the \ :literal:`QUAY\_TOKEN`\  environment variable.
+
+
+      .. raw:: html
+
+        </div>
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
+        <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_layer_info_module__parameter-validate_certs:
+      .. _ansible_collections.herve4m.quay.quay_layer_info_module__parameter-verify_ssl:
+
+      .. rst-class:: ansible-option-title
+
+      **validate_certs**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-aliases:`aliases: verify_ssl`
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`boolean`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Whether to allow insecure connections to the API.
+
+      If \ :literal:`no`\ , then the module does not validate SSL certificates.
+
+      If you do not set the parameter, then the module tries the \ :literal:`QUAY\_VERIFY\_SSL`\  environment variable (\ :literal:`yes`\ , \ :literal:`1`\ , and \ :literal:`True`\  mean yes, and \ :literal:`no`\ , \ :literal:`0`\ , \ :literal:`False`\ , and no value mean no).
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-choices:`Choices:`
+
+      - :ansible-option-choices-entry:`no`
+      - :ansible-option-default-bold:`yes` :ansible-option-default:`← (default)`
+
+      .. raw:: html
+
+        </div>
+
 
 .. Attributes
 
@@ -170,7 +276,7 @@ Examples
 
 .. code-block:: yaml+jinja
 
-
+    
     - name: Retrieve the layers of the coreos/dnsmasq:latest image
       herve4m.quay.quay_layer_info:
         image: coreos/dnsmasq:latest
@@ -189,124 +295,287 @@ Return Values
 -------------
 Common return values are documented :ref:`here <common_return_values>`, the following are the fields unique to this module:
 
-.. raw:: html
+.. rst-class:: ansible-option-table
 
-    <table border=0 cellpadding=0 class="documentation-table">
-        <tr>
-            <th colspan="2">Key</th>
-            <th>Returned</th>
-            <th width="100%">Description</th>
-        </tr>
-                    <tr>
-                                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="return-layers"></div>
-                    <b>layers</b>
-                    <a class="ansibleOptionLink" href="#return-layers" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">list</span>
-                       / <span style="color: purple">elements=dictionary</span>                    </div>
-                                    </td>
-                <td>always</td>
-                <td>
-                                            <div>Sorted list of the image layers. The top layer is listed first.</div>
-                                        <br/>
-                                                                <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[{&#x27;ancestors&#x27;: &#x27;/f757...6b36/e6f4...4f62/e619...cc21/f243...b231/15e0...2e36/a52c...327c/&#x27;, &#x27;command&#x27;: [&#x27;/bin/sh&#x27;, &#x27;-c&#x27;, &#x27;#(nop) &#x27;, &#x27;ENTRYPOINT [&quot;/usr/sbin/dnsmasq&quot;]&#x27;], &#x27;comment&#x27;: None, &#x27;created&#x27;: &#x27;Thu, 16 Nov 2017 22:24:13 -0000&#x27;, &#x27;id&#x27;: &#x27;3f7885b48af404b0b9fffb2120e5907929504b33a104894762e4e192f5db9e63&#x27;, &#x27;size&#x27;: 32, &#x27;sort_index&#x27;: 6, &#x27;uploading&#x27;: False}, {&#x27;ancestors&#x27;: &#x27;/e6f4...4f62/e619...cc21/f243...b231/15e0...2e36/a52c...327c/&#x27;, &#x27;command&#x27;: [&#x27;/bin/sh -c #(nop)  EXPOSE 53/tcp 67/tcp 69/tcp&#x27;], &#x27;comment&#x27;: None, &#x27;created&#x27;: &#x27;Thu, 16 Nov 2017 22:24:12 -0000&#x27;, &#x27;id&#x27;: &#x27;f7573df3a79319ce013ada220edea02c4def0bb2938d059313ca3b50c22c6b36&#x27;, &#x27;size&#x27;: 32, &#x27;sort_index&#x27;: 5, &#x27;uploading&#x27;: False}, {&#x27;ancestors&#x27;: &#x27;/e619...cc21/f243...b231/15e0...2e36/a52c...327c/&#x27;, &#x27;command&#x27;: [&#x27;/bin/sh -c #(nop) COPY dir:5c38...5694 in /var/lib/tftpboot &#x27;], &#x27;comment&#x27;: None, &#x27;created&#x27;: &#x27;Thu, 16 Nov 2017 22:24:11 -0000&#x27;, &#x27;id&#x27;: &#x27;e6f4fbbb429f4a42e138489b72fc451df7567750bfb28dfa81a4f93fb31b4f62&#x27;, &#x27;size&#x27;: 848185, &#x27;sort_index&#x27;: 4, &#x27;uploading&#x27;: False}, {&#x27;ancestors&#x27;: &#x27;/f243...b231/15e0...2e36/a52c...327c/&#x27;, &#x27;command&#x27;: [&#x27;/bin/sh -c apk -U add dnsmasq curl&#x27;], &#x27;comment&#x27;: None, &#x27;created&#x27;: &#x27;Thu, 16 Nov 2017 22:24:10 -0000&#x27;, &#x27;id&#x27;: &#x27;e6197fd52d52021b186662d4477d11db4520cbca280883245ef31cc4e2b3cc21&#x27;, &#x27;size&#x27;: 2010338, &#x27;sort_index&#x27;: 3, &#x27;uploading&#x27;: False}, {&#x27;ancestors&#x27;: &#x27;/15e0...2e36/a52c...327c/&#x27;, &#x27;command&#x27;: [&#x27;/bin/sh -c #(nop)  MAINTAINER Dalton Hubble &lt;dalton.hubble@coreos.com&gt;&#x27;], &#x27;comment&#x27;: None, &#x27;created&#x27;: &#x27;Thu, 16 Nov 2017 22:24:04 -0000&#x27;, &#x27;id&#x27;: &#x27;f2435a32f659b4a4568fbad867e9b88fa421586ab171ee2cd8096217e7ecb231&#x27;, &#x27;size&#x27;: 32, &#x27;sort_index&#x27;: 2, &#x27;uploading&#x27;: False}, {&#x27;ancestors&#x27;: &#x27;/a52c...327c/&#x27;, &#x27;command&#x27;: [&#x27;/bin/sh -c #(nop)  CMD [&quot;/bin/sh&quot;]&#x27;], &#x27;comment&#x27;: None, &#x27;created&#x27;: &#x27;Wed, 13 Sep 2017 14:32:26 -0000&#x27;, &#x27;id&#x27;: &#x27;15e0dc04655d169bbdc7e942756a594e808c6c50214aca9b97deb36715ec2e36&#x27;, &#x27;size&#x27;: 32, &#x27;sort_index&#x27;: 1, &#x27;uploading&#x27;: False}, {&#x27;ancestors&#x27;: &#x27;//&#x27;, &#x27;command&#x27;: [&#x27;/bin/sh -c #(nop) ADD file:4583...9e45 in / &#x27;], &#x27;comment&#x27;: None, &#x27;created&#x27;: &#x27;Wed, 13 Sep 2017 14:32:26 -0000&#x27;, &#x27;id&#x27;: &#x27;a52c7d714e5fc2f9c1e6bb2f8393636861045890c2731c53436924c9e2ad327c&#x27;, &#x27;size&#x27;: 1990402, &#x27;sort_index&#x27;: 0, &#x27;uploading&#x27;: False}]</div>
-                                    </td>
-            </tr>
-                                        <tr>
-                                    <td class="elbow-placeholder">&nbsp;</td>
-                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-layers/ancestors"></div>
-                    <b>ancestors</b>
-                    <a class="ansibleOptionLink" href="#return-layers/ancestors" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
-                <td>always</td>
-                <td>
-                                            <div>Forward slash separated list of the parent layer identifiers.</div>
-                                        <br/>
-                                                                <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">/f243...b231/15e0...2e36/a52c...327c/</div>
-                                    </td>
-            </tr>
-                                <tr>
-                                    <td class="elbow-placeholder">&nbsp;</td>
-                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-layers/command"></div>
-                    <b>command</b>
-                    <a class="ansibleOptionLink" href="#return-layers/command" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">list</span>
-                       / <span style="color: purple">elements=string</span>                    </div>
-                                    </td>
-                <td>always</td>
-                <td>
-                                            <div>The command that was used to build the layer.</div>
-                                        <br/>
-                                                                <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;/bin/sh&#x27;, &#x27;-c&#x27;, &#x27;#(nop) &#x27;, &#x27;ENTRYPOINT [&quot;/usr/sbin/dnsmasq&quot;]&#x27;]</div>
-                                    </td>
-            </tr>
-                                <tr>
-                                    <td class="elbow-placeholder">&nbsp;</td>
-                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-layers/created"></div>
-                    <b>created</b>
-                    <a class="ansibleOptionLink" href="#return-layers/created" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
-                <td>always</td>
-                <td>
-                                            <div>Layer creation date and time.</div>
-                                        <br/>
-                                                                <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">Thu, 30 Sep 2021 07:18:56 -0000</div>
-                                    </td>
-            </tr>
-                                <tr>
-                                    <td class="elbow-placeholder">&nbsp;</td>
-                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-layers/id"></div>
-                    <b>id</b>
-                    <a class="ansibleOptionLink" href="#return-layers/id" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">string</span>
-                                          </div>
-                                    </td>
-                <td>always</td>
-                <td>
-                                            <div>Internal identifier of the layer.</div>
-                                        <br/>
-                                                                <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">a52c7d714e5fc2f9c1e6bb2f8393636861045890c2731c53436924c9e2ad327c</div>
-                                    </td>
-            </tr>
-                                <tr>
-                                    <td class="elbow-placeholder">&nbsp;</td>
-                                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-layers/sort_index"></div>
-                    <b>sort_index</b>
-                    <a class="ansibleOptionLink" href="#return-layers/sort_index" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">integer</span>
-                                          </div>
-                                    </td>
-                <td>always</td>
-                <td>
-                                            <div>Index of the layer in the image.</div>
-                                        <br/>
-                                                                <div style="font-size: smaller"><b>Sample:</b></div>
-                                                <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">4</div>
-                                    </td>
-            </tr>
+.. list-table::
+  :width: 100%
+  :widths: auto
+  :header-rows: 1
 
-                        </table>
-    <br/><br/>
+  * - Key
+    - Description
+
+  * - .. raw:: html
+
+        <div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="return-layers"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_layer_info_module__return-layers:
+
+      .. rst-class:: ansible-option-title
+
+      **layers**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#return-layers" title="Permalink to this return value"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`list` / :ansible-option-elements:`elements=dictionary`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-cell">
+
+      Sorted list of the image layers. The top layer is listed first.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-returned-bold:`Returned:` always
+
+      .. rst-class:: ansible-option-line
+      .. rst-class:: ansible-option-sample
+
+      :ansible-option-sample-bold:`Sample:` [{"ancestors": "/f757...6b36/e6f4...4f62/e619...cc21/f243...b231/15e0...2e36/a52c...327c/", "command": ["/bin/sh", "-c", "#(nop) ", "ENTRYPOINT [\\"/usr/sbin/dnsmasq\\"]"], "comment": null, "created": "Thu, 16 Nov 2017 22:24:13 -0000", "id": "3f7885b48af404b0b9fffb2120e5907929504b33a104894762e4e192f5db9e63", "size": 32, "sort\_index": 6, "uploading": false}, {"ancestors": "/e6f4...4f62/e619...cc21/f243...b231/15e0...2e36/a52c...327c/", "command": ["/bin/sh -c #(nop)  EXPOSE 53/tcp 67/tcp 69/tcp"], "comment": null, "created": "Thu, 16 Nov 2017 22:24:12 -0000", "id": "f7573df3a79319ce013ada220edea02c4def0bb2938d059313ca3b50c22c6b36", "size": 32, "sort\_index": 5, "uploading": false}, {"ancestors": "/e619...cc21/f243...b231/15e0...2e36/a52c...327c/", "command": ["/bin/sh -c #(nop) COPY dir:5c38...5694 in /var/lib/tftpboot "], "comment": null, "created": "Thu, 16 Nov 2017 22:24:11 -0000", "id": "e6f4fbbb429f4a42e138489b72fc451df7567750bfb28dfa81a4f93fb31b4f62", "size": 848185, "sort\_index": 4, "uploading": false}, {"ancestors": "/f243...b231/15e0...2e36/a52c...327c/", "command": ["/bin/sh -c apk -U add dnsmasq curl"], "comment": null, "created": "Thu, 16 Nov 2017 22:24:10 -0000", "id": "e6197fd52d52021b186662d4477d11db4520cbca280883245ef31cc4e2b3cc21", "size": 2010338, "sort\_index": 3, "uploading": false}, {"ancestors": "/15e0...2e36/a52c...327c/", "command": ["/bin/sh -c #(nop)  MAINTAINER Dalton Hubble \\u003cdalton.hubble@coreos.com\\u003e"], "comment": null, "created": "Thu, 16 Nov 2017 22:24:04 -0000", "id": "f2435a32f659b4a4568fbad867e9b88fa421586ab171ee2cd8096217e7ecb231", "size": 32, "sort\_index": 2, "uploading": false}, {"ancestors": "/a52c...327c/", "command": ["/bin/sh -c #(nop)  CMD [\\"/bin/sh\\"]"], "comment": null, "created": "Wed, 13 Sep 2017 14:32:26 -0000", "id": "15e0dc04655d169bbdc7e942756a594e808c6c50214aca9b97deb36715ec2e36", "size": 32, "sort\_index": 1, "uploading": false}, {"ancestors": "//", "command": ["/bin/sh -c #(nop) ADD file:4583...9e45 in / "], "comment": null, "created": "Wed, 13 Sep 2017 14:32:26 -0000", "id": "a52c7d714e5fc2f9c1e6bb2f8393636861045890c2731c53436924c9e2ad327c", "size": 1990402, "sort\_index": 0, "uploading": false}]
+
+
+      .. raw:: html
+
+        </div>
+
+    
+  * - .. raw:: html
+
+        <div class="ansible-option-indent"></div><div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="return-layers/ancestors"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_layer_info_module__return-layers/ancestors:
+
+      .. rst-class:: ansible-option-title
+
+      **ancestors**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#return-layers/ancestors" title="Permalink to this return value"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
+
+      Forward slash separated list of the parent layer identifiers.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-returned-bold:`Returned:` always
+
+      .. rst-class:: ansible-option-line
+      .. rst-class:: ansible-option-sample
+
+      :ansible-option-sample-bold:`Sample:` "/f243...b231/15e0...2e36/a52c...327c/"
+
+
+      .. raw:: html
+
+        </div>
+
+
+  * - .. raw:: html
+
+        <div class="ansible-option-indent"></div><div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="return-layers/command"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_layer_info_module__return-layers/command:
+
+      .. rst-class:: ansible-option-title
+
+      **command**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#return-layers/command" title="Permalink to this return value"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`list` / :ansible-option-elements:`elements=string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
+
+      The command that was used to build the layer.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-returned-bold:`Returned:` always
+
+      .. rst-class:: ansible-option-line
+      .. rst-class:: ansible-option-sample
+
+      :ansible-option-sample-bold:`Sample:` ["/bin/sh", "-c", "#(nop) ", "ENTRYPOINT [\\"/usr/sbin/dnsmasq\\"]"]
+
+
+      .. raw:: html
+
+        </div>
+
+
+  * - .. raw:: html
+
+        <div class="ansible-option-indent"></div><div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="return-layers/created"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_layer_info_module__return-layers/created:
+
+      .. rst-class:: ansible-option-title
+
+      **created**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#return-layers/created" title="Permalink to this return value"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
+
+      Layer creation date and time.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-returned-bold:`Returned:` always
+
+      .. rst-class:: ansible-option-line
+      .. rst-class:: ansible-option-sample
+
+      :ansible-option-sample-bold:`Sample:` "Thu, 30 Sep 2021 07:18:56 -0000"
+
+
+      .. raw:: html
+
+        </div>
+
+
+  * - .. raw:: html
+
+        <div class="ansible-option-indent"></div><div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="return-layers/id"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_layer_info_module__return-layers/id:
+
+      .. rst-class:: ansible-option-title
+
+      **id**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#return-layers/id" title="Permalink to this return value"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`string`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
+
+      Internal identifier of the layer.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-returned-bold:`Returned:` always
+
+      .. rst-class:: ansible-option-line
+      .. rst-class:: ansible-option-sample
+
+      :ansible-option-sample-bold:`Sample:` "a52c7d714e5fc2f9c1e6bb2f8393636861045890c2731c53436924c9e2ad327c"
+
+
+      .. raw:: html
+
+        </div>
+
+
+  * - .. raw:: html
+
+        <div class="ansible-option-indent"></div><div class="ansible-option-cell">
+        <div class="ansibleOptionAnchor" id="return-layers/sort_index"></div>
+
+      .. _ansible_collections.herve4m.quay.quay_layer_info_module__return-layers/sort_index:
+
+      .. rst-class:: ansible-option-title
+
+      **sort_index**
+
+      .. raw:: html
+
+        <a class="ansibleOptionLink" href="#return-layers/sort_index" title="Permalink to this return value"></a>
+
+      .. rst-class:: ansible-option-type-line
+
+      :ansible-option-type:`integer`
+
+      .. raw:: html
+
+        </div>
+
+    - .. raw:: html
+
+        <div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
+
+      Index of the layer in the image.
+
+
+      .. rst-class:: ansible-option-line
+
+      :ansible-option-returned-bold:`Returned:` always
+
+      .. rst-class:: ansible-option-line
+      .. rst-class:: ansible-option-sample
+
+      :ansible-option-sample-bold:`Sample:` 4
+
+
+      .. raw:: html
+
+        </div>
+
+
+
 
 ..  Status (Presently only deprecated)
 
@@ -321,3 +590,4 @@ Authors
 
 
 .. Parsing errors
+

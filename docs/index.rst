@@ -1,10 +1,11 @@
 
+
 .. _plugins_in_herve4m.quay:
 
 Herve4M.Quay
 ============
 
-Collection version 0.0.8
+Collection version 0.0.9
 
 .. toctree::
     :maxdepth: 1
@@ -13,7 +14,7 @@ Collection version 0.0.8
 Plugin Index
 ------------
 
-These are the plugins in the herve4m.quay collection
+These are the plugins in the herve4m.quay collection:
 
 
 Modules
@@ -32,6 +33,7 @@ Modules
 * :ref:`quay_tag <ansible_collections.herve4m.quay.quay_tag_module>` -- Manage Red Hat Quay image tags
 * :ref:`quay_tag_info <ansible_collections.herve4m.quay.quay_tag_info_module>` -- Gather information about tags in a Red Hat Quay repository
 * :ref:`quay_team <ansible_collections.herve4m.quay.quay_team_module>` -- Manage Red Hat Quay teams
+* :ref:`quay_team_ldap <ansible_collections.herve4m.quay.quay_team_ldap_module>` -- Synchronize Red Hat Quay teams with LDAP groups
 * :ref:`quay_user <ansible_collections.herve4m.quay.quay_user_module>` -- Manage Red Hat Quay users
 * :ref:`quay_vulnerability_info <ansible_collections.herve4m.quay.quay_vulnerability_info_module>` -- Gather information about image vulnerabilities in Red Hat Quay
 
@@ -58,5 +60,6 @@ Modules
     quay_tag_module
     quay_tag_info_module
     quay_team_module
+    quay_team_ldap_module
     quay_user_module
     quay_vulnerability_info_module

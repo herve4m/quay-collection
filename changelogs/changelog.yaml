@@ -90,3 +90,9 @@ releases:
     fragments:
     - v0.0.8_summary.yml
     release_date: '2022-01-04'
+  0.0.9:
+    modules:
+    - description: Synchronize Red Hat Quay teams with LDAP groups
+      name: quay_team_ldap
+      namespace: ''
+    release_date: '2022-01-18'

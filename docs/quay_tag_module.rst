@@ -82,337 +82,149 @@ Synopsis
 Parameters
 ----------
 
-.. rst-class:: ansible-option-table
+.. raw:: html
+
+  <table class="colwidths-auto ansible-option-table docutils align-default" style="width: 100%">
+  <thead>
+  <tr class="row-odd">
+    <th class="head"><p>Parameter</p></th>
+    <th class="head"><p>Comments</p></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-expiration"></div>
+      <p class="ansible-option-title"><strong>expiration</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-expiration" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Expiration date and time for the tag. The format is <code class='docutils literal notranslate'>YYYYMMDDHHMM.SS</code> but you can change it by setting the <em>expiration_format</em> parameter.</p>
+      <p>You cannot set an expiration date more that two years in the future. If you do so, then Quay forces the date at that two years boundary.</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-expiration_format"></div>
+      <p class="ansible-option-title"><strong>expiration_format</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-expiration_format" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Indicate the time format used in the <em>expiration</em> parameter.</p>
+      <p>Based on default Python format (see <a href='https://docs.python.org/3/library/time.html#time.strftime'>https://docs.python.org/3/library/time.html#time.strftime</a>).</p>
+      <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">"%Y%m%d%H%M.%S"</span></p>
+    </div></td>
+  </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-image"></div>
+      <p class="ansible-option-title"><strong>image</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-image" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+        / <span class="ansible-option-required">required</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Name of the existing image to tag. The format is <code class='docutils literal notranslate'>namespace</code>/<code class='docutils literal notranslate'>repository</code>:<code class='docutils literal notranslate'>tag</code>. The namespace can be an organization or a personal namespace.</p>
+      <p>If you omit the namespace part, then the module looks for the repository in your personal namespace.</p>
+      <p>If you omit the tag, then it defaults to <code class='docutils literal notranslate'>latest</code>.</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
+      <p class="ansible-option-title"><strong>quay_host</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-quay_host" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>URL for accessing the API. <a href='https://quay.example.com:8443'>https://quay.example.com:8443</a> for example.</p>
+      <p>If you do not set the parameter, then the module uses the <code class='docutils literal notranslate'>QUAY_HOST</code> environment variable.</p>
+      <p>If you do no set the environment variable either, then the module uses the <a href='http://127.0.0.1'>http://127.0.0.1</a> URL.</p>
+      <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">"http://127.0.0.1"</span></p>
+    </div></td>
+  </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
+      <p class="ansible-option-title"><strong>quay_token</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-quay_token" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>OAuth access token for authenticating with the API.</p>
+      <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_TOKEN</code> environment variable.</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-state"></div>
+      <p class="ansible-option-title"><strong>state</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>If <code class='docutils literal notranslate'>absent</code>, then the module deletes the image which tag is given in the <em>tag</em> parameter, or if not set, in the image name.</p>
+      <p>If <code class='docutils literal notranslate'>present</code>, then the module adds the tag in the <em>tag</em> parameter to the image.</p>
+      <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+      <ul class="simple">
+        <li><p><span class="ansible-option-choices-entry">absent</span></p></li>
+        <li><p><span class="ansible-option-default-bold">present</span> <span class="ansible-option-default">← (default)</span></p></li>
+      </ul>
+    </div></td>
+  </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-tag"></div>
+      <p class="ansible-option-title"><strong>tag</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-tag" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>When <code class='docutils literal notranslate'>state=present</code>, the <em>tag</em> parameter provides the new tag to add to the image. If another image already uses that tag, then the module removes the tag from that other image first.</p>
+      <p>When <code class='docutils literal notranslate'>state=absent</code>, the <em>tag</em> parameter indicates the tag to remove. If you do not set that <em>tag</em> parameter, then the module removes the tag that you give in the image name with the <em>image</em> parameter.</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
+      <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div>
+      <p class="ansible-option-title"><strong>validate_certs</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: verify_ssl</p>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">boolean</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Whether to allow insecure connections to the API.</p>
+      <p>If <code class='docutils literal notranslate'>no</code>, then the module does not validate SSL certificates.</p>
+      <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_VERIFY_SSL</code> environment variable (<code class='docutils literal notranslate'>yes</code>, <code class='docutils literal notranslate'>1</code>, and <code class='docutils literal notranslate'>True</code> mean yes, and <code class='docutils literal notranslate'>no</code>, <code class='docutils literal notranslate'>0</code>, <code class='docutils literal notranslate'>False</code>, and no value mean no).</p>
+      <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+      <ul class="simple">
+        <li><p><span class="ansible-option-choices-entry">no</span></p></li>
+        <li><p><span class="ansible-option-default-bold">yes</span> <span class="ansible-option-default">← (default)</span></p></li>
+      </ul>
+    </div></td>
+  </tr>
+  </tbody>
+  </table>
 
-.. list-table::
-  :width: 100%
-  :widths: auto
-  :header-rows: 1
-
-  * - Parameter
-    - Comments
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-expiration"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_module__parameter-expiration:
-
-      .. rst-class:: ansible-option-title
-
-      **expiration**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-expiration" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      Expiration date and time for the tag. The format is \ :literal:`YYYYMMDDHHMM.SS`\  but you can change it by setting the \ :emphasis:`expiration\_format`\  parameter.
-
-      You cannot set an expiration date more that two years in the future. If you do so, then Quay forces the date at that two years boundary.
-
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-expiration_format"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_module__parameter-expiration_format:
-
-      .. rst-class:: ansible-option-title
-
-      **expiration_format**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-expiration_format" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      Indicate the time format used in the \ :emphasis:`expiration`\  parameter.
-
-      Based on default Python format (see \ https://docs.python.org/3/library/time.html#time.strftime\ ).
-
-
-      .. rst-class:: ansible-option-line
-
-      :ansible-option-default-bold:`Default:` :ansible-option-default:`"%Y%m%d%H%M.%S"`
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-image"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_module__parameter-image:
-
-      .. rst-class:: ansible-option-title
-
-      **image**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-image" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string` / :ansible-option-required:`required`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      Name of the existing image to tag. The format is \ :literal:`namespace`\ /\ :literal:`repository`\ :\ :literal:`tag`\ . The namespace can be an organization or a personal namespace.
-
-      If you omit the namespace part, then the module looks for the repository in your personal namespace.
-
-      If you omit the tag, then it defaults to \ :literal:`latest`\ .
-
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_module__parameter-quay_host:
-
-      .. rst-class:: ansible-option-title
-
-      **quay_host**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-quay_host" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      URL for accessing the API. \ https://quay.example.com:8443\  for example.
-
-      If you do not set the parameter, then the module uses the \ :literal:`QUAY\_HOST`\  environment variable.
-
-      If you do no set the environment variable either, then the module uses the \ http://127.0.0.1\  URL.
-
-
-      .. rst-class:: ansible-option-line
-
-      :ansible-option-default-bold:`Default:` :ansible-option-default:`"http://127.0.0.1"`
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_module__parameter-quay_token:
-
-      .. rst-class:: ansible-option-title
-
-      **quay_token**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-quay_token" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      OAuth access token for authenticating with the API.
-
-      If you do not set the parameter, then the module tries the \ :literal:`QUAY\_TOKEN`\  environment variable.
-
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-state"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_module__parameter-state:
-
-      .. rst-class:: ansible-option-title
-
-      **state**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      If \ :literal:`absent`\ , then the module deletes the image which tag is given in the \ :emphasis:`tag`\  parameter, or if not set, in the image name.
-
-      If \ :literal:`present`\ , then the module adds the tag in the \ :emphasis:`tag`\  parameter to the image.
-
-
-      .. rst-class:: ansible-option-line
-
-      :ansible-option-choices:`Choices:`
-
-      - :ansible-option-choices-entry:`absent`
-      - :ansible-option-default-bold:`present` :ansible-option-default:`← (default)`
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-tag"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_module__parameter-tag:
-
-      .. rst-class:: ansible-option-title
-
-      **tag**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-tag" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      When \ :literal:`state=present`\ , the \ :emphasis:`tag`\  parameter provides the new tag to add to the image. If another image already uses that tag, then the module removes the tag from that other image first.
-
-      When \ :literal:`state=absent`\ , the \ :emphasis:`tag`\  parameter indicates the tag to remove. If you do not set that \ :emphasis:`tag`\  parameter, then the module removes the tag that you give in the image name with the \ :emphasis:`image`\  parameter.
-
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
-        <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_module__parameter-validate_certs:
-      .. _ansible_collections.herve4m.quay.quay_tag_module__parameter-verify_ssl:
-
-      .. rst-class:: ansible-option-title
-
-      **validate_certs**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-aliases:`aliases: verify_ssl`
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`boolean`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      Whether to allow insecure connections to the API.
-
-      If \ :literal:`no`\ , then the module does not validate SSL certificates.
-
-      If you do not set the parameter, then the module tries the \ :literal:`QUAY\_VERIFY\_SSL`\  environment variable (\ :literal:`yes`\ , \ :literal:`1`\ , and \ :literal:`True`\  mean yes, and \ :literal:`no`\ , \ :literal:`0`\ , \ :literal:`False`\ , and no value mean no).
-
-
-      .. rst-class:: ansible-option-line
-
-      :ansible-option-choices:`Choices:`
-
-      - :ansible-option-choices-entry:`no`
-      - :ansible-option-default-bold:`yes` :ansible-option-default:`← (default)`
-
-      .. raw:: html
-
-        </div>
 
 
 .. Attributes

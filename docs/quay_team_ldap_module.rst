@@ -82,338 +82,153 @@ Synopsis
 Parameters
 ----------
 
-.. rst-class:: ansible-option-table
+.. raw:: html
+
+  <table class="colwidths-auto ansible-option-table docutils align-default" style="width: 100%">
+  <thead>
+  <tr class="row-odd">
+    <th class="head"><p>Parameter</p></th>
+    <th class="head"><p>Comments</p></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-group_dn"></div>
+      <p class="ansible-option-title"><strong>group_dn</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-group_dn" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>LDAP group distinguished name (DN), relative to the base DN that you defined in the <code class='docutils literal notranslate'>config.yaml</code> Quay configuration file with the <code class='docutils literal notranslate'>LDAP_BASE_DN</code> parameter.</p>
+      <p>For example, if the LDAP group DN is <code class='docutils literal notranslate'>cn=group1,ou=groups,dc=example,dc=org</code> and the base DN is <code class='docutils literal notranslate'>dc=example,dc=org</code>, then you must set <em>group_dn</em> to <code class='docutils literal notranslate'>cn=group1,ou=groups</code>.</p>
+      <p><em>group_dn</em> is required when <em>sync</em> is <code class='docutils literal notranslate'>yes</code>.</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-keep_users"></div>
+      <p class="ansible-option-title"><strong>keep_users</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-keep_users" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">boolean</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>If <code class='docutils literal notranslate'>yes</code>, then the current team members are kept after the synchronization is disabled.</p>
+      <p>If <code class='docutils literal notranslate'>no</code>, then the team members are removed (except robot accounts)</p>
+      <p><em>keep_users</em> is only used when <em>sync</em> is <code class='docutils literal notranslate'>no</code>.</p>
+      <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+      <ul class="simple">
+        <li><p><span class="ansible-option-choices-entry">no</span></p></li>
+        <li><p><span class="ansible-option-default-bold">yes</span> <span class="ansible-option-default">← (default)</span></p></li>
+      </ul>
+    </div></td>
+  </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-name"></div>
+      <p class="ansible-option-title"><strong>name</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+        / <span class="ansible-option-required">required</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Name of the team to synchronize or unsynchronize with an LDAP group. That team must exist (see the M(quay_team) module to create it).</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-organization"></div>
+      <p class="ansible-option-title"><strong>organization</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-organization" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+        / <span class="ansible-option-required">required</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Name of the organization for the team. That organization must exist.</p>
+    </div></td>
+  </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
+      <p class="ansible-option-title"><strong>quay_host</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-quay_host" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>URL for accessing the API. <a href='https://quay.example.com:8443'>https://quay.example.com:8443</a> for example.</p>
+      <p>If you do not set the parameter, then the module uses the <code class='docutils literal notranslate'>QUAY_HOST</code> environment variable.</p>
+      <p>If you do no set the environment variable either, then the module uses the <a href='http://127.0.0.1'>http://127.0.0.1</a> URL.</p>
+      <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">"http://127.0.0.1"</span></p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
+      <p class="ansible-option-title"><strong>quay_token</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-quay_token" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>OAuth access token for authenticating with the API.</p>
+      <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_TOKEN</code> environment variable.</p>
+    </div></td>
+  </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-sync"></div>
+      <p class="ansible-option-title"><strong>sync</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-sync" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">boolean</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>If <code class='docutils literal notranslate'>yes</code>, then the team members are retrieved from the LDAP group that you define in <em>group_dn</em>. The pre-existing members are removed from the team before the synchronization process starts. Existing robot account members are not removed.</p>
+      <p>If <code class='docutils literal notranslate'>no</code>, then the synchronization from LDAP is disabled. Existing team members (from LDAP) are kept, except if you set <em>keep_users</em> to <code class='docutils literal notranslate'>no</code>.</p>
+      <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+      <ul class="simple">
+        <li><p><span class="ansible-option-choices-entry">no</span></p></li>
+        <li><p><span class="ansible-option-default-bold">yes</span> <span class="ansible-option-default">← (default)</span></p></li>
+      </ul>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
+      <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div>
+      <p class="ansible-option-title"><strong>validate_certs</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: verify_ssl</p>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">boolean</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Whether to allow insecure connections to the API.</p>
+      <p>If <code class='docutils literal notranslate'>no</code>, then the module does not validate SSL certificates.</p>
+      <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_VERIFY_SSL</code> environment variable (<code class='docutils literal notranslate'>yes</code>, <code class='docutils literal notranslate'>1</code>, and <code class='docutils literal notranslate'>True</code> mean yes, and <code class='docutils literal notranslate'>no</code>, <code class='docutils literal notranslate'>0</code>, <code class='docutils literal notranslate'>False</code>, and no value mean no).</p>
+      <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+      <ul class="simple">
+        <li><p><span class="ansible-option-choices-entry">no</span></p></li>
+        <li><p><span class="ansible-option-default-bold">yes</span> <span class="ansible-option-default">← (default)</span></p></li>
+      </ul>
+    </div></td>
+  </tr>
+  </tbody>
+  </table>
 
-.. list-table::
-  :width: 100%
-  :widths: auto
-  :header-rows: 1
-
-  * - Parameter
-    - Comments
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-group_dn"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_team_ldap_module__parameter-group_dn:
-
-      .. rst-class:: ansible-option-title
-
-      **group_dn**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-group_dn" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      LDAP group distinguished name (DN), relative to the base DN that you defined in the \ :literal:`config.yaml`\  Quay configuration file with the \ :literal:`LDAP\_BASE\_DN`\  parameter.
-
-      For example, if the LDAP group DN is \ :literal:`cn=group1,ou=groups,dc=example,dc=org`\  and the base DN is \ :literal:`dc=example,dc=org`\ , then you must set \ :emphasis:`group\_dn`\  to \ :literal:`cn=group1,ou=groups`\ .
-
-      \ :emphasis:`group\_dn`\  is required when \ :emphasis:`sync`\  is \ :literal:`yes`\ .
-
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-keep_users"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_team_ldap_module__parameter-keep_users:
-
-      .. rst-class:: ansible-option-title
-
-      **keep_users**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-keep_users" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`boolean`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      If \ :literal:`yes`\ , then the current team members are kept after the synchronization is disabled.
-
-      If \ :literal:`no`\ , then the team members are removed (except robot accounts)
-
-      \ :emphasis:`keep\_users`\  is only used when \ :emphasis:`sync`\  is \ :literal:`no`\ .
-
-
-      .. rst-class:: ansible-option-line
-
-      :ansible-option-choices:`Choices:`
-
-      - :ansible-option-choices-entry:`no`
-      - :ansible-option-default-bold:`yes` :ansible-option-default:`← (default)`
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-name"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_team_ldap_module__parameter-name:
-
-      .. rst-class:: ansible-option-title
-
-      **name**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string` / :ansible-option-required:`required`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      Name of the team to synchronize or unsynchronize with an LDAP group. That team must exist (see the M(quay_team) module to create it).
-
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-organization"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_team_ldap_module__parameter-organization:
-
-      .. rst-class:: ansible-option-title
-
-      **organization**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-organization" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string` / :ansible-option-required:`required`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      Name of the organization for the team. That organization must exist.
-
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_team_ldap_module__parameter-quay_host:
-
-      .. rst-class:: ansible-option-title
-
-      **quay_host**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-quay_host" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      URL for accessing the API. \ https://quay.example.com:8443\  for example.
-
-      If you do not set the parameter, then the module uses the \ :literal:`QUAY\_HOST`\  environment variable.
-
-      If you do no set the environment variable either, then the module uses the \ http://127.0.0.1\  URL.
-
-
-      .. rst-class:: ansible-option-line
-
-      :ansible-option-default-bold:`Default:` :ansible-option-default:`"http://127.0.0.1"`
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_team_ldap_module__parameter-quay_token:
-
-      .. rst-class:: ansible-option-title
-
-      **quay_token**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-quay_token" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      OAuth access token for authenticating with the API.
-
-      If you do not set the parameter, then the module tries the \ :literal:`QUAY\_TOKEN`\  environment variable.
-
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-sync"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_team_ldap_module__parameter-sync:
-
-      .. rst-class:: ansible-option-title
-
-      **sync**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-sync" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`boolean`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      If \ :literal:`yes`\ , then the team members are retrieved from the LDAP group that you define in \ :emphasis:`group\_dn`\ . The pre-existing members are removed from the team before the synchronization process starts. Existing robot account members are not removed.
-
-      If \ :literal:`no`\ , then the synchronization from LDAP is disabled. Existing team members (from LDAP) are kept, except if you set \ :emphasis:`keep\_users`\  to \ :literal:`no`\ .
-
-
-      .. rst-class:: ansible-option-line
-
-      :ansible-option-choices:`Choices:`
-
-      - :ansible-option-choices-entry:`no`
-      - :ansible-option-default-bold:`yes` :ansible-option-default:`← (default)`
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
-        <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_team_ldap_module__parameter-validate_certs:
-      .. _ansible_collections.herve4m.quay.quay_team_ldap_module__parameter-verify_ssl:
-
-      .. rst-class:: ansible-option-title
-
-      **validate_certs**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-aliases:`aliases: verify_ssl`
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`boolean`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      Whether to allow insecure connections to the API.
-
-      If \ :literal:`no`\ , then the module does not validate SSL certificates.
-
-      If you do not set the parameter, then the module tries the \ :literal:`QUAY\_VERIFY\_SSL`\  environment variable (\ :literal:`yes`\ , \ :literal:`1`\ , and \ :literal:`True`\  mean yes, and \ :literal:`no`\ , \ :literal:`0`\ , \ :literal:`False`\ , and no value mean no).
-
-
-      .. rst-class:: ansible-option-line
-
-      :ansible-option-choices:`Choices:`
-
-      - :ansible-option-choices-entry:`no`
-      - :ansible-option-default-bold:`yes` :ansible-option-default:`← (default)`
-
-      .. raw:: html
-
-        </div>
 
 
 .. Attributes

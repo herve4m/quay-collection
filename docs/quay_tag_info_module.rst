@@ -82,257 +82,118 @@ Synopsis
 Parameters
 ----------
 
-.. rst-class:: ansible-option-table
+.. raw:: html
+
+  <table class="colwidths-auto ansible-option-table docutils align-default" style="width: 100%">
+  <thead>
+  <tr class="row-odd">
+    <th class="head"><p>Parameter</p></th>
+    <th class="head"><p>Comments</p></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-only_active_tags"></div>
+      <p class="ansible-option-title"><strong>only_active_tags</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-only_active_tags" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">boolean</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>If <code class='docutils literal notranslate'>yes</code>, then the module only collects information on tags that have not expired. If <code class='docutils literal notranslate'>no</code>, then the module returns information on all the tags.</p>
+      <p>You can identify expired tags (when <em>only_active_tags</em> is <code class='docutils literal notranslate'>no</code>) in the returned data by inspecting the <code class='docutils literal notranslate'>end_ts</code> or <code class='docutils literal notranslate'>expiration</code> tag attributes. Those attributes provide the expiration date.</p>
+      <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+      <ul class="simple">
+        <li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
+        <li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+      </ul>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
+      <p class="ansible-option-title"><strong>quay_host</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-quay_host" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>URL for accessing the API. <a href='https://quay.example.com:8443'>https://quay.example.com:8443</a> for example.</p>
+      <p>If you do not set the parameter, then the module uses the <code class='docutils literal notranslate'>QUAY_HOST</code> environment variable.</p>
+      <p>If you do no set the environment variable either, then the module uses the <a href='http://127.0.0.1'>http://127.0.0.1</a> URL.</p>
+      <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">"http://127.0.0.1"</span></p>
+    </div></td>
+  </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
+      <p class="ansible-option-title"><strong>quay_token</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-quay_token" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>OAuth access token for authenticating with the API.</p>
+      <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_TOKEN</code> environment variable.</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-repository"></div>
+      <p class="ansible-option-title"><strong>repository</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-repository" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+        / <span class="ansible-option-required">required</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Name of the repository that contains the tags to list. The format is <code class='docutils literal notranslate'>namespace</code>/<code class='docutils literal notranslate'>shortname</code>. The namespace can be an organization or a personal namespace.</p>
+      <p>If you omit the namespace part, then the module looks for the repository in your personal namespace.</p>
+    </div></td>
+  </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-tag"></div>
+      <p class="ansible-option-title"><strong>tag</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-tag" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Gather information on that specific tag instead of returning data on all the tags in the repository.</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
+      <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div>
+      <p class="ansible-option-title"><strong>validate_certs</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: verify_ssl</p>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">boolean</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Whether to allow insecure connections to the API.</p>
+      <p>If <code class='docutils literal notranslate'>no</code>, then the module does not validate SSL certificates.</p>
+      <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_VERIFY_SSL</code> environment variable (<code class='docutils literal notranslate'>yes</code>, <code class='docutils literal notranslate'>1</code>, and <code class='docutils literal notranslate'>True</code> mean yes, and <code class='docutils literal notranslate'>no</code>, <code class='docutils literal notranslate'>0</code>, <code class='docutils literal notranslate'>False</code>, and no value mean no).</p>
+      <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+      <ul class="simple">
+        <li><p><span class="ansible-option-choices-entry">no</span></p></li>
+        <li><p><span class="ansible-option-default-bold">yes</span> <span class="ansible-option-default">← (default)</span></p></li>
+      </ul>
+    </div></td>
+  </tr>
+  </tbody>
+  </table>
 
-.. list-table::
-  :width: 100%
-  :widths: auto
-  :header-rows: 1
-
-  * - Parameter
-    - Comments
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-only_active_tags"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_info_module__parameter-only_active_tags:
-
-      .. rst-class:: ansible-option-title
-
-      **only_active_tags**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-only_active_tags" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`boolean`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      If \ :literal:`yes`\ , then the module only collects information on tags that have not expired. If \ :literal:`no`\ , then the module returns information on all the tags.
-
-      You can identify expired tags (when \ :emphasis:`only\_active\_tags`\  is \ :literal:`no`\ ) in the returned data by inspecting the \ :literal:`end\_ts`\  or \ :literal:`expiration`\  tag attributes. Those attributes provide the expiration date.
-
-
-      .. rst-class:: ansible-option-line
-
-      :ansible-option-choices:`Choices:`
-
-      - :ansible-option-default-bold:`no` :ansible-option-default:`← (default)`
-      - :ansible-option-choices-entry:`yes`
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_info_module__parameter-quay_host:
-
-      .. rst-class:: ansible-option-title
-
-      **quay_host**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-quay_host" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      URL for accessing the API. \ https://quay.example.com:8443\  for example.
-
-      If you do not set the parameter, then the module uses the \ :literal:`QUAY\_HOST`\  environment variable.
-
-      If you do no set the environment variable either, then the module uses the \ http://127.0.0.1\  URL.
-
-
-      .. rst-class:: ansible-option-line
-
-      :ansible-option-default-bold:`Default:` :ansible-option-default:`"http://127.0.0.1"`
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_info_module__parameter-quay_token:
-
-      .. rst-class:: ansible-option-title
-
-      **quay_token**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-quay_token" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      OAuth access token for authenticating with the API.
-
-      If you do not set the parameter, then the module tries the \ :literal:`QUAY\_TOKEN`\  environment variable.
-
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-repository"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_info_module__parameter-repository:
-
-      .. rst-class:: ansible-option-title
-
-      **repository**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-repository" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string` / :ansible-option-required:`required`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      Name of the repository that contains the tags to list. The format is \ :literal:`namespace`\ /\ :literal:`shortname`\ . The namespace can be an organization or a personal namespace.
-
-      If you omit the namespace part, then the module looks for the repository in your personal namespace.
-
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-tag"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_info_module__parameter-tag:
-
-      .. rst-class:: ansible-option-title
-
-      **tag**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-tag" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      Gather information on that specific tag instead of returning data on all the tags in the repository.
-
-
-      .. raw:: html
-
-        </div>
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
-        <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_info_module__parameter-validate_certs:
-      .. _ansible_collections.herve4m.quay.quay_tag_info_module__parameter-verify_ssl:
-
-      .. rst-class:: ansible-option-title
-
-      **validate_certs**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-aliases:`aliases: verify_ssl`
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`boolean`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      Whether to allow insecure connections to the API.
-
-      If \ :literal:`no`\ , then the module does not validate SSL certificates.
-
-      If you do not set the parameter, then the module tries the \ :literal:`QUAY\_VERIFY\_SSL`\  environment variable (\ :literal:`yes`\ , \ :literal:`1`\ , and \ :literal:`True`\  mean yes, and \ :literal:`no`\ , \ :literal:`0`\ , \ :literal:`False`\ , and no value mean no).
-
-
-      .. rst-class:: ansible-option-line
-
-      :ansible-option-choices:`Choices:`
-
-      - :ansible-option-choices-entry:`no`
-      - :ansible-option-default-bold:`yes` :ansible-option-default:`← (default)`
-
-      .. raw:: html
-
-        </div>
 
 
 .. Attributes
@@ -380,424 +241,157 @@ Return Values
 -------------
 Common return values are documented :ref:`here <common_return_values>`, the following are the fields unique to this module:
 
-.. rst-class:: ansible-option-table
-
-.. list-table::
-  :width: 100%
-  :widths: auto
-  :header-rows: 1
-
-  * - Key
-    - Description
-
-  * - .. raw:: html
-
-        <div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="return-tags"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_info_module__return-tags:
-
-      .. rst-class:: ansible-option-title
-
-      **tags**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#return-tags" title="Permalink to this return value"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`list` / :ansible-option-elements:`elements=dictionary`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-cell">
-
-      List of the tags in the repository.
-
-
-      .. rst-class:: ansible-option-line
-
-      :ansible-option-returned-bold:`Returned:` always
-
-      .. rst-class:: ansible-option-line
-      .. rst-class:: ansible-option-sample
-
-      :ansible-option-sample-bold:`Sample:` [{"docker\_image\_id": "be3e...29d4", "image\_id": "be3e...29d4", "is\_manifest\_list": false, "last\_modified": "Thu, 30 Sep 2021 06:10:23 -0000", "manifest\_digest": "sha256:9ce9...f3c7", "name": "1.33.1", "reversion": false, "size": 784538, "start\_ts": 1632982223}, {"docker\_image\_id": "be3e...29d4", "image\_id": "be3e...29d4", "is\_manifest\_list": false, "last\_modified": "Thu, 30 Sep 2021 06:10:22 -0000", "manifest\_digest": "sha256:9ce9...f3c7", "name": "latest", "reversion": false, "size": 784538, "start\_ts": 1632982222}, {"docker\_image\_id": "bda4...29b2", "end\_ts": 1640336040, "expiration": "Fri, 24 Dec 2021 08:54:00 -0000", "image\_id": "bda4...29b2", "is\_manifest\_list": false, "last\_modified": "Thu, 30 Sep 2021 06:10:21 -0000", "manifest\_digest": "sha256:a8f2...5ea7", "name": "1.34.0", "reversion": false, "size": 802700, "start\_ts": 1632982221}]
-
-
-      .. raw:: html
-
-        </div>
-
-    
-  * - .. raw:: html
-
-        <div class="ansible-option-indent"></div><div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="return-tags/end_ts"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_info_module__return-tags/end_ts:
-
-      .. rst-class:: ansible-option-title
-
-      **end_ts**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#return-tags/end_ts" title="Permalink to this return value"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`integer`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
-
-      Time in seconds since the epoch of the tag expiration.
-
-      The module only returns expired tags when the \ :emphasis:`only\_active\_tags`\  parameter is \ :literal:`no`\ .
-
-
-      .. rst-class:: ansible-option-line
-
-      :ansible-option-returned-bold:`Returned:` only when an expiration date has been explicitly assigned.
-
-      .. rst-class:: ansible-option-line
-      .. rst-class:: ansible-option-sample
-
-      :ansible-option-sample-bold:`Sample:` 1640336040
-
-
-      .. raw:: html
-
-        </div>
-
-
-  * - .. raw:: html
-
-        <div class="ansible-option-indent"></div><div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="return-tags/expiration"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_info_module__return-tags/expiration:
-
-      .. rst-class:: ansible-option-title
-
-      **expiration**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#return-tags/expiration" title="Permalink to this return value"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
-
-      Expiration date and time in a human readable format.
-
-
-      .. rst-class:: ansible-option-line
-
-      :ansible-option-returned-bold:`Returned:` only when an expiration date has been explicitly assigned.
-
-      .. rst-class:: ansible-option-line
-      .. rst-class:: ansible-option-sample
-
-      :ansible-option-sample-bold:`Sample:` "Fri, 24 Dec 2021 08:54:00 -0000"
-
-
-      .. raw:: html
-
-        </div>
-
-
-  * - .. raw:: html
-
-        <div class="ansible-option-indent"></div><div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="return-tags/image_id"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_info_module__return-tags/image_id:
-
-      .. rst-class:: ansible-option-title
-
-      **image_id**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#return-tags/image_id" title="Permalink to this return value"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
-
-      Identifier of the image associated with the tag.
-
-
-      .. rst-class:: ansible-option-line
-
-      :ansible-option-returned-bold:`Returned:` always
-
-      .. rst-class:: ansible-option-line
-      .. rst-class:: ansible-option-sample
-
-      :ansible-option-sample-bold:`Sample:` "d53469b7e6ba9295a4b7a7d9e29537ab879e1582e64d534b6ed2637453dade25"
-
-
-      .. raw:: html
-
-        </div>
-
-
-  * - .. raw:: html
-
-        <div class="ansible-option-indent"></div><div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="return-tags/last_modified"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_info_module__return-tags/last_modified:
-
-      .. rst-class:: ansible-option-title
-
-      **last_modified**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#return-tags/last_modified" title="Permalink to this return value"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
-
-      Date and time of the last tag modification in a human readable format.
-
-
-      .. rst-class:: ansible-option-line
-
-      :ansible-option-returned-bold:`Returned:` always
-
-      .. rst-class:: ansible-option-line
-      .. rst-class:: ansible-option-sample
-
-      :ansible-option-sample-bold:`Sample:` "Thu, 30 Sep 2021 06:10:22 -0000"
-
-
-      .. raw:: html
-
-        </div>
-
-
-  * - .. raw:: html
-
-        <div class="ansible-option-indent"></div><div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="return-tags/manifest_digest"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_info_module__return-tags/manifest_digest:
-
-      .. rst-class:: ansible-option-title
-
-      **manifest_digest**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#return-tags/manifest_digest" title="Permalink to this return value"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
-
-      SHA256 digest for the tag.
-
-      You can use that digest to pull the image instead of using the tag name. For example, \ :literal:`podman pull quay.example.com/production/smallimage@sha256:a8f2...5ea7`\ 
-
-
-      .. rst-class:: ansible-option-line
-
-      :ansible-option-returned-bold:`Returned:` always
-
-      .. rst-class:: ansible-option-line
-      .. rst-class:: ansible-option-sample
-
-      :ansible-option-sample-bold:`Sample:` "sha256:a8f231c07da40107543d74ed1e9a1938a004b498377dbefcf29082c7a9e55ea7"
-
-
-      .. raw:: html
-
-        </div>
-
-
-  * - .. raw:: html
-
-        <div class="ansible-option-indent"></div><div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="return-tags/name"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_info_module__return-tags/name:
-
-      .. rst-class:: ansible-option-title
-
-      **name**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#return-tags/name" title="Permalink to this return value"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`string`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
-
-      Tag identifier.
-
-
-      .. rst-class:: ansible-option-line
-
-      :ansible-option-returned-bold:`Returned:` always
-
-      .. rst-class:: ansible-option-line
-      .. rst-class:: ansible-option-sample
-
-      :ansible-option-sample-bold:`Sample:` "0.1.2"
-
-
-      .. raw:: html
-
-        </div>
-
-
-  * - .. raw:: html
-
-        <div class="ansible-option-indent"></div><div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="return-tags/size"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_info_module__return-tags/size:
-
-      .. rst-class:: ansible-option-title
-
-      **size**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#return-tags/size" title="Permalink to this return value"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`integer`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
-
-      Size of the associated image in bytes.
-
-
-      .. rst-class:: ansible-option-line
-
-      :ansible-option-returned-bold:`Returned:` always
-
-      .. rst-class:: ansible-option-line
-      .. rst-class:: ansible-option-sample
-
-      :ansible-option-sample-bold:`Sample:` 802700
-
-
-      .. raw:: html
-
-        </div>
-
-
-  * - .. raw:: html
-
-        <div class="ansible-option-indent"></div><div class="ansible-option-cell">
-        <div class="ansibleOptionAnchor" id="return-tags/start_ts"></div>
-
-      .. _ansible_collections.herve4m.quay.quay_tag_info_module__return-tags/start_ts:
-
-      .. rst-class:: ansible-option-title
-
-      **start_ts**
-
-      .. raw:: html
-
-        <a class="ansibleOptionLink" href="#return-tags/start_ts" title="Permalink to this return value"></a>
-
-      .. rst-class:: ansible-option-type-line
-
-      :ansible-option-type:`integer`
-
-      .. raw:: html
-
-        </div>
-
-    - .. raw:: html
-
-        <div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
-
-      Time in seconds since the epoch of the last tag modification.
-
-
-      .. rst-class:: ansible-option-line
-
-      :ansible-option-returned-bold:`Returned:` always
-
-      .. rst-class:: ansible-option-line
-      .. rst-class:: ansible-option-sample
-
-      :ansible-option-sample-bold:`Sample:` 1632982222
-
-
-      .. raw:: html
-
-        </div>
-
+.. raw:: html
+
+  <table class="colwidths-auto ansible-option-table docutils align-default" style="width: 100%">
+  <thead>
+  <tr class="row-odd">
+    <th class="head"><p>Key</p></th>
+    <th class="head"><p>Description</p></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="return-tags"></div>
+      <p class="ansible-option-title"><strong>tags</strong></p>
+      <a class="ansibleOptionLink" href="#return-tags" title="Permalink to this return value"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">list</span>
+        / <span class="ansible-option-elements">elements=dictionary</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>List of the tags in the repository.</p>
+      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
+      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [{"docker_image_id": "be3e...29d4", "image_id": "be3e...29d4", "is_manifest_list": false, "last_modified": "Thu, 30 Sep 2021 06:10:23 -0000", "manifest_digest": "sha256:9ce9...f3c7", "name": "1.33.1", "reversion": false, "size": 784538, "start_ts": 1632982223}, {"docker_image_id": "be3e...29d4", "image_id": "be3e...29d4", "is_manifest_list": false, "last_modified": "Thu, 30 Sep 2021 06:10:22 -0000", "manifest_digest": "sha256:9ce9...f3c7", "name": "latest", "reversion": false, "size": 784538, "start_ts": 1632982222}, {"docker_image_id": "bda4...29b2", "end_ts": 1640336040, "expiration": "Fri, 24 Dec 2021 08:54:00 -0000", "image_id": "bda4...29b2", "is_manifest_list": false, "last_modified": "Thu, 30 Sep 2021 06:10:21 -0000", "manifest_digest": "sha256:a8f2...5ea7", "name": "1.34.0", "reversion": false, "size": 802700, "start_ts": 1632982221}]</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="return-tags/end_ts"></div>
+      <p class="ansible-option-title"><strong>end_ts</strong></p>
+      <a class="ansibleOptionLink" href="#return-tags/end_ts" title="Permalink to this return value"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">integer</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
+      <p>Time in seconds since the epoch of the tag expiration.</p>
+      <p>The module only returns expired tags when the <em>only_active_tags</em> parameter is <code class='docutils literal notranslate'>no</code>.</p>
+      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> only when an expiration date has been explicitly assigned.</p>
+      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> 1640336040</p>
+    </div></td>
+  </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="return-tags/expiration"></div>
+      <p class="ansible-option-title"><strong>expiration</strong></p>
+      <a class="ansibleOptionLink" href="#return-tags/expiration" title="Permalink to this return value"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
+      <p>Expiration date and time in a human readable format.</p>
+      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> only when an expiration date has been explicitly assigned.</p>
+      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "Fri, 24 Dec 2021 08:54:00 -0000"</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="return-tags/image_id"></div>
+      <p class="ansible-option-title"><strong>image_id</strong></p>
+      <a class="ansibleOptionLink" href="#return-tags/image_id" title="Permalink to this return value"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
+      <p>Identifier of the image associated with the tag.</p>
+      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
+      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "d53469b7e6ba9295a4b7a7d9e29537ab879e1582e64d534b6ed2637453dade25"</p>
+    </div></td>
+  </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="return-tags/last_modified"></div>
+      <p class="ansible-option-title"><strong>last_modified</strong></p>
+      <a class="ansibleOptionLink" href="#return-tags/last_modified" title="Permalink to this return value"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
+      <p>Date and time of the last tag modification in a human readable format.</p>
+      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
+      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "Thu, 30 Sep 2021 06:10:22 -0000"</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="return-tags/manifest_digest"></div>
+      <p class="ansible-option-title"><strong>manifest_digest</strong></p>
+      <a class="ansibleOptionLink" href="#return-tags/manifest_digest" title="Permalink to this return value"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
+      <p>SHA256 digest for the tag.</p>
+      <p>You can use that digest to pull the image instead of using the tag name. For example, <code class='docutils literal notranslate'>podman pull quay.example.com/production/smallimage@sha256:a8f2...5ea7</code></p>
+      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
+      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "sha256:a8f231c07da40107543d74ed1e9a1938a004b498377dbefcf29082c7a9e55ea7"</p>
+    </div></td>
+  </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="return-tags/name"></div>
+      <p class="ansible-option-title"><strong>name</strong></p>
+      <a class="ansibleOptionLink" href="#return-tags/name" title="Permalink to this return value"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
+      <p>Tag identifier.</p>
+      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
+      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "0.1.2"</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="return-tags/size"></div>
+      <p class="ansible-option-title"><strong>size</strong></p>
+      <a class="ansibleOptionLink" href="#return-tags/size" title="Permalink to this return value"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">integer</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
+      <p>Size of the associated image in bytes.</p>
+      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
+      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> 802700</p>
+    </div></td>
+  </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="return-tags/start_ts"></div>
+      <p class="ansible-option-title"><strong>start_ts</strong></p>
+      <a class="ansibleOptionLink" href="#return-tags/start_ts" title="Permalink to this return value"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">integer</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
+      <p>Time in seconds since the epoch of the last tag modification.</p>
+      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
+      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> 1632982222</p>
+    </div></td>
+  </tr>
+
+  </tbody>
+  </table>
 
 
 

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2021, Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2021, 2022, Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # For accessing the API documentation from a running system, use the swagger-ui
@@ -212,16 +212,13 @@ def main():
         module.exit_json(changed=False, images=[])
 
     # Get the tags
-    #
-    # GET /api/v1/repository/{namespace}/{repository}/tag/
-    # {
-    #   "tags": [
+    #   [
     #     {
     #       "name": "1.33.0",
-    #       "reversion": false,
+    #       "reversion": False,
     #       "start_ts": 1632982224,
     #       "manifest_digest": "sha256:f948...95fe",
-    #       "is_manifest_list": false,
+    #       "is_manifest_list": False,
     #       "size": 784606,
     #       "docker_image_id": "d25a...6d25",
     #       "image_id": "d25a...6d25",
@@ -229,10 +226,10 @@ def main():
     #     },
     #     {
     #       "name": "latest",
-    #       "reversion": false,
+    #       "reversion": False,
     #       "start_ts": 1632982222,
     #       "manifest_digest": "sha256:9ce9...f3c7",
-    #       "is_manifest_list": false,
+    #       "is_manifest_list": False,
     #       "size": 784538,
     #       "docker_image_id": "be3e...29d4",
     #       "image_id": "be3e...29d4",
@@ -240,11 +237,11 @@ def main():
     #     },
     #     {
     #       "name": "1.34.0",
-    #       "reversion": false,
+    #       "reversion": False,
     #       "start_ts": 1632982221,
     #       "end_ts": 1640336040,
     #       "manifest_digest": "sha256:a8f2...5ea7",
-    #       "is_manifest_list": false,
+    #       "is_manifest_list": False,
     #       "size": 802700,
     #       "docker_image_id": "bda4...29b2",
     #       "image_id": "bda4...29b2",
@@ -253,41 +250,19 @@ def main():
     #     },
     #     {
     #       "name": "latest",
-    #       "reversion": false,
+    #       "reversion": False,
     #       "start_ts": 1632921128,
     #       "end_ts": 1632982222,
     #       "manifest_digest": "sha256:9ce9...f3c7",
-    #       "is_manifest_list": false,
+    #       "is_manifest_list": False,
     #       "size": 784538,
     #       "docker_image_id": "be3e...29d4",
     #       "image_id": "be3e...29d4",
     #       "last_modified": "Wed, 29 Sep 2021 13:12:08 -0000",
     #       "expiration": "Thu, 30 Sep 2021 06:10:22 -0000"
     #     }
-    #   ],
-    #   "page": 1,
-    #   "has_additional": false
-    query_params = {"onlyActiveTags": only_active_tags, "limit": 100}
-    if tag:
-        query_params["specificTag"] = tag
-    tag_list = []
-    page = 1
-    while True:
-        query_params["page"] = page
-
-        tags = module.get_object_path(
-            "repository/{namespace}/{repository}/tag/",
-            query_params=query_params,
-            namespace=namespace,
-            repository=repo_shortname,
-        )
-        if tags:
-            tag_list.extend(tags.get("tags", []))
-            if tags.get("has_additional", False):
-                page += 1
-                continue
-        break
-
+    #   ]
+    tag_list = module.get_tags(namespace, repo_shortname, tag, only_active_tags)
     module.exit_json(changed=False, tags=tag_list)
 
 

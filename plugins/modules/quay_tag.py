@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2021, Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2021, 2022, Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # For accessing the API documentation from a running system, use the swagger-ui
@@ -220,45 +220,30 @@ def main():
         expiration_epoch = 0
 
     # Get the tag details for the image given in `image'
-    #
-    # GET /api/v1/repository/{namespace}/{repository}/tag/?specificTag={tag}
-    # {
-    #   "tags": [
-    #             {
-    #               "name": "v1.0.0",
-    #               "reversion": false,
-    #               "start_ts": 1633179652,
-    #               "end_ts": 1633179654,
-    #               "manifest_digest": "sha256:4f6f...5e797",
-    #               "is_manifest_list": false,
-    #               "size": 25343205,
-    #               "docker_image_id": "e942...dbea",
-    #               "image_id": "e942...dbea",
-    #               "last_modified": "Sat, 02 Oct 2021 13:00:52 -0000",
-    #               "expiration": "Sat, 02 Oct 2021 13:00:54 -0000"
-    #             }
-    #   ],
-    #   "page": 1,
-    #   "has_additional": false
-    query_params = {
-        "onlyActiveTags": True,
-        "limit": 100,
-        "page": 1,
-        "specificTag": existing_tag,
-    }
-    tags = module.get_object_path(
-        "repository/{namespace}/{repository}/tag/",
-        query_params=query_params,
-        namespace=namespace,
-        repository=repo_shortname,
-    )
-    if not tags or "tags" not in tags or len(tags["tags"]) == 0:
+    #   [
+    #      {
+    #        "name": "v1.0.0",
+    #        "reversion": False,
+    #        "start_ts": 1633179652,
+    #        "end_ts": 1633179654,
+    #        "manifest_digest": "sha256:4f6f...5e797",
+    #        "is_manifest_list": False,
+    #        "size": 25343205,
+    #        "docker_image_id": "e942...dbea",
+    #        "image_id": "e942...dbea",
+    #        "last_modified": "Sat, 02 Oct 2021 13:00:52 -0000",
+    #        "expiration": "Sat, 02 Oct 2021 13:00:54 -0000"
+    #      }
+    #   ]
+    tags = module.get_tags(namespace, repo_shortname, existing_tag)
+    if len(tags) == 0:
         module.fail_json(
             msg="The {tag} tag does not exist for the {image} image.".format(
                 tag=existing_tag, image=full_repo_name
             )
         )
-    if "manifest_digest" not in tags["tags"][0]:
+    tag_details = tags[0]
+    if "manifest_digest" not in tag_details:
         module.fail_json(
             msg="Cannot retrieve the manifest digest for the {image}:{tag} image.".format(
                 tag=existing_tag, image=full_repo_name
@@ -270,7 +255,6 @@ def main():
     # date.
     # Copy the `end_ts' attribute to `expiration' in the returned object so
     # that both object will use the same key for the same thing.
-    tag_details = tags["tags"][0]
     if "end_ts" in tag_details:
         tag_details["expiration"] = tag_details["end_ts"]
 
@@ -292,21 +276,11 @@ def main():
 
     # The user has specified a tag in `tag'. Verify if that tag already exists
     # and if it points to the same image as the one provided in `image'.
-    query_params["specificTag"] = tag
-    tags = module.get_object_path(
-        "repository/{namespace}/{repository}/tag/",
-        query_params=query_params,
-        namespace=namespace,
-        repository=repo_shortname,
-    )
+    tags = module.get_tags(namespace, repo_shortname, tag)
 
     # The two tags point to the same image.
-    if (
-        tags
-        and len(tags.get("tags", [])) > 0
-        and tags["tags"][0].get("manifest_digest") == tag_details["manifest_digest"]
-    ):
-        new_tag_details = tags["tags"][0]
+    if len(tags) > 0 and tags[0].get("manifest_digest") == tag_details["manifest_digest"]:
+        new_tag_details = tags[0]
         if "end_ts" in new_tag_details:
             new_tag_details["expiration"] = new_tag_details["end_ts"]
         created = False

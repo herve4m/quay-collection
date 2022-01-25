@@ -1045,7 +1045,7 @@ class APIModule(AnsibleModule):
             return user_details
         return None
 
-    def get_tags(self, namespace, repository, tag=None, only_active_tags=True):
+    def get_tags(self, namespace, repository, tag=None, digest=None, only_active_tags=True):
         """Return the list of tags for the given repository.
 
         :param namespace: The name of the repository's namespace.
@@ -1053,8 +1053,13 @@ class APIModule(AnsibleModule):
         :param repository: The name of the repository.
         :type repository: str
         :param tag: The tag to retrieve and return. If ``None`` (the default),
-                    then all the tags for the given repository are returned.
+                    then the :py:attribute:``digest`` is used instead. If that
+                    attribute is also not set, then all the tags for the given
+                    repository are returned.
         :type tag: str
+        :param digest: The image digest to search for. Only used if the
+                       :py:attribute:``tag`` attribute is None.
+        :type digest: str
         :param only_active_tags: If ``True`` (the default), then only return
                                  active tags.
         :type only_active_tags: bool
@@ -1157,6 +1162,7 @@ class APIModule(AnsibleModule):
         #   ],
         #   "page": 1,
         #   "has_additional": false
+        # }
         query_params = {"onlyActiveTags": only_active_tags, "limit": 100}
         if tag:
             query_params["specificTag"] = tag
@@ -1172,7 +1178,16 @@ class APIModule(AnsibleModule):
                 repository=repository,
             )
             if tags:
-                tag_list.extend(tags.get("tags", []))
+                if tag or not digest:
+                    tag_list.extend(tags.get("tags", []))
+                else:
+                    tag_list.extend(
+                        [
+                            t
+                            for t in tags.get("tags", [])
+                            if t.get("manifest_digest") == digest
+                        ]
+                    )
                 if tags.get("has_additional", False):
                     page += 1
                     continue

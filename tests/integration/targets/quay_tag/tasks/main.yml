@@ -210,6 +210,26 @@
     quay_token: "{{ quay_token }}"
     validate_certs: false
 
+- name: Retrieve the digest for the v2.0.0 image
+  herve4m.quay.quay_tag_info:
+    repository: ansibletestorg/ansibletestrepo
+    tag: v2.0.0
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: tags
+
+- name: Ensure the tag v3.0.0 is added with expiration
+  herve4m.quay.quay_tag:
+    image:
+      "ansibletestorg/ansibletestrepo@{{ tags['tags'][0]['manifest_digest'] }}"
+    tag: v3.0.0
+    expiration: "{{ expiration }}"
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
 - name: Ensure the tag v2.0.0 is removed
   herve4m.quay.quay_tag:
     image: ansibletestorg/ansibletestrepo:v2.0.0

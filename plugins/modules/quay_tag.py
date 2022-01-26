@@ -96,7 +96,7 @@ EXAMPLES = r"""
 
 - name: Ensure tag v0.0.2 is associated to the image with the specified digest
   herve4m.quay.quay_tag:
-    image: ansibletestorg/smallimage@sha256:4f6f...e797;
+    image: ansibletestorg/smallimage@sha256:4f6f...e797
     tag: v0.0.2
     state: present
     quay_host: https://quay.example.com

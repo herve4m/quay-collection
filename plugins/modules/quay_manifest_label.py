@@ -58,7 +58,7 @@ options:
         already use the key you define in the I(key) parameter. Quay supports
         multiple labels with the same key.
     type: bool
-    default: true
+    default: yes
   state:
     description:
       - If C(absent), then the module deletes the labels that match the I(key)

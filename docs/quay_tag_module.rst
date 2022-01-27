@@ -42,7 +42,7 @@ herve4m.quay.quay_tag -- Manage Red Hat Quay image tags
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.9).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.10).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -104,6 +104,7 @@ Parameters
     <td><div class="ansible-option-cell">
       <p>Expiration date and time for the tag. The format is <code class='docutils literal notranslate'>YYYYMMDDHHMM.SS</code> but you can change it by setting the <em>expiration_format</em> parameter.</p>
       <p>You cannot set an expiration date more that two years in the future. If you do so, then Quay forces the date at that two years boundary.</p>
+      <p>You cannot set an expiration date in the past.</p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -132,9 +133,9 @@ Parameters
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Name of the existing image to tag. The format is <code class='docutils literal notranslate'>namespace</code>/<code class='docutils literal notranslate'>repository</code>:<code class='docutils literal notranslate'>tag</code>. The namespace can be an organization or a personal namespace.</p>
+      <p>Name of the existing image. The format is <code class='docutils literal notranslate'>namespace</code>/<code class='docutils literal notranslate'>repository</code>:<code class='docutils literal notranslate'>tag</code> or <code class='docutils literal notranslate'>namespace</code>/<code class='docutils literal notranslate'>repository</code>@<code class='docutils literal notranslate'>digest</code>. The namespace can be an organization or a personal namespace.</p>
       <p>If you omit the namespace part, then the module looks for the repository in your personal namespace.</p>
-      <p>If you omit the tag, then it defaults to <code class='docutils literal notranslate'>latest</code>.</p>
+      <p>If you omit the tag and the digest part, then <code class='docutils literal notranslate'>latest</code> is assumed.</p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -198,6 +199,7 @@ Parameters
     <td><div class="ansible-option-cell">
       <p>When <code class='docutils literal notranslate'>state=present</code>, the <em>tag</em> parameter provides the new tag to add to the image. If another image already uses that tag, then the module removes the tag from that other image first.</p>
       <p>When <code class='docutils literal notranslate'>state=absent</code>, the <em>tag</em> parameter indicates the tag to remove. If you do not set that <em>tag</em> parameter, then the module removes the tag that you give in the image name with the <em>image</em> parameter.</p>
+      <p>When you specify the image by its digest, in the <em>image</em> parameter, then that <em>tag</em> parameter is mandatory.</p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -258,10 +260,18 @@ Examples
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
+    - name: Ensure tag v0.0.2 is associated to the image with the specified digest
+      herve4m.quay.quay_tag:
+        image: ansibletestorg/smallimage@sha256:4f6f...e797
+        tag: v0.0.2
+        state: present
+        quay_host: https://quay.example.com
+        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+
     - name: Ensure tag v0.0.8 expires May 25, 2023 at 16:30
       herve4m.quay.quay_tag:
         image: ansibletestorg/ansibletestrepo:v0.0.8
-        expire: 202305251630.00
+        expiration: 202305251630.00
         state: present
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
@@ -269,7 +279,7 @@ Examples
     - name: Ensure tag v0.0.8 does not expire anymore
       herve4m.quay.quay_tag:
         image: ansibletestorg/ansibletestrepo:v0.0.8
-        expire: ""
+        expiration: ""
         state: present
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7

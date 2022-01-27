@@ -229,7 +229,7 @@ def main():
     # Check whether namespace exists (organization or user account)
     namespace_details = module.get_namespace(namespace)
     if not namespace_details:
-        module.exit_json(changed=False, images=[])
+        module.exit_json(changed=False, tags=[])
 
     # Get the tags
     #   [

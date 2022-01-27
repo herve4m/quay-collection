@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2021, Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2021, 2022, Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # For accessing the API documentation from a running system, use the swagger-ui
@@ -217,7 +217,7 @@ def main():
     # Check whether namespace exists (organization or user account)
     namespace_details = module.get_namespace(namespace)
     if not namespace_details:
-        module.exit_json(changed=False, images=[])
+        module.exit_json(changed=False, layers=[])
 
     # Get the layers
     #

@@ -40,6 +40,15 @@ releases:
       name: quay_user
       namespace: ''
     release_date: '2021-10-03'
+  0.0.10:
+    modules:
+    - description: Manage Red Hat Quay image manifest labels
+      name: quay_manifest_label
+      namespace: ''
+    - description: Gather information about manifest labels in Red Hat Quay
+      name: quay_manifest_label_info
+      namespace: ''
+    release_date: '2022-01-27'
   0.0.2:
     changes:
       release_summary: Fix wrong project URLs

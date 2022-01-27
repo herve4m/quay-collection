@@ -42,7 +42,7 @@ herve4m.quay.quay_tag_info -- Gather information about tags in a Red Hat Quay re
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.9).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.10).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -94,6 +94,20 @@ Parameters
   <tbody>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-digest"></div>
+      <p class="ansible-option-title"><strong>digest</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-digest" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Gather information on the images with that digest instead of returning data on all the tags in the repository.</p>
+      <p>Mutually exclusive with <em>tag</em>.</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-only_active_tags"></div>
       <p class="ansible-option-title"><strong>only_active_tags</strong></p>
       <a class="ansibleOptionLink" href="#parameter-only_active_tags" title="Permalink to this option"></a>
@@ -102,8 +116,8 @@ Parameters
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>If <code class='docutils literal notranslate'>yes</code>, then the module only collects information on tags that have not expired. If <code class='docutils literal notranslate'>no</code>, then the module returns information on all the tags.</p>
-      <p>You can identify expired tags (when <em>only_active_tags</em> is <code class='docutils literal notranslate'>no</code>) in the returned data by inspecting the <code class='docutils literal notranslate'>end_ts</code> or <code class='docutils literal notranslate'>expiration</code> tag attributes. Those attributes provide the expiration date.</p>
+      <p>If <code class='docutils literal notranslate'>yes</code>, then the module only collects information on tags that have not expired and have not been deleted. If <code class='docutils literal notranslate'>no</code>, then the module returns information on all the tags.</p>
+      <p>You can identify expired and deleted tags (when <em>only_active_tags</em> is <code class='docutils literal notranslate'>no</code>) in the returned data by inspecting the <code class='docutils literal notranslate'>end_ts</code> or <code class='docutils literal notranslate'>expiration</code> tag attributes. Those attributes provide the expiration or deletion date.</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
         <li><p><span class="ansible-option-default-bold">no</span> <span class="ansible-option-default">← (default)</span></p></li>
@@ -111,7 +125,7 @@ Parameters
       </ul>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
       <p class="ansible-option-title"><strong>quay_host</strong></p>
@@ -127,7 +141,7 @@ Parameters
       <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">"http://127.0.0.1"</span></p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
       <p class="ansible-option-title"><strong>quay_token</strong></p>
@@ -141,7 +155,7 @@ Parameters
       <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_TOKEN</code> environment variable.</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-repository"></div>
       <p class="ansible-option-title"><strong>repository</strong></p>
@@ -156,7 +170,7 @@ Parameters
       <p>If you omit the namespace part, then the module looks for the repository in your personal namespace.</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-tag"></div>
       <p class="ansible-option-title"><strong>tag</strong></p>
@@ -167,9 +181,10 @@ Parameters
     </div></td>
     <td><div class="ansible-option-cell">
       <p>Gather information on that specific tag instead of returning data on all the tags in the repository.</p>
+      <p>Mutually exclusive with <em>digest</em>.</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div>
@@ -228,6 +243,15 @@ Examples
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
       register: tag_info
+
+    - name: Retrieve the tags from the images with the given digest
+      herve4m.quay.quay_tag_info:
+        repository: production/smallimage
+        digest: "sha256:53b2...a7c8"
+        only_active_tags: true
+        quay_host: https://quay.example.com
+        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+      register: tags
 
 
 

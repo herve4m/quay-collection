@@ -26,7 +26,7 @@
 
 .. Anchors
 
-.. _ansible_collections.herve4m.quay.quay_application_module:
+.. _ansible_collections.herve4m.quay.quay_manifest_label_module:
 
 .. Anchors: short name for ansible.builtin
 
@@ -36,8 +36,8 @@
 
 .. Title
 
-herve4m.quay.quay_application -- Manage Red Hat Quay applications
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+herve4m.quay.quay_manifest_label -- Manage Red Hat Quay image manifest labels
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. Collection note
 
@@ -50,11 +50,11 @@ herve4m.quay.quay_application -- Manage Red Hat Quay applications
 
     To install it, use: :code:`ansible-galaxy collection install herve4m.quay`.
 
-    To use it in a playbook, specify: :code:`herve4m.quay.quay_application`.
+    To use it in a playbook, specify: :code:`herve4m.quay.quay_manifest_label`.
 
 .. version_added
 
-.. versionadded:: 0.0.1 of herve4m.quay
+.. versionadded:: 0.0.10 of herve4m.quay
 
 .. contents::
    :local:
@@ -68,7 +68,7 @@ Synopsis
 
 .. Description
 
-- Create, delete, and update applications in Red Hat Quay organizations.
+- Add or remove labels to image manifests.
 
 
 .. Aliases
@@ -94,83 +94,32 @@ Parameters
   <tbody>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-application_uri"></div>
-      <p class="ansible-option-title"><strong>application_uri</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-application_uri" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
-      </p>
-    </div></td>
-    <td><div class="ansible-option-cell">
-      <p>URL to the application home page.</p>
-    </div></td>
-  </tr>
-  <tr class="row-odd">
-    <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-avatar_email"></div>
-      <p class="ansible-option-title"><strong>avatar_email</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-avatar_email" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
-      </p>
-    </div></td>
-    <td><div class="ansible-option-cell">
-      <p>Email address that represents the avatar for the application.</p>
-    </div></td>
-  </tr>
-  <tr class="row-even">
-    <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-description"></div>
-      <p class="ansible-option-title"><strong>description</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-description" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
-      </p>
-    </div></td>
-    <td><div class="ansible-option-cell">
-      <p>Description for the application.</p>
-    </div></td>
-  </tr>
-  <tr class="row-odd">
-    <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-name"></div>
-      <p class="ansible-option-title"><strong>name</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
+      <div class="ansibleOptionAnchor" id="parameter-image"></div>
+      <p class="ansible-option-title"><strong>image</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-image" title="Permalink to this option"></a>
       <p class="ansible-option-type-line">
         <span class="ansible-option-type">string</span>
         / <span class="ansible-option-required">required</span>
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Name of the application to create, update, or delete. Application names must be at least two characters long.</p>
-    </div></td>
-  </tr>
-  <tr class="row-even">
-    <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-new_name"></div>
-      <p class="ansible-option-title"><strong>new_name</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-new_name" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
-      </p>
-    </div></td>
-    <td><div class="ansible-option-cell">
-      <p>New name for the application.</p>
-      <p>Setting this option changes the name of the application which current name is provided in <em>name</em>.</p>
+      <p>Manifest to update. The format is <code class='docutils literal notranslate'>namespace</code>/<code class='docutils literal notranslate'>repository</code>:<code class='docutils literal notranslate'>tag</code> or <code class='docutils literal notranslate'>namespace</code>/<code class='docutils literal notranslate'>repository</code>@<code class='docutils literal notranslate'>digest</code>. The namespace can be an organization or a personal namespace.</p>
+      <p>If you omit the namespace part, then the module looks for the repository in your personal namespace.</p>
+      <p>If you omit the tag and the digest part, then <code class='docutils literal notranslate'>latest</code> is assumed.</p>
     </div></td>
   </tr>
   <tr class="row-odd">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-organization"></div>
-      <p class="ansible-option-title"><strong>organization</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-organization" title="Permalink to this option"></a>
+      <div class="ansibleOptionAnchor" id="parameter-key"></div>
+      <p class="ansible-option-title"><strong>key</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-key" title="Permalink to this option"></a>
       <p class="ansible-option-type-line">
         <span class="ansible-option-type">string</span>
         / <span class="ansible-option-required">required</span>
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Name of the organization in which to manage the application.</p>
+      <p>Label&#x27;s key.</p>
     </div></td>
   </tr>
   <tr class="row-even">
@@ -205,15 +154,22 @@ Parameters
   </tr>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-redirect_uri"></div>
-      <p class="ansible-option-title"><strong>redirect_uri</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-redirect_uri" title="Permalink to this option"></a>
+      <div class="ansibleOptionAnchor" id="parameter-replace"></div>
+      <p class="ansible-option-title"><strong>replace</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-replace" title="Permalink to this option"></a>
       <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
+        <span class="ansible-option-type">boolean</span>
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Prefix of the application&#x27;s OAuth redirection/callback URLs.</p>
+      <p>Only used when <code class='docutils literal notranslate'>state=present</code>.</p>
+      <p>If <code class='docutils literal notranslate'>yes</code>, then the module deletes all the labels that use the key you define in the <em>key</em> parameter before adding the new label.</p>
+      <p>If <code class='docutils literal notranslate'>no</code>, then the module adds the new label even if existing labels already use the key you define in the <em>key</em> parameter. Quay supports multiple labels with the same key.</p>
+      <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+      <ul class="simple">
+        <li><p><span class="ansible-option-choices-entry">no</span></p></li>
+        <li><p><span class="ansible-option-default-bold">yes</span> <span class="ansible-option-default">← (default)</span></p></li>
+      </ul>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -226,10 +182,8 @@ Parameters
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>If <code class='docutils literal notranslate'>absent</code>, then the module deletes the application.</p>
-      <p>The module does not fail if the application does not exist because the state is already as expected.</p>
-      <p>If <code class='docutils literal notranslate'>present</code>, then the module creates the application if it does not already exist.</p>
-      <p>If the application already exists, then the module updates its state.</p>
+      <p>If <code class='docutils literal notranslate'>absent</code>, then the module deletes the labels that match the <em>key</em> and <em>value</em> parameters. If you do not provide the <em>value</em> parameter, then the module deletes all the labels with the <em>key</em> parameter.</p>
+      <p>If <code class='docutils literal notranslate'>present</code>, then the module adds a label to the manifest.</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
         <li><p><span class="ansible-option-choices-entry">absent</span></p></li>
@@ -259,6 +213,19 @@ Parameters
       </ul>
     </div></td>
   </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-value"></div>
+      <p class="ansible-option-title"><strong>value</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-value" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Label&#x27;s value. Required when <code class='docutils literal notranslate'>state=present</code>.</p>
+    </div></td>
+  </tr>
   </tbody>
   </table>
 
@@ -273,8 +240,9 @@ Notes
 -----
 
 .. note::
+   - Labels defined in the Containerfile/Dockerfile cannot be deleted or updated. They are read-only.
    - Supports \ :literal:`check\_mode`\ .
-   - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Administer Organization" and "Administer User" permissions.
+   - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Administer Repositories" permission.
 
 .. Seealso
 
@@ -287,36 +255,38 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Ensure the application extapp exists
-      herve4m.quay.quay_application:
-        organization: production
-        name: extapp
-        description: External application
-        application_uri: http://applicationuri.example.com
-        redirect_uri: http://redirecturi.example.com
-        avatar_email: avatarextapp@example.com
-        state: present
-        quay_host: https://quay.example.com
-        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
-      register: app_details
-
-    - debug:
-        msg: "Client secret: {{ app_details['client_secret'] }}"
-
-    - name: Ensure the application is renamed
-      herve4m.quay.quay_application:
-        organization: production
-        name: extapp
-        new_name: apiaccess
-        description: Application dedicated to API access
+    - name: Ensure the manifest has the architecture label set
+      herve4m.quay.quay_manifest_label:
+        image: ansibletestorg/ansibletestrepo:v1.0.0
+        key: architecture
+        value: x86_64
         state: present
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-    - name: Ensure the application is removed
-      herve4m.quay.quay_application:
-        organization: production
-        name: apiaccess
+    - name: Ensure the manifest has an additional architecture label set
+      herve4m.quay.quay_manifest_label:
+        image: ansibletestorg/ansibletestrepo:v1.0.0
+        key: architecture
+        value: power
+        replace: false
+        state: present
+        quay_host: https://quay.example.com
+        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+
+    - name: Ensure the manifest has a specific component label removed
+      herve4m.quay.quay_manifest_label:
+        image: ansibletestorg/smallimage@sha256:4f6f...e797
+        key: component
+        value: front
+        state: absent
+        quay_host: https://quay.example.com
+        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+
+    - name: Remove all the labels that have a key set to scopes
+      herve4m.quay.quay_manifest_label:
+        image: ansibletestorg/ansibletestrepo:v1.0.0
+        key: scopes
         state: absent
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
@@ -345,47 +315,78 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
   <tbody>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="return-client_id"></div>
-      <p class="ansible-option-title"><strong>client_id</strong></p>
-      <a class="ansibleOptionLink" href="#return-client_id" title="Permalink to this return value"></a>
+      <div class="ansibleOptionAnchor" id="return-id"></div>
+      <p class="ansible-option-title"><strong>id</strong></p>
+      <a class="ansibleOptionLink" href="#return-id" title="Permalink to this return value"></a>
       <p class="ansible-option-type-line">
         <span class="ansible-option-type">string</span>
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>ID if the client associated with the application object.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> changed</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "SUJVKUJN5WIP07CAIXAF"</p>
+      <p>Internal identifier of the label.</p>
+      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
+      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "155f20b3-7ebf-4796-9d18-eb5c54bf7364"</p>
     </div></td>
   </tr>
   <tr class="row-odd">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="return-client_secret"></div>
-      <p class="ansible-option-title"><strong>client_secret</strong></p>
-      <a class="ansibleOptionLink" href="#return-client_secret" title="Permalink to this return value"></a>
+      <div class="ansibleOptionAnchor" id="return-key"></div>
+      <p class="ansible-option-title"><strong>key</strong></p>
+      <a class="ansibleOptionLink" href="#return-key" title="Permalink to this return value"></a>
       <p class="ansible-option-type-line">
         <span class="ansible-option-type">string</span>
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Secret for the client associated with the application object.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> changed</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "JBVXLG8XS7UCV1NFKDYPSNGJ4BUESU03GI5OXS2X"</p>
+      <p>Label&#x27;s key.</p>
+      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
+      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "architecture"</p>
     </div></td>
   </tr>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="return-name"></div>
-      <p class="ansible-option-title"><strong>name</strong></p>
-      <a class="ansibleOptionLink" href="#return-name" title="Permalink to this return value"></a>
+      <div class="ansibleOptionAnchor" id="return-media_type"></div>
+      <p class="ansible-option-title"><strong>media_type</strong></p>
+      <a class="ansibleOptionLink" href="#return-media_type" title="Permalink to this return value"></a>
       <p class="ansible-option-type-line">
         <span class="ansible-option-type">string</span>
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Application name.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> changed</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "apiaccess"</p>
+      <p>Format of the label (<code class='docutils literal notranslate'>text/plain</code> or <code class='docutils literal notranslate'>application/json</code>).</p>
+      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
+      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "text/plain"</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="return-source_type"></div>
+      <p class="ansible-option-title"><strong>source_type</strong></p>
+      <a class="ansibleOptionLink" href="#return-source_type" title="Permalink to this return value"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Whether the label has been set by the Containerfile/Dockerfile manifest (<code class='docutils literal notranslate'>manifest</code>), or by an API call or from the web UI (<code class='docutils literal notranslate'>api</code>).</p>
+      <p>Labels set in Containerfile/Dockerfile manifests are read-only.</p>
+      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
+      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "api"</p>
+    </div></td>
+  </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="return-value"></div>
+      <p class="ansible-option-title"><strong>value</strong></p>
+      <a class="ansibleOptionLink" href="#return-value" title="Permalink to this return value"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Label&#x27;s value.</p>
+      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
+      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "x86_64"</p>
     </div></td>
   </tr>
   </tbody>

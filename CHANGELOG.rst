@@ -5,6 +5,15 @@ Red Hat Quay Collection Release Notes
 .. contents:: Topics
 
 
+v0.0.10
+=======
+
+New Modules
+-----------
+
+- herve4m.quay.quay_manifest_label - Manage Red Hat Quay image manifest labels
+- herve4m.quay.quay_manifest_label_info - Gather information about manifest labels in Red Hat Quay
+
 v0.0.9
 ======
 

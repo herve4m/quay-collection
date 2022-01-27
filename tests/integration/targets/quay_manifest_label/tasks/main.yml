@@ -93,19 +93,22 @@
       changed_when: true
       failed_when: false
 
-- name: Ensure the tag v1.0.0 is added to the image
-  herve4m.quay.quay_tag:
+- name: Ensure the manifest has the label architecture=x86_64
+  herve4m.quay.quay_manifest_label:
     image: ansibletestorg/ansibletestrepo:latest
-    tag: v1.0.0
+    key: architecture
+    value: x86_64
     state: present
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
     validate_certs: false
 
-- name: Ensure the tag v1.0.0 is added to the image 1 (no change)
-  herve4m.quay.quay_tag:
+- name: Ensure the manifest has the label architecture=x86_64 1 (no change)
+  herve4m.quay.quay_manifest_label:
     image: ansibletestorg/ansibletestrepo:latest
-    tag: v1.0.0
+    key: architecture
+    value: x86_64
+    replace: true
     state: present
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
@@ -117,9 +120,12 @@
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
-- name: Ensure the tag v1.0.0 is added to the image 2 (no change)
-  herve4m.quay.quay_tag:
-    image: ansibletestorg/ansibletestrepo
+- name: Ensure the manifest has the label architecture=x86_64 2 (no change)
+  herve4m.quay.quay_manifest_label:
+    image: ansibletestorg/ansibletestrepo:latest
+    key: architecture
+    value: x86_64
+    replace: false
     state: present
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
@@ -131,9 +137,41 @@
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
-- name: Ensure the tag v1.0.0 is added to the image 3 (no change)
-  herve4m.quay.quay_tag:
-    image: ansibletestorg/ansibletestrepo:v1.0.0
+- name: Ensure the manifest has an additional label architecture=power
+  herve4m.quay.quay_manifest_label:
+    image: ansibletestorg/ansibletestrepo:latest
+    key: architecture
+    value: power
+    replace: false
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+# Should remove the other labels with the key architecture
+- name: Ensure the manifest has only the label architecture=power
+  herve4m.quay.quay_manifest_label:
+    image: ansibletestorg/ansibletestrepo:latest
+    key: architecture
+    value: power
+    replace: true
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did change something
+  assert:
+    that: result['changed']
+    fail_msg: The preceding task should have changed something
+
+- name: Ensure the manifest has only the label architecture=power (no change)
+  herve4m.quay.quay_manifest_label:
+    image: ansibletestorg/ansibletestrepo:latest
+    key: architecture
+    value: power
+    replace: true
     state: present
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
@@ -145,117 +183,66 @@
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
-- name: Ensure the tag v1.0.0 is added to the image 4 (no change)
-  herve4m.quay.quay_tag:
-    image: ansibletestorg/ansibletestrepo:v1.0.0
-    tag: latest
-    state: present
-    quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
-    validate_certs: false
-  register: result
-
-- name: Ensure that the task did not change anything
-  assert:
-    that: not result['changed']
-    fail_msg: The preceding task should not have changed anything
-
-- name: Ensure the tag v1.0.0 is added to the image 5 (no change)
-  herve4m.quay.quay_tag:
-    image: ansibletestorg/ansibletestrepo:v1.0.0
-    tag: latest
-    expiration: ""
-    state: present
-    quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
-    validate_certs: false
-  register: result
-
-- name: Ensure that the task did not change anything
-  assert:
-    that: not result['changed']
-    fail_msg: The preceding task should not have changed anything
-
-- name: Ensure the tag v2.0.0 is added with expiration
-  herve4m.quay.quay_tag:
-    image: ansibletestorg/ansibletestrepo:v1.0.0
-    tag: v2.0.0
-    expiration: "{{ expiration }}"
+- name: Ensure the manifest has an additional label architecture=other
+  herve4m.quay.quay_manifest_label:
+    image: ansibletestorg/ansibletestrepo:latest
+    key: architecture
+    value: other
+    replace: false
     state: present
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
     validate_certs: false
 
-- name: Ensure the tag v2.0.0 is added with expiration (no change)
-  herve4m.quay.quay_tag:
-    image: ansibletestorg/ansibletestrepo:v2.0.0
-    expiration: "{{ expiration }}"
-    state: present
-    quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
-    validate_certs: false
-  register: result
-
-- name: Ensure that the task did not change anything
-  assert:
-    that: not result['changed']
-    fail_msg: The preceding task should not have changed anything
-
-- name: Ensure the tag v2.0.0 has no expiration
-  herve4m.quay.quay_tag:
-    image: ansibletestorg/ansibletestrepo:v2.0.0
-    expiration: ""
-    state: present
-    quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
-    validate_certs: false
-
-- name: Retrieve the digest for the v2.0.0 image
-  herve4m.quay.quay_tag_info:
-    repository: ansibletestorg/ansibletestrepo
-    tag: v2.0.0
-    quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
-    validate_certs: false
-  register: tags
-
-- name: Ensure the tag v3.0.0 is added with expiration
-  herve4m.quay.quay_tag:
-    image:
-      "ansibletestorg/ansibletestrepo@{{ tags['tags'][0]['manifest_digest'] }}"
-    tag: v3.0.0
-    expiration: "{{ expiration }}"
-    state: present
-    quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
-    validate_certs: false
-
-- name: Ensure the tag v2.0.0 is removed
-  herve4m.quay.quay_tag:
-    image: ansibletestorg/ansibletestrepo:v2.0.0
-    expiration: ""
+- name: Ensure manifest does not have the label architecture=other
+  herve4m.quay.quay_manifest_label:
+    image: ansibletestorg/ansibletestrepo:latest
+    key: architecture
+    value: other
     state: absent
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
     validate_certs: false
 
-- name: Ensure the tag v1.0.0 is removed
-  herve4m.quay.quay_tag:
-    image: ansibletestorg/ansibletestrepo
-    tag: v1.0.0
+- name: Ensure manifest does not have the label architecture=other (no change)
+  herve4m.quay.quay_manifest_label:
+    image: ansibletestorg/ansibletestrepo:latest
+    key: architecture
+    value: other
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure manifest has no label with key architecture
+  herve4m.quay.quay_manifest_label:
+    image: ansibletestorg/ansibletestrepo:latest
+    key: architecture
     state: absent
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
     validate_certs: false
 
-- name: Ensure the tag latest is removed
-  herve4m.quay.quay_tag:
+- name: Ensure manifest has no label with key architecture (no change)
+  herve4m.quay.quay_manifest_label:
     image: ansibletestorg/ansibletestrepo:latest
-    tag: latest
+    key: architecture
     state: absent
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
     validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
 
 - name: Ensure the repository is removed
   herve4m.quay.quay_repository:

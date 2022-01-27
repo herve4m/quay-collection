@@ -1,0 +1,55 @@
+---
+- name: Getting the labels of the projectquay/quay manifest
+  herve4m.quay.quay_manifest_label_info:
+    image: projectquay/quay
+    quay_host: quay.io
+  register: labels
+
+- debug:
+    var: labels
+
+- name: Ensure that the task did return some labels
+  assert:
+    that: labels['labels']|length > 1
+    fail_msg: The preceding task should have returned some labels
+
+- name: Getting the version label of the projectquay/quay manifest
+  herve4m.quay.quay_manifest_label_info:
+    image: projectquay/quay:latest
+    key: version
+    quay_host: quay.io
+  register: label
+
+- debug:
+    var: label
+
+- name: Ensure that the task did return the version label
+  assert:
+    that: label['labels']|length == 1
+    fail_msg: The preceding task should have returned a label
+
+- name: Retrieve an image with no namespace (error)
+  herve4m.quay.quay_manifest_label_info:
+    image: nosuchimageipresume
+    quay_host: quay.io
+  ignore_errors: true
+  register: result
+
+- name: Ensure the task has failed
+  assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed
+
+- name: Retrieve a non-existing image in my namespace
+  herve4m.quay.quay_manifest_label_info:
+    image: dnsmasq:v1.0.0
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: labels
+
+- name: Ensure that the task did not return any label
+  assert:
+    that: labels['labels']|length == 0
+    fail_msg: The preceding task should not have returned labels
+...

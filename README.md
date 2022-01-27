@@ -18,6 +18,8 @@ Name | Description
 [quay_default_perm](https://github.com/herve4m/quay-collection/blob/main/docs/quay_default_perm_module.rst) |  Manage Red Hat Quay default repository permissions
 [quay_first_user](https://github.com/herve4m/quay-collection/blob/main/docs/quay_first_user_module.rst) |  Create the first user account
 [quay_layer_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_layer_info_module.rst) |  Gather information about image layers in Red Hat Quay
+[quay_manifest_label](https://github.com/herve4m/quay-collection/blob/main/docs/quay_manifest_label_module.rst) |  Manage Red Hat Quay image manifest labels
+[quay_manifest_label_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_manifest_label_info_module.rst) |  Gather information about manifest labels in Red Hat Quay
 [quay_message](https://github.com/herve4m/quay-collection/blob/main/docs/quay_message_module.rst) |  Manage Red Hat Quay global messages
 [quay_notification](https://github.com/herve4m/quay-collection/blob/main/docs/quay_notification_module.rst) |  Manage Red Hat Quay repository notifications
 [quay_organization](https://github.com/herve4m/quay-collection/blob/main/docs/quay_organization_module.rst) |  Manage Red Hat Quay organizations

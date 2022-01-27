@@ -1,0 +1,2 @@
+plugins/modules/quay_manifest_label.py validate-modules:no-log-needed
+plugins/modules/quay_manifest_label_info.py validate-modules:no-log-needed

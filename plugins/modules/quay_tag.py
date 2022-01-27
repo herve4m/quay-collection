@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2021, Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2021, 2022, Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # For accessing the API documentation from a running system, use the swagger-ui
@@ -32,12 +32,13 @@ author: Herve Quatremain (@herve4m)
 options:
   image:
     description:
-      - Name of the existing image to tag. The format is
-        C(namespace)/C(repository):C(tag). The namespace can be an organization
-        or a personal namespace.
+      - Name of the existing image. The format is
+        C(namespace)/C(repository):C(tag) or
+        C(namespace)/C(repository)@C(digest). The namespace can be an
+        organization or a personal namespace.
       - If you omit the namespace part, then the module looks for the
         repository in your personal namespace.
-      - If you omit the tag, then it defaults to C(latest).
+      - If you omit the tag and the digest part, then C(latest) is assumed.
     required: true
     type: str
   tag:
@@ -48,6 +49,8 @@ options:
       - When C(state=absent), the I(tag) parameter indicates the tag to remove.
         If you do not set that I(tag) parameter, then the module removes the
         tag that you give in the image name with the I(image) parameter.
+      - When you specify the image by its digest, in the I(image) parameter,
+        then that I(tag) parameter is mandatory.
     type: str
   expiration:
     description:
@@ -55,6 +58,7 @@ options:
         but you can change it by setting the I(expiration_format) parameter.
       - You cannot set an expiration date more that two years in the future.
         If you do so, then Quay forces the date at that two years boundary.
+      - You cannot set an expiration date in the past.
     type: str
   expiration_format:
     description:
@@ -90,10 +94,18 @@ EXAMPLES = r"""
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
+- name: Ensure tag v0.0.2 is associated to the image with the specified digest
+  herve4m.quay.quay_tag:
+    image: ansibletestorg/smallimage@sha256:4f6f...e797
+    tag: v0.0.2
+    state: present
+    quay_host: https://quay.example.com
+    quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+
 - name: Ensure tag v0.0.8 expires May 25, 2023 at 16:30
   herve4m.quay.quay_tag:
     image: ansibletestorg/ansibletestrepo:v0.0.8
-    expire: 202305251630.00
+    expiration: 202305251630.00
     state: present
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
@@ -101,7 +113,7 @@ EXAMPLES = r"""
 - name: Ensure tag v0.0.8 does not expire anymore
   herve4m.quay.quay_tag:
     image: ansibletestorg/ansibletestrepo:v0.0.8
-    expire: ""
+    expiration: ""
     state: present
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
@@ -119,6 +131,7 @@ RETURN = r""" # """
 import time
 
 from ..module_utils.api_module import APIModule
+from ..module_utils.quay_image import QuayImage
 from ansible.module_utils._text import to_native
 
 
@@ -147,32 +160,23 @@ def main():
     expiration_format = module.params.get("expiration_format")
     state = module.params.get("state")
 
-    # Get the tag from "namespace/repository:tag"
-    try:
-        repo, existing_tag = image.rsplit(":", 1)
-    except ValueError:
-        repo = image
-        existing_tag = "latest"
+    # Get the components of the given image (namespace, repository, tag, digest)
+    img = QuayImage(module, image)
+    namespace = img.namespace
+    if namespace is None:
+        module.fail_json(
+            msg=(
+                "The `image' parameter must include the"
+                " organization: <organization>/{name}."
+            ).format(name=image)
+        )
 
-    # Get the namespace and the repository
-    my_name = module.who_am_i()
-    try:
-        namespace, repo_shortname = repo.split("/", 1)
-    except ValueError:
-        # No namespace part in the repository name. Therefore, the repository
-        # is in the user's personal namespace
-        if my_name:
-            namespace = my_name
-            repo_shortname = repo
-        else:
-            module.fail_json(
-                msg=(
-                    "The `image' parameter must include the"
-                    " organization: <organization>/{name}."
-                ).format(name=image)
-            )
+    if img.digest and not tag:
+        module.fail_json(
+            msg="Because you use a digest in image, the tag parameter is mandatory."
+        )
 
-    # Check whether namespace exists (organization or user account)
+    # Check whether the namespace exists (organization or user account)
     namespace_details = module.get_namespace(namespace)
     if not namespace_details:
         if state == "absent":
@@ -182,12 +186,17 @@ def main():
         )
 
     full_repo_name = "{namespace}/{repository}".format(
-        namespace=namespace, repository=repo_shortname
+        namespace=namespace, repository=img.repository
     )
 
     # Remove the tag
     if state == "absent":
-        tag_to_delete = tag if tag else existing_tag
+        if tag:
+            tag_to_delete = tag
+        else:
+            # Because the user did not provide the tag attribute, remove the
+            # tag given in the image attribute.
+            tag_to_delete = img.tag
         module.delete(
             True,
             "tag",
@@ -197,14 +206,43 @@ def main():
             tag=tag_to_delete,
         )
 
+    # Get the tag details for the image given in `image'.
+    # If the image is specified with a tag, then only one tag is returned.
+    # If the image is specified with a digest, then several tags might be
+    # returned.
+    #   [
+    #      {
+    #        "name": "v1.0.0",
+    #        "reversion": False,
+    #        "start_ts": 1633179652,
+    #        "end_ts": 1633179654,
+    #        "manifest_digest": "sha256:4f6f...5e797",
+    #        "is_manifest_list": False,
+    #        "size": 25343205,
+    #        "docker_image_id": "e942...dbea",
+    #        "image_id": "e942...dbea",
+    #        "last_modified": "Sat, 02 Oct 2021 13:00:52 -0000",
+    #        "expiration": "Sat, 02 Oct 2021 13:00:54 -0000"
+    #      }
+    #   ]
+    tags = module.get_tags(namespace, img.repository, img.tag, img.digest)
+    tag_list = [t["name"] for t in tags if "name" in t]
+
     # No tag to set and no expiration date/time to update. Exit (no change)
-    if (not tag or tag == existing_tag) and expiration is None:
+    if (not tag or tag in tag_list) and expiration is None:
         module.exit_json(changed=False)
 
     # Convert the expiration date/time to the epoch format
     if expiration:
         try:
-            expiration_epoch = get_timestamp_for_time(expiration, expiration_format)
+            tms = get_timestamp_for_time(expiration, expiration_format)
+            if tms <= int(time.time() + 10):
+                module.fail_json(
+                    msg=("You cannot set an expiration date in the past: {time}").format(
+                        time=expiration,
+                    )
+                )
+            new_fields = {"expiration": tms}
         except (ValueError, OverflowError) as e:
             module.fail_json(
                 msg=(
@@ -217,96 +255,60 @@ def main():
                 )
             )
     else:
-        expiration_epoch = 0
+        new_fields = {"expiration": None}
 
-    # Get the tag details for the image given in `image'
-    #
-    # GET /api/v1/repository/{namespace}/{repository}/tag/?specificTag={tag}
-    # {
-    #   "tags": [
-    #             {
-    #               "name": "v1.0.0",
-    #               "reversion": false,
-    #               "start_ts": 1633179652,
-    #               "end_ts": 1633179654,
-    #               "manifest_digest": "sha256:4f6f...5e797",
-    #               "is_manifest_list": false,
-    #               "size": 25343205,
-    #               "docker_image_id": "e942...dbea",
-    #               "image_id": "e942...dbea",
-    #               "last_modified": "Sat, 02 Oct 2021 13:00:52 -0000",
-    #               "expiration": "Sat, 02 Oct 2021 13:00:54 -0000"
-    #             }
-    #   ],
-    #   "page": 1,
-    #   "has_additional": false
-    query_params = {
-        "onlyActiveTags": True,
-        "limit": 100,
-        "page": 1,
-        "specificTag": existing_tag,
-    }
-    tags = module.get_object_path(
-        "repository/{namespace}/{repository}/tag/",
-        query_params=query_params,
-        namespace=namespace,
-        repository=repo_shortname,
-    )
-    if not tags or "tags" not in tags or len(tags["tags"]) == 0:
-        module.fail_json(
-            msg="The {tag} tag does not exist for the {image} image.".format(
-                tag=existing_tag, image=full_repo_name
-            )
-        )
-    if "manifest_digest" not in tags["tags"][0]:
-        module.fail_json(
-            msg="Cannot retrieve the manifest digest for the {image}:{tag} image.".format(
-                tag=existing_tag, image=full_repo_name
-            )
-        )
+    if not tag_list:
+        module.fail_json(msg="The {image} image does not exist.".format(image=image))
 
-    # The return object has the expiration date in epoch format in the `end_ts'
-    # key. However, the PUT action use the `expiration' key to define that
-    # date.
-    # Copy the `end_ts' attribute to `expiration' in the returned object so
-    # that both object will use the same key for the same thing.
-    tag_details = tags["tags"][0]
-    if "end_ts" in tag_details:
-        tag_details["expiration"] = tag_details["end_ts"]
+    # No tag to set or the image has already the requested tag. Only the
+    # expiration date has to be updated
+    if not tag or tag in tag_list:
+        # In the list of returned tags, locate the tag to update
+        if not tag:
+            tag_details = tags[0]
+        else:
+            for t in tags:
+                if t.get("name") == tag:
+                    tag_details = t
+                    break
 
-    new_fields = {}
-    # The user did not provide the `tag' parameter. Update the tag provided in
-    # the `image' parameter.
-    if not tag or tag == existing_tag:
-        if expiration is not None:
-            new_fields["expiration"] = expiration_epoch if expiration_epoch else None
+        # The return object has the expiration date in epoch format in the
+        # `end_ts' key. However, the PUT action uses the `expiration' key to
+        # define that date.
+        # Copy the `end_ts' attribute to `expiration' in the returned object so
+        # that both object will use the same key for the same thing.
+        if "end_ts" in tag_details:
+            tag_details["expiration"] = tag_details["end_ts"]
+
+        # The user did not provide the `tag' parameter. Update the tag provided
+        # in the `image' parameter.
         module.update(
             tag_details,
             "tag",
-            existing_tag,
+            tag_details["name"],
             "repository/{full_repo_name}/tag/{tag}",
             new_fields,
             full_repo_name=full_repo_name,
-            tag=existing_tag,
+            tag=tag_details["name"],
+        )
+
+    try:
+        manifest_digest = tags[0]["manifest_digest"]
+    except KeyError:
+        module.fail_json(
+            msg="Cannot retrieve the manifest digest for the {image} image.".format(
+                image=image
+            )
         )
 
     # The user has specified a tag in `tag'. Verify if that tag already exists
     # and if it points to the same image as the one provided in `image'.
-    query_params["specificTag"] = tag
-    tags = module.get_object_path(
-        "repository/{namespace}/{repository}/tag/",
-        query_params=query_params,
-        namespace=namespace,
-        repository=repo_shortname,
-    )
+    tags = module.get_tags(namespace, img.repository, tag)
 
-    # The two tags point to the same image.
-    if (
-        tags
-        and len(tags.get("tags", [])) > 0
-        and tags["tags"][0].get("manifest_digest") == tag_details["manifest_digest"]
-    ):
-        new_tag_details = tags["tags"][0]
+    # The two tags point to the same image. No need to create the tag, only
+    # the expiration need updating.
+    if len(tags) > 0 and tags[0].get("manifest_digest") == manifest_digest:
+        new_tag_details = tags[0]
         if "end_ts" in new_tag_details:
             new_tag_details["expiration"] = new_tag_details["end_ts"]
         created = False
@@ -316,15 +318,13 @@ def main():
             "tag",
             tag,
             "repository/{full_repo_name}/tag/{tag}",
-            {"manifest_digest": tag_details["manifest_digest"]},
+            {"manifest_digest": manifest_digest},
             full_repo_name=full_repo_name,
             tag=tag,
         )
         new_tag_details = {}
         created = True
 
-    if expiration is not None:
-        new_fields["expiration"] = expiration_epoch if expiration_epoch else None
     updated, _not_used = module.update(
         new_tag_details,
         "tag",

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2021, Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2021, 2022, Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # For accessing the API documentation from a running system, use the swagger-ui
@@ -43,15 +43,23 @@ options:
     description:
       - Gather information on that specific tag instead of returning data on
         all the tags in the repository.
+      - Mutually exclusive with I(digest).
+    type: str
+  digest:
+    description:
+      - Gather information on the images with that digest instead of returning
+        data on all the tags in the repository.
+      - Mutually exclusive with I(tag).
     type: str
   only_active_tags:
     description:
       - If C(yes), then the module only collects information on tags that have
-        not expired. If C(no), then the module returns information on all the
-        tags.
-      - You can identify expired tags (when I(only_active_tags) is C(no)) in
-        the returned data by inspecting the C(end_ts) or C(expiration)
-        tag attributes. Those attributes provide the expiration date.
+        not expired and have not been deleted. If C(no), then the module
+        returns information on all the tags.
+      - You can identify expired and deleted tags (when I(only_active_tags) is
+        C(no)) in the returned data by inspecting the C(end_ts) or
+        C(expiration) tag attributes. Those attributes provide the expiration
+        or deletion date.
     type: bool
     default: no
 extends_documentation_fragment:
@@ -75,6 +83,15 @@ EXAMPLES = r"""
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
   register: tag_info
+
+- name: Retrieve the tags from the images with the given digest
+  herve4m.quay.quay_tag_info:
+    repository: production/smallimage
+    digest: "sha256:53b2...a7c8"
+    only_active_tags: true
+    quay_host: https://quay.example.com
+    quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+  register: tags
 """
 
 RETURN = r"""
@@ -172,56 +189,56 @@ tags:
 """
 
 from ..module_utils.api_module import APIModule
+from ..module_utils.quay_image import QuayImage
 
 
 def main():
     argument_spec = dict(
         repository=dict(required=True),
         tag=dict(),
+        digest=dict(),
         only_active_tags=dict(type="bool", default=False),
     )
 
+    mutually_exclusive = [("tag", "digest")]
+
     # Create a module for ourselves
-    module = APIModule(argument_spec=argument_spec, supports_check_mode=True)
+    module = APIModule(
+        argument_spec=argument_spec,
+        mutually_exclusive=mutually_exclusive,
+        supports_check_mode=True,
+    )
 
     # Extract our parameters
     name = module.params.get("repository").strip("/")
     tag = module.params.get("tag")
+    digest = module.params.get("digest")
     only_active_tags = module.params.get("only_active_tags")
 
-    my_name = module.who_am_i()
-    try:
-        namespace, repo_shortname = name.split("/", 1)
-    except ValueError:
-        # No namespace part in the repository name. Therefore, the repository
-        # is in the user's personal namespace
-        if my_name:
-            namespace = my_name
-            repo_shortname = name
-        else:
-            module.fail_json(
-                msg=(
-                    "The `repository' parameter must include the"
-                    " organization: <organization>/{name}."
-                ).format(name=name)
-            )
+    # Get the components of the given image (namespace, repository)
+    img = QuayImage(module, name)
+    namespace = img.namespace
+    if namespace is None:
+        module.fail_json(
+            msg=(
+                "The `repository' parameter must include the"
+                " organization: <organization>/{name}."
+            ).format(name=name)
+        )
 
     # Check whether namespace exists (organization or user account)
     namespace_details = module.get_namespace(namespace)
     if not namespace_details:
-        module.exit_json(changed=False, images=[])
+        module.exit_json(changed=False, tags=[])
 
     # Get the tags
-    #
-    # GET /api/v1/repository/{namespace}/{repository}/tag/
-    # {
-    #   "tags": [
+    #   [
     #     {
     #       "name": "1.33.0",
-    #       "reversion": false,
+    #       "reversion": False,
     #       "start_ts": 1632982224,
     #       "manifest_digest": "sha256:f948...95fe",
-    #       "is_manifest_list": false,
+    #       "is_manifest_list": False,
     #       "size": 784606,
     #       "docker_image_id": "d25a...6d25",
     #       "image_id": "d25a...6d25",
@@ -229,10 +246,10 @@ def main():
     #     },
     #     {
     #       "name": "latest",
-    #       "reversion": false,
+    #       "reversion": False,
     #       "start_ts": 1632982222,
     #       "manifest_digest": "sha256:9ce9...f3c7",
-    #       "is_manifest_list": false,
+    #       "is_manifest_list": False,
     #       "size": 784538,
     #       "docker_image_id": "be3e...29d4",
     #       "image_id": "be3e...29d4",
@@ -240,11 +257,11 @@ def main():
     #     },
     #     {
     #       "name": "1.34.0",
-    #       "reversion": false,
+    #       "reversion": False,
     #       "start_ts": 1632982221,
     #       "end_ts": 1640336040,
     #       "manifest_digest": "sha256:a8f2...5ea7",
-    #       "is_manifest_list": false,
+    #       "is_manifest_list": False,
     #       "size": 802700,
     #       "docker_image_id": "bda4...29b2",
     #       "image_id": "bda4...29b2",
@@ -253,41 +270,19 @@ def main():
     #     },
     #     {
     #       "name": "latest",
-    #       "reversion": false,
+    #       "reversion": False,
     #       "start_ts": 1632921128,
     #       "end_ts": 1632982222,
     #       "manifest_digest": "sha256:9ce9...f3c7",
-    #       "is_manifest_list": false,
+    #       "is_manifest_list": False,
     #       "size": 784538,
     #       "docker_image_id": "be3e...29d4",
     #       "image_id": "be3e...29d4",
     #       "last_modified": "Wed, 29 Sep 2021 13:12:08 -0000",
     #       "expiration": "Thu, 30 Sep 2021 06:10:22 -0000"
     #     }
-    #   ],
-    #   "page": 1,
-    #   "has_additional": false
-    query_params = {"onlyActiveTags": only_active_tags, "limit": 100}
-    if tag:
-        query_params["specificTag"] = tag
-    tag_list = []
-    page = 1
-    while True:
-        query_params["page"] = page
-
-        tags = module.get_object_path(
-            "repository/{namespace}/{repository}/tag/",
-            query_params=query_params,
-            namespace=namespace,
-            repository=repo_shortname,
-        )
-        if tags:
-            tag_list.extend(tags.get("tags", []))
-            if tags.get("has_additional", False):
-                page += 1
-                continue
-        break
-
+    #   ]
+    tag_list = module.get_tags(namespace, img.repository, tag, digest, only_active_tags)
     module.exit_json(changed=False, tags=tag_list)
 
 

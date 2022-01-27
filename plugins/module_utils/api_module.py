@@ -1045,6 +1045,155 @@ class APIModule(AnsibleModule):
             return user_details
         return None
 
+    def get_tags(self, namespace, repository, tag=None, digest=None, only_active_tags=True):
+        """Return the list of tags for the given repository.
+
+        :param namespace: The name of the repository's namespace.
+        :type namespace: str
+        :param repository: The name of the repository.
+        :type repository: str
+        :param tag: The tag to retrieve and return. If ``None`` (the default),
+                    then the :py:attribute:``digest`` is used instead. If that
+                    attribute is also not set, then all the tags for the given
+                    repository are returned.
+        :type tag: str
+        :param digest: The image digest to search for. Only used if the
+                       :py:attribute:``tag`` attribute is None.
+        :type digest: str
+        :param only_active_tags: If ``True`` (the default), then only return
+                                 active tags.
+        :type only_active_tags: bool
+
+        :return: The list of tags or an empty list if no tag has been retrieved.
+                 Each item in the list is the dictionary retrieved from the API.
+                 For example::
+
+                    [
+                        {
+                            "name": "1.33.0",
+                            "reversion": False,
+                            "start_ts": 1632982224,
+                            "manifest_digest": "sha256:f948...95fe",
+                            "is_manifest_list": False,
+                            "size": 784606,
+                            "docker_image_id": "d25a...6d25",
+                            "image_id": "d25a...6d25",
+                            "last_modified": "Thu, 30 Sep 2021 06:10:24 -0000"
+                        },
+                        {
+                            "name": "latest",
+                            "reversion": False,
+                            "start_ts": 1632982222,
+                            "manifest_digest": "sha256:9ce9...f3c7",
+                            "is_manifest_list": False,
+                            "size": 784538,
+                            "docker_image_id": "be3e...29d4",
+                            "image_id": "be3e...29d4",
+                            "last_modified": "Thu, 30 Sep 2021 06:10:22 -0000"
+                        },
+                        {
+                            "name": "1.34.0",
+                            "reversion": False,
+                            "start_ts": 1632982221,
+                            "end_ts": 1640336040,
+                            "manifest_digest": "sha256:a8f2...5ea7",
+                            "is_manifest_list": False,
+                            "size": 802700,
+                            "docker_image_id": "bda4...29b2",
+                            "image_id": "bda4...29b2",
+                            "last_modified": "Thu, 30 Sep 2021 06:10:21 -0000",
+                            "expiration": "Fri, 24 Dec 2021 08:54:00 -0000"
+                        }
+                    ]
+        """
+        # Get the tags
+        #
+        # GET /api/v1/repository/{namespace}/{repository}/tag/?specificTag={tag}
+        # {
+        #   "tags": [
+        #     {
+        #       "name": "1.33.0",
+        #       "reversion": false,
+        #       "start_ts": 1632982224,
+        #       "manifest_digest": "sha256:f948...95fe",
+        #       "is_manifest_list": false,
+        #       "size": 784606,
+        #       "docker_image_id": "d25a...6d25",
+        #       "image_id": "d25a...6d25",
+        #       "last_modified": "Thu, 30 Sep 2021 06:10:24 -0000"
+        #     },
+        #     {
+        #       "name": "latest",
+        #       "reversion": false,
+        #       "start_ts": 1632982222,
+        #       "manifest_digest": "sha256:9ce9...f3c7",
+        #       "is_manifest_list": false,
+        #       "size": 784538,
+        #       "docker_image_id": "be3e...29d4",
+        #       "image_id": "be3e...29d4",
+        #       "last_modified": "Thu, 30 Sep 2021 06:10:22 -0000"
+        #     },
+        #     {
+        #       "name": "1.34.0",
+        #       "reversion": false,
+        #       "start_ts": 1632982221,
+        #       "end_ts": 1640336040,
+        #       "manifest_digest": "sha256:a8f2...5ea7",
+        #       "is_manifest_list": false,
+        #       "size": 802700,
+        #       "docker_image_id": "bda4...29b2",
+        #       "image_id": "bda4...29b2",
+        #       "last_modified": "Thu, 30 Sep 2021 06:10:21 -0000",
+        #       "expiration": "Fri, 24 Dec 2021 08:54:00 -0000"
+        #     },
+        #     {
+        #       "name": "latest",
+        #       "reversion": false,
+        #       "start_ts": 1632921128,
+        #       "end_ts": 1632982222,
+        #       "manifest_digest": "sha256:9ce9...f3c7",
+        #       "is_manifest_list": false,
+        #       "size": 784538,
+        #       "docker_image_id": "be3e...29d4",
+        #       "image_id": "be3e...29d4",
+        #       "last_modified": "Wed, 29 Sep 2021 13:12:08 -0000",
+        #       "expiration": "Thu, 30 Sep 2021 06:10:22 -0000"
+        #     }
+        #   ],
+        #   "page": 1,
+        #   "has_additional": false
+        # }
+        query_params = {"onlyActiveTags": only_active_tags, "limit": 100}
+        if tag:
+            query_params["specificTag"] = tag
+        tag_list = []
+        page = 1
+        while True:
+            query_params["page"] = page
+
+            tags = self.get_object_path(
+                "repository/{namespace}/{repository}/tag/",
+                query_params=query_params,
+                namespace=namespace,
+                repository=repository,
+            )
+            if tags:
+                if tag or not digest:
+                    tag_list.extend(tags.get("tags", []))
+                else:
+                    tag_list.extend(
+                        [
+                            t
+                            for t in tags.get("tags", [])
+                            if t.get("manifest_digest") == digest
+                        ]
+                    )
+                if tags.get("has_additional", False):
+                    page += 1
+                    continue
+            break
+        return tag_list
+
 
 class APIModuleFirtUser(APIModule):
     AUTH_ARGSPEC = dict(

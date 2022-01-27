@@ -1,0 +1,3 @@
+---
+fake_image: quay.io/prometheus/busybox:latest
+...

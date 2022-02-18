@@ -49,7 +49,8 @@ options:
   email:
     description:
       - Email address to associate with the new organization.
-      - If you have enabled the mailing capability of your Quay installation,
+      - If your Quay administrator has enabled the mailing capability of your
+        Quay installation (C(FEATURE_MAILING) to C(true) in C(config.yaml)),
         then this I(email) parameter is mandatory.
       - You cannot use the same address as your account email.
     type: str

@@ -72,9 +72,9 @@ options:
     type: bool
     default: yes
 notes:
-  - The module requires that you configure the Quay authentication method to
-    LDAP (C(AUTHENTICATION_TYPE) to C(LDAP) in C(config.yaml) and the
-    C(LDAP_*) parameters correctly set).
+  - The module requires that your Quay administrator configures the Quay
+    authentication method to LDAP (C(AUTHENTICATION_TYPE) to C(LDAP) in
+    C(config.yaml) and the C(LDAP_*) parameters correctly set).
   - Supports C(check_mode).
   - The token that you provide in I(quay_token) must have the "Administer
     Organization" and "Administer User" permissions.

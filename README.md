@@ -16,6 +16,7 @@ Name | Description
 ---: | :---
 [quay_application](https://github.com/herve4m/quay-collection/blob/main/docs/quay_application_module.rst) |  Manage Red Hat Quay applications
 [quay_default_perm](https://github.com/herve4m/quay-collection/blob/main/docs/quay_default_perm_module.rst) |  Manage Red Hat Quay default repository permissions
+[quay_docker_token](https://github.com/herve4m/quay-collection/blob/main/docs/quay_docker_token_module.rst) |  Manage tokens for accessing Red Hat Quay repositories
 [quay_first_user](https://github.com/herve4m/quay-collection/blob/main/docs/quay_first_user_module.rst) |  Create the first user account
 [quay_layer_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_layer_info_module.rst) |  Gather information about image layers in Red Hat Quay
 [quay_manifest_label](https://github.com/herve4m/quay-collection/blob/main/docs/quay_manifest_label_module.rst) |  Manage Red Hat Quay image manifest labels
@@ -69,6 +70,7 @@ There are two ways to get an OAuth access token:
 * Use the Red Hat Quay web UI.
 * Use the `herve4m.quay.quay_first_user` Ansible module to create the first user account just after you installed Red Hat Quay.
   The module creates and then returns the OAuth access token for the user.
+  The token is valid for 2 hours and 30 minutes.
 
 
 ### Creating an OAuth Access Token by Using the Web UI

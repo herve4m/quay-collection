@@ -42,7 +42,7 @@ herve4m.quay.quay_repository_mirror -- Manage Red Hat Quay repository mirror con
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.10).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.11).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -370,11 +370,11 @@ Notes
 -----
 
 .. note::
-   - You must enable the mirroring capability of your Quay installation (\ :literal:`FEATURE\_REPO\_MIRROR`\  in \ :literal:`config.yaml`\ ) to use that module.
+   - Your Quay administrator must enable the mirroring capability of your Quay installation (\ :literal:`FEATURE\_REPO\_MIRROR`\  in \ :literal:`config.yaml`\ ) to use that module.
    - You cannot modify a repository mirroring configuration if a synchronization is in progress.
    - There is no API function to remove the configuration. However, you can deactivate mirroring by setting the \ :emphasis:`is\_enabled`\  parameter to \ :literal:`false`\  or by changing the repository mirror state (see the \ :emphasis:`repo\_state`\  parameter in the M(quay_repository) module). The configuration is preserved when you disable mirroring.
    - Supports \ :literal:`check\_mode`\ .
-   - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Administer Repositories" and "Create Repositories" permissions.
+   - The user account associated with the token that you provide in \ :emphasis:`quay\_token`\  must have administrator access to the repository.
 
 .. Seealso
 

@@ -112,8 +112,8 @@ options:
     type: bool
     default: false
 notes:
-  - You must enable the mirroring capability of your Quay installation
-    (C(FEATURE_REPO_MIRROR) in C(config.yaml)) to use that module.
+  - Your Quay administrator must enable the mirroring capability of your Quay
+    installation (C(FEATURE_REPO_MIRROR) in C(config.yaml)) to use that module.
   - You cannot modify a repository mirroring configuration if a synchronization
     is in progress.
   - There is no API function to remove the configuration. However, you can
@@ -122,8 +122,8 @@ notes:
     the M(quay_repository) module).
     The configuration is preserved when you disable mirroring.
   - Supports C(check_mode).
-  - The token that you provide in I(quay_token) must have the "Administer
-    Repositories" and "Create Repositories" permissions.
+  - The user account associated with the token that you provide in
+    I(quay_token) must have administrator access to the repository.
 extends_documentation_fragment:
   - herve4m.quay.auth
   - herve4m.quay.auth.token

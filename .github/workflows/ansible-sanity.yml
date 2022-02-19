@@ -19,7 +19,7 @@ jobs:
           python-version: '3.10'
 
       - name: Install required packages
-        run: pip install -Iv ansible-core ansible-test
+        run: pip install -Iv ansible
 
       - name: Run sanity tests
         run: ansible-test sanity --docker -v --color

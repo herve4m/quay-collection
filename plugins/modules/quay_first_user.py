@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2021, Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2021, 2022, Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # For accessing the API documentation from a running system, use the swagger-ui
@@ -48,7 +48,8 @@ options:
   email:
     description:
       - User's email address.
-      - If you have enabled the mailing capability of your Quay installation,
+      - If your Quay administrator has enabled the mailing capability of your
+        Quay installation (C(FEATURE_MAILING) to C(true) in C(config.yaml)),
         then this I(email) parameter is mandatory.
     type: str
   password:
@@ -62,7 +63,7 @@ options:
     description:
       - If C(yes), then an OAuth access token is created and returned. You can
         use that returned token with the other Quay modules, by setting it in
-        the I(quay_token) parameter.
+        the I(quay_token) parameter. The token is valid for 2 hours 30 minutes.
       - If C(no), then no access token is created.
     type: bool
     default: no
@@ -95,7 +96,9 @@ EXAMPLES = r"""
 
 RETURN = r"""
 access_token:
-  description: The access token that you can use for subsequent module calls.
+  description:
+    - The access token that you can use for subsequent module calls.
+    - The token is valid for 2 hours 30 minutes.
   returned: only when you set the I(create_token) parameter to C(yes)
   type: str
   sample: W2YX0V838JZ5FHHUH82Q25FZZMRX8YTB1MTN56P3

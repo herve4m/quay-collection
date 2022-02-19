@@ -1,0 +1,56 @@
+---
+- name: Ensure the ansibletesttoken1 does not exist (no change)
+  herve4m.quay.quay_docker_token:
+    name: ansibletesttoken1
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure the ansibletesttoken1 exists
+  herve4m.quay.quay_docker_token:
+    name: ansibletesttoken1
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure the ansibletesttoken1 exists (no change)
+  herve4m.quay.quay_docker_token:
+    name: ansibletesttoken1
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure that the token has the correct name
+  assert:
+    that: result['name'] == 'ansibletesttoken1'
+    fail_msg: The token should have the name ansibletesttoken1
+
+- name: Ensure that the returned data has the token_code key
+  assert:
+    that: "'token_code' in result"
+    fail_msg: The result should have the token_code key
+
+- name: Ensure the ansibletesttoken1 does not exist
+  herve4m.quay.quay_docker_token:
+    name: ansibletesttoken1
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+...

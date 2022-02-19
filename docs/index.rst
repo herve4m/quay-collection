@@ -5,7 +5,7 @@
 Herve4M.Quay
 ============
 
-Collection version 0.0.10
+Collection version 0.0.11
 
 .. toctree::
     :maxdepth: 1
@@ -22,6 +22,7 @@ Modules
 
 * :ref:`quay_application <ansible_collections.herve4m.quay.quay_application_module>` -- Manage Red Hat Quay applications
 * :ref:`quay_default_perm <ansible_collections.herve4m.quay.quay_default_perm_module>` -- Manage Red Hat Quay default repository permissions
+* :ref:`quay_docker_token <ansible_collections.herve4m.quay.quay_docker_token_module>` -- Manage tokens for accessing Red Hat Quay repositories
 * :ref:`quay_first_user <ansible_collections.herve4m.quay.quay_first_user_module>` -- Create the first user account
 * :ref:`quay_layer_info <ansible_collections.herve4m.quay.quay_layer_info_module>` -- Gather information about image layers in Red Hat Quay
 * :ref:`quay_manifest_label <ansible_collections.herve4m.quay.quay_manifest_label_module>` -- Manage Red Hat Quay image manifest labels
@@ -51,6 +52,7 @@ Modules
 
     quay_application_module
     quay_default_perm_module
+    quay_docker_token_module
     quay_first_user_module
     quay_layer_info_module
     quay_manifest_label_module

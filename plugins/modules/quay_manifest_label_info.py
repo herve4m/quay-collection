@@ -60,7 +60,7 @@ EXAMPLES = r"""
 
 - name: Retrieve the labels with a specific key
   herve4m.quay.quay_manifest_label_info:
-    image: ansibletestorg/smallimage@sha256:4f6f...e797
+    image: production/smallimage@sha256:4f6f...e797
     key: architecture
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7

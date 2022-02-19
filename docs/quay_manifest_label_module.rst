@@ -42,7 +42,7 @@ herve4m.quay.quay_manifest_label -- Manage Red Hat Quay image manifest labels
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.10).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.11).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -242,7 +242,7 @@ Notes
 .. note::
    - Labels defined in the Containerfile/Dockerfile cannot be deleted or updated. They are read-only.
    - Supports \ :literal:`check\_mode`\ .
-   - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Administer Repositories" permission.
+   - The user account associated with the token that you provide in \ :emphasis:`quay\_token`\  must have write access to the repository.
 
 .. Seealso
 
@@ -257,7 +257,7 @@ Examples
     
     - name: Ensure the manifest has the architecture label set
       herve4m.quay.quay_manifest_label:
-        image: ansibletestorg/ansibletestrepo:v1.0.0
+        image: production/smallimage:v1.0.0
         key: architecture
         value: x86_64
         state: present
@@ -266,7 +266,7 @@ Examples
 
     - name: Ensure the manifest has an additional architecture label set
       herve4m.quay.quay_manifest_label:
-        image: ansibletestorg/ansibletestrepo:v1.0.0
+        image: production/smallimage:v1.0.0
         key: architecture
         value: power
         replace: false
@@ -276,7 +276,7 @@ Examples
 
     - name: Ensure the manifest has a specific component label removed
       herve4m.quay.quay_manifest_label:
-        image: ansibletestorg/smallimage@sha256:4f6f...e797
+        image: production/smallimage@sha256:4f6f...e797
         key: component
         value: front
         state: absent
@@ -285,7 +285,7 @@ Examples
 
     - name: Remove all the labels that have a key set to scopes
       herve4m.quay.quay_manifest_label:
-        image: ansibletestorg/ansibletestrepo:v1.0.0
+        image: production/smallimage:v1.0.0
         key: scopes
         state: absent
         quay_host: https://quay.example.com

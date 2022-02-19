@@ -88,7 +88,7 @@ extends_documentation_fragment:
 EXAMPLES = r"""
 - name: Ensure the latest tag is associated with the image that has tag v1.0.0
   herve4m.quay.quay_tag:
-    image: ansibletestorg/ansibletestrepo:v1.0.0
+    image: production/smallimage:v1.0.0
     tag: latest
     state: present
     quay_host: https://quay.example.com
@@ -96,7 +96,7 @@ EXAMPLES = r"""
 
 - name: Ensure tag v0.0.2 is associated to the image with the specified digest
   herve4m.quay.quay_tag:
-    image: ansibletestorg/smallimage@sha256:4f6f...e797
+    image: production/smallimage@sha256:4f6f...e797
     tag: v0.0.2
     state: present
     quay_host: https://quay.example.com
@@ -104,7 +104,7 @@ EXAMPLES = r"""
 
 - name: Ensure tag v0.0.8 expires May 25, 2023 at 16:30
   herve4m.quay.quay_tag:
-    image: ansibletestorg/ansibletestrepo:v0.0.8
+    image: production/smallimage:v0.0.8
     expiration: 202305251630.00
     state: present
     quay_host: https://quay.example.com
@@ -112,7 +112,7 @@ EXAMPLES = r"""
 
 - name: Ensure tag v0.0.8 does not expire anymore
   herve4m.quay.quay_tag:
-    image: ansibletestorg/ansibletestrepo:v0.0.8
+    image: production/smallimage:v0.0.8
     expiration: ""
     state: present
     quay_host: https://quay.example.com
@@ -120,7 +120,7 @@ EXAMPLES = r"""
 
 - name: Ensure tag v0.0.1 does not exist
   herve4m.quay.quay_tag:
-    image: ansibletestorg/ansibletestrepo:v0.0.1
+    image: production/smallimage:v0.0.1
     state: absent
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7

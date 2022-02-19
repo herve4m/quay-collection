@@ -42,7 +42,7 @@ herve4m.quay.quay_first_user -- Create the first user account
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.10).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.11).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -102,7 +102,7 @@ Parameters
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>If <code class='docutils literal notranslate'>yes</code>, then an OAuth access token is created and returned. You can use that returned token with the other Quay modules, by setting it in the <em>quay_token</em> parameter.</p>
+      <p>If <code class='docutils literal notranslate'>yes</code>, then an OAuth access token is created and returned. You can use that returned token with the other Quay modules, by setting it in the <em>quay_token</em> parameter. The token is valid for 2 hours 30 minutes.</p>
       <p>If <code class='docutils literal notranslate'>no</code>, then no access token is created.</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
@@ -122,7 +122,7 @@ Parameters
     </div></td>
     <td><div class="ansible-option-cell">
       <p>User&#x27;s email address.</p>
-      <p>If you have enabled the mailing capability of your Quay installation, then this <em>email</em> parameter is mandatory.</p>
+      <p>If your Quay administrator has enabled the mailing capability of your Quay installation (<code class='docutils literal notranslate'>FEATURE_MAILING</code> to <code class='docutils literal notranslate'>true</code> in <code class='docutils literal notranslate'>config.yaml</code>), then this <em>email</em> parameter is mandatory.</p>
     </div></td>
   </tr>
   <tr class="row-even">
@@ -268,6 +268,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     </div></td>
     <td><div class="ansible-option-cell">
       <p>The access token that you can use for subsequent module calls.</p>
+      <p>The token is valid for 2 hours 30 minutes.</p>
       <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> only when you set the <em>create_token</em> parameter to <code class='docutils literal notranslate'>yes</code></p>
       <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "W2YX0V838JZ5FHHUH82Q25FZZMRX8YTB1MTN56P3"</p>
     </div></td>

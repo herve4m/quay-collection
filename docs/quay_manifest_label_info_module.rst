@@ -42,7 +42,7 @@ herve4m.quay.quay_manifest_label_info -- Gather information about manifest label
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.10).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.11).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -203,7 +203,7 @@ Examples
 
     - name: Retrieve the labels with a specific key
       herve4m.quay.quay_manifest_label_info:
-        image: ansibletestorg/smallimage@sha256:4f6f...e797
+        image: production/smallimage@sha256:4f6f...e797
         key: architecture
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7

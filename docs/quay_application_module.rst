@@ -42,7 +42,7 @@ herve4m.quay.quay_application -- Manage Red Hat Quay applications
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.10).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.11).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -274,7 +274,7 @@ Notes
 
 .. note::
    - Supports \ :literal:`check\_mode`\ .
-   - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Administer Organization" and "Administer User" permissions.
+   - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Administer Organization" permission.
 
 .. Seealso
 

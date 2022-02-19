@@ -5,6 +5,14 @@ Red Hat Quay Collection Release Notes
 .. contents:: Topics
 
 
+v0.0.11
+=======
+
+New Modules
+-----------
+
+- herve4m.quay.quay_docker_token - Manage tokens for accessing Red Hat Quay repositories
+
 v0.0.10
 =======
 

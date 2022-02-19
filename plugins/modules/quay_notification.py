@@ -65,7 +65,8 @@ options:
       - Notification method. Each method requires a specific set of options
         that you define by using the I(config) parameter.
       - The email notification method is only available on Quay installations
-        where the mailing capability has been activated.
+        where the mailing capability has been activated (C(FEATURE_MAILING) to
+        C(true) in C(config.yaml)).
     type: str
     choices:
       - email
@@ -186,8 +187,8 @@ options:
     choices: [absent, present]
 notes:
   - Supports C(check_mode).
-  - The token that you provide in I(quay_token) must have the "Administer
-    Repositories" and "Create Repositories" permissions.
+  - The user account associated with the token that you provide in
+    I(quay_token) must have administrator access to the repository.
 extends_documentation_fragment:
   - herve4m.quay.auth
   - herve4m.quay.auth.token

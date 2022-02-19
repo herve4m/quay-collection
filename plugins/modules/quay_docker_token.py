@@ -112,16 +112,25 @@ token_code:
   returned: always
   type: str
   sample: OVKFT8YJBTQYG4Z30YHDOPJBU4M2VPMCQJ5IYW4BAQGZD8T5V70JORLJBJHFYVVFQ89K7
-base64:
+auth_b64:
   description:
     - Base 64 encoding of the username and the token
       (C(I(username):I(token_code)))
     - Some client configuration files, such as the C(~/.docker/config.json)
       Docker configuration file, require that you provide the username and the
       token in that format.
+    - You can decode the string by using the C(base64 --decode) command. See
+      the C(base64)(1) man page.
   returned: always
   type: str
   sample: JGFw...NzBK
+dockerconfigjson_b64:
+  description:
+    - Base 64 encoding of the C(~/.docker/config.json) configuration file.
+    - The C(containers-auth.json)(5) man page describe the format of the file.
+  returned: always
+  type: str
+  sample: ewog...Cn0=
 created:
   description: Token creation date and time.
   returned: always
@@ -172,9 +181,20 @@ def exit_module(module, changed, data):
         # Add the "username" key (always $app)
         result["username"] = "$app"
         if "token_code" in result:
-            result["base64"] = to_text(
-                base64.b64encode(to_bytes("$app:{token}".format(token=result["token_code"])))
+            auth = "$app:{token}".format(token=result["token_code"])
+            result["auth_b64"] = to_text(base64.b64encode(to_bytes(auth)))
+            docker_conf = """{
+  "auths": {
+    "%s": {
+      "auth": "%s",
+      "email": ""
+    }
+  }
+}""" % (
+                module.host_url.netloc,
+                result["auth_b64"],
             )
+            result["dockerconfigjson_b64"] = to_text(base64.b64encode(to_bytes(docker_conf)))
     module.exit_json(**result)
 
 

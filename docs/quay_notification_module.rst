@@ -42,7 +42,7 @@ herve4m.quay.quay_notification -- Manage Red Hat Quay repository notifications
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.10).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.11).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -257,7 +257,7 @@ Parameters
     </div></td>
     <td><div class="ansible-option-cell">
       <p>Notification method. Each method requires a specific set of options that you define by using the <em>config</em> parameter.</p>
-      <p>The email notification method is only available on Quay installations where the mailing capability has been activated.</p>
+      <p>The email notification method is only available on Quay installations where the mailing capability has been activated (<code class='docutils literal notranslate'>FEATURE_MAILING</code> to <code class='docutils literal notranslate'>true</code> in <code class='docutils literal notranslate'>config.yaml</code>).</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
         <li><p><span class="ansible-option-choices-entry">email</span></p></li>
@@ -480,7 +480,7 @@ Notes
 
 .. note::
    - Supports \ :literal:`check\_mode`\ .
-   - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Administer Repositories" and "Create Repositories" permissions.
+   - The user account associated with the token that you provide in \ :emphasis:`quay\_token`\  must have administrator access to the repository.
 
 .. Seealso
 

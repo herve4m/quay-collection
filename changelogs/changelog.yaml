@@ -49,6 +49,12 @@ releases:
       name: quay_manifest_label_info
       namespace: ''
     release_date: '2022-01-27'
+  0.0.11:
+    modules:
+    - description: Manage tokens for accessing Red Hat Quay repositories
+      name: quay_docker_token
+      namespace: ''
+    release_date: '2022-02-19'
   0.0.2:
     changes:
       release_summary: Fix wrong project URLs

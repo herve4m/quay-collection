@@ -42,7 +42,7 @@ herve4m.quay.quay_team_ldap -- Synchronize Red Hat Quay teams with LDAP groups
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.10).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.11).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -240,7 +240,7 @@ Notes
 -----
 
 .. note::
-   - The module requires that you configure the Quay authentication method to LDAP (\ :literal:`AUTHENTICATION\_TYPE`\  to \ :literal:`LDAP`\  in \ :literal:`config.yaml`\  and the \ :literal:`LDAP\_\*`\  parameters correctly set).
+   - The module requires that your Quay administrator configures the Quay authentication method to LDAP (\ :literal:`AUTHENTICATION\_TYPE`\  to \ :literal:`LDAP`\  in \ :literal:`config.yaml`\  and the \ :literal:`LDAP\_\*`\  parameters correctly set).
    - Supports \ :literal:`check\_mode`\ .
    - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Administer Organization" and "Administer User" permissions.
 

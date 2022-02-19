@@ -48,6 +48,10 @@
         cmd: "podman push --tls-verify=false --remove-signatures
               {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
       changed_when: true
+      register: result
+      retries: 3
+      delay: 5
+      until: result["rc"] == 0
 
     - name: Ensure the images are removed
       command:

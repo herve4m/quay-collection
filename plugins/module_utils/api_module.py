@@ -148,8 +148,9 @@ class APIModule(AnsibleModule):
 
         :raises APIModuleError: The API request failed.
 
-        :return: A dictionnary with two entries: ``status_code`` provides the
-                 API call returned code and ``body`` provides the returned data.
+        :return: A dictionnary with three entries: ``status_code`` provides the
+                 API call returned code, ``body`` provides the returned data,
+                 and ``headers`` provides the returned headers (dictionary)
         :rtype: dict
         """
         if ok_error_codes is None:
@@ -161,10 +162,22 @@ class APIModule(AnsibleModule):
 
         # Extract the provided headers and data
         headers = kwargs.get("headers", {})
-        data = json.dumps(kwargs.get("data", {}))
+        data = kwargs.get("data")
+        if isinstance(data, dict):
+            data = json.dumps(data)
+        follow_redirects = kwargs.get("follow_redirects")
 
         try:
-            response = self.session.open(method, url.geturl(), headers=headers, data=data)
+            if follow_redirects is not None:
+                response = self.session.open(
+                    method,
+                    url.geturl(),
+                    headers=headers,
+                    data=data,
+                    follow_redirects=follow_redirects,
+                )
+            else:
+                response = self.session.open(method, url.geturl(), headers=headers, data=data)
         except SSLValidationError as ssl_err:
             raise APIModuleError(
                 "Could not establish a secure connection to {host}: {error}.".format(
@@ -236,6 +249,10 @@ class APIModule(AnsibleModule):
 
         try:
             response_body = response.read()
+            # Convert the list of tuples to a dictionnary
+            response_headers = {}
+            for r in response.getheaders():
+                response_headers[r[0]] = r[1]
         except Exception as e:
             raise APIModuleError(
                 "Cannot read response from the {method} request to {path}: {error}.".format(
@@ -243,7 +260,11 @@ class APIModule(AnsibleModule):
                 )
             )
 
-        return {"status_code": response.status, "body": response_body}
+        return {
+            "status_code": response.status,
+            "body": response_body,
+            "headers": response_headers,
+        }
 
     def make_json_request(self, method, url, ok_error_codes=None, **kwargs):
         """Perform an API call and return the retrieved JSON data.
@@ -260,9 +281,10 @@ class APIModule(AnsibleModule):
 
         :raises APIModuleError: The API request failed.
 
-        :return: A dictionnary with two entries: ``status_code`` provides the
-                 API call returned code and ``json`` provides the returned data
-                 in JSON format.
+        :return: A dictionnary with three entries: ``status_code`` provides the
+                 API call returned code, ``json`` provides the returned data
+                 in JSON format, and ``headers`` provides the returned headers
+                 (dictionary)
         :rtype: dict
         """
         response = self.make_raw_request(method, url, ok_error_codes, **kwargs)
@@ -279,7 +301,11 @@ class APIModule(AnsibleModule):
                     ).format(method=method, path=url.path, error=e)
                 )
 
-        return {"status_code": response["status_code"], "json": response_json}
+        return {
+            "status_code": response["status_code"],
+            "json": response_json,
+            "headers": response["headers"],
+        }
 
     def get_error_message(self, response):
         """Return the error message provided in the API response.

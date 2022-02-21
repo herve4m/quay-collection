@@ -168,7 +168,9 @@ def main():
         username=dict(required=True),
         password=dict(required=True, no_log=True),
         client_id=dict(required=True),
-        rights=dict(type="list", choices=allowed_rights, default=["repo:read"]),
+        rights=dict(
+            type="list", elements="str", choices=allowed_rights, default=["repo:read"]
+        ),
     )
 
     # Create a module for ourselves

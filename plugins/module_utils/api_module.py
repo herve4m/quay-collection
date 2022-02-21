@@ -133,7 +133,7 @@ class APIModule(AnsibleModule):
             url = url._replace(query=urlencode(query_params))
         return url
 
-    def make_request(self, method, url, ok_error_codes=None, **kwargs):
+    def make_raw_request(self, method, url, ok_error_codes=None, **kwargs):
         """Perform an API call and return the retrieved data.
 
         :param method: GET, PUT, POST, or DELETE
@@ -143,14 +143,14 @@ class APIModule(AnsibleModule):
         :param ok_error_codes: HTTP error codes that are acceptable (not errors)
                                when returned by the API. 404 by default.
         :type ok_error_codes: list
-        :param kwargs: Additionnal parameter to pass to the API (data
+        :param kwargs: Additionnal parameter to pass to the API (headers, data
                        for PUT and POST requests, ...)
 
         :raises APIModuleError: The API request failed.
 
-        :return: A dictionnary with two entries: ``status_code`` provides the
-                 API call returned code and ``json`` provides the returned data
-                 in JSON format.
+        :return: A dictionnary with three entries: ``status_code`` provides the
+                 API call returned code, ``body`` provides the returned data,
+                 and ``headers`` provides the returned headers (dictionary)
         :rtype: dict
         """
         if ok_error_codes is None:
@@ -160,11 +160,24 @@ class APIModule(AnsibleModule):
         if not method:
             raise Exception("The HTTP method must be provided.")
 
-        # Extract the provided data
-        data = json.dumps(kwargs.get("data", {}))
+        # Extract the provided headers and data
+        headers = kwargs.get("headers", {})
+        data = kwargs.get("data")
+        if isinstance(data, dict):
+            data = json.dumps(data)
+        follow_redirects = kwargs.get("follow_redirects")
 
         try:
-            response = self.session.open(method, url.geturl(), data=data)
+            if follow_redirects is not None:
+                response = self.session.open(
+                    method,
+                    url.geturl(),
+                    headers=headers,
+                    data=data,
+                    follow_redirects=follow_redirects,
+                )
+            else:
+                response = self.session.open(method, url.geturl(), headers=headers, data=data)
         except SSLValidationError as ssl_err:
             raise APIModuleError(
                 "Could not establish a secure connection to {host}: {error}.".format(
@@ -236,6 +249,10 @@ class APIModule(AnsibleModule):
 
         try:
             response_body = response.read()
+            # Convert the list of tuples to a dictionnary
+            response_headers = {}
+            for r in response.getheaders():
+                response_headers[r[0]] = r[1]
         except Exception as e:
             raise APIModuleError(
                 "Cannot read response from the {method} request to {path}: {error}.".format(
@@ -243,6 +260,35 @@ class APIModule(AnsibleModule):
                 )
             )
 
+        return {
+            "status_code": response.status,
+            "body": response_body,
+            "headers": response_headers,
+        }
+
+    def make_json_request(self, method, url, ok_error_codes=None, **kwargs):
+        """Perform an API call and return the retrieved JSON data.
+
+        :param method: GET, PUT, POST, or DELETE
+        :type method: str
+        :param url: URL to the API endpoint
+        :type url: :py:class:``urllib.parse.ParseResult``
+        :param ok_error_codes: HTTP error codes that are acceptable (not errors)
+                               when returned by the API. 404 by default.
+        :type ok_error_codes: list
+        :param kwargs: Additionnal parameter to pass to the API (data
+                       for PUT and POST requests, ...)
+
+        :raises APIModuleError: The API request failed.
+
+        :return: A dictionnary with three entries: ``status_code`` provides the
+                 API call returned code, ``json`` provides the returned data
+                 in JSON format, and ``headers`` provides the returned headers
+                 (dictionary)
+        :rtype: dict
+        """
+        response = self.make_raw_request(method, url, ok_error_codes, **kwargs)
+        response_body = response.get("body")
         response_json = {}
         if response_body:
             try:
@@ -255,7 +301,11 @@ class APIModule(AnsibleModule):
                     ).format(method=method, path=url.path, error=e)
                 )
 
-        return {"status_code": response.status, "json": response_json}
+        return {
+            "status_code": response["status_code"],
+            "json": response_json,
+            "headers": response["headers"],
+        }
 
     def get_error_message(self, response):
         """Return the error message provided in the API response.
@@ -345,7 +395,7 @@ class APIModule(AnsibleModule):
 
         url = self.build_url(endpoint, query_params=query_params)
         try:
-            response = self.make_request("GET", url, ok_error_codes=ok_error_codes)
+            response = self.make_json_request("GET", url, ok_error_codes=ok_error_codes)
         except APIModuleError as e:
             if exit_on_error:
                 self.fail_json(msg=str(e))
@@ -442,7 +492,7 @@ class APIModule(AnsibleModule):
 
         url = self.build_url(endpoint)
         try:
-            response = self.make_request("DELETE", url)
+            response = self.make_json_request("DELETE", url)
         except APIModuleError as e:
             if exit_on_error:
                 self.fail_json(msg=str(e))
@@ -537,7 +587,7 @@ class APIModule(AnsibleModule):
 
         url = self.build_url(endpoint)
         try:
-            response = self.make_request(
+            response = self.make_json_request(
                 "POST", url, ok_error_codes=ok_error_codes, data=new_item
             )
         except APIModuleError as e:
@@ -610,7 +660,7 @@ class APIModule(AnsibleModule):
 
         url = self.build_url(endpoint)
         try:
-            response = self.make_request("PUT", url, data=new_item)
+            response = self.make_json_request("PUT", url, data=new_item)
         except APIModuleError as e:
             if exit_on_error:
                 self.fail_json(msg=str(e))

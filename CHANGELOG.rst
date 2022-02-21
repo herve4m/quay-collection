@@ -5,6 +5,14 @@ Red Hat Quay Collection Release Notes
 .. contents:: Topics
 
 
+v0.0.12
+=======
+
+New Modules
+-----------
+
+- herve4m.quay.quay_api_token - Create OAuth access tokens for accessing the Red Hat Quay API
+
 v0.0.11
 =======
 

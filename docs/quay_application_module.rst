@@ -42,7 +42,7 @@ herve4m.quay.quay_application -- Manage Red Hat Quay applications
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.11).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.12).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -354,7 +354,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     </div></td>
     <td><div class="ansible-option-cell">
       <p>ID if the client associated with the application object.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> changed</p>
+      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
       <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "SUJVKUJN5WIP07CAIXAF"</p>
     </div></td>
   </tr>
@@ -369,7 +369,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     </div></td>
     <td><div class="ansible-option-cell">
       <p>Secret for the client associated with the application object.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> changed</p>
+      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
       <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "JBVXLG8XS7UCV1NFKDYPSNGJ4BUESU03GI5OXS2X"</p>
     </div></td>
   </tr>
@@ -384,7 +384,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     </div></td>
     <td><div class="ansible-option-cell">
       <p>Application name.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> changed</p>
+      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
       <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "apiaccess"</p>
     </div></td>
   </tr>

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2021, Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2021, 2022, Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # For accessing the API documentation from a running system, use the swagger-ui
@@ -122,17 +122,17 @@ EXAMPLES = r"""
 RETURN = r"""
 name:
   description: Application name.
-  returned: changed
+  returned: always
   type: str
   sample: apiaccess
 client_id:
   description: ID if the client associated with the application object.
-  returned: changed
+  returned: always
   type: str
   sample: SUJVKUJN5WIP07CAIXAF
 client_secret:
   description: Secret for the client associated with the application object.
-  returned: changed
+  returned: always
   type: str
   sample: JBVXLG8XS7UCV1NFKDYPSNGJ4BUESU03GI5OXS2X
  """

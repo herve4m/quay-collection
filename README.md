@@ -14,6 +14,7 @@ The modules have been tested against versions 3.5.6, 3.6.1, and 3.6.2 of Red Hat
 ### Modules
 Name | Description
 ---: | :---
+[quay_api_token](https://github.com/herve4m/quay-collection/blob/main/docs/quay_api_token_module.rst) |  Create OAuth access tokens for accessing the Red Hat Quay API
 [quay_application](https://github.com/herve4m/quay-collection/blob/main/docs/quay_application_module.rst) |  Manage Red Hat Quay applications
 [quay_default_perm](https://github.com/herve4m/quay-collection/blob/main/docs/quay_default_perm_module.rst) |  Manage Red Hat Quay default repository permissions
 [quay_docker_token](https://github.com/herve4m/quay-collection/blob/main/docs/quay_docker_token_module.rst) |  Manage tokens for accessing Red Hat Quay repositories
@@ -97,6 +98,8 @@ See the [Quay.io API](https://docs.quay.io/api/) documentation for more details.
 ### Getting an OAuth Access Token when Creating the First User
 
 Just after you installed Red Hat Quay, and before you do anything else, you can create the first user and generate an OAuth access token for that user.
+
+After that initial operation, you can create additional user accounts by using the `herve4m.quay.quay_user` module and generate OAuth access tokens for those additional accounts by using the `herve4m.quay.quay_api_token` module.
 
 The following playbook example uses the `herve4m.quay.quay_first_user` module to create the first user:
 

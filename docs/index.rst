@@ -5,7 +5,7 @@
 Herve4M.Quay
 ============
 
-Collection version 0.0.11
+Collection version 0.0.12
 
 .. toctree::
     :maxdepth: 1
@@ -20,6 +20,7 @@ These are the plugins in the herve4m.quay collection:
 Modules
 ~~~~~~~
 
+* :ref:`quay_api_token <ansible_collections.herve4m.quay.quay_api_token_module>` -- Create OAuth access tokens for accessing the Red Hat Quay API
 * :ref:`quay_application <ansible_collections.herve4m.quay.quay_application_module>` -- Manage Red Hat Quay applications
 * :ref:`quay_default_perm <ansible_collections.herve4m.quay.quay_default_perm_module>` -- Manage Red Hat Quay default repository permissions
 * :ref:`quay_docker_token <ansible_collections.herve4m.quay.quay_docker_token_module>` -- Manage tokens for accessing Red Hat Quay repositories
@@ -50,6 +51,7 @@ Modules
     :maxdepth: 1
     :hidden:
 
+    quay_api_token_module
     quay_application_module
     quay_default_perm_module
     quay_docker_token_module

@@ -55,6 +55,12 @@ releases:
       name: quay_docker_token
       namespace: ''
     release_date: '2022-02-19'
+  0.0.12:
+    modules:
+    - description: Create OAuth access tokens for accessing the Red Hat Quay API
+      name: quay_api_token
+      namespace: ''
+    release_date: '2022-02-21'
   0.0.2:
     changes:
       release_summary: Fix wrong project URLs

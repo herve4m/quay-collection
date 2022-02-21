@@ -26,7 +26,7 @@
 
 .. Anchors
 
-.. _ansible_collections.herve4m.quay.quay_robot_module:
+.. _ansible_collections.herve4m.quay.quay_api_token_module:
 
 .. Anchors: short name for ansible.builtin
 
@@ -36,8 +36,8 @@
 
 .. Title
 
-herve4m.quay.quay_robot -- Manage Red Hat Quay robot accounts
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+herve4m.quay.quay_api_token -- Create OAuth access tokens for accessing the Red Hat Quay API
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. Collection note
 
@@ -50,11 +50,11 @@ herve4m.quay.quay_robot -- Manage Red Hat Quay robot accounts
 
     To install it, use: :code:`ansible-galaxy collection install herve4m.quay`.
 
-    To use it in a playbook, specify: :code:`herve4m.quay.quay_robot`.
+    To use it in a playbook, specify: :code:`herve4m.quay.quay_api_token`.
 
 .. version_added
 
-.. versionadded:: 0.0.1 of herve4m.quay
+.. versionadded:: 0.0.12 of herve4m.quay
 
 .. contents::
    :local:
@@ -68,7 +68,7 @@ Synopsis
 
 .. Description
 
-- Create and delete robot accounts.
+- Create OAuth access tokens for authenticating with the API.
 
 
 .. Aliases
@@ -94,32 +94,31 @@ Parameters
   <tbody>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-description"></div>
-      <p class="ansible-option-title"><strong>description</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-description" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
-      </p>
-    </div></td>
-    <td><div class="ansible-option-cell">
-      <p>Description of the robot account. You cannot update the description of existing robot accounts.</p>
-    </div></td>
-  </tr>
-  <tr class="row-odd">
-    <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-name"></div>
-      <p class="ansible-option-title"><strong>name</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
+      <div class="ansibleOptionAnchor" id="parameter-client_id"></div>
+      <p class="ansible-option-title"><strong>client_id</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-client_id" title="Permalink to this option"></a>
       <p class="ansible-option-type-line">
         <span class="ansible-option-type">string</span>
         / <span class="ansible-option-required">required</span>
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Name of the robot account to create or remove, in the format <code class='docutils literal notranslate'>namespace</code>+<code class='docutils literal notranslate'>shortname</code>. The namespace can be an organization or a personal namespace.</p>
-      <p>The short name (the part after the <code class='docutils literal notranslate'>+</code> sign) must be in lowercase, must not contain white spaces, must not start by a digit, and must be at least two characters long.</p>
-      <p>If you omit the namespace part in the name, then the module uses your personal namespace.</p>
-      <p>You can create and delete robot accounts in your personal namespace, but not in the personal namespace of other users. The token you use in <em>quay_token</em> determines the user account you are using.</p>
+      <p>The client ID associated with the OAuth application to use for generating the OAuth access token.</p>
+      <p>See the M(quay_application) module to create an application object and to retrieve the associated client ID.</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-password"></div>
+      <p class="ansible-option-title"><strong>password</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+        / <span class="ansible-option-required">required</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>The password to use for authentication against the API.</p>
     </div></td>
   </tr>
   <tr class="row-even">
@@ -140,36 +139,43 @@ Parameters
   </tr>
   <tr class="row-odd">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
-      <p class="ansible-option-title"><strong>quay_token</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-quay_token" title="Permalink to this option"></a>
+      <div class="ansibleOptionAnchor" id="parameter-rights"></div>
+      <p class="ansible-option-title"><strong>rights</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-rights" title="Permalink to this option"></a>
       <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
+        <span class="ansible-option-type">list</span>
+        / <span class="ansible-option-elements">elements=string</span>
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>OAuth access token for authenticating with the API.</p>
-      <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_TOKEN</code> environment variable.</p>
+      <p>List of permissions to grant to the user account. <code class='docutils literal notranslate'>all</code> means all the permissions.</p>
+      <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+      <ul class="simple">
+        <li><p><span class="ansible-option-choices-entry">org:admin</span></p></li>
+        <li><p><span class="ansible-option-choices-entry">repo:admin</span></p></li>
+        <li><p><span class="ansible-option-choices-entry">repo:create</span></p></li>
+        <li><p><span class="ansible-option-default-bold">repo:read</span> <span class="ansible-option-default">← (default)</span></p></li>
+        <li><p><span class="ansible-option-choices-entry">repo:write</span></p></li>
+        <li><p><span class="ansible-option-choices-entry">super:user</span></p></li>
+        <li><p><span class="ansible-option-choices-entry">user:admin</span></p></li>
+        <li><p><span class="ansible-option-choices-entry">user:read</span></p></li>
+        <li><p><span class="ansible-option-choices-entry">all</span></p></li>
+      </ul>
     </div></td>
   </tr>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-state"></div>
-      <p class="ansible-option-title"><strong>state</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
+      <div class="ansibleOptionAnchor" id="parameter-username"></div>
+      <p class="ansible-option-title"><strong>username</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a>
       <p class="ansible-option-type-line">
         <span class="ansible-option-type">string</span>
+        / <span class="ansible-option-required">required</span>
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>If <code class='docutils literal notranslate'>absent</code>, then the module deletes the robot account.</p>
-      <p>The module does not fail if the account does not exist because the state is already as expected.</p>
-      <p>If <code class='docutils literal notranslate'>present</code>, then the module creates the robot account if it does not already exist.</p>
-      <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
-      <ul class="simple">
-        <li><p><span class="ansible-option-choices-entry">absent</span></p></li>
-        <li><p><span class="ansible-option-default-bold">present</span> <span class="ansible-option-default">← (default)</span></p></li>
-      </ul>
+      <p>The username to use for authentication against the API.</p>
+      <p>The OAuth access token that the module generates acts on behalf of that user account.</p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -209,7 +215,8 @@ Notes
 
 .. note::
    - Supports \ :literal:`check\_mode`\ .
-   - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Administer Organization" and "Administer User" permissions.
+   - The module is not idempotent. Every time you run it, an additional OAuth access token is produced. The other OAuth access tokens stay valid.
+   - You cannot delete OAuth access tokens.
 
 .. Seealso
 
@@ -222,31 +229,66 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Ensure the robot account production+robotprod1 exists
-      herve4m.quay.quay_robot:
-        name: production+robotprod1
-        description: Robot account for production
+    - name: Generate an OAuth access token
+      herve4m.quay.quay_api_token:
+        username: lvasquez
+        password: vs9mrD55NP
+        # The OAuth application must exist. See the following example that shows
+        # how to create an organization and an application.
+        client_id: PZ6F80R1LCVPGYNZGSZQ
+        rights:
+          - org:admin
+          - user:admin
+        quay_host: https://quay.example.com
+      register: token_details
+
+    - name: Display the new OAuth access token
+      debug:
+        msg: "The OAuth access token is: {{ token_details['access_token'] }}"
+
+    # The following example creates an organization, an OAuth application, a user
+    # account, and then generates an OAuth access token for that user account.
+    # The OAuth access token of an existing super user is required to create the
+    # organization, the application, and the user account.
+    - name: Ensure the organization exists
+      herve4m.quay.quay_organization:
+        name: production
+        email: prodlist@example.com
         state: present
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
-      register: robot_details
 
-    - debug:
-        msg: "Robot token: {{ robot_details['token'] }}"
+    - name: Ensure the application extapp exists
+      herve4m.quay.quay_application:
+        organization: production
+        name: extapp
+        state: present
+        quay_host: https://quay.example.com
+        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+      register: app_details
 
-    - name: Ensure the robot account myrobot exists in my namespace
-      herve4m.quay.quay_robot:
-        name: myrobot
+    - name: Ensure the user exists
+      herve4m.quay.quay_user:
+        username: jziglar
+        password: i45fR38GhY
+        email: jziglar@example.com
         state: present
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-    - name: Ensure the robot account production+robotdev1 does not exists
-      herve4m.quay.quay_robot:
-        name: production+robotdev1
-        state: absent
+    - name: Generate an OAuth access token for the user
+      herve4m.quay.quay_api_token:
+        username: jziglar
+        password: i45fR38GhY
+        client_id: "{{ app_details['client_id'] }}"
+        rights:
+          - all
         quay_host: https://quay.example.com
-        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+      register: token_details
+
+    - name: Display the new OAuth access token
+      debug:
+        msg: "The OAuth access token is: {{ token_details['access_token'] }}"
 
 
 
@@ -272,32 +314,17 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
   <tbody>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="return-name"></div>
-      <p class="ansible-option-title"><strong>name</strong></p>
-      <a class="ansibleOptionLink" href="#return-name" title="Permalink to this return value"></a>
+      <div class="ansibleOptionAnchor" id="return-access_token"></div>
+      <p class="ansible-option-title"><strong>access_token</strong></p>
+      <a class="ansibleOptionLink" href="#return-access_token" title="Permalink to this return value"></a>
       <p class="ansible-option-type-line">
         <span class="ansible-option-type">string</span>
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Token name.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> changed</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "production+robotprod1"</p>
-    </div></td>
-  </tr>
-  <tr class="row-odd">
-    <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="return-token"></div>
-      <p class="ansible-option-title"><strong>token</strong></p>
-      <a class="ansibleOptionLink" href="#return-token" title="Permalink to this return value"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
-      </p>
-    </div></td>
-    <td><div class="ansible-option-cell">
-      <p>Robot credential (token).</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> changed</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "IWG3K5EW92KZLPP42PMOKM5CJ2DEAQMSCU33A35NR7MNL21004NKVP3BECOWSQP2"</p>
+      <p>The OAuth access token.</p>
+      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
+      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "CywbRGkh1ttYkRRy9VL0Aw0yU9q7J62vIeo7WCFw"</p>
     </div></td>
   </tr>
   </tbody>

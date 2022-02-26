@@ -35,6 +35,11 @@ Name | Description
 [quay_user](https://github.com/herve4m/quay-collection/blob/main/docs/quay_user_module.rst) |  Manage Red Hat Quay users
 [quay_vulnerability_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_vulnerability_info_module.rst) | Gather information about image vulnerabilities in Red Hat Quay
 
+### Roles
+Name | Description
+---: | :---
+[quay_org](https://github.com/herve4m/quay-collection/blob/main/roles/quay_org/README.md) ([variables](https://github.com/herve4m/quay-collection/blob/main/docs/quay_org_role.rst)) | Create and configure a Red Hat Quay organization | [quay_org](https://github.com/herve4m/quay-collection/blob/main/docs/quay_org_role.rst)
+
 
 ## Installing the Collection
 

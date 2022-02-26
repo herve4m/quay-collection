@@ -1,0 +1,15 @@
+---
+- name: Ensure the applications exist
+  herve4m.quay.quay_application:
+    organization: "{{ quay_org_name }}"
+    name: "{{ item['name'] }}"
+    description: "{{ item['description'] | default(omit) }}"
+    application_uri: "{{ item['application_uri'] | default(omit) }}"
+    redirect_uri: "{{ item['redirect_uri'] | default(omit) }}"
+    avatar_email: "{{ item['avatar_email'] | default(omit) }}"
+    state: present
+    quay_token: "{{ quay_token | default(omit) }}"
+    quay_host: "{{ quay_host | default(omit) }}"
+    validate_certs: "{{ quay_validate_certs | default(omit) }}"
+  loop: "{{ quay_org_applications }}"
+...

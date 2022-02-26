@@ -1,0 +1,45 @@
+---
+# quay_host: https://quay.example.com
+# quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+# quay_validate_certs: false
+# quay_org_name: production
+# quay_org_email: production@example.com
+# quay_org_users:
+#   - username: lvasquez
+#     email: lvasquez@example.com
+#     password: vs9mrD55NP
+#   - username: dwilde
+#     email: dwilde@example.com
+# quay_org_robots:
+#   - name: robotprod
+#     description: Robot account for production
+# quay_org_teams:
+#   - name: qa
+#     role: member
+#     members:
+#       - lvasquez
+#   - name: ops
+#     description: Operators
+#     role: creator
+#     members:
+#       - dwilde
+#       - production+robotprod
+# quay_org_default_perms:
+#   - name: ops
+#     type: team
+#     role: write
+#   - name: lvasquez
+#     type: user
+#     role: read
+#     creator: dwilde
+# quay_org_applications:
+#   - name: oauth_app
+#     description: Application for producing OAuth access tokens
+# quay_org_repositories:
+#   - name: small_image
+#     description: Small GNU/Linux image
+#     visibility: public
+#     perms:
+#       - name: qa
+#         type: team
+#         role: read

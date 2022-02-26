@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2021, Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2021, 2022 Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # For accessing the API documentation from a running system, use the swagger-ui
@@ -45,6 +45,8 @@ options:
       - If C(public), then anyone can pull images from the repository.
       - If C(private), then nobody can access the repository and you need to
         explicitly grant access to users, robots, and teams.
+      - If you do not set the parameter when you create a repository, then
+        it defaults to C(private).
     type: str
     choices: [public, private]
   description:

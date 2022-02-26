@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2021, Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2021, 2022 Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # For accessing the API documentation from a running system, use the swagger-ui
@@ -44,7 +44,8 @@ options:
     type: str
   role:
     description:
-      - Role of the team within the organization.
+      - Role of the team within the organization. If not set, then the new team
+        has the C(member) role.
     type: str
     choices: [member, creator, admin]
   description:

@@ -1,0 +1,22 @@
+---
+- name: Ensure the user accounts exist
+  import_tasks: users.yml
+
+- name: Ensure the organization exists
+  import_tasks: organization.yml
+
+- name: Ensure the robot accounts exist
+  import_tasks: robots.yml
+
+- name: Ensure the teams exist
+  import_tasks: teams.yml
+
+- name: Ensure the default permissions exist
+  import_tasks: default_perms.yml
+
+- name: Ensure the applications exist
+  import_tasks: applications.yml
+
+- name: Ensure the repositories exist
+  import_tasks: repositories.yml
+...

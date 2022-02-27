@@ -1,0 +1,16 @@
+---
+- name: Ensure the default permissions exist
+  herve4m.quay.quay_default_perm:
+    organization: "{{ quay_org_name }}"
+    name: "{{ quay_org_name + '+' + item['name']
+              if '+' not in item['name'] and item['type'] == 'robot'
+              else item['name'] }}"
+    type: "{{ item['type'] if item['type'] != 'robot' else 'user' }}"
+    role: "{{ item['role'] | default(omit) }}"
+    creator: "{{ item['creator'] | default(omit) }}"
+    state: present
+    quay_token: "{{ quay_token | default(omit) }}"
+    quay_host: "{{ quay_host | default(omit) }}"
+    validate_certs: "{{ quay_validate_certs | default(omit) }}"
+  loop: "{{ quay_org_default_perms }}"
+...

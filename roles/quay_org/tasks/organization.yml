@@ -1,0 +1,10 @@
+---
+- name: Ensure the organization exists
+  herve4m.quay.quay_organization:
+    name: "{{ quay_org_name }}"
+    email: "{{ quay_org_email | default(omit) }}"
+    state: present
+    quay_token: "{{ quay_token | default(omit) }}"
+    quay_host: "{{ quay_host | default(omit) }}"
+    validate_certs: "{{ quay_validate_certs | default(omit) }}"
+...

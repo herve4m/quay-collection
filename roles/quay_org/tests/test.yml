@@ -1,0 +1,51 @@
+---
+- name: Testing the quay_org role
+  hosts: localhost
+  become: false
+  gather_facts: false
+
+  tasks:
+    - name: Ensure the organization exists
+      include_role:
+        name: herve4m.quay.quay_org
+      vars:
+        quay_host: https://quay.example.com
+        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+        quay_org_name: production
+        quay_org_email: production@example.com
+        quay_org_users:
+          - username: lvasquez
+            email: lvasquez@example.com
+            password: vs9mrD55NP
+          - username: dwilde
+            email: dwilde@example.com
+        quay_org_robots:
+          - name: robotprod
+        quay_org_teams:
+          - name: qa
+            role: member
+            members:
+              - lvasquez
+          - name: ops
+            description: Operators
+            role: creator
+            members:
+              - dwilde
+              - production+robotprod
+        quay_org_default_perms:
+          - name: ops
+            type: team
+            role: write
+          - name: lvasquez
+            type: user
+            role: read
+        quay_org_applications:
+          - name: oauth_app
+        quay_org_repositories:
+          - name: small_image
+            visibility: public
+            perms:
+              - name: qa
+                type: team
+                role: read
+...

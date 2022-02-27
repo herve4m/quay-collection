@@ -5,7 +5,7 @@
 Herve4M.Quay
 ============
 
-Collection version 0.0.12
+Collection version 0.0.13
 
 .. toctree::
     :maxdepth: 1
@@ -42,6 +42,13 @@ Modules
 * :ref:`quay_vulnerability_info <ansible_collections.herve4m.quay.quay_vulnerability_info_module>` -- Gather information about image vulnerabilities in Red Hat Quay
 
 
+Role Index
+----------
+
+These are the roles in the herve4m.quay collection:
+
+* :ref:`quay_org <ansible_collections.herve4m.quay.quay_org_role>` -- Create and configure a Red Hat Quay organization
+
 
 .. seealso::
 
@@ -71,3 +78,4 @@ Modules
     quay_team_ldap_module
     quay_user_module
     quay_vulnerability_info_module
+    quay_org_role

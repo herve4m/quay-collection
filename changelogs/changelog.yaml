@@ -61,6 +61,16 @@ releases:
       name: quay_api_token
       namespace: ''
     release_date: '2022-02-21'
+  0.0.13:
+    changes: {}
+    fragments:
+    - v0.0.13_summary.yml
+    objects:
+      role:
+      - description: Create and configure a Red Hat Quay organization
+        name: quay_org
+        namespace: null
+    release_date: '2022-02-27'
   0.0.2:
     changes:
       release_summary: Fix wrong project URLs

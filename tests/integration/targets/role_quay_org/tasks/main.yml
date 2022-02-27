@@ -1,0 +1,121 @@
+---
+- name: Ensure the organization exists
+  include_role:
+    name: herve4m.quay.quay_org
+  vars:
+    quay_host: "{{ quay_url }}"
+    #quay_token: "{{ quay_token }}"
+    quay_validate_certs: false
+    quay_org_name: ansibletestorg
+    quay_org_email: ansibletestorg@example.com
+    quay_org_users:
+      - username: ansibletestuser1
+        email: ansibletestuser1@example.com
+        password: vs9mrD55NP
+      - username: ansibletestuser2
+        email: ansibletestuser2@example.com
+      - username: ansibletestuser3
+        email: ansibletestuser3@example.com
+    quay_org_robots:
+      - name: ansibletestrobot1
+        description: Test robot 1
+    quay_org_teams:
+      - name: ansibletestteam1
+        description: Test team 1
+        role: member
+        members:
+          - ansibletestuser1
+      - name: ansibletestteam2
+        role: creator
+        members:
+          - ansibletestuser2
+          - ansibletestorg+ansibletestrobot1
+    quay_org_default_perms:
+      - name: ansibletestteam2
+        type: team
+        role: write
+      - name: ansibletestuser1
+        type: user
+        role: read
+        creator: ansibletestuser3
+    quay_org_applications:
+      - name: ansibletestapp1
+        description: Test application 1
+      - name: ansibletestapp2
+        application_uri: http://test.example.com
+        redirect_uri: http://test.example.com
+        avatar_email: http://test.example.com
+    quay_org_repositories:
+      - name: ansibletestrepo1
+        description: Test repository 1
+        visibility: public
+        perms:
+          - name: ansibletestteam1
+            type: team
+            role: read
+      - name: ansibletestrepo2
+
+# Cleanup
+- name: Ensure repositories are removed
+  herve4m.quay.quay_repository:
+    name: "ansibletestorg/{{ item }}"
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  loop:
+    - ansibletestrepo1
+    - ansibletestrepo2
+
+- name: Ensure the applications are removed
+  herve4m.quay.quay_application:
+    organization: ansibletestorg
+    name: "{{ item }}"
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  loop:
+    - ansibletestapp1
+    - ansibletestapp2
+
+- name: Ensure the teams are removed
+  herve4m.quay.quay_team:
+    name: "{{ item }}"
+    organization: ansibletestorg
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  loop:
+    - ansibletestteam1
+    - ansibletestteam2
+
+- name: Ensure the robot accounts are removed
+  herve4m.quay.quay_robot:
+    name: ansibletestorg+ansibletestrobot1
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure user accounts are removed
+  herve4m.quay.quay_user:
+    username: "{{ item }}"
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  loop:
+    - ansibletestuser1
+    - ansibletestuser2
+    - ansibletestuser3
+
+- name: Ensure the organization is removed
+  herve4m.quay.quay_organization:
+    name: ansibletestorg
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+...

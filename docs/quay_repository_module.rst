@@ -42,7 +42,7 @@ herve4m.quay.quay_repository -- Manage Red Hat Quay repositories
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.12).
+    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.13).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -332,6 +332,7 @@ Parameters
     <td><div class="ansible-option-cell">
       <p>If <code class='docutils literal notranslate'>public</code>, then anyone can pull images from the repository.</p>
       <p>If <code class='docutils literal notranslate'>private</code>, then nobody can access the repository and you need to explicitly grant access to users, robots, and teams.</p>
+      <p>If you do not set the parameter when you create a repository, then it defaults to <code class='docutils literal notranslate'>private</code>.</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
         <li><p><span class="ansible-option-choices-entry">public</span></p></li>

@@ -5,6 +5,14 @@ Red Hat Quay Collection Release Notes
 .. contents:: Topics
 
 
+v0.0.13
+=======
+
+New Roles
+---------
+
+- herve4m.quay.quay_org - Create and configure a Red Hat Quay organization
+
 v0.0.12
 =======
 

@@ -10,8 +10,7 @@ services:
       POSTGRESQL_ADMIN_PASSWORD: adminpass
       PGPASSWORD: adminpass
     volumes:
-      - "./postgresql-extension.sh:/opt/app-root/src/postgresql-start/postgresq\
-        l-extension.sh:ro"
+      - "./postgresql-extension.sh:/opt/app-root/src/postgresql-start/postgresql-extension.sh:ro"
 
   redis:
     image: quay.io/centos7/redis-5-centos7
@@ -27,7 +26,7 @@ services:
       - "8089:8080"
 
   quay:
-    image: quay.io/projectquay/quay:v3.6.2
+    image: quay.io/projectquay/quay:v3.7.0
     volumes:
       - "./quay-config:/conf/stack:Z"
       - "./quay-delay.sh:/quay-registry/conf/init/a-delay.sh:ro"

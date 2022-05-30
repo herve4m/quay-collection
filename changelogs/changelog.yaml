@@ -62,7 +62,6 @@ releases:
       namespace: ''
     release_date: '2022-02-21'
   0.0.13:
-    changes: {}
     fragments:
     - v0.0.13_summary.yml
     objects:
@@ -71,6 +70,12 @@ releases:
         name: quay_org
         namespace: null
     release_date: '2022-02-27'
+  0.0.14:
+    changes:
+      release_summary: Collection tested against Red Hat Quay v3.7.0
+    fragments:
+    - v0.0.14_summary.yml
+    release_date: '2022-05-30'
   0.0.2:
     changes:
       release_summary: Fix wrong project URLs

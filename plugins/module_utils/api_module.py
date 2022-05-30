@@ -1126,8 +1126,6 @@ class APIModule(AnsibleModule):
                             "manifest_digest": "sha256:f948...95fe",
                             "is_manifest_list": False,
                             "size": 784606,
-                            "docker_image_id": "d25a...6d25",
-                            "image_id": "d25a...6d25",
                             "last_modified": "Thu, 30 Sep 2021 06:10:24 -0000"
                         },
                         {
@@ -1137,8 +1135,6 @@ class APIModule(AnsibleModule):
                             "manifest_digest": "sha256:9ce9...f3c7",
                             "is_manifest_list": False,
                             "size": 784538,
-                            "docker_image_id": "be3e...29d4",
-                            "image_id": "be3e...29d4",
                             "last_modified": "Thu, 30 Sep 2021 06:10:22 -0000"
                         },
                         {
@@ -1149,8 +1145,6 @@ class APIModule(AnsibleModule):
                             "manifest_digest": "sha256:a8f2...5ea7",
                             "is_manifest_list": False,
                             "size": 802700,
-                            "docker_image_id": "bda4...29b2",
-                            "image_id": "bda4...29b2",
                             "last_modified": "Thu, 30 Sep 2021 06:10:21 -0000",
                             "expiration": "Fri, 24 Dec 2021 08:54:00 -0000"
                         }
@@ -1160,58 +1154,55 @@ class APIModule(AnsibleModule):
         #
         # GET /api/v1/repository/{namespace}/{repository}/tag/?specificTag={tag}
         # {
-        #   "tags": [
+        # "tags": [
         #     {
-        #       "name": "1.33.0",
-        #       "reversion": false,
-        #       "start_ts": 1632982224,
-        #       "manifest_digest": "sha256:f948...95fe",
-        #       "is_manifest_list": false,
-        #       "size": 784606,
-        #       "docker_image_id": "d25a...6d25",
-        #       "image_id": "d25a...6d25",
-        #       "last_modified": "Thu, 30 Sep 2021 06:10:24 -0000"
+        #     "name": "v0.5.0",
+        #     "reversion": false,
+        #     "start_ts": 1510871118,
+        #     "manifest_digest": "sha256:9107...5377",
+        #     "is_manifest_list": false,
+        #     "size": 0,
+        #     "last_modified": "Thu, 16 Nov 2017 22:25:18 -0000"
         #     },
         #     {
-        #       "name": "latest",
-        #       "reversion": false,
-        #       "start_ts": 1632982222,
-        #       "manifest_digest": "sha256:9ce9...f3c7",
-        #       "is_manifest_list": false,
-        #       "size": 784538,
-        #       "docker_image_id": "be3e...29d4",
-        #       "image_id": "be3e...29d4",
-        #       "last_modified": "Thu, 30 Sep 2021 06:10:22 -0000"
+        #     "name": "latest",
+        #     "reversion": false,
+        #     "start_ts": 1510871113,
+        #     "manifest_digest": "sha256:53b2...a7c8",
+        #     "is_manifest_list": false,
+        #     "size": 0,
+        #     "last_modified": "Thu, 16 Nov 2017 22:25:13 -0000"
         #     },
         #     {
-        #       "name": "1.34.0",
-        #       "reversion": false,
-        #       "start_ts": 1632982221,
-        #       "end_ts": 1640336040,
-        #       "manifest_digest": "sha256:a8f2...5ea7",
-        #       "is_manifest_list": false,
-        #       "size": 802700,
-        #       "docker_image_id": "bda4...29b2",
-        #       "image_id": "bda4...29b2",
-        #       "last_modified": "Thu, 30 Sep 2021 06:10:21 -0000",
-        #       "expiration": "Fri, 24 Dec 2021 08:54:00 -0000"
+        #     "name": "v0.4.1",
+        #     "reversion": false,
+        #     "start_ts": 1501630807,
+        #     "manifest_digest": "sha256:06f2...bee4",
+        #     "is_manifest_list": false,
+        #     "size": 0,
+        #     "last_modified": "Tue, 01 Aug 2017 23:40:07 -0000"
         #     },
         #     {
-        #       "name": "latest",
-        #       "reversion": false,
-        #       "start_ts": 1632921128,
-        #       "end_ts": 1632982222,
-        #       "manifest_digest": "sha256:9ce9...f3c7",
-        #       "is_manifest_list": false,
-        #       "size": 784538,
-        #       "docker_image_id": "be3e...29d4",
-        #       "image_id": "be3e...29d4",
-        #       "last_modified": "Wed, 29 Sep 2021 13:12:08 -0000",
-        #       "expiration": "Thu, 30 Sep 2021 06:10:22 -0000"
+        #     "name": "v0.4.0",
+        #     "reversion": false,
+        #     "start_ts": 1492586027,
+        #     "manifest_digest": "sha256:4472...6ecb",
+        #     "is_manifest_list": false,
+        #     "size": 0,
+        #     "last_modified": "Wed, 19 Apr 2017 07:13:47 -0000"
+        #     },
+        #     {
+        #     "name": "v0.3.0",
+        #     "reversion": false,
+        #     "start_ts": 1471626798,
+        #     "manifest_digest": "sha256:0b92...1747",
+        #     "is_manifest_list": false,
+        #     "size": 8584000,
+        #     "last_modified": "Fri, 19 Aug 2016 17:13:18 -0000"
         #     }
-        #   ],
-        #   "page": 1,
-        #   "has_additional": false
+        # ],
+        # "page": 1,
+        # "has_additional": false
         # }
         query_params = {"onlyActiveTags": only_active_tags, "limit": 100}
         if tag:

@@ -426,9 +426,12 @@ class APIModule(AnsibleModule):
         # Duplicate all attributes that have underscores (`_') in their name
         # with the same name but without the underscores. Some PUT data use
         # the attribute names without underscores.
-        for k in response["json"].copy().keys():
-            if "_" in k:
-                response["json"][k.replace("_", "")] = response["json"][k]
+        try:
+            for k in response["json"].copy().keys():
+                if "_" in k:
+                    response["json"][k.replace("_", "")] = response["json"][k]
+        except AttributeError:
+            pass
         return response["json"]
 
     def delete(
@@ -760,11 +763,11 @@ class APIModule(AnsibleModule):
                               error. Otherwise, raise the
                               :py:class:``APIModuleError`` exception.
         :type exit_on_error: bool
-        :param kwargs: Dictionnary used to substitute parameters in the given
+        :param kwargs: Dictionary used to substitute parameters in the given
                        ``endpoint`` string. For example ``{"username":"jdoe"}``
         :type kwargs: dict
 
-        :raises APIModuleError: An API error occured. That exception is only
+        :raises APIModuleError: An API error occurred. That exception is only
                                 raised when ``exit_on_error`` is ``False``.
 
         :return: A tuple. The first item is ``True`` if something has changed

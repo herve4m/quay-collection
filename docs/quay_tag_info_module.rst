@@ -36,13 +36,13 @@
 
 .. Title
 
-herve4m.quay.quay_tag_info -- Gather information about tags in a Red Hat Quay repository
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+herve4m.quay.quay_tag_info module -- Gather information about tags in a Red Hat Quay repository
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.13).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.14).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -77,10 +77,15 @@ Synopsis
 .. Requirements
 
 
+
+
+
+
 .. Options
 
 Parameters
 ----------
+
 
 .. raw:: html
 
@@ -190,7 +195,7 @@ Parameters
       <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div>
       <p class="ansible-option-title"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: verify_ssl</p>
+      <p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: verify_ssl</span></p>
       <p class="ansible-option-type-line">
         <span class="ansible-option-type">boolean</span>
       </p>
@@ -288,7 +293,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     <td><div class="ansible-option-cell">
       <p>List of the tags in the repository.</p>
       <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [{"docker_image_id": "be3e...29d4", "image_id": "be3e...29d4", "is_manifest_list": false, "last_modified": "Thu, 30 Sep 2021 06:10:23 -0000", "manifest_digest": "sha256:9ce9...f3c7", "name": "1.33.1", "reversion": false, "size": 784538, "start_ts": 1632982223}, {"docker_image_id": "be3e...29d4", "image_id": "be3e...29d4", "is_manifest_list": false, "last_modified": "Thu, 30 Sep 2021 06:10:22 -0000", "manifest_digest": "sha256:9ce9...f3c7", "name": "latest", "reversion": false, "size": 784538, "start_ts": 1632982222}, {"docker_image_id": "bda4...29b2", "end_ts": 1640336040, "expiration": "Fri, 24 Dec 2021 08:54:00 -0000", "image_id": "bda4...29b2", "is_manifest_list": false, "last_modified": "Thu, 30 Sep 2021 06:10:21 -0000", "manifest_digest": "sha256:a8f2...5ea7", "name": "1.34.0", "reversion": false, "size": 802700, "start_ts": 1632982221}]</p>
+      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [{"is_manifest_list": false, "last_modified": "Thu, 30 Sep 2021 06:10:23 -0000", "manifest_digest": "sha256:9ce9...f3c7", "name": "1.33.1", "reversion": false, "size": 784538, "start_ts": 1632982223}, {"is_manifest_list": false, "last_modified": "Thu, 30 Sep 2021 06:10:22 -0000", "manifest_digest": "sha256:9ce9...f3c7", "name": "latest", "reversion": false, "size": 784538, "start_ts": 1632982222}, {"end_ts": 1640336040, "expiration": "Fri, 24 Dec 2021 08:54:00 -0000", "is_manifest_list": false, "last_modified": "Thu, 30 Sep 2021 06:10:21 -0000", "manifest_digest": "sha256:a8f2...5ea7", "name": "1.34.0", "reversion": false, "size": 802700, "start_ts": 1632982221}]</p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -324,21 +329,6 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
   </tr>
   <tr class="row-odd">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="return-tags/image_id"></div>
-      <p class="ansible-option-title"><strong>image_id</strong></p>
-      <a class="ansibleOptionLink" href="#return-tags/image_id" title="Permalink to this return value"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
-      </p>
-    </div></td>
-    <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
-      <p>Identifier of the image associated with the tag.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "d53469b7e6ba9295a4b7a7d9e29537ab879e1582e64d534b6ed2637453dade25"</p>
-    </div></td>
-  </tr>
-  <tr class="row-even">
-    <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="return-tags/last_modified"></div>
       <p class="ansible-option-title"><strong>last_modified</strong></p>
       <a class="ansibleOptionLink" href="#return-tags/last_modified" title="Permalink to this return value"></a>
@@ -352,7 +342,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
       <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "Thu, 30 Sep 2021 06:10:22 -0000"</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="return-tags/manifest_digest"></div>
       <p class="ansible-option-title"><strong>manifest_digest</strong></p>
@@ -368,7 +358,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
       <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "sha256:a8f231c07da40107543d74ed1e9a1938a004b498377dbefcf29082c7a9e55ea7"</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="return-tags/name"></div>
       <p class="ansible-option-title"><strong>name</strong></p>
@@ -383,7 +373,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
       <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "0.1.2"</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="return-tags/size"></div>
       <p class="ansible-option-title"><strong>size</strong></p>
@@ -398,7 +388,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
       <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> 802700</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="return-tags/start_ts"></div>
       <p class="ansible-option-title"><strong>start_ts</strong></p>
@@ -430,6 +420,18 @@ Authors
 - Herve Quatremain (@herve4m)
 
 
+
+.. Extra links
+
+Collection links
+~~~~~~~~~~~~~~~~
+
+.. raw:: html
+
+  <p class="ansible-links">
+    <a href="https://github.com/herve4m/quay-collection/issues" aria-role="button" target="_blank" rel="noopener external">Issue Tracker</a>
+    <a href="https://github.com/herve4m/quay-collection" aria-role="button" target="_blank" rel="noopener external">Repository (Sources)</a>
+  </p>
 
 .. Parsing errors
 

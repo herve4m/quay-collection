@@ -21,13 +21,13 @@
 
 .. Title
 
-herve4m.quay.quay_org -- Create and configure a Red Hat Quay organization
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+herve4m.quay.quay_org role -- Create and configure a Red Hat Quay organization
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. Collection note
 
 .. note::
-    This role is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.13).
+    This role is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.14).
 
     To install it use: :code:`ansible-galaxy collection install herve4m.quay`.
 
@@ -697,9 +697,21 @@ Parameters
 Authors
 ^^^^^^^
 
-- Hervé Quatremain <rv4m@yahoo.co.uk>
+- Hervé Quatremain 
 
 
+
+.. Extra links
+
+Collection links
+~~~~~~~~~~~~~~~~
+
+.. raw:: html
+
+  <p class="ansible-links">
+    <a href="https://github.com/herve4m/quay-collection/issues" aria-role="button" target="_blank" rel="noopener external">Issue Tracker</a>
+    <a href="https://github.com/herve4m/quay-collection" aria-role="button" target="_blank" rel="noopener external">Repository (Sources)</a>
+  </p>
 
 .. Parsing errors
 

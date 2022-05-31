@@ -230,7 +230,7 @@ def main():
 
     # Get the team synchronization status
     #
-    # For a synchronized team, the result has a "synced" dictionnary:
+    # For a synchronized team, the result has a "synced" dictionary:
     #
     # GET /api/v1/organization/{orgname}/team/{teamname}/members
     # {
@@ -275,7 +275,7 @@ def main():
     #   }
     # }
     #
-    # For an unsynchronized team, the result the "synced" dictionnary is
+    # For an unsynchronized team, the result the "synced" dictionary is
     # missing:
     #
     # GET /api/v1/organization/{orgname}/team/{teamname}/members

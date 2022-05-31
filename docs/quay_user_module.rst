@@ -36,13 +36,13 @@
 
 .. Title
 
-herve4m.quay.quay_user -- Manage Red Hat Quay users
-+++++++++++++++++++++++++++++++++++++++++++++++++++
+herve4m.quay.quay_user module -- Manage Red Hat Quay users
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.13).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.14).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -77,10 +77,15 @@ Synopsis
 .. Requirements
 
 
+
+
+
+
 .. Options
 
 Parameters
 ----------
+
 
 .. raw:: html
 
@@ -198,7 +203,7 @@ Parameters
       <div class="ansibleOptionAnchor" id="parameter-is_superuser"></div>
       <p class="ansible-option-title"><strong>superuser</strong></p>
       <a class="ansibleOptionLink" href="#parameter-superuser" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: is_superuser</p>
+      <p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: is_superuser</span></p>
       <p class="ansible-option-type-line">
         <span class="ansible-option-type">boolean</span>
       </p>
@@ -234,7 +239,7 @@ Parameters
       <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div>
       <p class="ansible-option-title"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: verify_ssl</p>
+      <p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: verify_ssl</span></p>
       <p class="ansible-option-type-line">
         <span class="ansible-option-type">boolean</span>
       </p>
@@ -335,6 +340,18 @@ Authors
 - Herve Quatremain (@herve4m)
 
 
+
+.. Extra links
+
+Collection links
+~~~~~~~~~~~~~~~~
+
+.. raw:: html
+
+  <p class="ansible-links">
+    <a href="https://github.com/herve4m/quay-collection/issues" aria-role="button" target="_blank" rel="noopener external">Issue Tracker</a>
+    <a href="https://github.com/herve4m/quay-collection" aria-role="button" target="_blank" rel="noopener external">Repository (Sources)</a>
+  </p>
 
 .. Parsing errors
 

@@ -53,7 +53,7 @@ Modules
 * :ref:`quay_message module <ansible_collections.herve4m.quay.quay_message_module>` -- Manage Red Hat Quay global messages
 * :ref:`quay_notification module <ansible_collections.herve4m.quay.quay_notification_module>` -- Manage Red Hat Quay repository notifications
 * :ref:`quay_organization module <ansible_collections.herve4m.quay.quay_organization_module>` -- Manage Red Hat Quay organizations
-* :ref:`quay_quota module <ansible_collections.herve4m.quay.quay_quota_module>` -- Manage Red Hat Quay organizationq quota
+* :ref:`quay_quota module <ansible_collections.herve4m.quay.quay_quota_module>` -- Manage Red Hat Quay organizations quota
 * :ref:`quay_repository module <ansible_collections.herve4m.quay.quay_repository_module>` -- Manage Red Hat Quay repositories
 * :ref:`quay_repository_mirror module <ansible_collections.herve4m.quay.quay_repository_mirror_module>` -- Manage Red Hat Quay repository mirror configurations
 * :ref:`quay_robot module <ansible_collections.herve4m.quay.quay_robot_module>` -- Manage Red Hat Quay robot accounts

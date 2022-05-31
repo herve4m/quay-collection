@@ -13,6 +13,9 @@
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
         quay_org_name: production
         quay_org_email: production@example.com
+        quay_org_quota: 500 GiB
+        quay_org_warning_pct: 80
+        quay_org_reject_pct: 90
         quay_org_users:
           - username: lvasquez
             email: lvasquez@example.com

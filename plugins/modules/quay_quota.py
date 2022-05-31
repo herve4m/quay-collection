@@ -82,10 +82,10 @@ extends_documentation_fragment:
 """
 
 EXAMPLES = r"""
-- name: Ensure the organization has a 10 GiB quota with 80% and 95% limits
+- name: Ensure the organization has a 1.5 TiB quota with 80% and 95% limits
   herve4m.quay.quay_quota:
     organization: production
-    quota: 10 GiB
+    quota: 1.5 TiB
     warning_pct: 80
     reject_pct: 95
     state: present

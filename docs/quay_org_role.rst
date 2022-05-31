@@ -301,6 +301,37 @@ Parameters
   </tr>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-main--quay_org_quota"></div>
+      <p class="ansible-option-title"><strong>quay_org_quota</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-main--quay_org_quota" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Quota that Quay uses to compute the warning and reject limits for the organization.</p>
+      <p>You specify a quota in bytes, but you can also use the K[i]B, M[i]B, G[i]B, or T[i]B suffixes.</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-main--quay_org_reject_pct"></div>
+      <p class="ansible-option-title"><strong>quay_org_reject_pct</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-main--quay_org_reject_pct" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">integer</span>
+      </p>
+
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Reject (hard) limit as a percentage of the quota.</p>
+      <p>Quay terminates any image push in the organization when the limit is reached.</p>
+      <p>Set <em>quay_org_reject_pct</em> to <code class='docutils literal notranslate'>0</code> to remove the reject limit.</p>
+    </div></td>
+  </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_repositories"></div>
       <p class="ansible-option-title"><strong>quay_org_repositories</strong></p>
       <a class="ansibleOptionLink" href="#parameter-main--quay_org_repositories" title="Permalink to this option"></a>
@@ -649,6 +680,22 @@ Parameters
 
   <tr class="row-odd">
     <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-main--quay_org_warning_pct"></div>
+      <p class="ansible-option-title"><strong>quay_org_warning_pct</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-main--quay_org_warning_pct" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">integer</span>
+      </p>
+
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Warning (soft) limit as a percentage of the quota.</p>
+      <p>Quay notifies the users when the limit is reached.</p>
+      <p>Set <em>quay_org_warning_pct</em> to <code class='docutils literal notranslate'>0</code> to remove the warning limit.</p>
+    </div></td>
+  </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_token"></div>
       <p class="ansible-option-title"><strong>quay_token</strong></p>
       <a class="ansibleOptionLink" href="#parameter-main--quay_token" title="Permalink to this option"></a>
@@ -662,7 +709,7 @@ Parameters
       <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_TOKEN</code> environment variable.</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_validate_certs"></div>
       <p class="ansible-option-title"><strong>quay_validate_certs</strong></p>

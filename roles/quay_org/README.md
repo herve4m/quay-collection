@@ -44,6 +44,10 @@ The following list gives a short descriptions of the variables:
 * `quay_org_default_perms`: List of the default permissions to assign to repositories when they are created.
 * `quay_org_applications`: List of the OAuth applications to create in the organization.
 * `quay_org_repositories`: List of the repositories to create in the organization.
+* `quay_org_quota`: Quota that Quay uses to compute the warning and reject limits for the organization.
+  You specify a quota in bytes, but you can also use the K[i]B, M[i]B, G[i]B, or T[i]B suffixes.
+* `quay_org_warning_pct`: Warning (soft) limit as a percentage of the quota.
+* `quay_org_reject_pct`: Reject (hard) limit as a percentage of the quota.
 
 
 Example Playbook
@@ -68,6 +72,10 @@ Example Playbook
         # Organization name and email
         quay_org_name: production
         quay_org_email: production@example.com
+        # Quota
+        quay_org_quota: 1.5 TiB
+        quay_org_warning_pct: 90
+        quay_org_reject_pct: 97
         # User accounts to create
         quay_org_users:
           - username: lvasquez

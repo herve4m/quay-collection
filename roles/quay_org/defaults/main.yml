@@ -4,6 +4,9 @@
 # quay_validate_certs: false
 # quay_org_name: production
 # quay_org_email: production@example.com
+# quay_org_quota: 1.5 TiB
+# quay_org_warning_pct: 90
+# quay_org_reject_pct: 97
 # quay_org_users:
 #   - username: lvasquez
 #     email: lvasquez@example.com

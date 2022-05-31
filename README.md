@@ -9,7 +9,7 @@ The collection provides modules for managing your Red Hat Quay deployment.
 
 ## Included Content
 
-The modules have been tested against versions 3.5.6, 3.6.1, and 3.6.2 of Red Hat Quay.
+The modules have been tested against versions 3.5.6, 3.6.1, 3.6.2, and 3.7.0 of Red Hat Quay.
 
 ### Modules
 Name | Description
@@ -25,6 +25,7 @@ Name | Description
 [quay_message](https://github.com/herve4m/quay-collection/blob/main/docs/quay_message_module.rst) |  Manage Red Hat Quay global messages
 [quay_notification](https://github.com/herve4m/quay-collection/blob/main/docs/quay_notification_module.rst) |  Manage Red Hat Quay repository notifications
 [quay_organization](https://github.com/herve4m/quay-collection/blob/main/docs/quay_organization_module.rst) |  Manage Red Hat Quay organizations
+[quay_quota](https://github.com/herve4m/quay-collection/blob/main/docs/quay_quota_module.rst) |  Manage Red Hat Quay organizations quota
 [quay_repository](https://github.com/herve4m/quay-collection/blob/main/docs/quay_repository_module.rst) |  Manage Red Hat Quay repositories
 [quay_repository_mirror](https://github.com/herve4m/quay-collection/blob/main/docs/quay_repository_mirror_module.rst) |  Manage Red Hat Quay repositories mirrors
 [quay_robot](https://github.com/herve4m/quay-collection/blob/main/docs/quay_robot_module.rst) |  Manage Red Hat Quay robot accounts
@@ -114,6 +115,11 @@ The following playbook example uses the `herve4m.quay.quay_first_user` module to
   hosts: localhost
 
   tasks:
+    # You must probably ensure that the user account you create, admin in this
+    # example, has superuser permissions so that you can use the generated
+    # token to create additional objects.
+    # To give the user superuser permissions, add its name to the SUPER_USERS
+    # section in the `config.yaml` file.
     - name: Ensure the initial user exists
       herve4m.quay.quay_first_user:
         username: admin
@@ -124,6 +130,7 @@ The following playbook example uses the `herve4m.quay.quay_first_user` module to
         validate_certs: true
       register: result
 
+    # The token is valid for 2 hours and 30 minutes
     - name: Display the generated OAuth access token
       debug:
         msg: "Access token: {{ result['access_token'] }}"
@@ -145,6 +152,8 @@ The requirements for the `herve4m.quay.quay_first_user` module are as follows:
 * You must use Red Hat Quay 3.6 or later.
 * You must enable the first user creation feature (`FEATURE_USER_INITIALIZE` in `config.yaml`).
 * You must use the internal database for user authentication (`AUTHENTICATION_TYPE` to `Database` in `config.yaml` or `Internal Authentication` to `Local Database` in the configuration web UI).
+* You probably want the first user to have superuser permissions.
+  To do so, add that user account to the `SUPER_USERS` section in the `config.yaml` file.
 
 
 ## Contributing to the Collection

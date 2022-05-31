@@ -1,0 +1,12 @@
+---
+- name: Ensure the quota is set
+  herve4m.quay.quay_quota:
+    organization: "{{ quay_org_name }}"
+    quota: "{{ quay_org_quota | default(omit) }}"
+    warning_pct: "{{ quay_org_warning_pct | default(omit) }}"
+    reject_pct: "{{ quay_org_reject_pct | default(omit) }}"
+    state: present
+    quay_token: "{{ quay_token | default(omit) }}"
+    quay_host: "{{ quay_host | default(omit) }}"
+    validate_certs: "{{ quay_validate_certs | default(omit) }}"
+...

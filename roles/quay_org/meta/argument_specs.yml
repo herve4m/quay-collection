@@ -49,6 +49,26 @@ argument_specs:
             C(config.yaml)), then this I(email) parameter is mandatory.
           - You cannot use the same address as your account email.
         type: str
+      quay_org_quota:
+        description:
+          - Quota that Quay uses to compute the warning and reject limits for
+            the organization.
+          - You specify a quota in bytes, but you can also use the K[i]B,
+             M[i]B, G[i]B, or T[i]B suffixes.
+        type: str
+      quay_org_warning_pct:
+        description:
+          - Warning (soft) limit as a percentage of the quota.
+          - Quay notifies the users when the limit is reached.
+          - Set I(quay_org_warning_pct) to C(0) to remove the warning limit.
+        type: int
+      quay_org_reject_pct:
+        description:
+          - Reject (hard) limit as a percentage of the quota.
+          - Quay terminates any image push in the organization when the limit
+            is reached.
+          - Set I(quay_org_reject_pct) to C(0) to remove the reject limit.
+        type: int
       quay_org_users:
         description:
           - List of user account to create.

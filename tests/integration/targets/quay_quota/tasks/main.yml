@@ -1,0 +1,202 @@
+---
+# Supporting organization
+- name: Ensure organization ansibletestorg exists
+  herve4m.quay.quay_organization:
+    name: ansibletestorg
+    email: ansibletestorg@example.com
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure quota exists but no quota/limits given (no change)
+  herve4m.quay.quay_quota:
+    organization: ansibletestorg
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure the quota does not exist (no change)
+  herve4m.quay.quay_quota:
+    organization: ansibletestorg
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure quota exists but only warning limit given
+  herve4m.quay.quay_quota:
+    organization: ansibletestorg
+    warning_pct: 80
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure quota exists but only warning limit given (no change)
+  herve4m.quay.quay_quota:
+    organization: ansibletestorg
+    warning_pct: 80
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure quota exists but only change warning limit
+  herve4m.quay.quay_quota:
+    organization: ansibletestorg
+    warning_pct: 85
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did change something
+  assert:
+    that: result['changed']
+    fail_msg: The preceding task should have changed something
+
+- name: Ensure warning limit does not exist
+  herve4m.quay.quay_quota:
+    organization: ansibletestorg
+    warning_pct: 0
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure warning limit does not exist (no change)
+  herve4m.quay.quay_quota:
+    organization: ansibletestorg
+    warning_pct: 0
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure warning limit exists
+  herve4m.quay.quay_quota:
+    organization: ansibletestorg
+    warning_pct: 85
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did change something
+  assert:
+    that: result['changed']
+    fail_msg: The preceding task should have changed something
+
+- name: Ensure quota exists
+  herve4m.quay.quay_quota:
+    organization: ansibletestorg
+    quota: 1.5 GiB
+    warning_pct: 85
+    reject_pct: 90
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure quota exists (no change)
+  herve4m.quay.quay_quota:
+    organization: ansibletestorg
+    quota: 1.5 GiB
+    warning_pct: 85
+    reject_pct: 90
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure the quota is updated (1)
+  herve4m.quay.quay_quota:
+    organization: ansibletestorg
+    quota: 1.5 TiB
+    warning_pct: 80
+    reject_pct: 95
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure the quota is updated (2)
+  herve4m.quay.quay_quota:
+    organization: ansibletestorg
+    quota: 1.5 TiB
+    warning_pct: 80
+    reject_pct: 0
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure the quota is updated (3)
+  herve4m.quay.quay_quota:
+    organization: ansibletestorg
+    quota: 1 TiB
+    warning_pct: 85
+    reject_pct: 99
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure quota does not exist
+  herve4m.quay.quay_quota:
+    organization: ansibletestorg
+    quota: 1TiB
+    warning_pct: 85
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did change something
+  assert:
+    that: result['changed']
+    fail_msg: The preceding task should have changed something
+
+- name: Ensure the organization is removed
+  herve4m.quay.quay_organization:
+    name: ansibletestorg
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+...

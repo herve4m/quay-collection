@@ -120,11 +120,6 @@ tags:
       type: str
       returned: always
       sample: sha256:a8f231c07da40107543d74ed1e9a1938a004b498377dbefcf29082c7a9e55ea7
-    image_id:
-      description: Identifier of the image associated with the tag.
-      type: str
-      returned: always
-      sample: d53469b7e6ba9295a4b7a7d9e29537ab879e1582e64d534b6ed2637453dade25
     start_ts:
       description: Time in seconds since the epoch of the last tag modification.
       type: int
@@ -157,8 +152,6 @@ tags:
               "manifest_digest": "sha256:9ce9...f3c7",
               "is_manifest_list": false,
               "size": 784538,
-              "docker_image_id": "be3e...29d4",
-              "image_id": "be3e...29d4",
               "last_modified": "Thu, 30 Sep 2021 06:10:23 -0000"
             },
             {
@@ -168,8 +161,6 @@ tags:
               "manifest_digest": "sha256:9ce9...f3c7",
               "is_manifest_list": false,
               "size": 784538,
-              "docker_image_id": "be3e...29d4",
-              "image_id": "be3e...29d4",
               "last_modified": "Thu, 30 Sep 2021 06:10:22 -0000"
             },
             {
@@ -180,8 +171,6 @@ tags:
               "manifest_digest": "sha256:a8f2...5ea7",
               "is_manifest_list": false,
               "size": 802700,
-              "docker_image_id": "bda4...29b2",
-              "image_id": "bda4...29b2",
               "last_modified": "Thu, 30 Sep 2021 06:10:21 -0000",
               "expiration": "Fri, 24 Dec 2021 08:54:00 -0000"
             }
@@ -240,8 +229,6 @@ def main():
     #       "manifest_digest": "sha256:f948...95fe",
     #       "is_manifest_list": False,
     #       "size": 784606,
-    #       "docker_image_id": "d25a...6d25",
-    #       "image_id": "d25a...6d25",
     #       "last_modified": "Thu, 30 Sep 2021 06:10:24 -0000"
     #     },
     #     {
@@ -251,8 +238,6 @@ def main():
     #       "manifest_digest": "sha256:9ce9...f3c7",
     #       "is_manifest_list": False,
     #       "size": 784538,
-    #       "docker_image_id": "be3e...29d4",
-    #       "image_id": "be3e...29d4",
     #       "last_modified": "Thu, 30 Sep 2021 06:10:22 -0000"
     #     },
     #     {
@@ -263,8 +248,6 @@ def main():
     #       "manifest_digest": "sha256:a8f2...5ea7",
     #       "is_manifest_list": False,
     #       "size": 802700,
-    #       "docker_image_id": "bda4...29b2",
-    #       "image_id": "bda4...29b2",
     #       "last_modified": "Thu, 30 Sep 2021 06:10:21 -0000",
     #       "expiration": "Fri, 24 Dec 2021 08:54:00 -0000"
     #     },
@@ -276,8 +259,6 @@ def main():
     #       "manifest_digest": "sha256:9ce9...f3c7",
     #       "is_manifest_list": False,
     #       "size": 784538,
-    #       "docker_image_id": "be3e...29d4",
-    #       "image_id": "be3e...29d4",
     #       "last_modified": "Wed, 29 Sep 2021 13:12:08 -0000",
     #       "expiration": "Thu, 30 Sep 2021 06:10:22 -0000"
     #     }

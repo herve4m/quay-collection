@@ -219,8 +219,6 @@ def main():
     #        "manifest_digest": "sha256:4f6f...5e797",
     #        "is_manifest_list": False,
     #        "size": 25343205,
-    #        "docker_image_id": "e942...dbea",
-    #        "image_id": "e942...dbea",
     #        "last_modified": "Sat, 02 Oct 2021 13:00:52 -0000",
     #        "expiration": "Sat, 02 Oct 2021 13:00:54 -0000"
     #      }

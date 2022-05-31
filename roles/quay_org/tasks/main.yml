@@ -19,4 +19,7 @@
 
 - name: Ensure the repositories exist
   import_tasks: repositories.yml
+
+- name: Ensure the storage quota is set
+  import_tasks: quota.yml
 ...

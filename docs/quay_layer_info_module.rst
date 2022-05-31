@@ -36,13 +36,13 @@
 
 .. Title
 
-herve4m.quay.quay_layer_info -- Gather information about image layers in Red Hat Quay
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+herve4m.quay.quay_layer_info module -- Gather information about image layers in Red Hat Quay
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. Collection note
 
 .. note::
-    This plugin is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.13).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.14).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -77,10 +77,15 @@ Synopsis
 .. Requirements
 
 
+
+
+
+
 .. Options
 
 Parameters
 ----------
+
 
 .. raw:: html
 
@@ -103,9 +108,9 @@ Parameters
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Name of the image. The format is <code class='docutils literal notranslate'>namespace</code>/<code class='docutils literal notranslate'>repository</code>:<code class='docutils literal notranslate'>tag</code>. The namespace can be an organization or a personal namespace.</p>
+      <p>Name of the image. The format is <code class='docutils literal notranslate'>namespace</code>/<code class='docutils literal notranslate'>repository</code>:<code class='docutils literal notranslate'>tag</code> or <code class='docutils literal notranslate'>namespace</code>/<code class='docutils literal notranslate'>repository</code>@<code class='docutils literal notranslate'>digest</code>. The namespace can be an organization or a personal namespace.</p>
       <p>If you omit the namespace part, then the module looks for the repository in your personal namespace.</p>
-      <p>If you omit the tag, then it defaults to <code class='docutils literal notranslate'>latest</code>.</p>
+      <p>If you omit the tag and the digest part, then <code class='docutils literal notranslate'>latest</code> is assumed.</p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -144,7 +149,7 @@ Parameters
       <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div>
       <p class="ansible-option-title"><strong>validate_certs</strong></p>
       <a class="ansibleOptionLink" href="#parameter-validate_certs" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: verify_ssl</p>
+      <p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: verify_ssl</span></p>
       <p class="ansible-option-type-line">
         <span class="ansible-option-type">boolean</span>
       </p>
@@ -223,25 +228,10 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     <td><div class="ansible-option-cell">
       <p>Sorted list of the image layers. The top layer is listed first.</p>
       <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [{"ancestors": "/f757...6b36/e6f4...4f62/e619...cc21/f243...b231/15e0...2e36/a52c...327c/", "command": ["/bin/sh", "-c", "#(nop) ", "ENTRYPOINT [\"/usr/sbin/dnsmasq\"]"], "comment": null, "created": "Thu, 16 Nov 2017 22:24:13 -0000", "id": "3f7885b48af404b0b9fffb2120e5907929504b33a104894762e4e192f5db9e63", "size": 32, "sort_index": 6, "uploading": false}, {"ancestors": "/e6f4...4f62/e619...cc21/f243...b231/15e0...2e36/a52c...327c/", "command": ["/bin/sh -c #(nop)  EXPOSE 53/tcp 67/tcp 69/tcp"], "comment": null, "created": "Thu, 16 Nov 2017 22:24:12 -0000", "id": "f7573df3a79319ce013ada220edea02c4def0bb2938d059313ca3b50c22c6b36", "size": 32, "sort_index": 5, "uploading": false}, {"ancestors": "/e619...cc21/f243...b231/15e0...2e36/a52c...327c/", "command": ["/bin/sh -c #(nop) COPY dir:5c38...5694 in /var/lib/tftpboot "], "comment": null, "created": "Thu, 16 Nov 2017 22:24:11 -0000", "id": "e6f4fbbb429f4a42e138489b72fc451df7567750bfb28dfa81a4f93fb31b4f62", "size": 848185, "sort_index": 4, "uploading": false}, {"ancestors": "/f243...b231/15e0...2e36/a52c...327c/", "command": ["/bin/sh -c apk -U add dnsmasq curl"], "comment": null, "created": "Thu, 16 Nov 2017 22:24:10 -0000", "id": "e6197fd52d52021b186662d4477d11db4520cbca280883245ef31cc4e2b3cc21", "size": 2010338, "sort_index": 3, "uploading": false}, {"ancestors": "/15e0...2e36/a52c...327c/", "command": ["/bin/sh -c #(nop)  MAINTAINER Dalton Hubble \u003cdalton.hubble@coreos.com\u003e"], "comment": null, "created": "Thu, 16 Nov 2017 22:24:04 -0000", "id": "f2435a32f659b4a4568fbad867e9b88fa421586ab171ee2cd8096217e7ecb231", "size": 32, "sort_index": 2, "uploading": false}, {"ancestors": "/a52c...327c/", "command": ["/bin/sh -c #(nop)  CMD [\"/bin/sh\"]"], "comment": null, "created": "Wed, 13 Sep 2017 14:32:26 -0000", "id": "15e0dc04655d169bbdc7e942756a594e808c6c50214aca9b97deb36715ec2e36", "size": 32, "sort_index": 1, "uploading": false}, {"ancestors": "//", "command": ["/bin/sh -c #(nop) ADD file:4583...9e45 in / "], "comment": null, "created": "Wed, 13 Sep 2017 14:32:26 -0000", "id": "a52c7d714e5fc2f9c1e6bb2f8393636861045890c2731c53436924c9e2ad327c", "size": 1990402, "sort_index": 0, "uploading": false}]</p>
+      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> [{"author": "Dalton Hubble \u003c...\u003e", "blob_digest": "sha256:a3ed...46d4", "command": ["/bin/sh", "-c", "#(nop) ", "ENTRYPOINT [\"/usr/sbin/dnsmasq\"]"], "comment": null, "compressed_size": null, "created_datetime": "Thu, 16 Nov 2017 22:24:12 -0000", "index": 6, "is_remote": false, "urls": null}, {"author": "Dalton Hubble \u003c...\u003e", "blob_digest": "sha256:a3e...46d4", "command": ["/bin/sh -c #(nop)  EXPOSE 53/tcp 67/tcp 69/tcp"], "comment": null, "compressed_size": null, "created_datetime": "Thu, 16 Nov 2017 22:24:12 -0000", "index": 5, "is_remote": false, "urls": null}, {"author": "Dalton Hubble \u003c...\u003e", "blob_digest": "sha256:e40d...0351", "command": ["/bin/sh -c #(nop) COPY dir:5c38...5694 in /var/lib/tftpboot "], "comment": null, "compressed_size": null, "created_datetime": "Thu, 16 Nov 2017 22:24:11 -0000", "index": 4, "is_remote": false, "urls": null}, {"author": "Dalton Hubble \u003c...\u003e", "blob_digest": "sha256:7ef3...3a74", "command": ["/bin/sh -c apk -U add dnsmasq curl"], "comment": null, "compressed_size": null, "created_datetime": "Thu, 16 Nov 2017 22:24:09 -0000", "index": 3, "is_remote": false, "urls": null}, {"author": "Dalton Hubble \u003c...\u003e", "blob_digest": "sha256:a3ed...46d4", "command": ["/bin/sh -c #(nop)  MAINTAINER Dalton Hubble \u003c...\u003e"], "comment": null, "compressed_size": null, "created_datetime": "Thu, 16 Nov 2017 22:24:04 -0000", "index": 2, "is_remote": false, "urls": null}, {"author": null, "blob_digest": "sha256:a3ed...46d4", "command": ["/bin/sh -c #(nop)  CMD [\"/bin/sh\"]"], "comment": null, "compressed_size": null, "created_datetime": "Wed, 13 Sep 2017 14:32:26 -0000", "index": 1, "is_remote": false, "urls": null}, {"author": null, "blob_digest": "sha256:6d98...d913", "command": ["/bin/sh -c #(nop) ADD file:4583...9e45 in / "], "comment": null, "compressed_size": null, "created_datetime": "Wed, 13 Sep 2017 14:32:25 -0000", "index": 0, "is_remote": false, "urls": null}]</p>
     </div></td>
   </tr>
   <tr class="row-odd">
-    <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="return-layers/ancestors"></div>
-      <p class="ansible-option-title"><strong>ancestors</strong></p>
-      <a class="ansibleOptionLink" href="#return-layers/ancestors" title="Permalink to this return value"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
-      </p>
-    </div></td>
-    <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
-      <p>Forward slash separated list of the parent layer identifiers.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "/f243...b231/15e0...2e36/a52c...327c/"</p>
-    </div></td>
-  </tr>
-  <tr class="row-even">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="return-layers/command"></div>
       <p class="ansible-option-title"><strong>command</strong></p>
@@ -257,11 +247,11 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
       <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> ["/bin/sh", "-c", "#(nop) ", "ENTRYPOINT [\"/usr/sbin/dnsmasq\"]"]</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="return-layers/created"></div>
-      <p class="ansible-option-title"><strong>created</strong></p>
-      <a class="ansibleOptionLink" href="#return-layers/created" title="Permalink to this return value"></a>
+      <div class="ansibleOptionAnchor" id="return-layers/created_datetime"></div>
+      <p class="ansible-option-title"><strong>created_datetime</strong></p>
+      <a class="ansibleOptionLink" href="#return-layers/created_datetime" title="Permalink to this return value"></a>
       <p class="ansible-option-type-line">
         <span class="ansible-option-type">string</span>
       </p>
@@ -272,26 +262,11 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
       <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "Thu, 30 Sep 2021 07:18:56 -0000"</p>
     </div></td>
   </tr>
-  <tr class="row-even">
-    <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="return-layers/id"></div>
-      <p class="ansible-option-title"><strong>id</strong></p>
-      <a class="ansibleOptionLink" href="#return-layers/id" title="Permalink to this return value"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
-      </p>
-    </div></td>
-    <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
-      <p>Internal identifier of the layer.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "a52c7d714e5fc2f9c1e6bb2f8393636861045890c2731c53436924c9e2ad327c"</p>
-    </div></td>
-  </tr>
   <tr class="row-odd">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="return-layers/sort_index"></div>
-      <p class="ansible-option-title"><strong>sort_index</strong></p>
-      <a class="ansibleOptionLink" href="#return-layers/sort_index" title="Permalink to this return value"></a>
+      <div class="ansibleOptionAnchor" id="return-layers/index"></div>
+      <p class="ansible-option-title"><strong>index</strong></p>
+      <a class="ansibleOptionLink" href="#return-layers/index" title="Permalink to this return value"></a>
       <p class="ansible-option-type-line">
         <span class="ansible-option-type">integer</span>
       </p>
@@ -319,6 +294,18 @@ Authors
 - Herve Quatremain (@herve4m)
 
 
+
+.. Extra links
+
+Collection links
+~~~~~~~~~~~~~~~~
+
+.. raw:: html
+
+  <p class="ansible-links">
+    <a href="https://github.com/herve4m/quay-collection/issues" aria-role="button" target="_blank" rel="noopener external">Issue Tracker</a>
+    <a href="https://github.com/herve4m/quay-collection" aria-role="button" target="_blank" rel="noopener external">Repository (Sources)</a>
+  </p>
 
 .. Parsing errors
 

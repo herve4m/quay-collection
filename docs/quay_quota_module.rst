@@ -26,7 +26,7 @@
 
 .. Anchors
 
-.. _ansible_collections.herve4m.quay.quay_team_module:
+.. _ansible_collections.herve4m.quay.quay_quota_module:
 
 .. Anchors: short name for ansible.builtin
 
@@ -36,8 +36,8 @@
 
 .. Title
 
-herve4m.quay.quay_team module -- Manage Red Hat Quay teams
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+herve4m.quay.quay_quota module -- Manage Red Hat Quay organizations quota
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. Collection note
 
@@ -50,11 +50,11 @@ herve4m.quay.quay_team module -- Manage Red Hat Quay teams
 
     To install it, use: :code:`ansible-galaxy collection install herve4m.quay`.
 
-    To use it in a playbook, specify: :code:`herve4m.quay.quay_team`.
+    To use it in a playbook, specify: :code:`herve4m.quay.quay_quota`.
 
 .. version_added
 
-.. versionadded:: 0.0.1 of herve4m.quay
+.. versionadded:: 0.0.14 of herve4m.quay
 
 .. contents::
    :local:
@@ -68,7 +68,7 @@ Synopsis
 
 .. Description
 
-- Create, delete, and update teams in organizations.
+- Create, delete, and update storage quota for organizations.
 
 
 .. Aliases
@@ -99,68 +99,6 @@ Parameters
   <tbody>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-append"></div>
-      <p class="ansible-option-title"><strong>append</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-append" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">boolean</span>
-      </p>
-    </div></td>
-    <td><div class="ansible-option-cell">
-      <p>If <code class='docutils literal notranslate'>yes</code>, then add the users specified in <em>members</em> to the team.</p>
-      <p>If <code class='docutils literal notranslate'>no</code>, then the module sets the team members to users specified in <em>members</em>, removing all others users from the team.</p>
-      <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
-      <ul class="simple">
-        <li><p><span class="ansible-option-choices-entry">no</span></p></li>
-        <li><p><span class="ansible-option-default-bold">yes</span> <span class="ansible-option-default">← (default)</span></p></li>
-      </ul>
-    </div></td>
-  </tr>
-  <tr class="row-odd">
-    <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-description"></div>
-      <p class="ansible-option-title"><strong>description</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-description" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
-      </p>
-    </div></td>
-    <td><div class="ansible-option-cell">
-      <p>Text in Markdown format that describes the team.</p>
-    </div></td>
-  </tr>
-  <tr class="row-even">
-    <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-members"></div>
-      <p class="ansible-option-title"><strong>members</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-members" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">list</span>
-        / <span class="ansible-option-elements">elements=string</span>
-      </p>
-    </div></td>
-    <td><div class="ansible-option-cell">
-      <p>List of the user or robot accounts in the team. Use the syntax <code class='docutils literal notranslate'>organization</code>+<code class='docutils literal notranslate'>robotshortname</code> for robot accounts.</p>
-      <p>If the team is synchronized with an LDAP group (see the M(quay_team_ldap) module), then you can only add or remove robot accounts.</p>
-    </div></td>
-  </tr>
-  <tr class="row-odd">
-    <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-name"></div>
-      <p class="ansible-option-title"><strong>name</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-name" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
-        / <span class="ansible-option-required">required</span>
-      </p>
-    </div></td>
-    <td><div class="ansible-option-cell">
-      <p>Name of the team to create, remove, or modify.</p>
-      <p>The name must be in lowercase, must not contain white spaces, must not start by a digit, and must be at least two characters long.</p>
-    </div></td>
-  </tr>
-  <tr class="row-even">
-    <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-organization"></div>
       <p class="ansible-option-title"><strong>organization</strong></p>
       <a class="ansibleOptionLink" href="#parameter-organization" title="Permalink to this option"></a>
@@ -170,7 +108,7 @@ Parameters
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Name of the organization for the team. That organization must exist.</p>
+      <p>Name of the organization. That organization must exist.</p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -205,24 +143,34 @@ Parameters
   </tr>
   <tr class="row-odd">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-role"></div>
-      <p class="ansible-option-title"><strong>role</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-role" title="Permalink to this option"></a>
+      <div class="ansibleOptionAnchor" id="parameter-quota"></div>
+      <p class="ansible-option-title"><strong>quota</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-quota" title="Permalink to this option"></a>
       <p class="ansible-option-type-line">
         <span class="ansible-option-type">string</span>
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Role of the team within the organization. If not set, then the new team has the <code class='docutils literal notranslate'>member</code> role.</p>
-      <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
-      <ul class="simple">
-        <li><p><span class="ansible-option-choices-entry">member</span></p></li>
-        <li><p><span class="ansible-option-choices-entry">creator</span></p></li>
-        <li><p><span class="ansible-option-choices-entry">admin</span></p></li>
-      </ul>
+      <p>Quota that Quay uses to compute the warning and reject limits for the organization.</p>
+      <p>You specify a quota in bytes, but you can also use the K[i]B, M[i]B, G[i]B, or T[i]B suffixes.</p>
     </div></td>
   </tr>
   <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-reject_pct"></div>
+      <p class="ansible-option-title"><strong>reject_pct</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-reject_pct" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">integer</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Reject (hard) limit as a percentage of the quota.</p>
+      <p>Quay terminates any image push in the organization when the limit is reached.</p>
+      <p>Set <em>reject_pct</em> to <code class='docutils literal notranslate'>0</code> to remove the reject limit.</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-state"></div>
       <p class="ansible-option-title"><strong>state</strong></p>
@@ -232,10 +180,9 @@ Parameters
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>If <code class='docutils literal notranslate'>absent</code>, then the module deletes the team.</p>
-      <p>The module does not fail if the team does not exist because the state is already as expected.</p>
-      <p>If <code class='docutils literal notranslate'>present</code>, then the module creates the team if it does not already exist.</p>
-      <p>If the team already exists, then the module updates its state.</p>
+      <p>If <code class='docutils literal notranslate'>absent</code>, then the module deletes the quota and limits for the given organization.</p>
+      <p>If <code class='docutils literal notranslate'>present</code>, then the module establishes the quota and limits for the given organization.</p>
+      <p>If quota and limits are already set, then the module updates them.</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
         <li><p><span class="ansible-option-choices-entry">absent</span></p></li>
@@ -243,7 +190,7 @@ Parameters
       </ul>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div>
@@ -265,6 +212,21 @@ Parameters
       </ul>
     </div></td>
   </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-warning_pct"></div>
+      <p class="ansible-option-title"><strong>warning_pct</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-warning_pct" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">integer</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Warning (soft) limit as a percentage of the quota.</p>
+      <p>Quay notifies the users when the limit is reached.</p>
+      <p>Set <em>warning_pct</em> to <code class='docutils literal notranslate'>0</code> to remove the warning limit.</p>
+    </div></td>
+  </tr>
   </tbody>
   </table>
 
@@ -279,7 +241,8 @@ Notes
 -----
 
 .. note::
-   - To synchronize teams with LDAP groups, see the M(quay_team_ldap) module.
+   - The module requires Red Hat Quay 3.7 or later.
+   - The module requires that your Quay administrator enables quota management for your installation (by setting \ :literal:`FEATURE\_QUOTA\_MANAGEMENT`\  to \ :literal:`True`\  in \ :literal:`config.yaml`\ ).
    - Supports \ :literal:`check\_mode`\ .
    - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Administer Organization" and "Administer User" permissions.
 
@@ -294,52 +257,28 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Ensure team operators exists in the production organization
-      herve4m.quay.quay_team:
-        name: operators
+    - name: Ensure the organization has a 1.5 TiB quota with 80% and 95% limits
+      herve4m.quay.quay_quota:
         organization: production
-        description: |
-            # Operation Team
-
-            * Operators can create repositories
-            * Operators can store their images in those repositories
-        role: creator
-        members:
-          - lvasquez
-          - dwilde
-          - production+automationrobot
-        append: false
+        quota: 1.5 TiB
+        warning_pct: 80
+        reject_pct: 95
         state: present
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-    - name: Ensure team developers does not exist in the production organization
-      herve4m.quay.quay_team:
-        name: developers
+    - name: Ensure the production organization has no warning limit
+      herve4m.quay.quay_quota:
+        organization: production
+        warning_pct: 0
+        state: present
+        quay_host: https://quay.example.com
+        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+
+    - name: Ensure the production organization has no quota
+      herve4m.quay.quay_quota:
         organization: production
         state: absent
-        quay_host: https://quay.example.com
-        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
-
-    - name: Ensure team administrators has no members
-      herve4m.quay.quay_team:
-        name: administrators
-        organization: production
-        members: []
-        append: false
-        state: present
-        quay_host: https://quay.example.com
-        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
-
-    - name: Ensure team operators has additional members
-      herve4m.quay.quay_team:
-        name: operators
-        organization: production
-        members:
-          - jziglar
-          - chorwitz
-        append: true
-        state: present
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 

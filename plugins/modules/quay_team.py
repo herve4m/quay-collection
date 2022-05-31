@@ -127,7 +127,7 @@ EXAMPLES = r"""
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-- name: Ensure team operators has additionnal members
+- name: Ensure team operators has additional members
   herve4m.quay.quay_team:
     name: operators
     organization: production

@@ -9,12 +9,11 @@ Requirements
 ------------
 
 The role accesses Red Hat Quay through its REST API.
-To use the API, Red Hat Quay requires an OAuth access token.
+To access the API, you can use a username and a password, or an OAuth access token.
 
-Before using the role, you must generate that access token.
-In addition, the user account associated with the access token must have superuser permissions.
+The user account you use (or the user account associated with the OAuth access token) must have superuser permissions.
 
-To do so, follow those steps:
+If you wish to use an OAuth access token, then you can create one as follows:
 
 1. Log in to the Red Hat Quay web UI with a user account that has superuser permissions.
 2. Use an existing organization or create a new one.
@@ -35,6 +34,13 @@ The following list gives a short descriptions of the variables:
 
 * `quay_host`: URL for access the Red Hat Quay API.
 * `quay_token`: OAuth access token for authenticating with the API.
+  Mutually exclusive with `quay_username` and `quay_password`.
+* `quay_username`: Username for authenticating with the API.
+  You also need to define the `quay_password` variable.
+  Mutually exclusive with `quay_token`.
+* `quay_password`: Password for authenticating with the API.
+  You also need to define the `quay_username` variable.
+  Mutually exclusive with `quay_token`.
 * `quay_validate_certs`: Whether to allow insecure connections to the API.
 * `quay_org_name`: Name of the organization to create.
 * `quay_org_email`: Email address to associate with the organization.
@@ -67,7 +73,8 @@ Example Playbook
       vars:
         # Connection parameters
         quay_host: https://quay.example.com
-        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+        quay_username: admin
+        quay_password: Sup3r53cr37
         quay_validate_certs: true
         # Organization name and email
         quay_org_name: production

@@ -38,7 +38,7 @@ options:
 options:
   quay_token:
     description:
-      - OAuth access token for authenticating with the API.
+      - OAuth access token for authenticating against the API.
       - If you do not set the parameter, then the module tries the C(QUAY_TOKEN)
         environment variable.
       - Mutually exclusive with I(quay_username) and I(quay_password).

@@ -58,13 +58,14 @@
             role: read
       - name: ansibletestrepo2
 
-# Cleanup
+# Cleanup (by using quay_username and quay_password for testing purpose)
 - name: Ensure repositories are removed
   herve4m.quay.quay_repository:
     name: "ansibletestorg/{{ item }}"
     state: absent
     quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
+    quay_username: "{{ admin_username }}"
+    quay_password: "{{ admin_password }}"
     validate_certs: false
   loop:
     - ansibletestrepo1
@@ -76,7 +77,8 @@
     name: "{{ item }}"
     state: absent
     quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
+    quay_username: "{{ admin_username }}"
+    quay_password: "{{ admin_password }}"
     validate_certs: false
   loop:
     - ansibletestapp1
@@ -88,7 +90,8 @@
     organization: ansibletestorg
     state: absent
     quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
+    quay_username: "{{ admin_username }}"
+    quay_password: "{{ admin_password }}"
     validate_certs: false
   loop:
     - ansibletestteam1
@@ -99,7 +102,8 @@
     name: ansibletestorg+ansibletestrobot1
     state: absent
     quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
+    quay_username: "{{ admin_username }}"
+    quay_password: "{{ admin_password }}"
     validate_certs: false
 
 - name: Ensure user accounts are removed
@@ -107,7 +111,8 @@
     username: "{{ item }}"
     state: absent
     quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
+    quay_username: "{{ admin_username }}"
+    quay_password: "{{ admin_password }}"
     validate_certs: false
   loop:
     - ansibletestuser1
@@ -119,6 +124,7 @@
     name: ansibletestorg
     state: absent
     quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
+    quay_username: "{{ admin_username }}"
+    quay_password: "{{ admin_password }}"
     validate_certs: false
 ...

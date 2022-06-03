@@ -1,4 +1,11 @@
 ---
+- name: Ensure both token and username authentication are not configured
+  ansible.builtin.fail:
+    msg: "quay_username/quay_password and quay_token are mutually exclusive"
+  when:
+    quay_username is defined and quay_token is defined or
+    quay_password is defined and quay_token is defined
+
 - name: Ensure the user accounts exist
   import_tasks: users.yml
 

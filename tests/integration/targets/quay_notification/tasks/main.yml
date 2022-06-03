@@ -250,6 +250,8 @@
     name: ansibletestorg
     state: absent
     quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
+    # For testing, authenticating with username/password instead of the token
+    quay_username: "{{ admin_username }}"
+    quay_password: "{{ admin_password }}"
     validate_certs: false
 ...

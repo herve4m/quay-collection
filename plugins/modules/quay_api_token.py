@@ -28,6 +28,20 @@ description: Create OAuth access tokens for authenticating with the API.
 version_added: '0.0.12'
 author: Herve Quatremain (@herve4m)
 options:
+  quay_username:
+    description:
+      - The username to use for authenticating against the API.
+      - If you do not set the parameter, then the module tries the
+        C(QUAY_USERNAME) environment variable.
+    type: str
+    required: true
+  quay_password:
+    description:
+      - The password to use for authenticating against the API.
+      - If you do not set the parameter, then the module tries the
+        C(QUAY_PASSWORD) environment variable.
+    type: str
+    required: true
   client_id:
     description:
       - The client ID associated with the OAuth application to use for
@@ -62,7 +76,6 @@ notes:
   - You cannot delete OAuth access tokens.
 extends_documentation_fragment:
   - herve4m.quay.auth
-  - herve4m.quay.auth.user
 """
 
 EXAMPLES = r"""
@@ -139,7 +152,8 @@ access_token:
 import re
 
 from ansible.module_utils.six.moves.urllib.parse import urlencode
-from ..module_utils.api_module import APIModuleAPIToken, APIModuleError
+from ansible.module_utils.basic import env_fallback
+from ..module_utils.api_module import APIModuleNoAuth, APIModuleError
 
 
 def main():
@@ -155,6 +169,10 @@ def main():
         "all",
     ]
     argument_spec = dict(
+        quay_username=dict(required=True, fallback=(env_fallback, ["QUAY_USERNAME"])),
+        quay_password=dict(
+            required=True, no_log=True, fallback=(env_fallback, ["QUAY_PASSWORD"])
+        ),
         client_id=dict(required=True),
         rights=dict(
             type="list", elements="str", choices=allowed_rights, default=["repo:read"]
@@ -162,7 +180,7 @@ def main():
     )
 
     # Create a module for ourselves
-    module = APIModuleAPIToken(argument_spec=argument_spec, supports_check_mode=True)
+    module = APIModuleNoAuth(argument_spec=argument_spec, supports_check_mode=True)
 
     # Extract our parameters
     client_id = module.params.get("client_id")

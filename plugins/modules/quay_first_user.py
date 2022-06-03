@@ -123,7 +123,7 @@ username:
   sample: admin
 """
 
-from ..module_utils.api_module import APIModuleFirstUser
+from ..module_utils.api_module import APIModuleNoAuth
 
 
 def main():
@@ -135,7 +135,7 @@ def main():
     )
 
     # Create a module for ourselves
-    module = APIModuleFirstUser(argument_spec=argument_spec, supports_check_mode=True)
+    module = APIModuleNoAuth(argument_spec=argument_spec, supports_check_mode=True)
 
     # Extract our parameters
     username = module.params.get("username")

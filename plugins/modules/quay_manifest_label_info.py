@@ -48,8 +48,7 @@ options:
     type: str
 extends_documentation_fragment:
   - herve4m.quay.auth
-  - herve4m.quay.auth.token
-  - herve4m.quay.auth.user
+  - herve4m.quay.auth.login
 """
 
 EXAMPLES = r"""

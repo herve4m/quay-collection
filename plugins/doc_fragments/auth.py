@@ -34,7 +34,7 @@ options:
     aliases: [verify_ssl]
 """
 
-    TOKEN = r"""
+    LOGIN = r"""
 options:
   quay_token:
     description:
@@ -43,10 +43,6 @@ options:
         environment variable.
       - Mutually exclusive with I(quay_username) and I(quay_password).
     type: str
-"""
-
-    USER = r"""
-options:
   quay_username:
     description:
       - The username to use for authenticating against the API.

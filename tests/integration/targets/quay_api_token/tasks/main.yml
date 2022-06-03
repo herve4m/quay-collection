@@ -33,8 +33,8 @@
 
 - name: Generate an OAuth access token for the user
   herve4m.quay.quay_api_token:
-    username: ansibletestuser1
-    password: vs9mrD55NP
+    quay_username: ansibletestuser1
+    quay_password: vs9mrD55NP
     client_id: "{{ app_details['client_id'] }}"
     rights:
       - all
@@ -69,6 +69,8 @@
     name: ansibletestorg
     state: absent
     quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
+    # For testing, authenticating with username/password instead of the token
+    quay_username: "{{ admin_username }}"
+    quay_password: "{{ admin_password }}"
     validate_certs: false
 ...

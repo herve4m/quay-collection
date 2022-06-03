@@ -1346,27 +1346,9 @@ class APIModule(AnsibleModule):
         return tag_list
 
 
-class APIModuleFirstUser(APIModule):
+class APIModuleNoAuth(APIModule):
     AUTH_ARGSPEC = dict(
         quay_host=dict(fallback=(env_fallback, ["QUAY_HOST"]), default="http://127.0.0.1"),
-        validate_certs=dict(
-            type="bool",
-            aliases=["verify_ssl"],
-            default=True,
-            fallback=(env_fallback, ["QUAY_VERIFY_SSL"]),
-        ),
-    )
-    MUTUALLY_EXCLUSIVE = []
-    REQUIRED_TOGETHER = []
-
-
-class APIModuleAPIToken(APIModule):
-    AUTH_ARGSPEC = dict(
-        quay_host=dict(fallback=(env_fallback, ["QUAY_HOST"]), default="http://127.0.0.1"),
-        quay_username=dict(required=True, fallback=(env_fallback, ["QUAY_USERNAME"])),
-        quay_password=dict(
-            required=True, no_log=True, fallback=(env_fallback, ["QUAY_PASSWORD"])
-        ),
         validate_certs=dict(
             type="bool",
             aliases=["verify_ssl"],

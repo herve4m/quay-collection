@@ -119,7 +119,7 @@ The following playbook example uses the `herve4m.quay.quay_first_user` module to
     # example, has superuser permissions so that you can use the generated
     # token to create additional objects.
     # To give the user superuser permissions, add its name to the SUPER_USERS
-    # section in the `config.yaml` file.
+    # section in the config.yaml file.
     - name: Ensure the initial user exists
       herve4m.quay.quay_first_user:
         username: admin

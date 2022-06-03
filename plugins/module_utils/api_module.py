@@ -8,12 +8,12 @@ __metaclass__ = type
 
 import socket
 import json
+import re
 
 from ansible.module_utils.basic import AnsibleModule, env_fallback
-
+from ansible.module_utils._text import to_text
 from ansible.module_utils.six.moves.urllib.parse import urlparse, urlencode
 from ansible.module_utils.six.moves.urllib.error import HTTPError
-
 from ansible.module_utils.urls import Request, SSLValidationError
 
 
@@ -39,6 +39,8 @@ class APIModule(AnsibleModule):
     AUTH_ARGSPEC = dict(
         quay_host=dict(fallback=(env_fallback, ["QUAY_HOST"]), default="http://127.0.0.1"),
         quay_token=dict(no_log=True, fallback=(env_fallback, ["QUAY_TOKEN"])),
+        quay_username=dict(fallback=(env_fallback, ["QUAY_USERNAME"])),
+        quay_password=dict(no_log=True, fallback=(env_fallback, ["QUAY_PASSWORD"])),
         validate_certs=dict(
             type="bool",
             aliases=["verify_ssl"],
@@ -46,6 +48,10 @@ class APIModule(AnsibleModule):
             fallback=(env_fallback, ["QUAY_VERIFY_SSL"]),
         ),
     )
+
+    MUTUALLY_EXCLUSIVE = [("quay_username", "quay_token"), ("quay_password", "quay_token")]
+
+    REQUIRED_TOGETHER = [("quay_username", "quay_password")]
 
     def __init__(self, argument_spec, **kwargs):
         """Initialize the object.
@@ -59,9 +65,20 @@ class APIModule(AnsibleModule):
         * :py:attr:``self.cache_org``: Dictionary that is used to cache
           organization details. Keys are organization names.
         """
+        self.authenticated = False
+        self.token_authenticated = False
+
         full_argspec = {}
         full_argspec.update(self.AUTH_ARGSPEC)
         full_argspec.update(argument_spec)
+
+        kwargs["mutually_exclusive"] = (
+            kwargs.get("mutually_exclusive", []) + self.MUTUALLY_EXCLUSIVE
+        )
+
+        kwargs["required_together"] = (
+            kwargs.get("required_together", []) + self.REQUIRED_TOGETHER
+        )
 
         super(APIModule, self).__init__(argument_spec=full_argspec, **kwargs)
 
@@ -90,23 +107,113 @@ class APIModule(AnsibleModule):
                 )
             )
 
+        # Create a network session object
+        self.create_session()
+
+        # Authenticate
+        token = self.params.get("quay_token")
+        if token:
+            self.token_authenticated = True
+            self.authenticated = True
+            self.session.headers.update(
+                {"Authorization": "Bearer {token}".format(token=token)}
+            )
+        else:
+            token = self.authenticate()
+            if token:
+                self.session.headers.update({"X-CSRF-Token": token})
+                self.authenticated = True
+        self.token = token
+
+        # Cache returns from API calls that get organization details
+        self.cache_org = {}
+
+    def create_session(self):
+        """Create a network session.
+
+        The session preserves cookies and headers between calls.
+        """
         headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
         }
-        token = self.params.get("quay_token")
-        if token:
-            headers["Authorization"] = "Bearer {token}".format(token=token)
-            self.authenticated = True
-        else:
-            self.authenticated = False
-
         self.session = Request(
             validate_certs=self.params.get("validate_certs"), headers=headers
         )
 
-        # Cache returns from API calls that get organization details
-        self.cache_org = {}
+    def authenticate(self):
+        """Authenticate by using a username and a password.
+
+        :return: The session token.
+        :rtype: str
+        """
+        username = self.params.get("quay_username")
+        password = self.params.get("quay_password")
+        if not username or not password:
+            return None
+
+        # Retrieve the CSRF cookie and token from the root page (GET /)
+        url = self.host_url._replace(path="/")
+        headers = {"Accept": "*/*"}
+        try:
+            html = self.make_raw_request("GET", url, headers=headers)
+        except APIModuleError as e:
+            self.fail_json(msg=str(e))
+        try:
+            csrf = re.search(r"window.__token\s*=\s*'(.*?)';", to_text(html["body"])).group(1)
+        except AttributeError:
+            self.fail_json(msg="Cannot retrieve the CSRF token from the returned data")
+
+        # Log in to the web UI (POST /api/v1/signin)
+        url = self.build_url("signin")
+        headers = {"X-CSRF-Token": csrf}
+        data = {"username": username, "password": password}
+        try:
+            response = self.make_json_request("POST", url, headers=headers, data=data)
+        except APIModuleError as e:
+            self.fail_json(msg=str(e))
+
+        if response["status_code"] != 200:
+            error_msg = self.get_error_message(response)
+            if error_msg:
+                fail_msg = "Unable to get {path}: {code}: {error}.".format(
+                    path=url.path,
+                    code=response["status_code"],
+                    error=error_msg,
+                )
+            else:
+                fail_msg = "Unable to get {path}: {code}.".format(
+                    path=url.path,
+                    code=response["status_code"],
+                )
+            self.fail_json(msg=fail_msg)
+
+        # Get the X-CSRF-Token header
+        token = response["headers"].get("X-Next-CSRF-Token")
+        if token is None:
+            self.fail_json(msg="Cannot retrieve the authentication token")
+        return token
+
+    def logout(self):
+        """Logout."""
+        if self.authenticated and not self.token_authenticated:
+            url = self.build_url("signout")
+            try:
+                self.make_json_request("POST", url)
+            except APIModuleError:
+                pass
+        self.authenticated = False
+        self.create_session()
+
+    def fail_json(self, **kwargs):
+        """Logout and then exit with an error."""
+        self.logout()
+        super(APIModule, self).fail_json(**kwargs)
+
+    def exit_json(self, **kwargs):
+        """Logout and then exit the module."""
+        self.logout()
+        super(APIModule, self).exit_json(**kwargs)
 
     def build_url(self, endpoint, query_params=None):
         """Return a URL for the given endpoint.
@@ -143,12 +250,12 @@ class APIModule(AnsibleModule):
         :param ok_error_codes: HTTP error codes that are acceptable (not errors)
                                when returned by the API. 404 by default.
         :type ok_error_codes: list
-        :param kwargs: Additionnal parameter to pass to the API (headers, data
+        :param kwargs: Additional parameter to pass to the API (headers, data
                        for PUT and POST requests, ...)
 
         :raises APIModuleError: The API request failed.
 
-        :return: A dictionnary with three entries: ``status_code`` provides the
+        :return: A dictionary with three entries: ``status_code`` provides the
                  API call returned code, ``body`` provides the returned data,
                  and ``headers`` provides the returned headers (dictionary)
         :rtype: dict
@@ -249,7 +356,7 @@ class APIModule(AnsibleModule):
 
         try:
             response_body = response.read()
-            # Convert the list of tuples to a dictionnary
+            # Convert the list of tuples to a dictionary
             response_headers = {}
             for r in response.getheaders():
                 response_headers[r[0]] = r[1]
@@ -276,12 +383,12 @@ class APIModule(AnsibleModule):
         :param ok_error_codes: HTTP error codes that are acceptable (not errors)
                                when returned by the API. 404 by default.
         :type ok_error_codes: list
-        :param kwargs: Additionnal parameter to pass to the API (data
+        :param kwargs: Additional parameter to pass to the API (data
                        for PUT and POST requests, ...)
 
         :raises APIModuleError: The API request failed.
 
-        :return: A dictionnary with three entries: ``status_code`` provides the
+        :return: A dictionary with three entries: ``status_code`` provides the
                  API call returned code, ``json`` provides the returned data
                  in JSON format, and ``headers`` provides the returned headers
                  (dictionary)
@@ -333,7 +440,7 @@ class APIModule(AnsibleModule):
                          in JSON format.
         :type response: dict
 
-        :return: The error message or an empty string if the reponse does not
+        :return: The error message or an empty string if the response does not
                  provide a message.
         :rtype: str
         """
@@ -377,11 +484,11 @@ class APIModule(AnsibleModule):
         :param ok_error_codes: HTTP error codes that are acceptable (not errors)
                                when returned by the API. 404 by default.
         :type ok_error_codes: list
-        :param kwargs: Dictionnary used to substitute parameters in the given
+        :param kwargs: Dictionary used to substitute parameters in the given
                        ``endpoint`` string. For example ``{"username":"jdoe"}``
         :type kwargs: dict
 
-        :raises APIModuleError: An API error occured. That exception is only
+        :raises APIModuleError: An API error occurred. That exception is only
                                 raised when ``exit_on_error`` is ``False``.
 
         :return: The response from the API or ``None`` if the object does not
@@ -469,11 +576,11 @@ class APIModule(AnsibleModule):
                               error. Otherwise, raise the
                               :py:class:``APIModuleError`` exception.
         :type exit_on_error: bool
-        :param kwargs: Dictionnary used to substitute parameters in the given
+        :param kwargs: Dictionary used to substitute parameters in the given
                        ``endpoint`` string. For example ``{"username":"jdoe"}``
         :type kwargs: dict
 
-        :raises APIModuleError: An API error occured. That exception is only
+        :raises APIModuleError: An API error occurred. That exception is only
                                 raised when ``exit_on_error`` is ``False``.
 
         :return: ``True`` if something has changed (object deleted), ``False``
@@ -568,11 +675,11 @@ class APIModule(AnsibleModule):
                                when returned by the API. 200, 201, and 204 by
                                default.
         :type ok_error_codes: list
-        :param kwargs: Dictionnary used to substitute parameters in the given
+        :param kwargs: Dictionary used to substitute parameters in the given
                        ``endpoint`` string. For example ``{"orgname":"devel"}``
         :type kwargs: dict
 
-        :raises APIModuleError: An API error occured. That exception is only
+        :raises APIModuleError: An API error occurred. That exception is only
                                 raised when ``exit_on_error`` is ``False``.
 
         :return: The data returned by the API call.
@@ -645,11 +752,11 @@ class APIModule(AnsibleModule):
                               error. Otherwise, raise the
                               :py:class:``APIModuleError`` exception.
         :type exit_on_error: bool
-        :param kwargs: Dictionnary used to substitute parameters in the given
+        :param kwargs: Dictionary used to substitute parameters in the given
                        ``endpoint`` string. For example ``{"username":"jdoe"}``
         :type kwargs: dict
 
-        :raises APIModuleError: An API error occured. That exception is only
+        :raises APIModuleError: An API error occurred. That exception is only
                                 raised when ``exit_on_error`` is ``False``.
 
         :return: The data returned by the API call.
@@ -836,7 +943,7 @@ class APIModule(AnsibleModule):
         :type exit_on_error: bool
 
         :return: The user description or None if the user account cannot be
-                 found. The returned dictionnary includes the ``is_robot`` key
+                 found. The returned dictionary includes the ``is_robot`` key
                  which indicates if the account is a robot account (``True``)
                  or a user account (``False``).
         :rtype: dict or None
@@ -1239,7 +1346,7 @@ class APIModule(AnsibleModule):
         return tag_list
 
 
-class APIModuleFirtUser(APIModule):
+class APIModuleFirstUser(APIModule):
     AUTH_ARGSPEC = dict(
         quay_host=dict(fallback=(env_fallback, ["QUAY_HOST"]), default="http://127.0.0.1"),
         validate_certs=dict(
@@ -1249,3 +1356,23 @@ class APIModuleFirtUser(APIModule):
             fallback=(env_fallback, ["QUAY_VERIFY_SSL"]),
         ),
     )
+    MUTUALLY_EXCLUSIVE = []
+    REQUIRED_TOGETHER = []
+
+
+class APIModuleAPIToken(APIModule):
+    AUTH_ARGSPEC = dict(
+        quay_host=dict(fallback=(env_fallback, ["QUAY_HOST"]), default="http://127.0.0.1"),
+        quay_username=dict(required=True, fallback=(env_fallback, ["QUAY_USERNAME"])),
+        quay_password=dict(
+            required=True, no_log=True, fallback=(env_fallback, ["QUAY_PASSWORD"])
+        ),
+        validate_certs=dict(
+            type="bool",
+            aliases=["verify_ssl"],
+            default=True,
+            fallback=(env_fallback, ["QUAY_VERIFY_SSL"]),
+        ),
+    )
+    MUTUALLY_EXCLUSIVE = []
+    REQUIRED_TOGETHER = []

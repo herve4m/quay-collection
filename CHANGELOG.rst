@@ -5,6 +5,14 @@ Red Hat Quay Collection Release Notes
 .. contents:: Topics
 
 
+v0.1.0
+======
+
+Minor Changes
+-------------
+
+- In addition to token authentication, the modules can now connect to the Quay API by using a login and password scheme. The new ``quay_username`` and ``quay_password`` parameters are mutually exclusive with the ``quay_token`` parameter.
+
 v0.0.14
 =======
 

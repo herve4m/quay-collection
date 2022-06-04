@@ -42,7 +42,7 @@ herve4m.quay.quay_api_token module -- Create OAuth access tokens for accessing t
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.14).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.1.0).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -114,20 +114,6 @@ Parameters
   </tr>
   <tr class="row-odd">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-password"></div>
-      <p class="ansible-option-title"><strong>password</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
-        / <span class="ansible-option-required">required</span>
-      </p>
-    </div></td>
-    <td><div class="ansible-option-cell">
-      <p>The password to use for authentication against the API.</p>
-    </div></td>
-  </tr>
-  <tr class="row-even">
-    <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
       <p class="ansible-option-title"><strong>quay_host</strong></p>
       <a class="ansibleOptionLink" href="#parameter-quay_host" title="Permalink to this option"></a>
@@ -142,7 +128,37 @@ Parameters
       <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">"http://127.0.0.1"</span></p>
     </div></td>
   </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-quay_password"></div>
+      <p class="ansible-option-title"><strong>quay_password</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-quay_password" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+        / <span class="ansible-option-required">required</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>The password to use for authenticating against the API.</p>
+      <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_PASSWORD</code> environment variable.</p>
+    </div></td>
+  </tr>
   <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-quay_username"></div>
+      <p class="ansible-option-title"><strong>quay_username</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-quay_username" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+        / <span class="ansible-option-required">required</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>The username to use for authenticating against the API.</p>
+      <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_USERNAME</code> environment variable.</p>
+    </div></td>
+  </tr>
+  <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-rights"></div>
       <p class="ansible-option-title"><strong>rights</strong></p>
@@ -166,21 +182,6 @@ Parameters
         <li><p><span class="ansible-option-choices-entry">user:read</span></p></li>
         <li><p><span class="ansible-option-choices-entry">all</span></p></li>
       </ul>
-    </div></td>
-  </tr>
-  <tr class="row-even">
-    <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-username"></div>
-      <p class="ansible-option-title"><strong>username</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
-        / <span class="ansible-option-required">required</span>
-      </p>
-    </div></td>
-    <td><div class="ansible-option-cell">
-      <p>The username to use for authentication against the API.</p>
-      <p>The OAuth access token that the module generates acts on behalf of that user account.</p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -220,6 +221,7 @@ Notes
 
 .. note::
    - Supports \ :literal:`check\_mode`\ .
+   - The generated OAuth access token acts on behalf of the user account you use with the module (in \ :emphasis:`quay\_username`\ ).
    - The module is not idempotent. Every time you run it, an additional OAuth access token is produced. The other OAuth access tokens stay valid.
    - You cannot delete OAuth access tokens.
 
@@ -236,8 +238,8 @@ Examples
     
     - name: Generate an OAuth access token
       herve4m.quay.quay_api_token:
-        username: lvasquez
-        password: vs9mrD55NP
+        quay_username: lvasquez
+        quay_password: vs9mrD55NP
         # The OAuth application must exist. See the following example that shows
         # how to create an organization and an application.
         client_id: PZ6F80R1LCVPGYNZGSZQ
@@ -283,8 +285,8 @@ Examples
 
     - name: Generate an OAuth access token for the user
       herve4m.quay.quay_api_token:
-        username: jziglar
-        password: i45fR38GhY
+        quay_username: jziglar
+        quay_password: i45fR38GhY
         client_id: "{{ app_details['client_id'] }}"
         rights:
           - all

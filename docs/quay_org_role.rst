@@ -27,7 +27,7 @@ herve4m.quay.quay_org role -- Create and configure a Red Hat Quay organization
 .. Collection note
 
 .. note::
-    This role is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.14).
+    This role is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.1.0).
 
     To install it use: :code:`ansible-galaxy collection install herve4m.quay`.
 
@@ -86,8 +86,8 @@ Parameters
     </div></td>
     <td><div class="ansible-option-cell">
       <p>URL for accessing the API. <a href='https://quay.example.com:8443'>https://quay.example.com:8443</a> for example.</p>
-      <p>If you do not set the parameter, then the module uses the <code class='docutils literal notranslate'>QUAY_HOST</code> environment variable.</p>
-      <p>If you do no set the environment variable either, then the module uses the <a href='http://127.0.0.1'>http://127.0.0.1</a> URL.</p>
+      <p>If you do not set the parameter, then the role uses the <code class='docutils literal notranslate'>QUAY_HOST</code> environment variable.</p>
+      <p>If you do no set the environment variable either, then the role uses the <a href='http://127.0.0.1'>http://127.0.0.1</a> URL.</p>
       <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">"http://127.0.0.1"</span></p>
     </div></td>
   </tr>
@@ -238,7 +238,7 @@ Parameters
     </div></td>
     <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
       <p>Permission that Quay automatically grants to the user or team on new created repositories in the organization.</p>
-      <p>If you do not provide that parameter, then the module uses <code class='docutils literal notranslate'>read</code> by default.</p>
+      <p>If you do not provide that parameter, then the role uses <code class='docutils literal notranslate'>read</code> by default.</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
         <li><p><span class="ansible-option-choices-entry">read</span></p></li>
@@ -696,6 +696,23 @@ Parameters
   </tr>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-main--quay_password"></div>
+      <p class="ansible-option-title"><strong>quay_password</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-main--quay_password" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>The password to use for authenticating against the API.</p>
+      <p>If you do not set the parameter, then the role tries the <code class='docutils literal notranslate'>QUAY_PASSWORD</code> environment variable.</p>
+      <p>If you set <em>quay_password</em>, then you also need to set <em>quay_username</em>.</p>
+      <p>Mutually exclusive with <em>quay_token</em>.</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_token"></div>
       <p class="ansible-option-title"><strong>quay_token</strong></p>
       <a class="ansibleOptionLink" href="#parameter-main--quay_token" title="Permalink to this option"></a>
@@ -705,8 +722,26 @@ Parameters
 
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>OAuth access token for authenticating with the API.</p>
-      <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_TOKEN</code> environment variable.</p>
+      <p>OAuth access token for authenticating against the API.</p>
+      <p>If you do not set the parameter, then the role tries the <code class='docutils literal notranslate'>QUAY_TOKEN</code> environment variable.</p>
+      <p>Mutually exclusive with <em>quay_username</em> and <em>quay_password</em>.</p>
+    </div></td>
+  </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-main--quay_username"></div>
+      <p class="ansible-option-title"><strong>quay_username</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-main--quay_username" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>The username to use for authenticating against the API.</p>
+      <p>If you do not set the parameter, then the role tries the <code class='docutils literal notranslate'>QUAY_USERNAME</code> environment variable.</p>
+      <p>If you set <em>quay_username</em>, then you also need to set <em>quay_password</em>.</p>
+      <p>Mutually exclusive with <em>quay_token</em>.</p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -721,8 +756,8 @@ Parameters
     </div></td>
     <td><div class="ansible-option-cell">
       <p>Whether to allow insecure connections to the API.</p>
-      <p>If <code class='docutils literal notranslate'>no</code>, then the module does not validate SSL certificates.</p>
-      <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_VERIFY_SSL</code> environment variable (<code class='docutils literal notranslate'>yes</code>, <code class='docutils literal notranslate'>1</code>, and <code class='docutils literal notranslate'>True</code> mean yes, and <code class='docutils literal notranslate'>no</code>, <code class='docutils literal notranslate'>0</code>, <code class='docutils literal notranslate'>False</code>, and no value mean no).</p>
+      <p>If <code class='docutils literal notranslate'>no</code>, then the role does not validate SSL certificates.</p>
+      <p>If you do not set the parameter, then the role tries the <code class='docutils literal notranslate'>QUAY_VERIFY_SSL</code> environment variable (<code class='docutils literal notranslate'>yes</code>, <code class='docutils literal notranslate'>1</code>, and <code class='docutils literal notranslate'>True</code> mean yes, and <code class='docutils literal notranslate'>no</code>, <code class='docutils literal notranslate'>0</code>, <code class='docutils literal notranslate'>False</code>, and no value mean no).</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
         <li><p><span class="ansible-option-choices-entry">no</span></p></li>

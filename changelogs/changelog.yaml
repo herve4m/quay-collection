@@ -132,3 +132,12 @@ releases:
       name: quay_team_ldap
       namespace: ''
     release_date: '2022-01-18'
+  0.1.0:
+    changes:
+      minor_changes:
+      - In addition to token authentication, the modules can now connect to the Quay
+        API by using a login and password scheme. The new ``quay_username`` and ``quay_password``
+        parameters are mutually exclusive with the ``quay_token`` parameter.
+    fragments:
+    - v0.1.0_summary.yml
+    release_date: '2022-06-04'

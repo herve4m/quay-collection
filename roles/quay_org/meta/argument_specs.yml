@@ -12,26 +12,45 @@ argument_specs:
         description:
           - URL for accessing the API. U(https://quay.example.com:8443) for
             example.
-          - If you do not set the parameter, then the module uses the
+          - If you do not set the parameter, then the role uses the
             C(QUAY_HOST) environment variable.
-          - If you do no set the environment variable either, then the module
+          - If you do no set the environment variable either, then the role
             uses the U(http://127.0.0.1) URL.
         type: str
         default: http://127.0.0.1
       quay_validate_certs:
         description:
           - Whether to allow insecure connections to the API.
-          - If C(no), then the module does not validate SSL certificates.
-          - If you do not set the parameter, then the module tries the
+          - If C(no), then the role does not validate SSL certificates.
+          - If you do not set the parameter, then the role tries the
             C(QUAY_VERIFY_SSL) environment variable (C(yes), C(1), and C(True)
             mean yes, and C(no), C(0), C(False), and no value mean no).
         type: bool
         default: true
       quay_token:
         description:
-          - OAuth access token for authenticating with the API.
-          - If you do not set the parameter, then the module tries the
+          - OAuth access token for authenticating against the API.
+          - If you do not set the parameter, then the role tries the
             C(QUAY_TOKEN) environment variable.
+          - Mutually exclusive with I(quay_username) and I(quay_password).
+        type: str
+      quay_username:
+        description:
+          - The username to use for authenticating against the API.
+          - If you do not set the parameter, then the role tries the
+            C(QUAY_USERNAME) environment variable.
+          - If you set I(quay_username), then you also need to set
+            I(quay_password).
+          - Mutually exclusive with I(quay_token).
+        type: str
+      quay_password:
+        description:
+          - The password to use for authenticating against the API.
+          - If you do not set the parameter, then the role tries the
+            C(QUAY_PASSWORD) environment variable.
+          - If you set I(quay_password), then you also need to set
+            I(quay_username).
+          - Mutually exclusive with I(quay_token).
         type: str
       quay_org_name:
         description:
@@ -176,7 +195,7 @@ argument_specs:
             description:
               - Permission that Quay automatically grants to the user or team
                 on new created repositories in the organization.
-              - If you do not provide that parameter, then the module uses
+              - If you do not provide that parameter, then the role uses
                 C(read) by default.
             type: str
             choices: [read, write, admin]

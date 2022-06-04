@@ -42,7 +42,7 @@ herve4m.quay.quay_first_user module -- Create the first user account
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.14).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.1.0).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.

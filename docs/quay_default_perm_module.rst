@@ -42,7 +42,7 @@ herve4m.quay.quay_default_perm module -- Manage Red Hat Quay default repository 
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.0.14).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.1.0).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -159,6 +159,22 @@ Parameters
   </tr>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-quay_password"></div>
+      <p class="ansible-option-title"><strong>quay_password</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-quay_password" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>The password to use for authenticating against the API.</p>
+      <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_PASSWORD</code> environment variable.</p>
+      <p>If you set <em>quay_password</em>, then you also need to set <em>quay_username</em>.</p>
+      <p>Mutually exclusive with <em>quay_token</em>.</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
       <p class="ansible-option-title"><strong>quay_token</strong></p>
       <a class="ansibleOptionLink" href="#parameter-quay_token" title="Permalink to this option"></a>
@@ -167,8 +183,25 @@ Parameters
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>OAuth access token for authenticating with the API.</p>
+      <p>OAuth access token for authenticating against the API.</p>
       <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_TOKEN</code> environment variable.</p>
+      <p>Mutually exclusive with <em>quay_username</em> and <em>quay_password</em>.</p>
+    </div></td>
+  </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-quay_username"></div>
+      <p class="ansible-option-title"><strong>quay_username</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-quay_username" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>The username to use for authenticating against the API.</p>
+      <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_USERNAME</code> environment variable.</p>
+      <p>If you set <em>quay_username</em>, then you also need to set <em>quay_password</em>.</p>
+      <p>Mutually exclusive with <em>quay_token</em>.</p>
     </div></td>
   </tr>
   <tr class="row-odd">

@@ -69,15 +69,14 @@ See [Ansible -- Using collections](https://docs.ansible.com/ansible/latest/user_
 ## Using the Collection
 
 The modules in the collection access Red Hat Quay through its REST API.
-To use the API, Red Hat Quay requires an OAuth access token.
-You cannot use a user name and a password for authenticating.
+The modules can connect to the API by using a username and a password, or by using an OAuth access token.
 
 There are two ways to get an OAuth access token:
 
 * Use the Red Hat Quay web UI.
 * Use the `herve4m.quay.quay_first_user` Ansible module to create the first user account just after you installed Red Hat Quay.
-  The module creates and then returns the OAuth access token for the user.
-  The token is valid for 2 hours and 30 minutes.
+  The module creates and then returns an OAuth access token for the user.
+  This token is only valid for 2 hours and 30 minutes.
 
 
 ### Creating an OAuth Access Token by Using the Web UI
@@ -119,7 +118,7 @@ The following playbook example uses the `herve4m.quay.quay_first_user` module to
     # example, has superuser permissions so that you can use the generated
     # token to create additional objects.
     # To give the user superuser permissions, add its name to the SUPER_USERS
-    # section in the `config.yaml` file.
+    # section in the config.yaml file.
     - name: Ensure the initial user exists
       herve4m.quay.quay_first_user:
         username: admin

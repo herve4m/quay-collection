@@ -46,8 +46,8 @@ options:
     description:
       - The client ID associated with the OAuth application to use for
         generating the OAuth access token.
-      - See the M(quay_application) module to create an application object and
-        to retrieve the associated client ID.
+      - See the M(herve4m.quay.quay_application) module to create an application
+        object and to retrieve the associated client ID.
     required: true
     type: str
   rights:

@@ -119,7 +119,7 @@ notes:
   - There is no API function to remove the configuration. However, you can
     deactivate mirroring by setting the I(is_enabled) parameter to C(false) or
     by changing the repository mirror state (see the I(repo_state) parameter in
-    the M(quay_repository) module).
+    the M(herve4m.quay.quay_repository) module).
     The configuration is preserved when you disable mirroring.
   - Supports C(check_mode).
   - The user account associated with the token that you provide in

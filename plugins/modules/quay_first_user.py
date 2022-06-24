@@ -46,7 +46,8 @@ options:
       - You probably want that user account to have superuser permissions so
         that you can use the returned token to create additional objects.
         To do so, add the account name to the C(SUPER_USERS) section in the
-        C(config.yaml) file before using the M(quay_first_user) module.
+        C(config.yaml) file before using the M(herve4m.quay.quay_first_user)
+        module.
     required: true
     type: str
   email:

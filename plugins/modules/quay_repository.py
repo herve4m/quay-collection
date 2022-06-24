@@ -110,7 +110,7 @@ options:
       - If C(NORMAL), then the repository is in the default state (read/write).
       - If C(READ_ONLY), then the repository is read-only.
       - If C(MIRROR), then the repository is a mirror and you can configure it
-        by using the M(quay_repository_mirror) module.
+        by using the M(herve4m.quay.quay_repository_mirror) module.
       - You must enable the mirroring capability of your Quay installation to
         use this I(repo_state) parameter.
     type: str

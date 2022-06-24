@@ -57,8 +57,8 @@ options:
       - List of the user or robot accounts in the team. Use the syntax
         C(organization)+C(robotshortname) for robot accounts.
       - If the team is synchronized with an LDAP group (see the
-        M(quay_team_ldap) module), then you can only add or remove robot
-        accounts.
+        M(herve4m.quay.quay_team_ldap) module), then you can only add or remove
+        robot accounts.
     type: list
     elements: str
   append:
@@ -80,7 +80,8 @@ options:
     default: present
     choices: [absent, present]
 notes:
-  - To synchronize teams with LDAP groups, see the M(quay_team_ldap) module.
+  - To synchronize teams with LDAP groups, see the
+    M(herve4m.quay.quay_team_ldap) module.
   - Supports C(check_mode).
   - The token that you provide in I(quay_token) must have the "Administer
     Organization" and "Administer User" permissions.

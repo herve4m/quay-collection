@@ -33,7 +33,8 @@ options:
   name:
     description:
       - Name of the team to synchronize or unsynchronize with an LDAP group.
-        That team must exist (see the M(quay_team) module to create it).
+        That team must exist (see the M(herve4m.quay.quay_team) module to
+        create it).
     required: true
     type: str
   organization:

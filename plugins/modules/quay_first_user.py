@@ -36,7 +36,7 @@ DOCUMENTATION = r"""
 module: quay_first_user
 short_description: Create the first user account
 description:
-  - Create the first user just after installing Red Hat Quay.
+  - Create the first user just after installing Quay Container Registry.
 version_added: '0.0.7'
 author: Herve Quatremain (@herve4m)
 options:
@@ -72,7 +72,7 @@ options:
     type: bool
     default: no
 notes:
-  - The module requires Red Hat Quay 3.6 or later.
+  - The module requires Quay version 3.6 or later.
   - To use the module, you must enable the first user creation feature of your
     Quay installation (C(FEATURE_USER_INITIALIZE) in C(config.yaml)).
   - You must also use the internal database of your Quay installation for

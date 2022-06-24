@@ -36,13 +36,13 @@
 
 .. Title
 
-herve4m.quay.quay_application module -- Manage Red Hat Quay applications
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+herve4m.quay.quay_application module -- Manage Quay Container Registry applications
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.1.0).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.1.1).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -68,7 +68,7 @@ Synopsis
 
 .. Description
 
-- Create, delete, and update applications in Red Hat Quay organizations.
+- Create, delete, and update applications in Quay organizations.
 
 
 .. Aliases

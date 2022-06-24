@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2021, Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2021, 2022, Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # For accessing the API documentation from a running system, use the swagger-ui
@@ -27,7 +27,7 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: quay_default_perm
-short_description: Manage Red Hat Quay default repository permissions
+short_description: Manage Quay Container Registry default repository permissions
 description:
   - Create, delete, and update default repository permissions.
 version_added: '0.0.1'

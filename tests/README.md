@@ -1,4 +1,4 @@
-# Tests for the Red Hat Quay Collection
+# Tests for the Quay Container Registry Collection
 
 GitHub Actions trigger the tests in this directory.
 The GitHub Actions workflow YAML files are defined in the [GitHub Actions workflow directory](https://github.com/herve4m/quay-collection/tree/main/.github/workflows).
@@ -12,14 +12,14 @@ If you want to run one of these playbooks manually against your Quay installatio
 
 * Make a copy of the `sample_manual_test.yml` playbook model and then update your copy.
   Change the role to run and provide the connection parameters to your Quay installation.
-* Install the Red Hat Quay collection in your environment by using the `ansible-galaxy collection install` command.
+* Install the Quay Container Registry collection in your environment by using the `ansible-galaxy collection install` command.
 * Run your copy of the playbook with the `ansible-playbook` command.
 
 If you are using a fresh Quay installation that you have not configured yet, then you do not need to set the `default_token` variable in your copy of the playbook.
 The test framework will try to create the first user account and use its OAuth access token for later authentications.
 This mechanism requires:
 
-* Red Hat Quay version 3.6 or later.
+* Quay version 3.6 or later.
 * A pristine Quay installation (an empty database).
 * The `FEATURE_USER_INITIALIZE` parameter set to `true` in the `config.yaml` file.
 * User authentication performed against the internal database (the `AUTHENTICATION_TYPE` parameter must be set to `Database` in `config.yaml`, or `Internal Authentication` to `Local Database` in the configuration web UI)

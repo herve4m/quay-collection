@@ -24,7 +24,7 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: quay_quota
-short_description: Manage Red Hat Quay organizations quota
+short_description: Manage Quay Container Registry organizations quota
 description:
   - Create, delete, and update storage quota for organizations.
 version_added: '0.0.14'
@@ -69,7 +69,7 @@ options:
     default: present
     choices: [absent, present]
 notes:
-  - The module requires Red Hat Quay 3.7 or later.
+  - The module requires Quay version 3.7 or later.
   - The module requires that your Quay administrator enables quota management
     for your installation (by setting C(FEATURE_QUOTA_MANAGEMENT) to C(True) in
     C(config.yaml)).

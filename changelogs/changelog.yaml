@@ -141,3 +141,9 @@ releases:
     fragments:
     - v0.1.0_summary.yml
     release_date: '2022-06-04'
+  0.1.1:
+    changes:
+      release_summary: Updating documentation and testing against version 3.7.2
+    fragments:
+    - v0.1.1_summary.yml
+    release_date: '2022-06-24'

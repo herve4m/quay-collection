@@ -24,9 +24,9 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: quay_repository
-short_description: Manage Red Hat Quay repositories
+short_description: Manage Quay Container Registry repositories
 description:
-  - Create, delete, and update repositories in Red Hat Quay.
+  - Create, delete, and update repositories in Quay Container Registry.
 version_added: '0.0.1'
 author: Herve Quatremain (@herve4m)
 options:

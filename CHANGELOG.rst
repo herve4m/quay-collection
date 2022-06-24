@@ -1,9 +1,17 @@
-=====================================
-Red Hat Quay Collection Release Notes
-=====================================
+================================================
+Quay Container Registry Collection Release Notes
+================================================
 
 .. contents:: Topics
 
+
+v0.1.1
+======
+
+Release Summary
+---------------
+
+Updating documentation and testing against version 3.7.2
 
 v0.1.0
 ======

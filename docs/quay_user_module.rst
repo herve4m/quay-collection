@@ -36,13 +36,13 @@
 
 .. Title
 
-herve4m.quay.quay_user module -- Manage Red Hat Quay users
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+herve4m.quay.quay_user module -- Manage Quay Container Registry users
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.1.0).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.1.1).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -68,7 +68,7 @@ Synopsis
 
 .. Description
 
-- Create, delete, and update user accounts in Red Hat Quay.
+- Create, delete, and update user accounts in Quay Container Registry.
 
 
 .. Aliases
@@ -243,7 +243,7 @@ Parameters
     </div></td>
     <td><div class="ansible-option-cell">
       <p>Grant superuser permissions to the user.</p>
-      <p>Granting superuser privileges to a user is not immediate and usually requires a restart of the Red Hat Quay service.</p>
+      <p>Granting superuser privileges to a user is not immediate and usually requires a restart of the Quay Container Registry service.</p>
       <p>You cannot revoke superuser permissions.</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
@@ -339,7 +339,7 @@ Examples
         username: jziglar
         email: jziglar@example.com
         state: present
-        # Only effective after a restart of the Red Hat Quay service.
+        # Only effective after a restart of the Quay Container Registry service.
         superuser: true
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7

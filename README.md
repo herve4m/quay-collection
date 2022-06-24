@@ -1,50 +1,50 @@
-# Red Hat Quay Collection for Ansible
+# Quay Container Registry Collection for Ansible
 
 [![Code Linting](https://github.com/herve4m/quay-collection/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/herve4m/quay-collection/actions/workflows/pre-commit.yml)
 [![Sanity Test](https://github.com/herve4m/quay-collection/actions/workflows/ansible-sanity.yml/badge.svg)](https://github.com/herve4m/quay-collection/actions/workflows/ansible-sanity.yml)
 [![Integration Test](https://github.com/herve4m/quay-collection/actions/workflows/ansible-integration.yml/badge.svg)](https://github.com/herve4m/quay-collection/actions/workflows/ansible-integration.yml)
 
 
-The collection provides modules for managing your Red Hat Quay deployment.
+The collection provides modules for managing your Quay Container Registry deployment.
 
 ## Included Content
 
-The modules have been tested against versions 3.5.6, 3.6.1, 3.6.2, and 3.7.0 of Red Hat Quay.
+The modules have been tested against versions 3.5.6, 3.6.1, 3.6.2, 3.7.0, and 3.7.2 of Quay Container Registry.
 
 ### Modules
 Name | Description
 ---: | :---
-[quay_api_token](https://github.com/herve4m/quay-collection/blob/main/docs/quay_api_token_module.rst) |  Create OAuth access tokens for accessing the Red Hat Quay API
-[quay_application](https://github.com/herve4m/quay-collection/blob/main/docs/quay_application_module.rst) |  Manage Red Hat Quay applications
-[quay_default_perm](https://github.com/herve4m/quay-collection/blob/main/docs/quay_default_perm_module.rst) |  Manage Red Hat Quay default repository permissions
-[quay_docker_token](https://github.com/herve4m/quay-collection/blob/main/docs/quay_docker_token_module.rst) |  Manage tokens for accessing Red Hat Quay repositories
+[quay_api_token](https://github.com/herve4m/quay-collection/blob/main/docs/quay_api_token_module.rst) |  Create OAuth access tokens for accessing the Quay Container Registry API
+[quay_application](https://github.com/herve4m/quay-collection/blob/main/docs/quay_application_module.rst) |  Manage Quay Container Registry applications
+[quay_default_perm](https://github.com/herve4m/quay-collection/blob/main/docs/quay_default_perm_module.rst) |  Manage Quay Container Registry default repository permissions
+[quay_docker_token](https://github.com/herve4m/quay-collection/blob/main/docs/quay_docker_token_module.rst) |  Manage tokens for accessing Quay Container Registry repositories
 [quay_first_user](https://github.com/herve4m/quay-collection/blob/main/docs/quay_first_user_module.rst) |  Create the first user account
-[quay_layer_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_layer_info_module.rst) |  Gather information about image layers in Red Hat Quay
-[quay_manifest_label](https://github.com/herve4m/quay-collection/blob/main/docs/quay_manifest_label_module.rst) |  Manage Red Hat Quay image manifest labels
-[quay_manifest_label_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_manifest_label_info_module.rst) |  Gather information about manifest labels in Red Hat Quay
-[quay_message](https://github.com/herve4m/quay-collection/blob/main/docs/quay_message_module.rst) |  Manage Red Hat Quay global messages
-[quay_notification](https://github.com/herve4m/quay-collection/blob/main/docs/quay_notification_module.rst) |  Manage Red Hat Quay repository notifications
-[quay_organization](https://github.com/herve4m/quay-collection/blob/main/docs/quay_organization_module.rst) |  Manage Red Hat Quay organizations
-[quay_quota](https://github.com/herve4m/quay-collection/blob/main/docs/quay_quota_module.rst) |  Manage Red Hat Quay organizations quota
-[quay_repository](https://github.com/herve4m/quay-collection/blob/main/docs/quay_repository_module.rst) |  Manage Red Hat Quay repositories
-[quay_repository_mirror](https://github.com/herve4m/quay-collection/blob/main/docs/quay_repository_mirror_module.rst) |  Manage Red Hat Quay repositories mirrors
-[quay_robot](https://github.com/herve4m/quay-collection/blob/main/docs/quay_robot_module.rst) |  Manage Red Hat Quay robot accounts
-[quay_tag](https://github.com/herve4m/quay-collection/blob/main/docs/quay_tag_module.rst) | Manage Red Hat Quay image tags
-[quay_tag_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_tag_info_module.rst) |  Gather information about tags in a Red Hat Quay repository
-[quay_team](https://github.com/herve4m/quay-collection/blob/main/docs/quay_team_module.rst) |  Manage Red Hat Quay teams
-[quay_team_ldap](https://github.com/herve4m/quay-collection/blob/main/docs/quay_team_ldap_module.rst) |  Synchronize Red Hat Quay teams with LDAP groups
-[quay_user](https://github.com/herve4m/quay-collection/blob/main/docs/quay_user_module.rst) |  Manage Red Hat Quay users
-[quay_vulnerability_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_vulnerability_info_module.rst) | Gather information about image vulnerabilities in Red Hat Quay
+[quay_layer_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_layer_info_module.rst) |  Gather information about image layers in Quay Container Registry
+[quay_manifest_label](https://github.com/herve4m/quay-collection/blob/main/docs/quay_manifest_label_module.rst) |  Manage Quay Container Registry image manifest labels
+[quay_manifest_label_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_manifest_label_info_module.rst) |  Gather information about manifest labels in Quay Container Registry
+[quay_message](https://github.com/herve4m/quay-collection/blob/main/docs/quay_message_module.rst) |  Manage Quay Container Registry global messages
+[quay_notification](https://github.com/herve4m/quay-collection/blob/main/docs/quay_notification_module.rst) |  Manage Quay Container Registry repository notifications
+[quay_organization](https://github.com/herve4m/quay-collection/blob/main/docs/quay_organization_module.rst) |  Manage Quay Container Registry organizations
+[quay_quota](https://github.com/herve4m/quay-collection/blob/main/docs/quay_quota_module.rst) |  Manage Quay Container Registry organizations quota
+[quay_repository](https://github.com/herve4m/quay-collection/blob/main/docs/quay_repository_module.rst) |  Manage Quay Container Registry repositories
+[quay_repository_mirror](https://github.com/herve4m/quay-collection/blob/main/docs/quay_repository_mirror_module.rst) |  Manage Quay Container Registry repositories mirrors
+[quay_robot](https://github.com/herve4m/quay-collection/blob/main/docs/quay_robot_module.rst) |  Manage Quay Container Registry robot accounts
+[quay_tag](https://github.com/herve4m/quay-collection/blob/main/docs/quay_tag_module.rst) | Manage Quay Container Registry image tags
+[quay_tag_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_tag_info_module.rst) |  Gather information about tags in a Quay Container Registry repository
+[quay_team](https://github.com/herve4m/quay-collection/blob/main/docs/quay_team_module.rst) |  Manage Quay Container Registry teams
+[quay_team_ldap](https://github.com/herve4m/quay-collection/blob/main/docs/quay_team_ldap_module.rst) |  Synchronize Quay Container Registry teams with LDAP groups
+[quay_user](https://github.com/herve4m/quay-collection/blob/main/docs/quay_user_module.rst) |  Manage Quay Container Registry users
+[quay_vulnerability_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_vulnerability_info_module.rst) | Gather information about image vulnerabilities in Quay Container Registry
 
 ### Roles
 Name | Description
 ---: | :---
-[quay_org](https://github.com/herve4m/quay-collection/blob/main/roles/quay_org/README.md) ([variables](https://github.com/herve4m/quay-collection/blob/main/docs/quay_org_role.rst)) | Create and configure a Red Hat Quay organization | [quay_org](https://github.com/herve4m/quay-collection/blob/main/docs/quay_org_role.rst)
+[quay_org](https://github.com/herve4m/quay-collection/blob/main/roles/quay_org/README.md) ([variables](https://github.com/herve4m/quay-collection/blob/main/docs/quay_org_role.rst)) | Create and configure a Quay Container Registry organization | [quay_org](https://github.com/herve4m/quay-collection/blob/main/docs/quay_org_role.rst)
 
 
 ## Installing the Collection
 
-Before using the Red Hat Quay collection, install it by using the Ansible Galaxy command-line tool:
+Before using the Quay collection, install it by using the Ansible Galaxy command-line tool:
 
 ```bash
 ansible-galaxy collection install herve4m.quay
@@ -68,13 +68,13 @@ See [Ansible -- Using collections](https://docs.ansible.com/ansible/latest/user_
 
 ## Using the Collection
 
-The modules in the collection access Red Hat Quay through its REST API.
+The modules in the collection access Quay through its REST API.
 The modules can connect to the API by using a username and a password, or by using an OAuth access token.
 
 There are two ways to get an OAuth access token:
 
-* Use the Red Hat Quay web UI.
-* Use the `herve4m.quay.quay_first_user` Ansible module to create the first user account just after you installed Red Hat Quay.
+* Use the Quay Container Registry web UI.
+* Use the `herve4m.quay.quay_first_user` Ansible module to create the first user account just after you installed Quay Container Registry.
   The module creates and then returns an OAuth access token for the user.
   This token is only valid for 2 hours and 30 minutes.
 
@@ -84,7 +84,7 @@ There are two ways to get an OAuth access token:
 Before you can use the collection, you must generate an OAuth access token.
 To do so, follow those steps:
 
-1. Log in to the Red Hat Quay web UI.
+1. Log in to the Quay Container Registry web UI.
 2. Use an existing organization or create a new one.
 3. In the organization, create an application.
 4. In the application, select the `Generate Token` menu.
@@ -102,7 +102,7 @@ See the [Quay.io API](https://docs.quay.io/api/) documentation for more details.
 
 ### Getting an OAuth Access Token when Creating the First User
 
-Just after you installed Red Hat Quay, and before you do anything else, you can create the first user and generate an OAuth access token for that user.
+Just after you installed Quay Container Registry, and before you do anything else, you can create the first user and generate an OAuth access token for that user.
 
 After that initial operation, you can create additional user accounts by using the `herve4m.quay.quay_user` module and generate OAuth access tokens for those additional accounts by using the `herve4m.quay.quay_api_token` module.
 
@@ -110,7 +110,7 @@ The following playbook example uses the `herve4m.quay.quay_first_user` module to
 
 ```yaml
 ---
-- name: Bootstrapping a fresh Red Hat Quay installation
+- name: Bootstrapping a fresh Quay Container Registry installation
   hosts: localhost
 
   tasks:
@@ -134,7 +134,7 @@ The following playbook example uses the `herve4m.quay.quay_first_user` module to
       debug:
         msg: "Access token: {{ result['access_token'] }}"
 
-    # Using the OAuth access token to continue configuring Red Hat Quay
+    # Using the OAuth access token to continue configuring Quay
     - name: Ensure the user exists
       herve4m.quay.quay_user:
         username: lvasquez
@@ -148,7 +148,7 @@ The following playbook example uses the `herve4m.quay.quay_first_user` module to
 
 The requirements for the `herve4m.quay.quay_first_user` module are as follows:
 
-* You must use Red Hat Quay 3.6 or later.
+* You must use Quay version 3.6 or later.
 * You must enable the first user creation feature (`FEATURE_USER_INITIALIZE` in `config.yaml`).
 * You must use the internal database for user authentication (`AUTHENTICATION_TYPE` to `Database` in `config.yaml` or `Internal Authentication` to `Local Database` in the configuration web UI).
 * You probably want the first user to have superuser permissions.

@@ -24,7 +24,7 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: quay_team
-short_description: Manage Red Hat Quay teams
+short_description: Manage Quay Container Registry teams
 description:
   - Create, delete, and update teams in organizations.
 version_added: '0.0.1'

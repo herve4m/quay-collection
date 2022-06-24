@@ -24,7 +24,7 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: quay_manifest_label_info
-short_description: Gather information about manifest labels in Red Hat Quay
+short_description: Gather information about manifest labels in Quay Container Registry
 description:
   - Gather information about the manifest labels in a repository.
 version_added: '0.0.10'

@@ -23,7 +23,7 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: quay_api_token
-short_description: Create OAuth access tokens for accessing the Red Hat Quay API
+short_description: Create OAuth access tokens for accessing the Quay Container Registry API
 description: Create OAuth access tokens for authenticating with the API.
 version_added: '0.0.12'
 author: Herve Quatremain (@herve4m)

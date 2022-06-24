@@ -42,7 +42,7 @@ herve4m.quay.quay_first_user module -- Create the first user account
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.1.0).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.1.1).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -68,7 +68,7 @@ Synopsis
 
 .. Description
 
-- Create the first user just after installing Red Hat Quay.
+- Create the first user just after installing Quay Container Registry.
 
 
 .. Aliases
@@ -212,7 +212,7 @@ Notes
 -----
 
 .. note::
-   - The module requires Red Hat Quay 3.6 or later.
+   - The module requires Quay version 3.6 or later.
    - To use the module, you must enable the first user creation feature of your Quay installation (\ :literal:`FEATURE\_USER\_INITIALIZE`\  in \ :literal:`config.yaml`\ ).
    - You must also use the internal database of your Quay installation for authentication (\ :literal:`AUTHENTICATION\_TYPE`\  to \ :literal:`Database`\  in \ :literal:`config.yaml`\ ).
    - Use the module just after installing Quay, when the database is empty. The module fails if user accounts are already defined in the database.

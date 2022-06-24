@@ -23,7 +23,7 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: quay_docker_token
-short_description: Manage tokens for accessing Red Hat Quay repositories
+short_description: Manage tokens for accessing Quay Container Registry repositories
 description:
   - Create or delete tokens for client tools to access repositories.
   - For example, the C(docker), C(podman), and C(skopeo) command-line tools can

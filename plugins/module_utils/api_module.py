@@ -34,7 +34,7 @@ class APIModuleError(Exception):
 
 
 class APIModule(AnsibleModule):
-    """Ansible module for managing Red Hat Quay."""
+    """Ansible module for managing Quay Container Registry."""
 
     AUTH_ARGSPEC = dict(
         quay_host=dict(fallback=(env_fallback, ["QUAY_HOST"]), default="http://127.0.0.1"),

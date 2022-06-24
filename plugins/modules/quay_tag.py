@@ -24,7 +24,7 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: quay_tag
-short_description: Manage Red Hat Quay image tags
+short_description: Manage Quay Container Registry image tags
 description:
   - Create, delete, and update image tags.
 version_added: '0.0.1'

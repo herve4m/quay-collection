@@ -36,13 +36,13 @@
 
 .. Title
 
-herve4m.quay.quay_quota module -- Manage Red Hat Quay organizations quota
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+herve4m.quay.quay_quota module -- Manage Quay Container Registry organizations quota
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.1.0).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.1.1).
 
     You might already have this collection installed if you are using the ``ansible`` package.
     It is not included in ``ansible-core``.
@@ -274,7 +274,7 @@ Notes
 -----
 
 .. note::
-   - The module requires Red Hat Quay 3.7 or later.
+   - The module requires Quay version 3.7 or later.
    - The module requires that your Quay administrator enables quota management for your installation (by setting \ :literal:`FEATURE\_QUOTA\_MANAGEMENT`\  to \ :literal:`True`\  in \ :literal:`config.yaml`\ ).
    - Supports \ :literal:`check\_mode`\ .
    - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Administer Organization" and "Administer User" permissions.

@@ -1,21 +1,21 @@
 herve4m.quay.quay_org
 =========
 
-This role creates an organization in Red Hat Quay.
+This role creates an organization in Quay Container Registry.
 In addition, it can creates user accounts, robot accounts, teams, default permissions, applications, and repositories for that organization.
 
 
 Requirements
 ------------
 
-The role accesses Red Hat Quay through its REST API.
+The role accesses Quay Container Registry through its REST API.
 To access the API, you can use a username and a password, or an OAuth access token.
 
 The user account you use (or the user account associated with the OAuth access token) must have superuser permissions.
 
 If you wish to use an OAuth access token, then you can create one as follows:
 
-1. Log in to the Red Hat Quay web UI with a user account that has superuser permissions.
+1. Log in to the Quay Container Registry web UI with a user account that has superuser permissions.
 2. Use an existing organization or create a new one.
 3. In the organization, create an application.
 4. In the application, select the `Generate Token` menu.
@@ -32,7 +32,7 @@ You can access the documentation of all the role variables by running the `ansib
 
 The following list gives a short descriptions of the variables:
 
-* `quay_host`: URL for access the Red Hat Quay API.
+* `quay_host`: URL for access the Quay Container Registry API.
 * `quay_token`: OAuth access token for authenticating with the API.
   Mutually exclusive with `quay_username` and `quay_password`.
 * `quay_username`: Username for authenticating with the API.

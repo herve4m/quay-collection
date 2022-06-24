@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2021, Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2021, 2022, Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # For accessing the API documentation from a running system, use the swagger-ui
@@ -35,9 +35,9 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: quay_user
-short_description: Manage Red Hat Quay users
+short_description: Manage Quay Container Registry users
 description:
-  - Create, delete, and update user accounts in Red Hat Quay.
+  - Create, delete, and update user accounts in Quay Container Registry.
 version_added: '0.0.1'
 author: Herve Quatremain (@herve4m)
 options:
@@ -69,7 +69,7 @@ options:
     description:
       - Grant superuser permissions to the user.
       - Granting superuser privileges to a user is not immediate and
-        usually requires a restart of the Red Hat Quay service.
+        usually requires a restart of the Quay Container Registry service.
       - You cannot revoke superuser permissions.
     type: bool
     default: False
@@ -120,7 +120,7 @@ EXAMPLES = r"""
     username: jziglar
     email: jziglar@example.com
     state: present
-    # Only effective after a restart of the Red Hat Quay service.
+    # Only effective after a restart of the Quay Container Registry service.
     superuser: true
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7

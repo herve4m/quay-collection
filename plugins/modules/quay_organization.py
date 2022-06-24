@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2021, Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2021, 2022, Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # For accessing the API documentation from a running system, use the swagger-ui
@@ -24,9 +24,9 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: quay_organization
-short_description: Manage Red Hat Quay organizations
+short_description: Manage Quay Container Registry organizations
 description:
-  - Create, delete, and update organizations in Red Hat Quay.
+  - Create, delete, and update organizations in Quay Container Registry.
 version_added: '0.0.1'
 author: Herve Quatremain (@herve4m)
 options:

@@ -23,7 +23,7 @@
     username: jziglar
     state: present
     email: jziglar@example.com
-    # Only effective after a restart of the Red Hat Quay service.
+    # Only effective after a restart of the Quay Container Registry service.
     superuser: true
     enabled: false
     quay_host: "{{ quay_url }}"
@@ -34,7 +34,7 @@
   herve4m.quay.quay_user:
     username: jziglar
     state: present
-    # Works because the Red Hat Quay service has not been restarted yet.
+    # Works because the Quay service has not been restarted yet.
     superuser: false
     enabled: true
     password: vs9mrD55NP

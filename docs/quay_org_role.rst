@@ -21,13 +21,13 @@
 
 .. Title
 
-herve4m.quay.quay_org role -- Create and configure a Red Hat Quay organization
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+herve4m.quay.quay_org role -- Create and configure a Quay Container Registry organization
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. Collection note
 
 .. note::
-    This role is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.1.0).
+    This role is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.1.1).
 
     To install it use: :code:`ansible-galaxy collection install herve4m.quay`.
 
@@ -40,8 +40,8 @@ herve4m.quay.quay_org role -- Create and configure a Red Hat Quay organization
 
 .. Entry point title
 
-Entry point ``main`` -- Create and configure a Red Hat Quay organization
-------------------------------------------------------------------------
+Entry point ``main`` -- Create and configure a Quay Container Registry organization
+-----------------------------------------------------------------------------------
 
 .. version_added
 

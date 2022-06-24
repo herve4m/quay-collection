@@ -24,7 +24,7 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: quay_tag_info
-short_description: Gather information about tags in a Red Hat Quay repository
+short_description: Gather information about tags in a Quay Container Registry repository
 description:
   - Gather information about the tags in a repository.
 version_added: '0.0.1'

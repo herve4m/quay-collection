@@ -18,7 +18,7 @@
 
 # Preparing an image:
 # - Pulling a small image from Quay (does not matter what image it is)
-# - Tagging it so that it can be pushed to the local Red Hat Quay
+# - Tagging it so that it can be pushed to the local Quay Container Registry
 # - Pushing the image
 # - Deleting the images from the local system
 # The tasks do not use the podman collection because it may not be
@@ -43,7 +43,7 @@
               --password {{ admin_password }} {{ quay_hostname }}"
       changed_when: true
 
-    - name: Ensure the image is pushed to Red Hat Quay
+    - name: Ensure the image is pushed to Quay Container Registry
       command:
         cmd: "podman push --tls-verify=false --remove-signatures
               {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
@@ -75,7 +75,7 @@
               --password {{ admin_password }} {{ quay_hostname }}"
       changed_when: true
 
-    - name: Ensure the image is pushed to Red Hat Quay
+    - name: Ensure the image is pushed to Quay Container Registry
       command:
         cmd: "docker push
               {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"

@@ -24,7 +24,7 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: quay_manifest_label
-short_description: Manage Red Hat Quay image manifest labels
+short_description: Manage Quay Container Registry image manifest labels
 description:
   - Add or remove labels to image manifests.
 version_added: '0.0.10'

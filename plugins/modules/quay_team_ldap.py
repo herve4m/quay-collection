@@ -24,7 +24,7 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: quay_team_ldap
-short_description: Synchronize Red Hat Quay teams with LDAP groups
+short_description: Synchronize Quay Container Registry teams with LDAP groups
 description:
   - Synchronize and unsynchronize teams in organizations with LDAP groups.
 version_added: '0.0.9'
@@ -33,7 +33,8 @@ options:
   name:
     description:
       - Name of the team to synchronize or unsynchronize with an LDAP group.
-        That team must exist (see the M(quay_team) module to create it).
+        That team must exist (see the M(herve4m.quay.quay_team) module to
+        create it).
     required: true
     type: str
   organization:

@@ -24,9 +24,9 @@ __metaclass__ = type
 DOCUMENTATION = r"""
 ---
 module: quay_repository
-short_description: Manage Red Hat Quay repositories
+short_description: Manage Quay Container Registry repositories
 description:
-  - Create, delete, and update repositories in Red Hat Quay.
+  - Create, delete, and update repositories in Quay Container Registry.
 version_added: '0.0.1'
 author: Herve Quatremain (@herve4m)
 options:
@@ -110,7 +110,7 @@ options:
       - If C(NORMAL), then the repository is in the default state (read/write).
       - If C(READ_ONLY), then the repository is read-only.
       - If C(MIRROR), then the repository is a mirror and you can configure it
-        by using the M(quay_repository_mirror) module.
+        by using the M(herve4m.quay.quay_repository_mirror) module.
       - You must enable the mirroring capability of your Quay installation to
         use this I(repo_state) parameter.
     type: str

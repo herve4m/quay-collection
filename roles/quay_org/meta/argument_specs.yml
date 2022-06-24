@@ -3,7 +3,8 @@ argument_specs:
   main:
     author:
       - Hervé Quatremain <rv4m@yahoo.co.uk>
-    short_description: Create and configure a Red Hat Quay organization
+    short_description:
+      Create and configure a Quay Container Registry organization
     description:
       - Create an organization and configure it with robot accounts, teams,
         default permissions, OAuth applications, and repositories.

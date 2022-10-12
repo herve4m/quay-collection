@@ -1,3 +1,26 @@
 ---
 requires_ansible: '>=2.9.6'
+action_groups:
+  quay:
+    - quay_api_token
+    - quay_application
+    - quay_default_perm
+    - quay_docker_token
+    - quay_first_user
+    - quay_layer_info
+    - quay_manifest_label_info
+    - quay_manifest_label
+    - quay_message
+    - quay_notification
+    - quay_organization
+    - quay_quota
+    - quay_repository_mirror
+    - quay_repository
+    - quay_robot
+    - quay_tag_info
+    - quay_tag
+    - quay_team_ldap
+    - quay_team
+    - quay_user
+    - quay_vulnerability_info
 ...

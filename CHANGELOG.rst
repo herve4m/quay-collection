@@ -5,6 +5,19 @@ Quay Container Registry Collection Release Notes
 .. contents:: Topics
 
 
+v0.1.2
+======
+
+Release Summary
+---------------
+
+Adding the ``herve4m.quay.quay`` module defaults group.
+
+Minor Changes
+-------------
+
+- Add the ``herve4m.quay.quay`` module defaults group. To avoid repeating common parameters, such as ``quay_host`` or ``quay_token``, in each task, you can define these common module parameters at the top of your play, in the ``module_defaults`` section, under the ``group/herve4m.quay.quay`` subsection.
+
 v0.1.1
 ======
 

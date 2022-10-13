@@ -9,7 +9,7 @@ The collection provides modules for managing your Quay Container Registry deploy
 
 ## Included Content
 
-The modules have been tested against versions 3.5.6, 3.6.1, 3.6.2, 3.7.0, and 3.7.2 of Quay Container Registry.
+The modules have been tested against versions 3.5, 3.6, and 3.7 of Quay Container Registry.
 
 ### Modules
 Name | Description
@@ -153,6 +153,49 @@ The requirements for the `herve4m.quay.quay_first_user` module are as follows:
 * You must use the internal database for user authentication (`AUTHENTICATION_TYPE` to `Database` in `config.yaml` or `Internal Authentication` to `Local Database` in the configuration web UI).
 * You probably want the first user to have superuser permissions.
   To do so, add that user account to the `SUPER_USERS` section in the `config.yaml` file.
+
+
+### Grouping Common Module Parameters
+
+When your play calls multiple modules from the collection, you can group common module parameters in the `module_defaults` section, under the `group/herve4m.quay.quay` subsection.
+For example, instead of repeating the `quay_host`, `quay_username`, and `quay_password` parameters in each task, you can declare them at the top of your play:
+
+```yaml
+- name: Creating the development organization and the developers team
+  hosts: localhost
+
+  module_defaults:
+    group/herve4m.quay.quay:
+      quay_host: https://quay.example.com
+      quay_username: admin
+      quay_password: S6tGwo13
+
+  tasks:
+    - name: Ensure the organization exists
+      herve4m.quay.quay_organization:
+        name: development
+        email: devorg@example.com
+        time_machine_expiration: "1d"
+        state: present
+
+    - name: Ensure the additional user exists
+      herve4m.quay.quay_user:
+        username: dwilde
+        email: dwilde@example.com
+        password: 7BbB8T6c
+        state: present
+
+    - name: Ensure the team exists in the development organization
+      herve4m.quay.quay_team:
+        name: developers
+        organization: development
+        role: creator
+        members:
+          - lvasquez
+          - dwilde
+        append: false
+        state: present
+```
 
 
 ## Contributing to the Collection

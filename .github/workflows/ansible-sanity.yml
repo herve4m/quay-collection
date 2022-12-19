@@ -22,6 +22,8 @@ jobs:
         run: pip install -Iv ansible
 
       - name: Run sanity tests
-        run: ansible-test sanity --docker default -v --color
+        run: >
+          ANSIBLE_TEST_PREFER_PODMAN=1 ansible-test sanity
+          --docker default -v --color
         working-directory: ./ansible_collections/herve4m/quay
 ...

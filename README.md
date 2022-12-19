@@ -9,7 +9,7 @@ The collection provides modules for managing your Quay Container Registry deploy
 
 ## Included Content
 
-The modules have been tested against versions 3.5, 3.6, and 3.7 of Quay Container Registry.
+The modules have been tested against versions 3.5, 3.6, 3.7, and 3.8 of Quay Container Registry.
 
 ### Modules
 Name | Description

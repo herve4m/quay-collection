@@ -5,6 +5,14 @@ Quay Container Registry Collection Release Notes
 .. contents:: Topics
 
 
+v0.1.3
+======
+
+Release Summary
+---------------
+
+Testing against Quay version 3.8.0.
+
 v0.1.2
 ======
 

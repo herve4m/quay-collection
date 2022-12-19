@@ -200,6 +200,7 @@ def main():
     }
     redirect_url = module.host_url._replace(path="/oauth/localapp")
     data = {
+        "response_type": "token",
         "client_id": client_id,
         "redirect_uri": redirect_url.geturl(),
         "scope": " ".join(rights),

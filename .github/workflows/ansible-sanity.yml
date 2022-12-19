@@ -10,11 +10,11 @@ jobs:
   integration:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: ansible_collections/herve4m/quay
 
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
@@ -22,6 +22,8 @@ jobs:
         run: pip install -Iv ansible
 
       - name: Run sanity tests
-        run: ansible-test sanity --docker -v --color
+        run: >
+          ANSIBLE_TEST_PREFER_PODMAN=1 ansible-test sanity
+          --docker default -v --color
         working-directory: ./ansible_collections/herve4m/quay
 ...

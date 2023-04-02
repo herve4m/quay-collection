@@ -223,11 +223,15 @@ def main():
     except APIModuleError as e:
         module.fail_json(msg=str(e))
 
-    if "Location" not in response["headers"]:
-        module.fail_json(msg="Cannot retrieve the OAuth access token from the returned data")
+    # Depending on the Quay version the headers might not be in lowercase
+    headers_lower = dict((k.lower(), v) for k, v in response["headers"].items())
+    if "location" not in headers_lower:
+        module.fail_json(
+            msg="Cannot retrieve the OAuth access token from the returned data"
+        )
 
     try:
-        token = re.search("access_token=(.*?)&", response["headers"]["Location"]).group(1)
+        token = re.search("access_token=(.*?)&", headers_lower["location"]).group(1)
     except AttributeError:
         module.fail_json(msg="Cannot retrieve the CSRF token from the returned data")
 

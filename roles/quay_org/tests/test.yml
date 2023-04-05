@@ -6,7 +6,7 @@
 
   tasks:
     - name: Ensure the organization exists
-      include_role:
+      ansible.builtin.include_role:
         name: herve4m.quay.quay_org
       vars:
         quay_host: https://quay.example.com

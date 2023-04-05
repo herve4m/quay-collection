@@ -6,9 +6,9 @@
 
   tasks:
     - name: Test the role
-      include_role:
+      ansible.builtin.include_role:
         # Specify the role to test
-        name: integration/targets/quay_user
+        name: quay_user
       vars:
         # Set the connection parameters to your Quay installation with the
         # following variables. If you do not set the default_token parameter,

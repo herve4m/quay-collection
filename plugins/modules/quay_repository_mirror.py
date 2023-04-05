@@ -270,7 +270,6 @@ def main():
 
     # Create a new synchronization configuration
     if not mirror_details:
-
         # Verify the mandatory parameters for creation
         missing_req_params = []
         if external_reference is None:

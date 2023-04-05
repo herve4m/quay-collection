@@ -9,7 +9,6 @@ __metaclass__ = type
 
 
 class ModuleDocFragment(object):
-
     # Ansible Galaxy documentation fragment
     DOCUMENTATION = r"""
 options:

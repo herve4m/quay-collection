@@ -49,7 +49,10 @@ class APIModule(AnsibleModule):
         ),
     )
 
-    MUTUALLY_EXCLUSIVE = [("quay_username", "quay_token"), ("quay_password", "quay_token")]
+    MUTUALLY_EXCLUSIVE = [
+        ("quay_username", "quay_token"),
+        ("quay_password", "quay_token"),
+    ]
 
     REQUIRED_TOGETHER = [("quay_username", "quay_password")]
 
@@ -189,7 +192,9 @@ class APIModule(AnsibleModule):
             self.fail_json(msg=fail_msg)
 
         # Get the X-CSRF-Token header
-        token = response["headers"].get("X-Next-CSRF-Token")
+        # Depending on the Quay version the headers might not be in lowercase
+        headers_lower = dict((k.lower(), v) for k, v in response["headers"].items())
+        token = headers_lower.get("x-next-csrf-token")
         if token is None:
             self.fail_json(msg="Cannot retrieve the authentication token")
         return token

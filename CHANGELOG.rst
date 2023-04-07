@@ -5,6 +5,19 @@ Quay Container Registry Collection Release Notes
 .. contents:: Topics
 
 
+v1.0.0
+======
+
+Release Summary
+---------------
+
+Testing against Quay version 3.8.5.
+
+Bugfixes
+--------
+
+- quay_api_token - Convert response headers in lowercase. (https://github.com/herve4m/quay-collection/issues/23)
+
 v0.1.3
 ======
 

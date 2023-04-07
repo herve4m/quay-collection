@@ -226,9 +226,7 @@ def main():
     # Depending on the Quay version the headers might not be in lowercase
     headers_lower = dict((k.lower(), v) for k, v in response["headers"].items())
     if "location" not in headers_lower:
-        module.fail_json(
-            msg="Cannot retrieve the OAuth access token from the returned data"
-        )
+        module.fail_json(msg="Cannot retrieve the OAuth access token from the returned data")
 
     try:
         token = re.search("access_token=(.*?)&", headers_lower["location"]).group(1)

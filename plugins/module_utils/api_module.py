@@ -37,9 +37,7 @@ class APIModule(AnsibleModule):
     """Ansible module for managing Quay Container Registry."""
 
     AUTH_ARGSPEC = dict(
-        quay_host=dict(
-            fallback=(env_fallback, ["QUAY_HOST"]), default="http://127.0.0.1"
-        ),
+        quay_host=dict(fallback=(env_fallback, ["QUAY_HOST"]), default="http://127.0.0.1"),
         quay_token=dict(no_log=True, fallback=(env_fallback, ["QUAY_TOKEN"])),
         quay_username=dict(fallback=(env_fallback, ["QUAY_USERNAME"])),
         quay_password=dict(no_log=True, fallback=(env_fallback, ["QUAY_PASSWORD"])),
@@ -165,9 +163,7 @@ class APIModule(AnsibleModule):
         except APIModuleError as e:
             self.fail_json(msg=str(e))
         try:
-            csrf = re.search(
-                r"window.__token\s*=\s*'(.*?)';", to_text(html["body"])
-            ).group(1)
+            csrf = re.search(r"window.__token\s*=\s*'(.*?)';", to_text(html["body"])).group(1)
         except AttributeError:
             self.fail_json(msg="Cannot retrieve the CSRF token from the returned data")
 
@@ -293,9 +289,7 @@ class APIModule(AnsibleModule):
                     follow_redirects=follow_redirects,
                 )
             else:
-                response = self.session.open(
-                    method, url.geturl(), headers=headers, data=data
-                )
+                response = self.session.open(method, url.geturl(), headers=headers, data=data)
         except SSLValidationError as ssl_err:
             raise APIModuleError(
                 "Could not establish a secure connection to {host}: {error}.".format(
@@ -323,9 +317,7 @@ class APIModule(AnsibleModule):
             # If so, fail out now; this is always a failure.
             elif he.code == 401:
                 raise APIModuleError(
-                    "Authentication required for {path} (HTTP 401).".format(
-                        path=url.path
-                    )
+                    "Authentication required for {path} (HTTP 401).".format(path=url.path)
                 )
             # Sanity check: Did we get a forbidden response, which means that
             # the user isn't allowed to do this? Report that.
@@ -480,12 +472,7 @@ class APIModule(AnsibleModule):
         return ": ".join(msg_fragments)
 
     def get_object_path(
-        self,
-        endpoint,
-        query_params=None,
-        exit_on_error=True,
-        ok_error_codes=None,
-        **kwargs
+        self, endpoint, query_params=None, exit_on_error=True, ok_error_codes=None, **kwargs
     ):
         """Retrieve a single object from a GET API call.
 
@@ -1111,11 +1098,7 @@ class APIModule(AnsibleModule):
         org_details = self.get_organization(organization, exit_on_error=exit_on_error)
         if not org_details:
             return None
-        return (
-            org_details["teams"].get(team_name, None)
-            if "teams" in org_details
-            else None
-        )
+        return org_details["teams"].get(team_name, None) if "teams" in org_details else None
 
     def get_organization(self, organization, exit_on_error=True):
         """Search for the given organization.
@@ -1227,9 +1210,7 @@ class APIModule(AnsibleModule):
             return user_details
         return None
 
-    def get_tags(
-        self, namespace, repository, tag=None, digest=None, only_active_tags=True
-    ):
+    def get_tags(self, namespace, repository, tag=None, digest=None, only_active_tags=True):
         """Return the list of tags for the given repository.
 
         :param namespace: The name of the repository's namespace.
@@ -1372,9 +1353,7 @@ class APIModule(AnsibleModule):
 
 class APIModuleNoAuth(APIModule):
     AUTH_ARGSPEC = dict(
-        quay_host=dict(
-            fallback=(env_fallback, ["QUAY_HOST"]), default="http://127.0.0.1"
-        ),
+        quay_host=dict(fallback=(env_fallback, ["QUAY_HOST"]), default="http://127.0.0.1"),
         validate_certs=dict(
             type="bool",
             aliases=["verify_ssl"],

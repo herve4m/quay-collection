@@ -520,7 +520,6 @@ def main():
 
     # Create a notification
     if not match_notifications:
-
         # Verify that the repository exists
         repo_details = module.get_object_path(
             "repository/{full_repo_name}",
@@ -624,7 +623,6 @@ def main():
             if template:
                 new_fields["config"]["template"] = template
         elif method == "quay_notification":
-
             name = config.get("name")
             if not name:
                 module.fail_json(

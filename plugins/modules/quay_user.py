@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2021, 2022, Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2021-2023, Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # For accessing the API documentation from a running system, use the swagger-ui
@@ -24,7 +24,7 @@
 #    but that only takes effect once Quay is restarted.
 #  - As a consequence, the module allows users to set/unset the flag by using
 #    the `superuser` parameter but does not restart Quay so the change is
-#    not immediatly reflected.
+#    not immediately reflected.
 #
 
 from __future__ import absolute_import, division, print_function
@@ -72,7 +72,6 @@ options:
         usually requires a restart of the Quay Container Registry service.
       - You cannot revoke superuser permissions.
     type: bool
-    default: False
     aliases: ['is_superuser']
   state:
     description:
@@ -137,7 +136,7 @@ EXAMPLES = r"""
 
 RETURN = r""" # """
 
-from ..module_utils.api_module import APIModule
+from ..module_utils.api_module import APIModule, APIModuleError
 
 
 def main():
@@ -146,7 +145,7 @@ def main():
         email=dict(),
         password=dict(no_log=True),
         enabled=dict(type="bool"),
-        superuser=dict(type="bool", default=False, aliases=["is_superuser"]),
+        superuser=dict(type="bool", aliases=["is_superuser"]),
         state=dict(choices=["present", "absent"], default="present"),
     )
 
@@ -197,13 +196,19 @@ def main():
             # Quay `config.yaml` configuration file. That only works if a
             # previous module execution set that flag for the user and the Quay
             # system has not yet been restarted.
-            module.unconditional_update(
-                "user",
-                username,
-                "superuser/users/{username}",
-                {"enabled": True, "superuser": False},
-                username=username,
-            )
+            try:
+                module.unconditional_update(
+                    "user",
+                    username,
+                    "superuser/users/{username}",
+                    {"enabled": True, "superuser": False},
+                    exit_on_error=False,
+                    username=username,
+                )
+            except APIModuleError:
+                # The Quay server might return 500 if SUPER_USERS is missing
+                # or empty in the config.yaml file
+                pass
 
         module.delete(
             user_details,
@@ -226,7 +231,7 @@ def main():
         created = False
 
     # Create the data that gets sent for update
-    new_fields = {"superuser": superuser}
+    new_fields = {"superuser": superuser} if superuser is not None else {}
     if enabled is not None:
         new_fields["enabled"] = enabled
     if email:

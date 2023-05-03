@@ -1,3 +1,4 @@
+
 .. Document meta
 
 :orphan:
@@ -17,8 +18,7 @@
 .. role:: ansible-option-versionadded
 .. role:: ansible-option-aliases
 .. role:: ansible-option-choices
-.. role:: ansible-option-choices-entry
-.. role:: ansible-option-default
+.. role:: ansible-option-choices-default-mark
 .. role:: ansible-option-default-bold
 .. role:: ansible-option-configuration
 .. role:: ansible-option-returned-bold
@@ -42,11 +42,7 @@ herve4m.quay.quay_organization module -- Manage Quay Container Registry organiza
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.1.1).
-
-    You might already have this collection installed if you are using the ``ansible`` package.
-    It is not included in ``ansible-core``.
-    To check whether it is installed, run :code:`ansible-galaxy collection list`.
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 1.0.1).
 
     To install it, use: :code:`ansible-galaxy collection install herve4m.quay`.
 
@@ -54,7 +50,9 @@ herve4m.quay.quay_organization module -- Manage Quay Container Registry organiza
 
 .. version_added
 
-.. versionadded:: 0.0.1 of herve4m.quay
+.. rst-class:: ansible-version-added
+
+New in herve4m.quay 0.0.1
 
 .. contents::
    :local:
@@ -85,7 +83,6 @@ Synopsis
 
 Parameters
 ----------
-
 
 .. raw:: html
 
@@ -139,7 +136,7 @@ Parameters
     <td><div class="ansible-option-cell">
       <p>New name for the organization.</p>
       <p>Setting this option changes the name of the organization which current name is provided in <em>name</em>.</p>
-      <p>The token you use to connect to the API (in <em>quay_token</em>) must have the &quot;Super User Access&quot; permission.</p>
+      <p>The token you use to connect to the API (in <em>quay_token</em>) must have the "Super User Access" permission.</p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -155,7 +152,7 @@ Parameters
       <p>URL for accessing the API. <a href='https://quay.example.com:8443'>https://quay.example.com:8443</a> for example.</p>
       <p>If you do not set the parameter, then the module uses the <code class='docutils literal notranslate'>QUAY_HOST</code> environment variable.</p>
       <p>If you do no set the environment variable either, then the module uses the <a href='http://127.0.0.1'>http://127.0.0.1</a> URL.</p>
-      <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">"http://127.0.0.1"</span></p>
+      <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-value literal notranslate ansible-option-default">&#34;http://127.0.0.1&#34;</code></p>
     </div></td>
   </tr>
   <tr class="row-even">
@@ -221,9 +218,10 @@ Parameters
       <p>If the organization already exists, then the module updates its state.</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
-        <li><p><span class="ansible-option-choices-entry">absent</span></p></li>
-        <li><p><span class="ansible-option-default-bold">present</span> <span class="ansible-option-default">← (default)</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;absent&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold">&#34;present&#34;</code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
       </ul>
+
     </div></td>
   </tr>
   <tr class="row-even">
@@ -239,12 +237,13 @@ Parameters
       <p>The amount of time, after a tag is deleted, that the tag is accessible in time machine before being garbage collected.</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
-        <li><p><span class="ansible-option-choices-entry">0s</span></p></li>
-        <li><p><span class="ansible-option-choices-entry">1d</span></p></li>
-        <li><p><span class="ansible-option-choices-entry">7d</span></p></li>
-        <li><p><span class="ansible-option-choices-entry">14d</span></p></li>
-        <li><p><span class="ansible-option-choices-entry">1month</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;0s&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;1d&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;7d&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;14d&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;1month&#34;</code></p></li>
       </ul>
+
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -264,9 +263,10 @@ Parameters
       <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_VERIFY_SSL</code> environment variable (<code class='docutils literal notranslate'>yes</code>, <code class='docutils literal notranslate'>1</code>, and <code class='docutils literal notranslate'>True</code> mean yes, and <code class='docutils literal notranslate'>no</code>, <code class='docutils literal notranslate'>0</code>, <code class='docutils literal notranslate'>False</code>, and no value mean no).</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
-        <li><p><span class="ansible-option-choices-entry">no</span></p></li>
-        <li><p><span class="ansible-option-default-bold">yes</span> <span class="ansible-option-default">← (default)</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">false</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold">true</code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
       </ul>
+
     </div></td>
   </tr>
   </tbody>

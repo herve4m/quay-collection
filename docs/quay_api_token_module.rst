@@ -1,3 +1,4 @@
+
 .. Document meta
 
 :orphan:
@@ -17,8 +18,7 @@
 .. role:: ansible-option-versionadded
 .. role:: ansible-option-aliases
 .. role:: ansible-option-choices
-.. role:: ansible-option-choices-entry
-.. role:: ansible-option-default
+.. role:: ansible-option-choices-default-mark
 .. role:: ansible-option-default-bold
 .. role:: ansible-option-configuration
 .. role:: ansible-option-returned-bold
@@ -42,11 +42,7 @@ herve4m.quay.quay_api_token module -- Create OAuth access tokens for accessing t
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.1.1).
-
-    You might already have this collection installed if you are using the ``ansible`` package.
-    It is not included in ``ansible-core``.
-    To check whether it is installed, run :code:`ansible-galaxy collection list`.
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 1.0.1).
 
     To install it, use: :code:`ansible-galaxy collection install herve4m.quay`.
 
@@ -54,7 +50,9 @@ herve4m.quay.quay_api_token module -- Create OAuth access tokens for accessing t
 
 .. version_added
 
-.. versionadded:: 0.0.12 of herve4m.quay
+.. rst-class:: ansible-version-added
+
+New in herve4m.quay 0.0.12
 
 .. contents::
    :local:
@@ -86,7 +84,6 @@ Synopsis
 Parameters
 ----------
 
-
 .. raw:: html
 
   <table class="colwidths-auto ansible-option-table docutils align-default" style="width: 100%">
@@ -109,7 +106,7 @@ Parameters
     </div></td>
     <td><div class="ansible-option-cell">
       <p>The client ID associated with the OAuth application to use for generating the OAuth access token.</p>
-      <p>See the M(quay_application) module to create an application object and to retrieve the associated client ID.</p>
+      <p>See the <a href='../../herve4m/quay/quay_application_module.html' class='module'>herve4m.quay.quay_application</a> module to create an application object and to retrieve the associated client ID.</p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -125,7 +122,7 @@ Parameters
       <p>URL for accessing the API. <a href='https://quay.example.com:8443'>https://quay.example.com:8443</a> for example.</p>
       <p>If you do not set the parameter, then the module uses the <code class='docutils literal notranslate'>QUAY_HOST</code> environment variable.</p>
       <p>If you do no set the environment variable either, then the module uses the <a href='http://127.0.0.1'>http://127.0.0.1</a> URL.</p>
-      <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">"http://127.0.0.1"</span></p>
+      <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-value literal notranslate ansible-option-default">&#34;http://127.0.0.1&#34;</code></p>
     </div></td>
   </tr>
   <tr class="row-even">
@@ -172,16 +169,18 @@ Parameters
       <p>List of permissions to grant to the user account. <code class='docutils literal notranslate'>all</code> means all the permissions.</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
-        <li><p><span class="ansible-option-choices-entry">org:admin</span></p></li>
-        <li><p><span class="ansible-option-choices-entry">repo:admin</span></p></li>
-        <li><p><span class="ansible-option-choices-entry">repo:create</span></p></li>
-        <li><p><span class="ansible-option-default-bold">repo:read</span> <span class="ansible-option-default">← (default)</span></p></li>
-        <li><p><span class="ansible-option-choices-entry">repo:write</span></p></li>
-        <li><p><span class="ansible-option-choices-entry">super:user</span></p></li>
-        <li><p><span class="ansible-option-choices-entry">user:admin</span></p></li>
-        <li><p><span class="ansible-option-choices-entry">user:read</span></p></li>
-        <li><p><span class="ansible-option-choices-entry">all</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;org:admin&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;repo:admin&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;repo:create&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold">&#34;repo:read&#34;</code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;repo:write&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;super:user&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;user:admin&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;user:read&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;all&#34;</code></p></li>
       </ul>
+
+      <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-value literal notranslate ansible-option-default">[&#34;repo:read&#34;]</code></p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -201,9 +200,10 @@ Parameters
       <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_VERIFY_SSL</code> environment variable (<code class='docutils literal notranslate'>yes</code>, <code class='docutils literal notranslate'>1</code>, and <code class='docutils literal notranslate'>True</code> mean yes, and <code class='docutils literal notranslate'>no</code>, <code class='docutils literal notranslate'>0</code>, <code class='docutils literal notranslate'>False</code>, and no value mean no).</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
-        <li><p><span class="ansible-option-choices-entry">no</span></p></li>
-        <li><p><span class="ansible-option-default-bold">yes</span> <span class="ansible-option-default">← (default)</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">false</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold">true</code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
       </ul>
+
     </div></td>
   </tr>
   </tbody>
@@ -331,7 +331,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     <td><div class="ansible-option-cell">
       <p>The OAuth access token.</p>
       <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> "CywbRGkh1ttYkRRy9VL0Aw0yU9q7J62vIeo7WCFw"</p>
+      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-value literal notranslate ansible-option-sample">&#34;CywbRGkh1ttYkRRy9VL0Aw0yU9q7J62vIeo7WCFw&#34;</code></p>
     </div></td>
   </tr>
   </tbody>

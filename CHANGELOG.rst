@@ -5,6 +5,19 @@ Quay Container Registry Collection Release Notes
 .. contents:: Topics
 
 
+v1.0.1
+======
+
+Release Summary
+---------------
+
+Testing against Quay version 3.8.6.
+
+Bugfixes
+--------
+
+- quay_user - Workaround empty SUPER_USERS configuration parameter. (https://github.com/herve4m/quay-collection/issues/26)
+
 v1.0.0
 ======
 

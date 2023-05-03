@@ -173,3 +173,11 @@ releases:
     - 24-lowercaseheaders.yml
     - v1.0.0-summary.yml
     release_date: '2023-04-07'
+  1.0.1:
+    changes:
+      bugfixes:
+      - quay_user - Workaround empty SUPER_USERS configuration parameter. (https://github.com/herve4m/quay-collection/issues/26)
+      release_summary: Testing against Quay version 3.8.6.
+    fragments:
+    - 27-v1.0.1-summary.yml
+    release_date: '2023-05-03'

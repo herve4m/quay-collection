@@ -1,3 +1,4 @@
+
 .. Document meta
 
 :orphan:
@@ -17,8 +18,7 @@
 .. role:: ansible-option-versionadded
 .. role:: ansible-option-aliases
 .. role:: ansible-option-choices
-.. role:: ansible-option-choices-entry
-.. role:: ansible-option-default
+.. role:: ansible-option-choices-default-mark
 .. role:: ansible-option-default-bold
 .. role:: ansible-option-configuration
 .. role:: ansible-option-returned-bold
@@ -42,11 +42,7 @@ herve4m.quay.quay_repository module -- Manage Quay Container Registry repositori
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 0.1.1).
-
-    You might already have this collection installed if you are using the ``ansible`` package.
-    It is not included in ``ansible-core``.
-    To check whether it is installed, run :code:`ansible-galaxy collection list`.
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 1.0.1).
 
     To install it, use: :code:`ansible-galaxy collection install herve4m.quay`.
 
@@ -54,7 +50,9 @@ herve4m.quay.quay_repository module -- Manage Quay Container Registry repositori
 
 .. version_added
 
-.. versionadded:: 0.0.1 of herve4m.quay
+.. rst-class:: ansible-version-added
+
+New in herve4m.quay 0.0.1
 
 .. contents::
    :local:
@@ -86,7 +84,6 @@ Synopsis
 Parameters
 ----------
 
-
 .. raw:: html
 
   <table class="colwidths-auto ansible-option-table docutils align-default" style="width: 100%">
@@ -111,9 +108,10 @@ Parameters
       <p>If <code class='docutils literal notranslate'>no</code>, then the module sets the permissions specified in <em>perms</em>, removing all others permissions from the repository.</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
-        <li><p><span class="ansible-option-choices-entry">no</span></p></li>
-        <li><p><span class="ansible-option-default-bold">yes</span> <span class="ansible-option-default">← (default)</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">false</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold">true</code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
       </ul>
+
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -186,10 +184,11 @@ Parameters
       <p>Type of permission to grant.</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
-        <li><p><span class="ansible-option-default-bold">read</span> <span class="ansible-option-default">← (default)</span></p></li>
-        <li><p><span class="ansible-option-choices-entry">write</span></p></li>
-        <li><p><span class="ansible-option-choices-entry">admin</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold">&#34;read&#34;</code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;write&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;admin&#34;</code></p></li>
       </ul>
+
     </div></td>
   </tr>
   <tr class="row-even">
@@ -205,9 +204,10 @@ Parameters
       <p>Specifies the type of the account. Choose <code class='docutils literal notranslate'>user</code> for both user and robot accounts.</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
-        <li><p><span class="ansible-option-default-bold">user</span> <span class="ansible-option-default">← (default)</span></p></li>
-        <li><p><span class="ansible-option-choices-entry">team</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold">&#34;user&#34;</code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;team&#34;</code></p></li>
       </ul>
+
     </div></td>
   </tr>
 
@@ -224,7 +224,7 @@ Parameters
       <p>URL for accessing the API. <a href='https://quay.example.com:8443'>https://quay.example.com:8443</a> for example.</p>
       <p>If you do not set the parameter, then the module uses the <code class='docutils literal notranslate'>QUAY_HOST</code> environment variable.</p>
       <p>If you do no set the environment variable either, then the module uses the <a href='http://127.0.0.1'>http://127.0.0.1</a> URL.</p>
-      <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <span class="ansible-option-default">"http://127.0.0.1"</span></p>
+      <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-value literal notranslate ansible-option-default">&#34;http://127.0.0.1&#34;</code></p>
     </div></td>
   </tr>
   <tr class="row-even">
@@ -286,14 +286,15 @@ Parameters
     <td><div class="ansible-option-cell">
       <p>If <code class='docutils literal notranslate'>NORMAL</code>, then the repository is in the default state (read/write).</p>
       <p>If <code class='docutils literal notranslate'>READ_ONLY</code>, then the repository is read-only.</p>
-      <p>If <code class='docutils literal notranslate'>MIRROR</code>, then the repository is a mirror and you can configure it by using the M(quay_repository_mirror) module.</p>
+      <p>If <code class='docutils literal notranslate'>MIRROR</code>, then the repository is a mirror and you can configure it by using the <a href='../../herve4m/quay/quay_repository_mirror_module.html' class='module'>herve4m.quay.quay_repository_mirror</a> module.</p>
       <p>You must enable the mirroring capability of your Quay installation to use this <em>repo_state</em> parameter.</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
-        <li><p><span class="ansible-option-choices-entry">NORMAL</span></p></li>
-        <li><p><span class="ansible-option-choices-entry">READ_ONLY</span></p></li>
-        <li><p><span class="ansible-option-choices-entry">MIRROR</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;NORMAL&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;READ_ONLY&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;MIRROR&#34;</code></p></li>
       </ul>
+
     </div></td>
   </tr>
   <tr class="row-even">
@@ -310,9 +311,10 @@ Parameters
       <p>To star or unstar a repository you must provide the <em>quay_token</em> parameter to authenticate. If you are not authenticated, then the module ignores the <em>star</em> parameter.</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
-        <li><p><span class="ansible-option-choices-entry">no</span></p></li>
-        <li><p><span class="ansible-option-choices-entry">yes</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">false</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">true</code></p></li>
       </ul>
+
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -331,9 +333,10 @@ Parameters
       <p>If the repository already exists, then the module updates its state.</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
-        <li><p><span class="ansible-option-choices-entry">absent</span></p></li>
-        <li><p><span class="ansible-option-default-bold">present</span> <span class="ansible-option-default">← (default)</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;absent&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold">&#34;present&#34;</code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
       </ul>
+
     </div></td>
   </tr>
   <tr class="row-even">
@@ -353,9 +356,10 @@ Parameters
       <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_VERIFY_SSL</code> environment variable (<code class='docutils literal notranslate'>yes</code>, <code class='docutils literal notranslate'>1</code>, and <code class='docutils literal notranslate'>True</code> mean yes, and <code class='docutils literal notranslate'>no</code>, <code class='docutils literal notranslate'>0</code>, <code class='docutils literal notranslate'>False</code>, and no value mean no).</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
-        <li><p><span class="ansible-option-choices-entry">no</span></p></li>
-        <li><p><span class="ansible-option-default-bold">yes</span> <span class="ansible-option-default">← (default)</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">false</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold">true</code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
       </ul>
+
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -373,9 +377,10 @@ Parameters
       <p>If you do not set the parameter when you create a repository, then it defaults to <code class='docutils literal notranslate'>private</code>.</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
-        <li><p><span class="ansible-option-choices-entry">public</span></p></li>
-        <li><p><span class="ansible-option-choices-entry">private</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;public&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;private&#34;</code></p></li>
       </ul>
+
     </div></td>
   </tr>
   </tbody>

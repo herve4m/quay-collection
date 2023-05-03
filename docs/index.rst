@@ -1,11 +1,12 @@
 
 
+
 .. _plugins_in_herve4m.quay:
 
 Herve4M.Quay
 ============
 
-Collection version 0.1.1
+Collection version 1.0.1
 
 .. contents::
    :local:
@@ -19,6 +20,10 @@ Ansible modules to manage Quay Container Registry installations
 **Author:**
 
 * Hervé Quatremain <rv4m@yahoo.co.uk>
+
+**Supported ansible-core versions:**
+
+* 2.9.10 or newer
 
 .. raw:: html
 
@@ -64,12 +69,6 @@ Modules
 * :ref:`quay_user module <ansible_collections.herve4m.quay.quay_user_module>` -- Manage Quay Container Registry users
 * :ref:`quay_vulnerability_info module <ansible_collections.herve4m.quay.quay_vulnerability_info_module>` -- Gather information about image vulnerabilities in Quay Container Registry
 
-
-
-.. seealso::
-
-    List of :ref:`collections <list_of_collections>` with docs hosted here.
-
 .. toctree::
     :maxdepth: 1
     :hidden:
@@ -95,3 +94,18 @@ Modules
     quay_team_ldap_module
     quay_user_module
     quay_vulnerability_info_module
+
+
+Role Index
+----------
+
+These are the roles in the herve4m.quay collection:
+
+* :ref:`quay_org role <ansible_collections.herve4m.quay.quay_org_role>` -- Create and configure a Quay Container Registry organization
+
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+
+    quay_org_role
+

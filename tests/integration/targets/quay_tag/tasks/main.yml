@@ -221,8 +221,7 @@
 
 - name: Ensure the tag v3.0.0 is added with expiration
   herve4m.quay.quay_tag:
-    image: >
-      "ansibletestorg/ansibletestrepo@{{ t['tags'][0]['manifest_digest'] }}"
+    image: ansibletestorg/ansibletestrepo@{{ t['tags'][0]['manifest_digest'] }}
     tag: v3.0.0
     expiration: "{{ expiration }}"
     state: present

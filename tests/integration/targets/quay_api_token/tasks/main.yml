@@ -43,7 +43,7 @@
   register: result
 
 - name: Ensure that the returned data has the access_token key
-  assert:
+  ansible.builtin.assert:
     that: "'access_token' in result"
     fail_msg: The result should have the access_token key
 

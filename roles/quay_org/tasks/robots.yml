@@ -2,13 +2,12 @@
 - name: Ensure the robot accounts exist
   herve4m.quay.quay_robot:
     name: "{{ item['name'] if '+' in item['name']
-              else quay_org_name + '+' + item['name'] }}"
+      else quay_org_name + '+' + item['name'] }}"
     description: "{{ item['description'] | default(omit) }}"
     state: present
-    quay_token: "{{ quay_token | default(omit) }}"
-    quay_username: "{{ quay_username | default(omit) }}"
-    quay_password: "{{ quay_password | default(omit) }}"
-    quay_host: "{{ quay_host | default(omit) }}"
-    validate_certs: "{{ quay_validate_certs | default(omit) }}"
+    quay_token: "{{ quay_org_token | default(omit) }}"
+    quay_username: "{{ quay_org_username | default(omit) }}"
+    quay_password: "{{ quay_org_password | default(omit) }}"
+    quay_host: "{{ quay_org_host | default(omit) }}"
+    validate_certs: "{{ quay_org_validate_certs | default(omit) }}"
   loop: "{{ quay_org_robots }}"
-...

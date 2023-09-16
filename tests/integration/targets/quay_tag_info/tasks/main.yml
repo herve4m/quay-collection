@@ -24,20 +24,22 @@
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
     validate_certs: false
-  register: tags
+  register: t
 
-- debug:
-    var: tags
+- name: Display result 1
+  ansible.builtin.debug:
+    var: t
 
 - name: Getting the details of the coreos/dnsmasq latest tag
   herve4m.quay.quay_tag_info:
     repository: coreos/dnsmasq
     tag: latest
     quay_host: quay.io
-  register: tags
+  register: t
 
-- debug:
-    var: tags
+- name: Display result 2
+  ansible.builtin.debug:
+    var: t
 
 - name: Getting the details of the tags in a non-existing repository
   herve4m.quay.quay_tag_info:
@@ -45,15 +47,16 @@
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
     validate_certs: false
-  register: tags
+  register: t
 
 - name: Ensure that the task did not change anything
-  assert:
-    that: not tags['changed']
+  ansible.builtin.assert:
+    that: not t['changed']
     fail_msg: The preceding task should not have changed anything
 
-- debug:
-    var: tags
+- name: Display result 3
+  ansible.builtin.debug:
+    var: t
 
 - name: Ensure the repository is removed
   herve4m.quay.quay_repository:
@@ -72,4 +75,3 @@
     quay_username: "{{ admin_username }}"
     quay_password: "{{ admin_password }}"
     validate_certs: false
-...

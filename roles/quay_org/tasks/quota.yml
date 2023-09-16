@@ -6,9 +6,8 @@
     warning_pct: "{{ quay_org_warning_pct | default(omit) }}"
     reject_pct: "{{ quay_org_reject_pct | default(omit) }}"
     state: present
-    quay_token: "{{ quay_token | default(omit) }}"
-    quay_username: "{{ quay_username | default(omit) }}"
-    quay_password: "{{ quay_password | default(omit) }}"
-    quay_host: "{{ quay_host | default(omit) }}"
-    validate_certs: "{{ quay_validate_certs | default(omit) }}"
-...
+    quay_token: "{{ quay_org_token | default(omit) }}"
+    quay_username: "{{ quay_org_username | default(omit) }}"
+    quay_password: "{{ quay_org_password | default(omit) }}"
+    quay_host: "{{ quay_org_host | default(omit) }}"
+    validate_certs: "{{ quay_org_validate_certs | default(omit) }}"

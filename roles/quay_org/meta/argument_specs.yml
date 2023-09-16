@@ -3,13 +3,13 @@ argument_specs:
   main:
     author:
       - Hervé Quatremain <rv4m@yahoo.co.uk>
-    short_description:
+    short_description: >
       Create and configure a Quay Container Registry organization
     description:
       - Create an organization and configure it with robot accounts, teams,
         default permissions, OAuth applications, and repositories.
     options:
-      quay_host:
+      quay_org_host:
         description:
           - URL for accessing the API. U(https://quay.example.com:8443) for
             example.
@@ -19,7 +19,7 @@ argument_specs:
             uses the U(http://127.0.0.1) URL.
         type: str
         default: http://127.0.0.1
-      quay_validate_certs:
+      quay_org_validate_certs:
         description:
           - Whether to allow insecure connections to the API.
           - If C(no), then the role does not validate SSL certificates.
@@ -28,14 +28,14 @@ argument_specs:
             mean yes, and C(no), C(0), C(False), and no value mean no).
         type: bool
         default: true
-      quay_token:
+      quay_org_token:
         description:
           - OAuth access token for authenticating against the API.
           - If you do not set the parameter, then the role tries the
             C(QUAY_TOKEN) environment variable.
           - Mutually exclusive with I(quay_username) and I(quay_password).
         type: str
-      quay_username:
+      quay_org_username:
         description:
           - The username to use for authenticating against the API.
           - If you do not set the parameter, then the role tries the
@@ -44,7 +44,7 @@ argument_specs:
             I(quay_password).
           - Mutually exclusive with I(quay_token).
         type: str
-      quay_password:
+      quay_org_password:
         description:
           - The password to use for authenticating against the API.
           - If you do not set the parameter, then the role tries the
@@ -74,7 +74,7 @@ argument_specs:
           - Quota that Quay uses to compute the warning and reject limits for
             the organization.
           - You specify a quota in bytes, but you can also use the K[i]B,
-             M[i]B, G[i]B, or T[i]B suffixes.
+            M[i]B, G[i]B, or T[i]B suffixes.
         type: str
       quay_org_warning_pct:
         description:
@@ -300,4 +300,3 @@ argument_specs:
                 installation to use this I(repo_state) parameter.
             type: str
             choices: [NORMAL, READ_ONLY, MIRROR]
-...

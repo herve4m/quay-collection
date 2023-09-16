@@ -22,18 +22,16 @@
 
 .. _ansible_collections.herve4m.quay.quay_org_role:
 
-.. Anchors: aliases
-
-
 .. Title
 
 herve4m.quay.quay_org role -- Create and configure a Quay Container Registry organization
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. Collection note
 
 .. note::
-    This role is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 1.0.1).
+    This role is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 1.0.2).
 
     To install it use: :code:`ansible-galaxy collection install herve4m.quay`.
 
@@ -47,7 +45,8 @@ herve4m.quay.quay_org role -- Create and configure a Quay Container Registry org
 .. Entry point title
 
 Entry point ``main`` -- Create and configure a Quay Container Registry organization
------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------
 
 .. version_added
 
@@ -82,23 +81,6 @@ Parameters
   <tbody>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-main--quay_host"></div>
-      <p class="ansible-option-title"><strong>quay_host</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-main--quay_host" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
-      </p>
-
-    </div></td>
-    <td><div class="ansible-option-cell">
-      <p>URL for accessing the API. <a href='https://quay.example.com:8443'>https://quay.example.com:8443</a> for example.</p>
-      <p>If you do not set the parameter, then the role uses the <code class='docutils literal notranslate'>QUAY_HOST</code> environment variable.</p>
-      <p>If you do no set the environment variable either, then the role uses the <a href='http://127.0.0.1'>http://127.0.0.1</a> URL.</p>
-      <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-value literal notranslate ansible-option-default">&#34;http://127.0.0.1&#34;</code></p>
-    </div></td>
-  </tr>
-  <tr class="row-odd">
-    <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_applications"></div>
       <p class="ansible-option-title"><strong>quay_org_applications</strong></p>
       <a class="ansibleOptionLink" href="#parameter-main--quay_org_applications" title="Permalink to this option"></a>
@@ -112,7 +94,7 @@ Parameters
       <p>Create applications in the organization.</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_applications/application_uri"></div>
       <p class="ansible-option-title"><strong>application_uri</strong></p>
@@ -126,7 +108,7 @@ Parameters
       <p>URL to the application home page.</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_applications/avatar_email"></div>
       <p class="ansible-option-title"><strong>avatar_email</strong></p>
@@ -140,7 +122,7 @@ Parameters
       <p>Email address that represents the avatar for the application.</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_applications/description"></div>
       <p class="ansible-option-title"><strong>description</strong></p>
@@ -154,7 +136,7 @@ Parameters
       <p>Description for the application.</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_applications/name"></div>
       <p class="ansible-option-title"><strong>name</strong></p>
@@ -169,7 +151,7 @@ Parameters
       <p>Name of the application to create in the organization. Application names must be at least two characters long.</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_applications/redirect_uri"></div>
       <p class="ansible-option-title"><strong>redirect_uri</strong></p>
@@ -184,7 +166,7 @@ Parameters
     </div></td>
   </tr>
 
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_default_perms"></div>
       <p class="ansible-option-title"><strong>quay_org_default_perms</strong></p>
@@ -200,7 +182,7 @@ Parameters
       <p>The permissions you define with this parameter apply when a user creates a new repository in the organization.</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_default_perms/creator"></div>
       <p class="ansible-option-title"><strong>creator</strong></p>
@@ -216,7 +198,7 @@ Parameters
       <p>You cannot use robot accounts or teams for the <em>creator</em> parameter. You can only use regular user accounts.</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_default_perms/name"></div>
       <p class="ansible-option-title"><strong>name</strong></p>
@@ -232,7 +214,7 @@ Parameters
       <p>For robot accounts use the <code class='docutils literal notranslate'>organization</code>+<code class='docutils literal notranslate'>shortrobotname</code> format.</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_default_perms/role"></div>
       <p class="ansible-option-title"><strong>role</strong></p>
@@ -254,7 +236,7 @@ Parameters
 
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_default_perms/type"></div>
       <p class="ansible-option-title"><strong>type</strong></p>
@@ -275,7 +257,7 @@ Parameters
     </div></td>
   </tr>
 
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_email"></div>
       <p class="ansible-option-title"><strong>quay_org_email</strong></p>
@@ -289,6 +271,23 @@ Parameters
       <p>Email address to associate with the new organization.</p>
       <p>If your Quay administrator has enabled the mailing capability of your Quay installation (<code class='docutils literal notranslate'>FEATURE_MAILING</code> to <code class='docutils literal notranslate'>true</code> in <code class='docutils literal notranslate'>config.yaml</code>), then this <em>email</em> parameter is mandatory.</p>
       <p>You cannot use the same address as your account email.</p>
+    </div></td>
+  </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-main--quay_org_host"></div>
+      <p class="ansible-option-title"><strong>quay_org_host</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-main--quay_org_host" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>URL for accessing the API. <a href='https://quay.example.com:8443'>https://quay.example.com:8443</a> for example.</p>
+      <p>If you do not set the parameter, then the role uses the <code class='docutils literal notranslate'>QUAY_HOST</code> environment variable.</p>
+      <p>If you do no set the environment variable either, then the role uses the <a href='http://127.0.0.1'>http://127.0.0.1</a> URL.</p>
+      <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-value literal notranslate ansible-option-default">&#34;http://127.0.0.1&#34;</code></p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -309,6 +308,23 @@ Parameters
   </tr>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-main--quay_org_password"></div>
+      <p class="ansible-option-title"><strong>quay_org_password</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-main--quay_org_password" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>The password to use for authenticating against the API.</p>
+      <p>If you do not set the parameter, then the role tries the <code class='docutils literal notranslate'>QUAY_PASSWORD</code> environment variable.</p>
+      <p>If you set <em>quay_password</em>, then you also need to set <em>quay_username</em>.</p>
+      <p>Mutually exclusive with <em>quay_token</em>.</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_quota"></div>
       <p class="ansible-option-title"><strong>quay_org_quota</strong></p>
       <a class="ansibleOptionLink" href="#parameter-main--quay_org_quota" title="Permalink to this option"></a>
@@ -322,7 +338,7 @@ Parameters
       <p>You specify a quota in bytes, but you can also use the K[i]B, M[i]B, G[i]B, or T[i]B suffixes.</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_reject_pct"></div>
       <p class="ansible-option-title"><strong>quay_org_reject_pct</strong></p>
@@ -338,7 +354,7 @@ Parameters
       <p>Set <em>quay_org_reject_pct</em> to <code class='docutils literal notranslate'>0</code> to remove the reject limit.</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_repositories"></div>
       <p class="ansible-option-title"><strong>quay_org_repositories</strong></p>
@@ -353,7 +369,7 @@ Parameters
       <p>Create repositories in the organization.</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_repositories/description"></div>
       <p class="ansible-option-title"><strong>description</strong></p>
@@ -367,7 +383,7 @@ Parameters
       <p>Text in Markdown format that describes the repository.</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_repositories/name"></div>
       <p class="ansible-option-title"><strong>name</strong></p>
@@ -382,7 +398,7 @@ Parameters
       <p>Name of the repository to create in the organization. The name must be in lowercase and must not contain white spaces.</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_repositories/perms"></div>
       <p class="ansible-option-title"><strong>perms</strong></p>
@@ -397,7 +413,7 @@ Parameters
       <p>User, robot, and team permissions to associate with the repository.</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_repositories/perms/name"></div>
       <p class="ansible-option-title"><strong>name</strong></p>
@@ -412,7 +428,7 @@ Parameters
       <p>Name of the account. The format for robot accounts is <code class='docutils literal notranslate'>organization</code>+<code class='docutils literal notranslate'>shortrobotname</code>.</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_repositories/perms/role"></div>
       <p class="ansible-option-title"><strong>role</strong></p>
@@ -433,7 +449,7 @@ Parameters
 
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_repositories/perms/type"></div>
       <p class="ansible-option-title"><strong>type</strong></p>
@@ -454,7 +470,7 @@ Parameters
     </div></td>
   </tr>
 
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_repositories/repo_state"></div>
       <p class="ansible-option-title"><strong>repo_state</strong></p>
@@ -467,7 +483,7 @@ Parameters
     <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
       <p>If <code class='docutils literal notranslate'>NORMAL</code>, then the repository is in the default state (read/write).</p>
       <p>If <code class='docutils literal notranslate'>READ_ONLY</code>, then the repository is read-only.</p>
-      <p>If <code class='docutils literal notranslate'>MIRROR</code>, then the repository is a mirror and you can configure it by using the <span class="error">ERROR while parsing: While parsing M() at index 85: Module name "quay_repository_mirror" is not a FQCN</span> module.</p>
+      <p>If <code class='docutils literal notranslate'>MIRROR</code>, then the repository is a mirror and you can configure it by using the <span class="error">ERROR while parsing: While parsing "M(quay_repository_mirror)" at index 85: Module name "quay_repository_mirror" is not a FQCN</span> module.</p>
       <p>You must enable the mirroring capability of your Quay installation to use this <em>repo_state</em> parameter.</p>
       <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
       <ul class="simple">
@@ -478,7 +494,7 @@ Parameters
 
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_repositories/visibility"></div>
       <p class="ansible-option-title"><strong>visibility</strong></p>
@@ -501,7 +517,7 @@ Parameters
     </div></td>
   </tr>
 
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_robots"></div>
       <p class="ansible-option-title"><strong>quay_org_robots</strong></p>
@@ -516,7 +532,7 @@ Parameters
       <p>List of robot accounts to create for the organization.</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_robots/description"></div>
       <p class="ansible-option-title"><strong>description</strong></p>
@@ -530,7 +546,7 @@ Parameters
       <p>Description of the robot account. You cannot update the description of existing robot accounts.</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_robots/name"></div>
       <p class="ansible-option-title"><strong>name</strong></p>
@@ -547,7 +563,7 @@ Parameters
     </div></td>
   </tr>
 
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_teams"></div>
       <p class="ansible-option-title"><strong>quay_org_teams</strong></p>
@@ -562,7 +578,7 @@ Parameters
       <p>List of teams to create in the organization.</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_teams/description"></div>
       <p class="ansible-option-title"><strong>description</strong></p>
@@ -576,7 +592,7 @@ Parameters
       <p>Text in Markdown format that describes the team.</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_teams/members"></div>
       <p class="ansible-option-title"><strong>members</strong></p>
@@ -589,10 +605,10 @@ Parameters
     </div></td>
     <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
       <p>List of the user or robot accounts in the team. Use the syntax <code class='docutils literal notranslate'>organization</code>+<code class='docutils literal notranslate'>robotshortname</code> for robot accounts.</p>
-      <p>If the team is synchronized with an LDAP group (see the <span class="error">ERROR while parsing: While parsing M() at index 57: Module name "quay_team_ldap" is not a FQCN</span> module), then you can only add or remove robot accounts.</p>
+      <p>If the team is synchronized with an LDAP group (see the <span class="error">ERROR while parsing: While parsing "M(quay_team_ldap)" at index 57: Module name "quay_team_ldap" is not a FQCN</span> module), then you can only add or remove robot accounts.</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_teams/name"></div>
       <p class="ansible-option-title"><strong>name</strong></p>
@@ -608,7 +624,7 @@ Parameters
       <p>The name must be in lowercase, must not contain white spaces, must not start by a digit, and must be at least two characters long.</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_teams/role"></div>
       <p class="ansible-option-title"><strong>role</strong></p>
@@ -630,7 +646,40 @@ Parameters
     </div></td>
   </tr>
 
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-main--quay_org_token"></div>
+      <p class="ansible-option-title"><strong>quay_org_token</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-main--quay_org_token" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>OAuth access token for authenticating against the API.</p>
+      <p>If you do not set the parameter, then the role tries the <code class='docutils literal notranslate'>QUAY_TOKEN</code> environment variable.</p>
+      <p>Mutually exclusive with <em>quay_username</em> and <em>quay_password</em>.</p>
+    </div></td>
+  </tr>
   <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-main--quay_org_username"></div>
+      <p class="ansible-option-title"><strong>quay_org_username</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-main--quay_org_username" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>The username to use for authenticating against the API.</p>
+      <p>If you do not set the parameter, then the role tries the <code class='docutils literal notranslate'>QUAY_USERNAME</code> environment variable.</p>
+      <p>If you set <em>quay_username</em>, then you also need to set <em>quay_password</em>.</p>
+      <p>Mutually exclusive with <em>quay_token</em>.</p>
+    </div></td>
+  </tr>
+  <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_users"></div>
       <p class="ansible-option-title"><strong>quay_org_users</strong></p>
@@ -645,7 +694,7 @@ Parameters
       <p>List of user account to create.</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_users/email"></div>
       <p class="ansible-option-title"><strong>email</strong></p>
@@ -660,7 +709,7 @@ Parameters
       <p>If your Quay administrator has enabled the mailing capability of your Quay installation (<code class='docutils literal notranslate'>FEATURE_MAILING</code> to <code class='docutils literal notranslate'>true</code> in <code class='docutils literal notranslate'>config.yaml</code>), then this <em>email</em> parameter is mandatory.</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_users/password"></div>
       <p class="ansible-option-title"><strong>password</strong></p>
@@ -675,7 +724,7 @@ Parameters
       <p>The password must be at least eight characters long and must not contain white spaces.</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_users/username"></div>
       <p class="ansible-option-title"><strong>username</strong></p>
@@ -691,77 +740,11 @@ Parameters
     </div></td>
   </tr>
 
-  <tr class="row-odd">
-    <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-main--quay_org_warning_pct"></div>
-      <p class="ansible-option-title"><strong>quay_org_warning_pct</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-main--quay_org_warning_pct" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">integer</span>
-      </p>
-
-    </div></td>
-    <td><div class="ansible-option-cell">
-      <p>Warning (soft) limit as a percentage of the quota.</p>
-      <p>Quay notifies the users when the limit is reached.</p>
-      <p>Set <em>quay_org_warning_pct</em> to <code class='docutils literal notranslate'>0</code> to remove the warning limit.</p>
-    </div></td>
-  </tr>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-main--quay_password"></div>
-      <p class="ansible-option-title"><strong>quay_password</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-main--quay_password" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
-      </p>
-
-    </div></td>
-    <td><div class="ansible-option-cell">
-      <p>The password to use for authenticating against the API.</p>
-      <p>If you do not set the parameter, then the role tries the <code class='docutils literal notranslate'>QUAY_PASSWORD</code> environment variable.</p>
-      <p>If you set <em>quay_password</em>, then you also need to set <em>quay_username</em>.</p>
-      <p>Mutually exclusive with <em>quay_token</em>.</p>
-    </div></td>
-  </tr>
-  <tr class="row-odd">
-    <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-main--quay_token"></div>
-      <p class="ansible-option-title"><strong>quay_token</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-main--quay_token" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
-      </p>
-
-    </div></td>
-    <td><div class="ansible-option-cell">
-      <p>OAuth access token for authenticating against the API.</p>
-      <p>If you do not set the parameter, then the role tries the <code class='docutils literal notranslate'>QUAY_TOKEN</code> environment variable.</p>
-      <p>Mutually exclusive with <em>quay_username</em> and <em>quay_password</em>.</p>
-    </div></td>
-  </tr>
-  <tr class="row-even">
-    <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-main--quay_username"></div>
-      <p class="ansible-option-title"><strong>quay_username</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-main--quay_username" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
-      </p>
-
-    </div></td>
-    <td><div class="ansible-option-cell">
-      <p>The username to use for authenticating against the API.</p>
-      <p>If you do not set the parameter, then the role tries the <code class='docutils literal notranslate'>QUAY_USERNAME</code> environment variable.</p>
-      <p>If you set <em>quay_username</em>, then you also need to set <em>quay_password</em>.</p>
-      <p>Mutually exclusive with <em>quay_token</em>.</p>
-    </div></td>
-  </tr>
-  <tr class="row-odd">
-    <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-main--quay_validate_certs"></div>
-      <p class="ansible-option-title"><strong>quay_validate_certs</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-main--quay_validate_certs" title="Permalink to this option"></a>
+      <div class="ansibleOptionAnchor" id="parameter-main--quay_org_validate_certs"></div>
+      <p class="ansible-option-title"><strong>quay_org_validate_certs</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-main--quay_org_validate_certs" title="Permalink to this option"></a>
       <p class="ansible-option-type-line">
         <span class="ansible-option-type">boolean</span>
       </p>
@@ -777,6 +760,22 @@ Parameters
         <li><p><code class="ansible-value literal notranslate ansible-option-default-bold">true</code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
       </ul>
 
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-main--quay_org_warning_pct"></div>
+      <p class="ansible-option-title"><strong>quay_org_warning_pct</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-main--quay_org_warning_pct" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">integer</span>
+      </p>
+
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Warning (soft) limit as a percentage of the quota.</p>
+      <p>Quay notifies the users when the limit is reached.</p>
+      <p>Set <em>quay_org_warning_pct</em> to <code class='docutils literal notranslate'>0</code> to remove the warning limit.</p>
     </div></td>
   </tr>
   </tbody>

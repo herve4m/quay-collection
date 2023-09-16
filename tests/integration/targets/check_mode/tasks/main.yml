@@ -13,7 +13,7 @@
   register: result
 
 - name: Ensure that the task did change something
-  assert:
+  ansible.builtin.assert:
     that: result['changed']
     fail_msg: The preceding task should have created the user account
 
@@ -29,7 +29,7 @@
   register: result
 
 - name: Ensure that the task did change something
-  assert:
+  ansible.builtin.assert:
     that: result['changed']
     fail_msg: The preceding task should have created the user account
 
@@ -46,7 +46,7 @@
   register: result
 
 - name: Ensure that the task did not change anything
-  assert:
+  ansible.builtin.assert:
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
@@ -61,7 +61,7 @@
   register: result
 
 - name: Ensure that the task did not change anything
-  assert:
+  ansible.builtin.assert:
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
@@ -78,7 +78,7 @@
   register: result
 
 - name: Ensure that the task did change something
-  assert:
+  ansible.builtin.assert:
     that: result['changed']
     fail_msg: The preceding task should have updated the user email address
 
@@ -93,7 +93,7 @@
   register: result
 
 - name: Ensure that the task did change something
-  assert:
+  ansible.builtin.assert:
     that: result['changed']
     fail_msg: The preceding task should have updated the user email address
 
@@ -110,7 +110,7 @@
   register: result
 
 - name: Ensure that the task did change something
-  assert:
+  ansible.builtin.assert:
     that: result['changed']
     fail_msg: The preceding task should have deleted the user account
 
@@ -125,7 +125,7 @@
   register: result
 
 - name: Ensure that the task did change something
-  assert:
+  ansible.builtin.assert:
     that: result['changed']
     fail_msg: The preceding task should have deleted the user account
 ...

@@ -10,7 +10,7 @@
     validate_certs: false
 
 - name: Check whether podman is available
-  command:
+  ansible.builtin.command:
     cmd: podman --version
   failed_when: false
   changed_when: false
@@ -27,68 +27,68 @@
   when: "podman['rc'] == 0"
   block:
     - name: Ensure a small container image is available
-      command:
+      ansible.builtin.command:
         cmd: "podman pull {{ fake_image }}"
       changed_when: true
 
     - name: Ensure the image has the correct tag
-      command:
+      ansible.builtin.command:
         cmd: "podman tag {{ fake_image }}
-              {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
+          {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
       changed_when: true
 
     - name: Ensure podman is logged in
-      command:
+      ansible.builtin.command:
         cmd: "podman login --tls-verify=false --username {{ admin_username }}
-              --password {{ admin_password }} {{ quay_hostname }}"
+          --password {{ admin_password }} {{ quay_hostname }}"
       changed_when: true
 
     - name: Ensure the image is pushed to Quay Container Registry
-      command:
+      ansible.builtin.command:
         cmd: "podman push --tls-verify=false --remove-signatures
-              {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
+          {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
       changed_when: true
 
     - name: Ensure the images are removed
-      command:
+      ansible.builtin.command:
         cmd: "podman rmi {{ fake_image }}
-              {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
+          {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
       changed_when: true
 
 - name: Ensure the image is prepared with docker
   when: "podman['rc'] != 0"
   block:
     - name: Ensure a small container image is available
-      command:
+      ansible.builtin.command:
         cmd: "docker pull {{ fake_image }}"
       changed_when: true
 
     - name: Ensure the image has the correct tag
-      command:
+      ansible.builtin.command:
         cmd: "docker tag {{ fake_image }}
-              {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
+          {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
       changed_when: true
 
     - name: Ensure docker is logged in
-      command:
+      ansible.builtin.command:
         cmd: "docker login --username {{ admin_username }}
-              --password {{ admin_password }} {{ quay_hostname }}"
+          --password {{ admin_password }} {{ quay_hostname }}"
       changed_when: true
 
     - name: Ensure the image is pushed to Quay Container Registry
-      command:
+      ansible.builtin.command:
         cmd: "docker push
-              {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
+          {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
       changed_when: true
 
     - name: Ensure the images are removed
-      command:
+      ansible.builtin.command:
         cmd: "docker rmi {{ fake_image }}
-              {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
+          {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
       changed_when: true
 
     - name: Ensure docker is logged out
-      command:
+      ansible.builtin.command:
         cmd: "docker logout {{ quay_hostname }}"
       changed_when: true
       failed_when: false
@@ -113,7 +113,7 @@
   register: result
 
 - name: Ensure that the task did not change anything
-  assert:
+  ansible.builtin.assert:
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
@@ -127,7 +127,7 @@
   register: result
 
 - name: Ensure that the task did not change anything
-  assert:
+  ansible.builtin.assert:
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
@@ -141,7 +141,7 @@
   register: result
 
 - name: Ensure that the task did not change anything
-  assert:
+  ansible.builtin.assert:
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
@@ -156,7 +156,7 @@
   register: result
 
 - name: Ensure that the task did not change anything
-  assert:
+  ansible.builtin.assert:
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
@@ -172,7 +172,7 @@
   register: result
 
 - name: Ensure that the task did not change anything
-  assert:
+  ansible.builtin.assert:
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
@@ -197,7 +197,7 @@
   register: result
 
 - name: Ensure that the task did not change anything
-  assert:
+  ansible.builtin.assert:
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
@@ -217,12 +217,11 @@
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
     validate_certs: false
-  register: tags
+  register: t
 
 - name: Ensure the tag v3.0.0 is added with expiration
   herve4m.quay.quay_tag:
-    image:
-      "ansibletestorg/ansibletestrepo@{{ tags['tags'][0]['manifest_digest'] }}"
+    image: ansibletestorg/ansibletestrepo@{{ t['tags'][0]['manifest_digest'] }}
     tag: v3.0.0
     expiration: "{{ expiration }}"
     state: present
@@ -274,4 +273,3 @@
     quay_username: "{{ admin_username }}"
     quay_password: "{{ admin_password }}"
     validate_certs: false
-...

@@ -5,11 +5,12 @@
     quay_host: quay.io
   register: labels
 
-- debug:
+- name: Display result 1
+  ansible.builtin.debug:
     var: labels
 
 - name: Ensure that the task did return some labels
-  assert:
+  ansible.builtin.assert:
     that: labels['labels']|length > 1
     fail_msg: The preceding task should have returned some labels
 
@@ -20,11 +21,12 @@
     quay_host: quay.io
   register: label
 
-- debug:
+- name: Display result 2
+  ansible.builtin.debug:
     var: label
 
 - name: Ensure that the task did return the version label
-  assert:
+  ansible.builtin.assert:
     that: label['labels']|length == 1
     fail_msg: The preceding task should have returned a label
 
@@ -36,7 +38,7 @@
   register: result
 
 - name: Ensure the task has failed
-  assert:
+  ansible.builtin.assert:
     that: result['failed']
     fail_msg: The preceding task should have failed
 
@@ -49,7 +51,6 @@
   register: labels
 
 - name: Ensure that the task did not return any label
-  assert:
+  ansible.builtin.assert:
     that: labels['labels']|length == 0
     fail_msg: The preceding task should not have returned labels
-...

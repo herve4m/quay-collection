@@ -1,6 +1,3 @@
 ---
-skip_list:
-  - yaml
 exclude_paths:
-  - tests/integration/targets
-...
+  - tests/sample_manual_test.yml

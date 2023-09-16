@@ -1,10 +1,11 @@
 ---
 - name: Ensure both token and username authentication are not configured
   ansible.builtin.fail:
-    msg: "quay_username/quay_password and quay_token are mutually exclusive"
-  when:
-    quay_username is defined and quay_token is defined or
-    quay_password is defined and quay_token is defined
+    msg: >
+      quay_org_username/quay_org_password and quay_org_token
+      are mutually exclusive
+  when: quay_org_username is defined and quay_org_token is defined or
+    quay_org_password is defined and quay_org_token is defined
 
 - name: Ensure the user accounts exist
   ansible.builtin.import_tasks: users.yml
@@ -29,4 +30,3 @@
 
 - name: Ensure the storage quota is set
   ansible.builtin.import_tasks: quota.yml
-...

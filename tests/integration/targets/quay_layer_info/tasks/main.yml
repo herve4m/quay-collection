@@ -5,7 +5,8 @@
     quay_host: quay.io
   register: layers1
 
-- debug:
+- name: Display result
+  ansible.builtin.debug:
     var: layers1
 
 - name: Retrieve the layers of the coreos/dnsmasq image (default tag)
@@ -15,7 +16,7 @@
   register: layers2
 
 - name: Ensure the two images are the same
-  assert:
+  ansible.builtin.assert:
     that: layers1['layers']|length == layers2['layers']|length
     fail_msg: The same image should have been returned
 
@@ -27,7 +28,7 @@
   register: result
 
 - name: Ensure the task has failed
-  assert:
+  ansible.builtin.assert:
     that: result['failed']
     fail_msg: The preceding task should have failed
 
@@ -40,7 +41,6 @@
   register: result
 
 - name: Ensure that the task did not change anything
-  assert:
+  ansible.builtin.assert:
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
-...

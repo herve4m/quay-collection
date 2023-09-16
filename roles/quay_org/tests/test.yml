@@ -9,8 +9,8 @@
       ansible.builtin.include_role:
         name: herve4m.quay.quay_org
       vars:
-        quay_host: https://quay.example.com
-        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+        quay_org_host: https://quay.example.com
+        quay_org_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
         quay_org_name: production
         quay_org_email: production@example.com
         quay_org_quota: 500 GiB
@@ -51,4 +51,3 @@
               - name: qa
                 type: team
                 role: read
-...

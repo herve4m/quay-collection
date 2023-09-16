@@ -9,7 +9,7 @@
   register: result
 
 - name: Ensure that the task did not change anything
-  assert:
+  ansible.builtin.assert:
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
@@ -32,17 +32,17 @@
   register: result
 
 - name: Ensure that the task did not change anything
-  assert:
+  ansible.builtin.assert:
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
 - name: Ensure that the token has the correct name
-  assert:
+  ansible.builtin.assert:
     that: result['name'] == 'ansibletesttoken1'
     fail_msg: The token should have the name ansibletesttoken1
 
 - name: Ensure that the returned data has the token_code key
-  assert:
+  ansible.builtin.assert:
     that: "'token_code' in result"
     fail_msg: The result should have the token_code key
 

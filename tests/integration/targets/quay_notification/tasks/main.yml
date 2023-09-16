@@ -64,7 +64,7 @@
   register: result
 
 - name: Ensure that the task failed
-  assert:
+  ansible.builtin.assert:
     that: result['failed']
     fail_msg: The preceding task should have failed (no such repository)
 
@@ -79,7 +79,7 @@
   register: result
 
 - name: Ensure that the task failed
-  assert:
+  ansible.builtin.assert:
     that: result['failed']
     fail_msg: The preceding task should have failed (missing parameters)
 
@@ -113,7 +113,7 @@
   register: result
 
 - name: Ensure that the task did not change anything
-  assert:
+  ansible.builtin.assert:
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
@@ -146,7 +146,7 @@
     validate_certs: false
 
 - name: Wait to ensure the tests have failed
-  pause:
+  ansible.builtin.pause:
     seconds: 15
 
 - name: Ensure failure counter is reset for Quay Notification (no change)
@@ -160,7 +160,7 @@
   register: result
 
 - name: Ensure that the task did not change anything
-  assert:
+  ansible.builtin.assert:
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
@@ -184,7 +184,7 @@
   register: result
 
 - name: Ensure that the task did not change anything
-  assert:
+  ansible.builtin.assert:
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
@@ -199,7 +199,7 @@
   register: result
 
 - name: Ensure that the task did not change anything
-  assert:
+  ansible.builtin.assert:
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
@@ -254,4 +254,3 @@
     quay_username: "{{ admin_username }}"
     quay_password: "{{ admin_password }}"
     validate_certs: false
-...

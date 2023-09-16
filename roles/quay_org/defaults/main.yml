@@ -1,10 +1,10 @@
 ---
-# quay_host: https://quay.example.com
-# # quay_token and quay_username/quay_password are mutually exclusive
-# quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
-# quay_username: admin
-# quay_password: Sup3rS3cr37
-# quay_validate_certs: false
+# quay_org_host: https://quay.example.com
+# #quay_org_token and quay_org_username/quay_org_password are mutually exclusive
+# quay_org_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+# quay_org_username: admin
+# quay_org_password: Sup3rS3cr37
+# quay_org_validate_certs: false
 # quay_org_name: production
 # quay_org_email: production@example.com
 # quay_org_quota: 1.5 TiB

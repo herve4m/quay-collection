@@ -13,7 +13,7 @@
 # 4) The retrieved token is stored in /tmp/quay_collection_TOKEN.yml so that it
 #    can be reused by other playbooks.
 - name: Set the quay_token fact from defaults/main.yml
-  set_fact:
+  ansible.builtin.set_fact:
     quay_token: "{{ default_token }}"
   when:
     - default_token is defined
@@ -23,12 +23,12 @@
   when: quay_token is not defined or quay_token|length == 0
   block:
     - name: Get the OAuth access token from /tmp/quay_collection_TOKEN.yml
-      include_vars:
+      ansible.builtin.include_vars:
         file: /tmp/quay_collection_TOKEN.yml
       failed_when: false
 
     - name: Set the quay_token fact
-      set_fact:
+      ansible.builtin.set_fact:
         quay_token: "{{ default_token }}"
       when:
         - default_token is defined
@@ -54,7 +54,7 @@
       failed_when: false
 
     - name: Ensure that the OAuth access token is defined
-      assert:
+      ansible.builtin.assert:
         that: "result is defined and 'access_token' in result"
         fail_msg: >
           I cannot create an OAuth access token for you.
@@ -62,16 +62,16 @@
         quiet: true
 
     - name: Ensure the /tmp/quay_collection_TOKEN.yml file is created
-      copy:
+      ansible.builtin.copy:
         dest: /tmp/quay_collection_TOKEN.yml
         content: "---\ndefault_token: {{ result['access_token'] }}\n"
         mode: 0600
 
     - name: Store the OAuth access token in the quay_token fact
-      set_fact:
+      ansible.builtin.set_fact:
         quay_token: "{{ result['access_token'] }}"
 
 - name: Display the OAuth access token
-  debug:
+  ansible.builtin.debug:
     msg: "OAuth access token: {{ quay_token }}"
 ...

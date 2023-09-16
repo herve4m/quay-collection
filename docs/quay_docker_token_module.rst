@@ -30,10 +30,6 @@
 
 .. Anchors: short name for ansible.builtin
 
-.. Anchors: aliases
-
-
-
 .. Title
 
 herve4m.quay.quay_docker_token module -- Manage tokens for accessing Quay Container Registry repositories
@@ -42,7 +38,7 @@ herve4m.quay.quay_docker_token module -- Manage tokens for accessing Quay Contai
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 1.0.1).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 1.0.2).
 
     To install it, use: :code:`ansible-galaxy collection install herve4m.quay`.
 

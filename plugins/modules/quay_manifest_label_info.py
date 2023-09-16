@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2022, Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2022, 2023, Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # For accessing the API documentation from a running system, use the swagger-ui
@@ -156,7 +156,7 @@ from ..module_utils.quay_image import QuayImage
 def main():
     argument_spec = dict(
         image=dict(required=True),
-        key=dict(),
+        key=dict(no_log=True),
     )
 
     # Create a module for ourselves

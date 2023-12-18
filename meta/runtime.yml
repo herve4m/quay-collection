@@ -1,5 +1,5 @@
 ---
-requires_ansible: '>=2.9.10'
+requires_ansible: ">=2.15.0"
 action_groups:
   quay:
     - quay_api_token
@@ -23,4 +23,3 @@ action_groups:
     - quay_team
     - quay_user
     - quay_vulnerability_info
-...

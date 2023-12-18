@@ -109,7 +109,7 @@ EXAMPLES = r"""
 
 - name: Ensure the user is removed
   herve4m.quay.quay_user:
-    username:  dwilde
+    username: dwilde
     state: absent
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7

@@ -187,3 +187,9 @@ releases:
     fragments:
     - PR28-v1.0.2-summary.yml
     release_date: '2023-09-16'
+  1.0.3:
+    changes:
+      release_summary: Testing against Quay version 3.10.1.
+    fragments:
+    - PR29-v1.0.3-summary.yml
+    release_date: '2023-12-18'

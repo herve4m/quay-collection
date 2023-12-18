@@ -130,7 +130,7 @@ extends_documentation_fragment:
 """
 
 EXAMPLES = r"""
-- name: Ensure mirroring configuration is set for the existing production/smallimage repo
+- name: Ensure mirroring is set for the existing production/smallimage repo
   herve4m.quay.quay_repository_mirror:
     name: production/smallimage
     external_reference: quay.io/projectquay/quay
@@ -156,7 +156,6 @@ EXAMPLES = r"""
     force_sync: true
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
-
 """
 
 RETURN = r""" # """

@@ -334,9 +334,11 @@ def main():
     # Sort the layers in reverse sort index
     module.exit_json(
         changed=False,
-        layers=sorted(images.get("layers", []), key=lambda k: k["index"], reverse=True)
-        if images
-        else [],
+        layers=(
+            sorted(images.get("layers", []), key=lambda k: k["index"], reverse=True)
+            if images
+            else []
+        ),
     )
 
 

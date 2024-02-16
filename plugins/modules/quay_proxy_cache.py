@@ -27,7 +27,7 @@ module: quay_proxy_cache
 short_description: Manage Quay Container Registry proxy cache configurations
 description:
   - Create, delete, and update the proxy cache configuration in organizations.
-version_added: '1.0.4'
+version_added: '1.0'
 author: Herve Quatremain (@herve4m)
 options:
   organization:

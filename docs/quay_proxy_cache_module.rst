@@ -23,7 +23,7 @@ herve4m.quay.quay_proxy_cache module -- Manage Quay Container Registry proxy cac
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.0.4).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.1.0).
 
     It is not included in ``ansible-core``.
     To check whether it is installed, run :code:`ansible-galaxy collection list`.
@@ -36,7 +36,7 @@ herve4m.quay.quay_proxy_cache module -- Manage Quay Container Registry proxy cac
 
 .. rst-class:: ansible-version-added
 
-New in herve4m.quay 1.0.4
+New in herve4m.quay 1.1.0
 
 .. contents::
    :local:

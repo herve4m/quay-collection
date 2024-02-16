@@ -9,7 +9,7 @@
 Herve4M.Quay
 ============
 
-Collection version 1.0.4
+Collection version 1.1.0
 
 .. contents::
    :local:

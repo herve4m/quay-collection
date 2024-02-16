@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2021, 2022 Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2021-2024 Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # For accessing the API documentation from a running system, use the swagger-ui
@@ -97,7 +97,7 @@ options:
   state:
     description:
       - If C(absent), then the module deletes the repository.
-      - The module does not fail if the repository does not exist because the
+      - The module does not fail if the repository does not exist, because the
         state is already as expected.
       - If C(present), then the module creates the repository if it does not
         already exist.

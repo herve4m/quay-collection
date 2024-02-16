@@ -13,6 +13,7 @@ action_groups:
     - quay_message
     - quay_notification
     - quay_organization
+    - quay_proxy_cache
     - quay_quota
     - quay_repository_mirror
     - quay_repository

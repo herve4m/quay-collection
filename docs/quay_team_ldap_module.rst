@@ -6,23 +6,8 @@
 .. |antsibull-internal-nbsp| unicode:: 0xA0
     :trim:
 
-.. role:: ansible-attribute-support-label
-.. role:: ansible-attribute-support-property
-.. role:: ansible-attribute-support-full
-.. role:: ansible-attribute-support-partial
-.. role:: ansible-attribute-support-none
-.. role:: ansible-attribute-support-na
-.. role:: ansible-option-type
-.. role:: ansible-option-elements
-.. role:: ansible-option-required
-.. role:: ansible-option-versionadded
-.. role:: ansible-option-aliases
-.. role:: ansible-option-choices
-.. role:: ansible-option-choices-default-mark
-.. role:: ansible-option-default-bold
-.. role:: ansible-option-configuration
-.. role:: ansible-option-returned-bold
-.. role:: ansible-option-sample-bold
+.. meta::
+  :antsibull-docs: 2.7.0
 
 .. Anchors
 
@@ -38,7 +23,10 @@ herve4m.quay.quay_team_ldap module -- Synchronize Quay Container Registry teams 
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 1.0.2).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.0.4).
+
+    It is not included in ``ansible-core``.
+    To check whether it is installed, run :code:`ansible-galaxy collection list`.
 
     To install it, use: :code:`ansible-galaxy collection install herve4m.quay`.
 
@@ -118,10 +106,10 @@ Parameters
       <p>If <code class='docutils literal notranslate'>yes</code>, then the current team members are kept after the synchronization is disabled.</p>
       <p>If <code class='docutils literal notranslate'>no</code>, then the team members are removed (except robot accounts)</p>
       <p><em>keep_users</em> is only used when <em>sync</em> is <code class='docutils literal notranslate'>no</code>.</p>
-      <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+      <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
       <ul class="simple">
         <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">false</code></p></li>
-        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold">true</code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold"><strong>true</strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
       </ul>
 
     </div></td>
@@ -167,7 +155,7 @@ Parameters
       <p>URL for accessing the API. <a href='https://quay.example.com:8443'>https://quay.example.com:8443</a> for example.</p>
       <p>If you do not set the parameter, then the module uses the <code class='docutils literal notranslate'>QUAY_HOST</code> environment variable.</p>
       <p>If you do no set the environment variable either, then the module uses the <a href='http://127.0.0.1'>http://127.0.0.1</a> URL.</p>
-      <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-value literal notranslate ansible-option-default">&#34;http://127.0.0.1&#34;</code></p>
+      <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-value literal notranslate ansible-option-default">&#34;http://127.0.0.1&#34;</code></p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -229,10 +217,10 @@ Parameters
     <td><div class="ansible-option-cell">
       <p>If <code class='docutils literal notranslate'>yes</code>, then the team members are retrieved from the LDAP group that you define in <em>group_dn</em>. The pre-existing members are removed from the team before the synchronization process starts. Existing robot account members are not removed.</p>
       <p>If <code class='docutils literal notranslate'>no</code>, then the synchronization from LDAP is disabled. Existing team members (from LDAP) are kept, except if you set <em>keep_users</em> to <code class='docutils literal notranslate'>no</code>.</p>
-      <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+      <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
       <ul class="simple">
         <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">false</code></p></li>
-        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold">true</code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold"><strong>true</strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
       </ul>
 
     </div></td>
@@ -252,10 +240,10 @@ Parameters
       <p>Whether to allow insecure connections to the API.</p>
       <p>If <code class='docutils literal notranslate'>no</code>, then the module does not validate SSL certificates.</p>
       <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_VERIFY_SSL</code> environment variable (<code class='docutils literal notranslate'>yes</code>, <code class='docutils literal notranslate'>1</code>, and <code class='docutils literal notranslate'>True</code> mean yes, and <code class='docutils literal notranslate'>no</code>, <code class='docutils literal notranslate'>0</code>, <code class='docutils literal notranslate'>False</code>, and no value mean no).</p>
-      <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+      <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
       <ul class="simple">
         <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">false</code></p></li>
-        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold">true</code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold"><strong>true</strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
       </ul>
 
     </div></td>
@@ -349,12 +337,15 @@ Authors
 Collection links
 ~~~~~~~~~~~~~~~~
 
-.. raw:: html
+.. ansible-links::
 
-  <p class="ansible-links">
-    <a href="https://github.com/herve4m/quay-collection/issues" aria-role="button" target="_blank" rel="noopener external">Issue Tracker</a>
-    <a href="https://github.com/herve4m/quay-collection" aria-role="button" target="_blank" rel="noopener external">Repository (Sources)</a>
-  </p>
+  - title: "Issue Tracker"
+    url: "https://github.com/herve4m/quay-collection/issues"
+    external: true
+  - title: "Repository (Sources)"
+    url: "https://github.com/herve4m/quay-collection"
+    external: true
+
 
 .. Parsing errors
 

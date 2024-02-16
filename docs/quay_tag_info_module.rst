@@ -6,23 +6,8 @@
 .. |antsibull-internal-nbsp| unicode:: 0xA0
     :trim:
 
-.. role:: ansible-attribute-support-label
-.. role:: ansible-attribute-support-property
-.. role:: ansible-attribute-support-full
-.. role:: ansible-attribute-support-partial
-.. role:: ansible-attribute-support-none
-.. role:: ansible-attribute-support-na
-.. role:: ansible-option-type
-.. role:: ansible-option-elements
-.. role:: ansible-option-required
-.. role:: ansible-option-versionadded
-.. role:: ansible-option-aliases
-.. role:: ansible-option-choices
-.. role:: ansible-option-choices-default-mark
-.. role:: ansible-option-default-bold
-.. role:: ansible-option-configuration
-.. role:: ansible-option-returned-bold
-.. role:: ansible-option-sample-bold
+.. meta::
+  :antsibull-docs: 2.7.0
 
 .. Anchors
 
@@ -38,7 +23,10 @@ herve4m.quay.quay_tag_info module -- Gather information about tags in a Quay Con
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 1.0.2).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.0.4).
+
+    It is not included in ``ansible-core``.
+    To check whether it is installed, run :code:`ansible-galaxy collection list`.
 
     To install it, use: :code:`ansible-galaxy collection install herve4m.quay`.
 
@@ -116,9 +104,9 @@ Parameters
     <td><div class="ansible-option-cell">
       <p>If <code class='docutils literal notranslate'>yes</code>, then the module only collects information on tags that have not expired and have not been deleted. If <code class='docutils literal notranslate'>no</code>, then the module returns information on all the tags.</p>
       <p>You can identify expired and deleted tags (when <em>only_active_tags</em> is <code class='docutils literal notranslate'>no</code>) in the returned data by inspecting the <code class='docutils literal notranslate'>end_ts</code> or <code class='docutils literal notranslate'>expiration</code> tag attributes. Those attributes provide the expiration or deletion date.</p>
-      <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+      <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
       <ul class="simple">
-        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold">false</code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold"><strong>false</strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
         <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">true</code></p></li>
       </ul>
 
@@ -137,7 +125,7 @@ Parameters
       <p>URL for accessing the API. <a href='https://quay.example.com:8443'>https://quay.example.com:8443</a> for example.</p>
       <p>If you do not set the parameter, then the module uses the <code class='docutils literal notranslate'>QUAY_HOST</code> environment variable.</p>
       <p>If you do no set the environment variable either, then the module uses the <a href='http://127.0.0.1'>http://127.0.0.1</a> URL.</p>
-      <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-value literal notranslate ansible-option-default">&#34;http://127.0.0.1&#34;</code></p>
+      <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-value literal notranslate ansible-option-default">&#34;http://127.0.0.1&#34;</code></p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -231,10 +219,10 @@ Parameters
       <p>Whether to allow insecure connections to the API.</p>
       <p>If <code class='docutils literal notranslate'>no</code>, then the module does not validate SSL certificates.</p>
       <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_VERIFY_SSL</code> environment variable (<code class='docutils literal notranslate'>yes</code>, <code class='docutils literal notranslate'>1</code>, and <code class='docutils literal notranslate'>True</code> mean yes, and <code class='docutils literal notranslate'>no</code>, <code class='docutils literal notranslate'>0</code>, <code class='docutils literal notranslate'>False</code>, and no value mean no).</p>
-      <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+      <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
       <ul class="simple">
         <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">false</code></p></li>
-        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold">true</code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold"><strong>true</strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
       </ul>
 
     </div></td>
@@ -320,8 +308,8 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     </div></td>
     <td><div class="ansible-option-cell">
       <p>List of the tags in the repository.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-value literal notranslate ansible-option-sample">[{&#34;is_manifest_list&#34;: false, &#34;last_modified&#34;: &#34;Thu, 30 Sep 2021 06:10:23 -0000&#34;, &#34;manifest_digest&#34;: &#34;sha256:9ce9...f3c7&#34;, &#34;name&#34;: &#34;1.33.1&#34;, &#34;reversion&#34;: false, &#34;size&#34;: 784538, &#34;start_ts&#34;: 1632982223}, {&#34;is_manifest_list&#34;: false, &#34;last_modified&#34;: &#34;Thu, 30 Sep 2021 06:10:22 -0000&#34;, &#34;manifest_digest&#34;: &#34;sha256:9ce9...f3c7&#34;, &#34;name&#34;: &#34;latest&#34;, &#34;reversion&#34;: false, &#34;size&#34;: 784538, &#34;start_ts&#34;: 1632982222}, {&#34;end_ts&#34;: 1640336040, &#34;expiration&#34;: &#34;Fri, 24 Dec 2021 08:54:00 -0000&#34;, &#34;is_manifest_list&#34;: false, &#34;last_modified&#34;: &#34;Thu, 30 Sep 2021 06:10:21 -0000&#34;, &#34;manifest_digest&#34;: &#34;sha256:a8f2...5ea7&#34;, &#34;name&#34;: &#34;1.34.0&#34;, &#34;reversion&#34;: false, &#34;size&#34;: 802700, &#34;start_ts&#34;: 1632982221}]</code></p>
+      <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+      <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-value literal notranslate ansible-option-sample">[{&#34;is_manifest_list&#34;: false, &#34;last_modified&#34;: &#34;Thu, 30 Sep 2021 06:10:23 -0000&#34;, &#34;manifest_digest&#34;: &#34;sha256:9ce9...f3c7&#34;, &#34;name&#34;: &#34;1.33.1&#34;, &#34;reversion&#34;: false, &#34;size&#34;: 784538, &#34;start_ts&#34;: 1632982223}, {&#34;is_manifest_list&#34;: false, &#34;last_modified&#34;: &#34;Thu, 30 Sep 2021 06:10:22 -0000&#34;, &#34;manifest_digest&#34;: &#34;sha256:9ce9...f3c7&#34;, &#34;name&#34;: &#34;latest&#34;, &#34;reversion&#34;: false, &#34;size&#34;: 784538, &#34;start_ts&#34;: 1632982222}, {&#34;end_ts&#34;: 1640336040, &#34;expiration&#34;: &#34;Fri, 24 Dec 2021 08:54:00 -0000&#34;, &#34;is_manifest_list&#34;: false, &#34;last_modified&#34;: &#34;Thu, 30 Sep 2021 06:10:21 -0000&#34;, &#34;manifest_digest&#34;: &#34;sha256:a8f2...5ea7&#34;, &#34;name&#34;: &#34;1.34.0&#34;, &#34;reversion&#34;: false, &#34;size&#34;: 802700, &#34;start_ts&#34;: 1632982221}]</code></p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -336,8 +324,8 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
       <p>Time in seconds since the epoch of the tag expiration.</p>
       <p>The module only returns expired tags when the <em>only_active_tags</em> parameter is <code class='docutils literal notranslate'>no</code>.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> only when an expiration date has been explicitly assigned.</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-value literal notranslate ansible-option-sample">1640336040</code></p>
+      <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> only when an expiration date has been explicitly assigned.</p>
+      <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-value literal notranslate ansible-option-sample">1640336040</code></p>
     </div></td>
   </tr>
   <tr class="row-even">
@@ -351,8 +339,8 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     </div></td>
     <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
       <p>Expiration date and time in a human readable format.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> only when an expiration date has been explicitly assigned.</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-value literal notranslate ansible-option-sample">&#34;Fri, 24 Dec 2021 08:54:00 -0000&#34;</code></p>
+      <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> only when an expiration date has been explicitly assigned.</p>
+      <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-value literal notranslate ansible-option-sample">&#34;Fri, 24 Dec 2021 08:54:00 -0000&#34;</code></p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -366,8 +354,8 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     </div></td>
     <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
       <p>Date and time of the last tag modification in a human readable format.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-value literal notranslate ansible-option-sample">&#34;Thu, 30 Sep 2021 06:10:22 -0000&#34;</code></p>
+      <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+      <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-value literal notranslate ansible-option-sample">&#34;Thu, 30 Sep 2021 06:10:22 -0000&#34;</code></p>
     </div></td>
   </tr>
   <tr class="row-even">
@@ -382,8 +370,8 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
       <p>SHA256 digest for the tag.</p>
       <p>You can use that digest to pull the image instead of using the tag name. For example, <code class='docutils literal notranslate'>podman pull quay.example.com/production/smallimage@sha256:a8f2...5ea7</code></p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-value literal notranslate ansible-option-sample">&#34;sha256:a8f231c07da40107543d74ed1e9a1938a004b498377dbefcf29082c7a9e55ea7&#34;</code></p>
+      <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+      <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-value literal notranslate ansible-option-sample">&#34;sha256:a8f231c07da40107543d74ed1e9a1938a004b498377dbefcf29082c7a9e55ea7&#34;</code></p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -397,8 +385,8 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     </div></td>
     <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
       <p>Tag identifier.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-value literal notranslate ansible-option-sample">&#34;0.1.2&#34;</code></p>
+      <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+      <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-value literal notranslate ansible-option-sample">&#34;0.1.2&#34;</code></p>
     </div></td>
   </tr>
   <tr class="row-even">
@@ -412,8 +400,8 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     </div></td>
     <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
       <p>Size of the associated image in bytes.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-value literal notranslate ansible-option-sample">802700</code></p>
+      <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+      <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-value literal notranslate ansible-option-sample">802700</code></p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -427,8 +415,8 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     </div></td>
     <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
       <p>Time in seconds since the epoch of the last tag modification.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-value literal notranslate ansible-option-sample">1632982222</code></p>
+      <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+      <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-value literal notranslate ansible-option-sample">1632982222</code></p>
     </div></td>
   </tr>
 
@@ -454,12 +442,15 @@ Authors
 Collection links
 ~~~~~~~~~~~~~~~~
 
-.. raw:: html
+.. ansible-links::
 
-  <p class="ansible-links">
-    <a href="https://github.com/herve4m/quay-collection/issues" aria-role="button" target="_blank" rel="noopener external">Issue Tracker</a>
-    <a href="https://github.com/herve4m/quay-collection" aria-role="button" target="_blank" rel="noopener external">Repository (Sources)</a>
-  </p>
+  - title: "Issue Tracker"
+    url: "https://github.com/herve4m/quay-collection/issues"
+    external: true
+  - title: "Repository (Sources)"
+    url: "https://github.com/herve4m/quay-collection"
+    external: true
+
 
 .. Parsing errors
 

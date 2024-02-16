@@ -6,23 +6,8 @@
 .. |antsibull-internal-nbsp| unicode:: 0xA0
     :trim:
 
-.. role:: ansible-attribute-support-label
-.. role:: ansible-attribute-support-property
-.. role:: ansible-attribute-support-full
-.. role:: ansible-attribute-support-partial
-.. role:: ansible-attribute-support-none
-.. role:: ansible-attribute-support-na
-.. role:: ansible-option-type
-.. role:: ansible-option-elements
-.. role:: ansible-option-required
-.. role:: ansible-option-versionadded
-.. role:: ansible-option-aliases
-.. role:: ansible-option-choices
-.. role:: ansible-option-choices-default-mark
-.. role:: ansible-option-default-bold
-.. role:: ansible-option-configuration
-.. role:: ansible-option-returned-bold
-.. role:: ansible-option-sample-bold
+.. meta::
+  :antsibull-docs: 2.7.0
 
 .. Anchors
 
@@ -38,7 +23,10 @@ herve4m.quay.quay_docker_token module -- Manage tokens for accessing Quay Contai
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/herve4m/quay>`_ (version 1.0.2).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.0.4).
+
+    It is not included in ``ansible-core``.
+    To check whether it is installed, run :code:`ansible-galaxy collection list`.
 
     To install it, use: :code:`ansible-galaxy collection install herve4m.quay`.
 
@@ -121,7 +109,7 @@ Parameters
       <p>URL for accessing the API. <a href='https://quay.example.com:8443'>https://quay.example.com:8443</a> for example.</p>
       <p>If you do not set the parameter, then the module uses the <code class='docutils literal notranslate'>QUAY_HOST</code> environment variable.</p>
       <p>If you do no set the environment variable either, then the module uses the <a href='http://127.0.0.1'>http://127.0.0.1</a> URL.</p>
-      <p class="ansible-option-line"><span class="ansible-option-default-bold">Default:</span> <code class="ansible-value literal notranslate ansible-option-default">&#34;http://127.0.0.1&#34;</code></p>
+      <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-value literal notranslate ansible-option-default">&#34;http://127.0.0.1&#34;</code></p>
     </div></td>
   </tr>
   <tr class="row-even">
@@ -182,13 +170,13 @@ Parameters
     </div></td>
     <td><div class="ansible-option-cell">
       <p>If <code class='docutils literal notranslate'>absent</code>, then the module deletes the token.</p>
-      <p>The module does not fail if the token does not exist because the state is already as expected.</p>
+      <p>The module does not fail if the token does not exist, because the state is already as expected.</p>
       <p>If <code class='docutils literal notranslate'>present</code>, then the module creates the token if it does not already exist.</p>
       <p>If the token already exists, then the module returns its details.</p>
-      <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+      <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
       <ul class="simple">
         <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;absent&#34;</code></p></li>
-        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold">&#34;present&#34;</code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold"><strong>&#34;present&#34;</strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
       </ul>
 
     </div></td>
@@ -208,10 +196,10 @@ Parameters
       <p>Whether to allow insecure connections to the API.</p>
       <p>If <code class='docutils literal notranslate'>no</code>, then the module does not validate SSL certificates.</p>
       <p>If you do not set the parameter, then the module tries the <code class='docutils literal notranslate'>QUAY_VERIFY_SSL</code> environment variable (<code class='docutils literal notranslate'>yes</code>, <code class='docutils literal notranslate'>1</code>, and <code class='docutils literal notranslate'>True</code> mean yes, and <code class='docutils literal notranslate'>no</code>, <code class='docutils literal notranslate'>0</code>, <code class='docutils literal notranslate'>False</code>, and no value mean no).</p>
-      <p class="ansible-option-line"><span class="ansible-option-choices">Choices:</span></p>
+      <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
       <ul class="simple">
         <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">false</code></p></li>
-        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold">true</code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold"><strong>true</strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
       </ul>
 
     </div></td>
@@ -300,8 +288,8 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
       <p>Base 64 encoding of the username and the token (<code class='docutils literal notranslate'>I(username</code>:<em>token_code</em>))</p>
       <p>Some client configuration files, such as the <code class='docutils literal notranslate'>~/.docker/config.json</code> Docker configuration file, require that you provide the username and the token in that format.</p>
       <p>You can decode the string by using the <code class='docutils literal notranslate'>base64 --decode</code> command. See the <code class='docutils literal notranslate'>base64</code>(1) man page.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-value literal notranslate ansible-option-sample">&#34;JGFw...NzBK&#34;</code></p>
+      <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+      <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-value literal notranslate ansible-option-sample">&#34;JGFw...NzBK&#34;</code></p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -315,8 +303,8 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     </div></td>
     <td><div class="ansible-option-cell">
       <p>Token creation date and time.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-value literal notranslate ansible-option-sample">&#34;Wed, 25 May 2022 12:46:41 -0000&#34;</code></p>
+      <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+      <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-value literal notranslate ansible-option-sample">&#34;Wed, 25 May 2022 12:46:41 -0000&#34;</code></p>
     </div></td>
   </tr>
   <tr class="row-even">
@@ -331,8 +319,8 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     <td><div class="ansible-option-cell">
       <p>Base 64 encoding of the <code class='docutils literal notranslate'>~/.docker/config.json</code> configuration file.</p>
       <p>The <code class='docutils literal notranslate'>containers-auth.json</code>(5) man page describe the format of the file.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-value literal notranslate ansible-option-sample">&#34;ewog...Cn0=&#34;</code></p>
+      <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+      <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-value literal notranslate ansible-option-sample">&#34;ewog...Cn0=&#34;</code></p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -348,8 +336,8 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
       <p>Expiration date and time of the token.</p>
       <p>By default, tokens do not expire. In that case <em>expiration</em> is <code class='docutils literal notranslate'>null</code>.</p>
       <p>Your Quay administrator might have activated expiration by setting the <code class='docutils literal notranslate'>APP_SPECIFIC_TOKEN_EXPIRATION</code> directive in the <code class='docutils literal notranslate'>config.yaml</code> configuration file.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-value literal notranslate ansible-option-sample">&#34;Fri, 29 Apr 2023 13:31:05 -0000&#34;</code></p>
+      <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+      <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-value literal notranslate ansible-option-sample">&#34;Fri, 29 Apr 2023 13:31:05 -0000&#34;</code></p>
     </div></td>
   </tr>
   <tr class="row-even">
@@ -364,8 +352,8 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     <td><div class="ansible-option-cell">
       <p>Last date and time the token was used.</p>
       <p>If the token has not been used yet, then <em>last_accessed</em> is <code class='docutils literal notranslate'>null</code>.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-value literal notranslate ansible-option-sample">&#34;Wed, 25 May 2022 12:49:45 -0000&#34;</code></p>
+      <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+      <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-value literal notranslate ansible-option-sample">&#34;Wed, 25 May 2022 12:49:45 -0000&#34;</code></p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -379,8 +367,8 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     </div></td>
     <td><div class="ansible-option-cell">
       <p>Name of the application token.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-value literal notranslate ansible-option-sample">&#34;my_push_token&#34;</code></p>
+      <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+      <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-value literal notranslate ansible-option-sample">&#34;my_push_token&#34;</code></p>
     </div></td>
   </tr>
   <tr class="row-even">
@@ -394,8 +382,8 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     </div></td>
     <td><div class="ansible-option-cell">
       <p>Token to use as the password.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-value literal notranslate ansible-option-sample">&#34;OVKFT8YJBTQYG4Z30YHDOPJBU4M2VPMCQJ5IYW4BAQGZD8T5V70JORLJBJHFYVVFQ89K7&#34;</code></p>
+      <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+      <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-value literal notranslate ansible-option-sample">&#34;OVKFT8YJBTQYG4Z30YHDOPJBU4M2VPMCQJ5IYW4BAQGZD8T5V70JORLJBJHFYVVFQ89K7&#34;</code></p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -412,8 +400,8 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
       <p>When you use a token with those commands, do not use your login name but use this username instead.</p>
       <p>For Quay, that username is always <code class='docutils literal notranslate'>$app</code>.</p>
       <p>Because the <code class='docutils literal notranslate'>$</code> character is a special shell character, you might have to protect it with a backslash or by using single quotation marks.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-value literal notranslate ansible-option-sample">&#34;$app&#34;</code></p>
+      <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+      <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-value literal notranslate ansible-option-sample">&#34;$app&#34;</code></p>
     </div></td>
   </tr>
   <tr class="row-even">
@@ -427,8 +415,8 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     </div></td>
     <td><div class="ansible-option-cell">
       <p>Internal ID of the application token.</p>
-      <p class="ansible-option-line"><span class="ansible-option-returned-bold">Returned:</span> always</p>
-      <p class="ansible-option-line ansible-option-sample"><span class="ansible-option-sample-bold">Sample:</span> <code class="ansible-value literal notranslate ansible-option-sample">&#34;31b32343-e974-4f8c-bd9c-db5a0406f211&#34;</code></p>
+      <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
+      <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-value literal notranslate ansible-option-sample">&#34;31b32343-e974-4f8c-bd9c-db5a0406f211&#34;</code></p>
     </div></td>
   </tr>
   </tbody>
@@ -453,12 +441,15 @@ Authors
 Collection links
 ~~~~~~~~~~~~~~~~
 
-.. raw:: html
+.. ansible-links::
 
-  <p class="ansible-links">
-    <a href="https://github.com/herve4m/quay-collection/issues" aria-role="button" target="_blank" rel="noopener external">Issue Tracker</a>
-    <a href="https://github.com/herve4m/quay-collection" aria-role="button" target="_blank" rel="noopener external">Repository (Sources)</a>
-  </p>
+  - title: "Issue Tracker"
+    url: "https://github.com/herve4m/quay-collection/issues"
+    external: true
+  - title: "Repository (Sources)"
+    url: "https://github.com/herve4m/quay-collection"
+    external: true
+
 
 .. Parsing errors
 

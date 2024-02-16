@@ -1,4 +1,4 @@
-# Copyright: (c) 2021, 2022, Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2021-2024, Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 
@@ -452,6 +452,10 @@ class APIModule(AnsibleModule):
         if not response or "json" not in response:
             return ""
 
+        # Some API calls do not return JSON, but a string
+        if isinstance(response["json"], str):
+            return response["json"]
+
         message = response["json"].get("message")
         if message:
             return message
@@ -615,7 +619,7 @@ class APIModule(AnsibleModule):
                 raise
 
         # Success
-        if response["status_code"] in [200, 202, 204]:
+        if response["status_code"] in [200, 201, 202, 204]:
             if auto_exit:
                 self.exit_json(changed=True)
             return True

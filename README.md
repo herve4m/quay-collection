@@ -25,6 +25,7 @@ Name | Description
 [quay_message](https://github.com/herve4m/quay-collection/blob/main/docs/quay_message_module.rst) |  Manage Quay Container Registry global messages
 [quay_notification](https://github.com/herve4m/quay-collection/blob/main/docs/quay_notification_module.rst) |  Manage Quay Container Registry repository notifications
 [quay_organization](https://github.com/herve4m/quay-collection/blob/main/docs/quay_organization_module.rst) |  Manage Quay Container Registry organizations
+[quay_proxy_cache](https://github.com/herve4m/quay-collection/blob/main/docs/quay_proxy_cache_module.rst) |  Manage Quay Container Registry proxy cache configurations
 [quay_quota](https://github.com/herve4m/quay-collection/blob/main/docs/quay_quota_module.rst) |  Manage Quay Container Registry organizations quota
 [quay_repository](https://github.com/herve4m/quay-collection/blob/main/docs/quay_repository_module.rst) |  Manage Quay Container Registry repositories
 [quay_repository_mirror](https://github.com/herve4m/quay-collection/blob/main/docs/quay_repository_mirror_module.rst) |  Manage Quay Container Registry repositories mirrors

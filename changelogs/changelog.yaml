@@ -193,3 +193,9 @@ releases:
     fragments:
     - PR29-v1.0.3-summary.yml
     release_date: '2023-12-18'
+  1.0.4:
+    modules:
+    - description: Manage Quay Container Registry proxy cache configurations
+      name: quay_proxy_cache
+      namespace: ''
+    release_date: '2024-02-16'

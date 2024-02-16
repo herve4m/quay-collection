@@ -11,14 +11,14 @@
 
 .. Anchors
 
-.. _ansible_collections.herve4m.quay.quay_tag_module:
+.. _ansible_collections.herve4m.quay.quay_proxy_cache_module:
 
 .. Anchors: short name for ansible.builtin
 
 .. Title
 
-herve4m.quay.quay_tag module -- Manage Quay Container Registry image tags
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+herve4m.quay.quay_proxy_cache module -- Manage Quay Container Registry proxy cache configurations
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. Collection note
 
@@ -30,13 +30,13 @@ herve4m.quay.quay_tag module -- Manage Quay Container Registry image tags
 
     To install it, use: :code:`ansible-galaxy collection install herve4m.quay`.
 
-    To use it in a playbook, specify: :code:`herve4m.quay.quay_tag`.
+    To use it in a playbook, specify: :code:`herve4m.quay.quay_proxy_cache`.
 
 .. version_added
 
 .. rst-class:: ansible-version-added
 
-New in herve4m.quay 0.0.1
+New in herve4m.quay 1.0.4
 
 .. contents::
    :local:
@@ -50,7 +50,7 @@ Synopsis
 
 .. Description
 
-- Create, delete, and update image tags.
+- Create, delete, and update the proxy cache configuration in organizations.
 
 
 .. Aliases
@@ -84,47 +84,64 @@ Parameters
       <p class="ansible-option-title"><strong>expiration</strong></p>
       <a class="ansibleOptionLink" href="#parameter-expiration" title="Permalink to this option"></a>
       <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
+        <span class="ansible-option-type">integer</span>
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Expiration date and time for the tag. The format is <code class='docutils literal notranslate'>YYYYMMDDHHMM.SS</code> but you can change it by setting the <em>expiration_format</em> parameter.</p>
-      <p>You cannot set an expiration date more that two years in the future. If you do so, then Quay forces the date at that two years boundary.</p>
-      <p>You cannot set an expiration date in the past.</p>
+      <p>Tag expiration in seconds for cached images.</p>
+      <p>86400 (one day) by default.</p>
+      <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-value literal notranslate ansible-option-default">86400</code></p>
     </div></td>
   </tr>
   <tr class="row-odd">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-expiration_format"></div>
-      <p class="ansible-option-title"><strong>expiration_format</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-expiration_format" title="Permalink to this option"></a>
+      <div class="ansibleOptionAnchor" id="parameter-insecure"></div>
+      <p class="ansible-option-title"><strong>insecure</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-insecure" title="Permalink to this option"></a>
       <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
+        <span class="ansible-option-type">boolean</span>
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Indicate the time format used in the <em>expiration</em> parameter.</p>
-      <p>Based on default Python format (see <a href='https://docs.python.org/3/library/time.html#time.strftime'>https://docs.python.org/3/library/time.html#time.strftime</a>).</p>
-      <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-value literal notranslate ansible-option-default">&#34;%Y%m%d%H%M.%S&#34;</code></p>
+      <p>Whether to allow insecure connections to the remote registry.</p>
+      <p>If <code class='docutils literal notranslate'>yes</code>, then the module does not validate SSL certificates.</p>
+      <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+      <ul class="simple">
+        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold"><strong>false</strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">true</code></p></li>
+      </ul>
+
     </div></td>
   </tr>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-image"></div>
-      <p class="ansible-option-title"><strong>image</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-image" title="Permalink to this option"></a>
+      <div class="ansibleOptionAnchor" id="parameter-organization"></div>
+      <p class="ansible-option-title"><strong>organization</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-organization" title="Permalink to this option"></a>
       <p class="ansible-option-type-line">
         <span class="ansible-option-type">string</span>
         / <span class="ansible-option-required">required</span>
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Name of the existing image. The format is <code class='docutils literal notranslate'>namespace</code>/<code class='docutils literal notranslate'>repository</code>:<code class='docutils literal notranslate'>tag</code> or <code class='docutils literal notranslate'>namespace</code>/<code class='docutils literal notranslate'>repository</code>@<code class='docutils literal notranslate'>digest</code>. The namespace can be an organization or a personal namespace.</p>
-      <p>If you omit the namespace part, then the module looks for the repository in your personal namespace.</p>
-      <p>If you omit the tag and the digest part, then <code class='docutils literal notranslate'>latest</code> is assumed.</p>
+      <p>Name of the organization in which to create the proxy cache configuration. That organization must exist.</p>
     </div></td>
   </tr>
   <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-password"></div>
+      <p class="ansible-option-title"><strong>password</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-password" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>User&#x27;s password as a clear string.</p>
+      <p>Do not set a password for a public access to the remote registry.</p>
+    </div></td>
+  </tr>
+  <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
       <p class="ansible-option-title"><strong>quay_host</strong></p>
@@ -140,7 +157,7 @@ Parameters
       <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-value literal notranslate ansible-option-default">&#34;http://127.0.0.1&#34;</code></p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-quay_password"></div>
       <p class="ansible-option-title"><strong>quay_password</strong></p>
@@ -156,7 +173,7 @@ Parameters
       <p>Mutually exclusive with <em>quay_token</em>.</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
       <p class="ansible-option-title"><strong>quay_token</strong></p>
@@ -171,7 +188,7 @@ Parameters
       <p>Mutually exclusive with <em>quay_username</em> and <em>quay_password</em>.</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-quay_username"></div>
       <p class="ansible-option-title"><strong>quay_username</strong></p>
@@ -187,6 +204,21 @@ Parameters
       <p>Mutually exclusive with <em>quay_token</em>.</p>
     </div></td>
   </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-registry"></div>
+      <p class="ansible-option-title"><strong>registry</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-registry" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Name of the remote registry.</p>
+      <p>Add a namespace to the remote registry to restrict caching images from that namespace.</p>
+      <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-value literal notranslate ansible-option-default">&#34;quay.io&#34;</code></p>
+    </div></td>
+  </tr>
   <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-state"></div>
@@ -197,8 +229,10 @@ Parameters
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>If <code class='docutils literal notranslate'>absent</code>, then the module deletes the image which tag is given in the <em>tag</em> parameter, or if not set, in the image name.</p>
-      <p>If <code class='docutils literal notranslate'>present</code>, then the module adds the tag in the <em>tag</em> parameter to the image.</p>
+      <p>If <code class='docutils literal notranslate'>absent</code>, then the module removes the proxy cache configuration.</p>
+      <p>The module does not fail if the proxy cache configuration does not exist, because the state is already as expected.</p>
+      <p>If <code class='docutils literal notranslate'>present</code>, then the module creates the proxy cache configuration.</p>
+      <p>If a proxy cache configuration already exists, then the module deletes it first.</p>
       <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
       <ul class="simple">
         <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;absent&#34;</code></p></li>
@@ -209,17 +243,16 @@ Parameters
   </tr>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-tag"></div>
-      <p class="ansible-option-title"><strong>tag</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-tag" title="Permalink to this option"></a>
+      <div class="ansibleOptionAnchor" id="parameter-username"></div>
+      <p class="ansible-option-title"><strong>username</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a>
       <p class="ansible-option-type-line">
         <span class="ansible-option-type">string</span>
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>When <code class='docutils literal notranslate'>state=present</code>, the <em>tag</em> parameter provides the new tag to add to the image. If another image already uses that tag, then the module removes the tag from that other image first.</p>
-      <p>When <code class='docutils literal notranslate'>state=absent</code>, the <em>tag</em> parameter indicates the tag to remove. If you do not set that <em>tag</em> parameter, then the module removes the tag that you give in the image name with the <em>image</em> parameter.</p>
-      <p>When you specify the image by its digest, in the <em>image</em> parameter, then that <em>tag</em> parameter is mandatory.</p>
+      <p>Name of the user account to use for authenticating with the remote registry.</p>
+      <p>Do not set a username for a public access to the remote registry.</p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -259,8 +292,11 @@ Notes
 -----
 
 .. note::
+   - The module requires Quay version 3.7 or later.
+   - To use the module, you must enable the proxy cache feature of your Quay installation (\ :literal:`FEATURE\_PROXY\_CACHE`\  in \ :literal:`config.yaml`\ ).
+   - When you set \ :emphasis:`state`\  to \ :literal:`present`\ , the module always reports a changed status, because it cannot retrieve the current password for the remote registry to compare it with the \ :emphasis:`password`\  parameter.
    - Supports \ :literal:`check\_mode`\ .
-   - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Administer Repositories" permission.
+   - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Administer Organization" permission.
 
 .. Seealso
 
@@ -273,41 +309,20 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Ensure the latest tag is associated with the image that has tag v1.0.0
-      herve4m.quay.quay_tag:
-        image: production/smallimage:v1.0.0
-        tag: latest
+    - name: Ensure proxy cache is enabled in the production organization
+      herve4m.quay.quay_proxy_cache:
+        organization: production
+        registry: quay.io/prodimgs
+        username: cwade
+        password: My53cr3Tpa55
+        expiration: 172800
         state: present
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-    - name: Ensure tag v0.0.2 is associated to the image with the specified digest
-      herve4m.quay.quay_tag:
-        image: production/smallimage@sha256:4f6f...e797
-        tag: v0.0.2
-        state: present
-        quay_host: https://quay.example.com
-        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
-
-    - name: Ensure tag v0.0.8 expires May 25, 2023 at 16:30
-      herve4m.quay.quay_tag:
-        image: production/smallimage:v0.0.8
-        expiration: 202305251630.00
-        state: present
-        quay_host: https://quay.example.com
-        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
-
-    - name: Ensure tag v0.0.8 does not expire anymore
-      herve4m.quay.quay_tag:
-        image: production/smallimage:v0.0.8
-        expiration: ""
-        state: present
-        quay_host: https://quay.example.com
-        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
-
-    - name: Ensure tag v0.0.1 does not exist
-      herve4m.quay.quay_tag:
-        image: production/smallimage:v0.0.1
+    - name: Ensure proxy cache is disabled in the production organization
+      herve4m.quay.quay_proxy_cache:
+        organization: production
         state: absent
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7

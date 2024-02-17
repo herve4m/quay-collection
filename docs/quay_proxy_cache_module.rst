@@ -11,14 +11,14 @@
 
 .. Anchors
 
-.. _ansible_collections.herve4m.quay.quay_user_module:
+.. _ansible_collections.herve4m.quay.quay_proxy_cache_module:
 
 .. Anchors: short name for ansible.builtin
 
 .. Title
 
-herve4m.quay.quay_user module -- Manage Quay Container Registry users
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+herve4m.quay.quay_proxy_cache module -- Manage Quay Container Registry proxy cache configurations
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. Collection note
 
@@ -30,13 +30,13 @@ herve4m.quay.quay_user module -- Manage Quay Container Registry users
 
     To install it, use: :code:`ansible-galaxy collection install herve4m.quay`.
 
-    To use it in a playbook, specify: :code:`herve4m.quay.quay_user`.
+    To use it in a playbook, specify: :code:`herve4m.quay.quay_proxy_cache`.
 
 .. version_added
 
 .. rst-class:: ansible-version-added
 
-New in herve4m.quay 0.0.1
+New in herve4m.quay 1.1.0
 
 .. contents::
    :local:
@@ -50,7 +50,7 @@ Synopsis
 
 .. Description
 
-- Create, delete, and update user accounts in Quay Container Registry.
+- Create, delete, and update the proxy cache configuration in organizations.
 
 
 .. Aliases
@@ -80,39 +80,54 @@ Parameters
   <tbody>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-email"></div>
-      <p class="ansible-option-title"><strong>email</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-email" title="Permalink to this option"></a>
+      <div class="ansibleOptionAnchor" id="parameter-expiration"></div>
+      <p class="ansible-option-title"><strong>expiration</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-expiration" title="Permalink to this option"></a>
       <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
+        <span class="ansible-option-type">integer</span>
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>User&#x27;s email address.</p>
-      <p>If your Quay administrator has enabled the mailing capability of your Quay installation (<code class='docutils literal notranslate'>FEATURE_MAILING</code> to <code class='docutils literal notranslate'>true</code> in <code class='docutils literal notranslate'>config.yaml</code>), then this <em>email</em> parameter is mandatory.</p>
+      <p>Tag expiration in seconds for cached images.</p>
+      <p>86400 (one day) by default.</p>
+      <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-value literal notranslate ansible-option-default">86400</code></p>
     </div></td>
   </tr>
   <tr class="row-odd">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-enabled"></div>
-      <p class="ansible-option-title"><strong>enabled</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-enabled" title="Permalink to this option"></a>
+      <div class="ansibleOptionAnchor" id="parameter-insecure"></div>
+      <p class="ansible-option-title"><strong>insecure</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-insecure" title="Permalink to this option"></a>
       <p class="ansible-option-type-line">
         <span class="ansible-option-type">boolean</span>
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Enable (<code class='docutils literal notranslate'>true</code>) or disable (<code class='docutils literal notranslate'>false</code>) the user account.</p>
-      <p>When their account is disabled, the user cannot log in to the web UI and cannot push or pull container images.</p>
+      <p>Whether to allow insecure connections to the remote registry.</p>
+      <p>If <code class='docutils literal notranslate'>yes</code>, then the module does not validate SSL certificates.</p>
       <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
       <ul class="simple">
-        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">false</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold"><strong>false</strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
         <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">true</code></p></li>
       </ul>
 
     </div></td>
   </tr>
   <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-organization"></div>
+      <p class="ansible-option-title"><strong>organization</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-organization" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+        / <span class="ansible-option-required">required</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Name of the organization in which to create the proxy cache configuration. That organization must exist.</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-password"></div>
       <p class="ansible-option-title"><strong>password</strong></p>
@@ -123,10 +138,10 @@ Parameters
     </div></td>
     <td><div class="ansible-option-cell">
       <p>User&#x27;s password as a clear string.</p>
-      <p>The password must be at least eight characters long and must not contain white spaces.</p>
+      <p>Do not set a password for a public access to the remote registry.</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
       <p class="ansible-option-title"><strong>quay_host</strong></p>
@@ -142,7 +157,7 @@ Parameters
       <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-value literal notranslate ansible-option-default">&#34;http://127.0.0.1&#34;</code></p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-quay_password"></div>
       <p class="ansible-option-title"><strong>quay_password</strong></p>
@@ -158,7 +173,7 @@ Parameters
       <p>Mutually exclusive with <em>quay_token</em>.</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
       <p class="ansible-option-title"><strong>quay_token</strong></p>
@@ -173,7 +188,7 @@ Parameters
       <p>Mutually exclusive with <em>quay_username</em> and <em>quay_password</em>.</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-quay_username"></div>
       <p class="ansible-option-title"><strong>quay_username</strong></p>
@@ -189,6 +204,21 @@ Parameters
       <p>Mutually exclusive with <em>quay_token</em>.</p>
     </div></td>
   </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-registry"></div>
+      <p class="ansible-option-title"><strong>registry</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-registry" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Name of the remote registry.</p>
+      <p>Add a namespace to the remote registry to restrict caching images from that namespace.</p>
+      <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-value literal notranslate ansible-option-default">&#34;quay.io&#34;</code></p>
+    </div></td>
+  </tr>
   <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-state"></div>
@@ -199,12 +229,10 @@ Parameters
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>If <code class='docutils literal notranslate'>absent</code>, then the module deletes the user.</p>
-      <p>You cannot delete superuser accounts.</p>
-      <p>The module does not fail if the user does not exist, because the state is already as expected.</p>
-      <p>If <code class='docutils literal notranslate'>present</code>, then the module creates the user if it does not already exist.</p>
-      <p>If the user account already exists, then the module updates its state.</p>
-      <p>You cannot update superuser accounts.</p>
+      <p>If <code class='docutils literal notranslate'>absent</code>, then the module removes the proxy cache configuration.</p>
+      <p>The module does not fail if the proxy cache configuration does not exist, because the state is already as expected.</p>
+      <p>If <code class='docutils literal notranslate'>present</code>, then the module creates the proxy cache configuration.</p>
+      <p>If a proxy cache configuration already exists, then the module deletes it first.</p>
       <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
       <ul class="simple">
         <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;absent&#34;</code></p></li>
@@ -215,42 +243,19 @@ Parameters
   </tr>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-superuser"></div>
-      <div class="ansibleOptionAnchor" id="parameter-is_superuser"></div>
-      <p class="ansible-option-title"><strong>superuser</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-superuser" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line"><span class="ansible-option-aliases">aliases: is_superuser</span></p>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">boolean</span>
-      </p>
-    </div></td>
-    <td><div class="ansible-option-cell">
-      <p>Grant superuser permissions to the user.</p>
-      <p>Granting superuser privileges to a user is not immediate and usually requires a restart of the Quay Container Registry service.</p>
-      <p>You cannot revoke superuser permissions.</p>
-      <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
-      <ul class="simple">
-        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">false</code></p></li>
-        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">true</code></p></li>
-      </ul>
-
-    </div></td>
-  </tr>
-  <tr class="row-odd">
-    <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-username"></div>
       <p class="ansible-option-title"><strong>username</strong></p>
       <a class="ansibleOptionLink" href="#parameter-username" title="Permalink to this option"></a>
       <p class="ansible-option-type-line">
         <span class="ansible-option-type">string</span>
-        / <span class="ansible-option-required">required</span>
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Name of the user account to create, remove, or modify.</p>
+      <p>Name of the user account to use for authenticating with the remote registry.</p>
+      <p>Do not set a username for a public access to the remote registry.</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div>
@@ -287,10 +292,11 @@ Notes
 -----
 
 .. note::
+   - The module requires Quay version 3.7 or later.
+   - To use the module, you must enable the proxy cache feature of your Quay installation (\ :literal:`FEATURE\_PROXY\_CACHE`\  in \ :literal:`config.yaml`\ ).
+   - When you set \ :emphasis:`state`\  to \ :literal:`present`\ , the module always reports a changed status, because it cannot retrieve the current password for the remote registry to compare it with the \ :emphasis:`password`\  parameter.
    - Supports \ :literal:`check\_mode`\ .
-   - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Super User Access" permission.
-   - You cannot delete or modify superuser accounts.
-   - You cannot revoke superuser privileges with this module.
+   - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Administer Organization" permission.
 
 .. Seealso
 
@@ -303,38 +309,21 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Ensure the user exists
-      herve4m.quay.quay_user:
-        username: lvasquez
-        email: lvasquez@example.com
-        password: vs9mrD55NP
+    - name: Ensure proxy cache is enabled in the production organization
+      herve4m.quay.quay_proxy_cache:
+        organization: production
+        registry: quay.io/prodimgs
+        username: cwade
+        password: My53cr3Tpa55
+        expiration: 172800
         state: present
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-    - name: Ensure the user is removed
-      herve4m.quay.quay_user:
-        username: dwilde
+    - name: Ensure proxy cache is disabled in the production organization
+      herve4m.quay.quay_proxy_cache:
+        organization: production
         state: absent
-        quay_host: https://quay.example.com
-        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
-
-    - name: Ensure the user is a superuser
-      herve4m.quay.quay_user:
-        username: jziglar
-        email: jziglar@example.com
-        state: present
-        # Only effective after a restart of the Quay Container Registry service.
-        superuser: true
-        quay_host: https://quay.example.com
-        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
-
-    - name: Ensure the user account is disabled
-      herve4m.quay.quay_user:
-        username: chorwitz
-        email: chorwitz@example.com
-        state: present
-        enabled: false
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 

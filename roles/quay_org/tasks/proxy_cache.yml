@@ -1,0 +1,17 @@
+---
+- name: Ensure the proxy cache configuration is performed
+  when:
+    - quay_org_cache_registry is defined
+    - quay_org_cache_registry|length > 0
+  herve4m.quay.quay_proxy_cache:
+    organization: "{{ quay_org_name }}"
+    registry: "{{ quay_org_cache_registry }}"
+    expiration: "{{ quay_org_cache_expiration | default(omit) }}"
+    insecure: "{{ quay_org_cache_insecure | default(omit) }}"
+    username: "{{ quay_org_cache_username | default(omit) }}"
+    password: "{{ quay_org_cache_password | default(omit) }}"
+    state: present
+    quay_token: "{{ quay_org_token | default(omit) }}"
+    quay_username: "{{ quay_org_username | default(omit) }}"
+    quay_password: "{{ quay_org_password | default(omit) }}"
+    quay_host: "{{ quay_org_host | default(omit) }}"

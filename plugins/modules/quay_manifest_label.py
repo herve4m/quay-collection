@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2022, 2023, Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2022-2024, Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # For accessing the API documentation from a running system, use the swagger-ui
@@ -240,7 +240,7 @@ def main():
     #   ]
     # }
     #
-    # When `source_type' is `manifest', then the label is read-only because it
+    # When `source_type' is `manifest', then the label is read-only, because it
     # comes from the Containerfile/Dockerfile.
     # When `source_type' is `api', then the label is mutable (it has been set
     # by using the web UI or from a previous call to the API)

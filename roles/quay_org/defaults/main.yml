@@ -7,6 +7,11 @@
 # quay_org_validate_certs: false
 # quay_org_name: production
 # quay_org_email: production@example.com
+# quay_org_cache_registry: quay.io/sclorg
+# quay_org_cache_insecure: false
+# quay_org_cache_username: ""
+# quay_org_cache_password: ""
+# quay_org_cache_expiration: 86400
 # quay_org_quota: 1.5 TiB
 # quay_org_warning_pct: 90
 # quay_org_reject_pct: 97

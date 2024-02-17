@@ -4,6 +4,16 @@ Quay Container Registry Collection Release Notes
 
 .. contents:: Topics
 
+v1.1.0
+======
+
+v1.0.4
+======
+
+New Modules
+-----------
+
+- herve4m.quay.quay_proxy_cache - Manage Quay Container Registry proxy cache configurations
 
 v1.0.3
 ======

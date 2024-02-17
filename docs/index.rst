@@ -1,12 +1,15 @@
 
 
+.. meta::
+  :antsibull-docs: 2.7.0
+
 
 .. _plugins_in_herve4m.quay:
 
 Herve4M.Quay
 ============
 
-Collection version 1.0.2
+Collection version 1.1.0
 
 .. contents::
    :local:
@@ -23,14 +26,17 @@ Ansible modules to manage Quay Container Registry installations
 
 **Supported ansible-core versions:**
 
-* 2.9.10 or newer
+* 2.15.0 or newer
 
-.. raw:: html
+.. ansible-links::
 
-  <p class="ansible-links">
-    <a href="https://github.com/herve4m/quay-collection/issues" aria-role="button" target="_blank" rel="noopener external">Issue Tracker</a>
-    <a href="https://github.com/herve4m/quay-collection" aria-role="button" target="_blank" rel="noopener external">Repository (Sources)</a>
-  </p>
+  - title: "Issue Tracker"
+    url: "https://github.com/herve4m/quay-collection/issues"
+    external: true
+  - title: "Repository (Sources)"
+    url: "https://github.com/herve4m/quay-collection"
+    external: true
+
 
 
 
@@ -58,6 +64,7 @@ Modules
 * :ansplugin:`quay_message module <herve4m.quay.quay_message#module>` -- Manage Quay Container Registry global messages
 * :ansplugin:`quay_notification module <herve4m.quay.quay_notification#module>` -- Manage Quay Container Registry repository notifications
 * :ansplugin:`quay_organization module <herve4m.quay.quay_organization#module>` -- Manage Quay Container Registry organizations
+* :ansplugin:`quay_proxy_cache module <herve4m.quay.quay_proxy_cache#module>` -- Manage Quay Container Registry proxy cache configurations
 * :ansplugin:`quay_quota module <herve4m.quay.quay_quota#module>` -- Manage Quay Container Registry organizations quota
 * :ansplugin:`quay_repository module <herve4m.quay.quay_repository#module>` -- Manage Quay Container Registry repositories
 * :ansplugin:`quay_repository_mirror module <herve4m.quay.quay_repository_mirror#module>` -- Manage Quay Container Registry repository mirror configurations
@@ -84,6 +91,7 @@ Modules
     quay_message_module
     quay_notification_module
     quay_organization_module
+    quay_proxy_cache_module
     quay_quota_module
     quay_repository_module
     quay_repository_mirror_module

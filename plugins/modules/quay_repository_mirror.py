@@ -291,12 +291,14 @@ def main():
             "external_reference": external_reference,
             "root_rule": {"rule_kind": "tag_glob_csv", "rule_value": image_tags},
             "sync_interval": int(sync_interval) if sync_interval is not None else 86400,
-            "sync_start_date": sync_start_date
-            if sync_start_date
-            else datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "external_registry_username": external_registry_username
-            if external_registry_username
-            else None,
+            "sync_start_date": (
+                sync_start_date
+                if sync_start_date
+                else datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ")
+            ),
+            "external_registry_username": (
+                external_registry_username if external_registry_username else None
+            ),
             "external_registry_config": {
                 "verify_tls": verify_tls if verify_tls is not None else True,
                 "proxy": {

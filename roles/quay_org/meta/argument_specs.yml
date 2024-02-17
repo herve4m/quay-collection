@@ -69,6 +69,37 @@ argument_specs:
             C(config.yaml)), then this I(email) parameter is mandatory.
           - You cannot use the same address as your account email.
         type: str
+      quay_org_cache_registry:
+        description:
+          - Name of the remote registry to use for the proxy cache
+            configuration.
+          - Add a namespace to the remote registry to restrict caching images
+            from that namespace.
+        type: str
+      quay_org_cache_username:
+        description:
+          - Name of the user account to use for authenticating with the
+            remote registry.
+          - Do not set a username for a public access to the remote registry.
+        type: str
+      quay_org_cache_password:
+        description:
+          - User's password as a clear string for authenticating with the
+            remote registry.
+          - Do not set a password for a public access to the remote registry.
+        type: str
+      quay_org_cache_insecure:
+        description:
+          - Whether to allow insecure connections to the remote registry.
+          - If C(yes), then the module does not validate SSL certificates.
+        type: bool
+        default: false
+      quay_org_cache_expiration:
+        description:
+          - Tag expiration in seconds for cached images.
+          - 86400 (one day) by default.
+        type: int
+        default: 86400
       quay_org_quota:
         description:
           - Quota that Quay uses to compute the warning and reject limits for

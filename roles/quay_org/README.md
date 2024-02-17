@@ -54,6 +54,12 @@ The following list gives a short descriptions of the variables:
   You specify a quota in bytes, but you can also use the K[i]B, M[i]B, G[i]B, or T[i]B suffixes.
 * `quay_org_warning_pct`: Warning (soft) limit as a percentage of the quota.
 * `quay_org_reject_pct`: Reject (hard) limit as a percentage of the quota.
+* `quay_org_cache_registry`: Remote registry to configure for proxy cache.
+* `quay_org_cache_insecure`: Whether to allow insecure connections to the remote registry.
+* `quay_org_cache_username`: Username to use for authentication to the remote registry.
+  Leave empty for a public access to the remote registry.
+* `quay_org_cache_password`: Password to use for authentication to the remote registry.
+* `quay_org_cache_expiration`: Tag expiration in seconds for cached images.
 
 
 Example Playbook
@@ -79,6 +85,9 @@ Example Playbook
         # Organization name and email
         quay_org_name: production
         quay_org_email: production@example.com
+        # Proxy cache
+        quay_org_cache_registry: quay.io/sclorg
+        quay_org_cache_expiration: 259200
         # Quota
         quay_org_quota: 1.5 TiB
         quay_org_warning_pct: 90

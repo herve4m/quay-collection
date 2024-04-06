@@ -4,6 +4,8 @@
     name: "{{ quay_org_name }}"
     email: "{{ quay_org_email | default(omit) }}"
     state: present
+    auto_prune_method: "{{ quay_org_auto_prune_method | default(omit) }}"
+    auto_prune_value: "{{ quay_org_auto_prune_value | default(omit) }}"
     quay_token: "{{ quay_org_token | default(omit) }}"
     quay_username: "{{ quay_org_username | default(omit) }}"
     quay_password: "{{ quay_org_password | default(omit) }}"

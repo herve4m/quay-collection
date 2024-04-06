@@ -8,6 +8,8 @@
     quay_org_validate_certs: false
     quay_org_name: ansibletestorg
     quay_org_email: ansibletestorg@example.com
+    quay_org_auto_prune_method: tags
+    quay_org_auto_prune_value: 15
     quay_org_cache_registry: public.ecr.aws/nginx
     quay_org_cache_expiration: 345600
     quay_org_cache_insecure: true

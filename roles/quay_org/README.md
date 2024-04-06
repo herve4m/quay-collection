@@ -44,6 +44,8 @@ The following list gives a short descriptions of the variables:
 * `quay_validate_certs`: Whether to allow insecure connections to the API.
 * `quay_org_name`: Name of the organization to create.
 * `quay_org_email`: Email address to associate with the organization.
+* `quay_org_auto_prune_method`: Method to use for the auto-pruning tags policy.
+* `quay_org_auto_prune_value`: Number or period of time to keep tags.
 * `quay_org_users`: List of user accounts to create.
 * `quay_org_robots`: List of robot accounts to create in the organization.
 * `quay_org_teams`: List of the teams to create in the organization.
@@ -85,6 +87,9 @@ Example Playbook
         # Organization name and email
         quay_org_name: production
         quay_org_email: production@example.com
+        # Organization auto-prune policy
+        quay_org_auto_prune_method: tags
+        quay_org_auto_prune_value: 15
         # Proxy cache
         quay_org_cache_registry: quay.io/sclorg
         quay_org_cache_expiration: 259200

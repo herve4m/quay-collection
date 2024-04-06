@@ -9,7 +9,7 @@ The collection provides modules for managing your Quay Container Registry deploy
 
 ## Included Content
 
-The modules have been tested against versions 3.8, 3.9, and 3.10 of Quay Container Registry.
+The modules have been tested against versions 3.9, 3.10, and 3.11 of Quay Container Registry.
 
 ### Modules
 Name | Description
@@ -34,6 +34,7 @@ Name | Description
 [quay_tag_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_tag_info_module.rst) |  Gather information about tags in a Quay Container Registry repository
 [quay_team](https://github.com/herve4m/quay-collection/blob/main/docs/quay_team_module.rst) |  Manage Quay Container Registry teams
 [quay_team_ldap](https://github.com/herve4m/quay-collection/blob/main/docs/quay_team_ldap_module.rst) |  Synchronize Quay Container Registry teams with LDAP groups
+[quay_team_oidc](https://github.com/herve4m/quay-collection/blob/main/docs/quay_team_oidc_module.rst) |  Synchronize Quay Container Registry teams with OIDC groups
 [quay_user](https://github.com/herve4m/quay-collection/blob/main/docs/quay_user_module.rst) |  Manage Quay Container Registry users
 [quay_vulnerability_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_vulnerability_info_module.rst) | Gather information about image vulnerabilities in Quay Container Registry
 

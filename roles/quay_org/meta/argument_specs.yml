@@ -195,9 +195,9 @@ argument_specs:
             description:
               - List of the user or robot accounts in the team. Use the syntax
                 C(organization)+C(robotshortname) for robot accounts.
-              - If the team is synchronized with an LDAP group (see the
-                M(quay_team_ldap) module), then you can only add or remove
-                robot accounts.
+              - If the team is synchronized with an LDAP or OIDC group (see the
+                M(quay_team_ldap) and M(quay_team_oidc) modules), then you can
+                only add or remove robot accounts.
             type: list
             elements: str
       quay_org_default_perms:

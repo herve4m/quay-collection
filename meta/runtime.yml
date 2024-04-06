@@ -21,6 +21,7 @@ action_groups:
     - quay_tag_info
     - quay_tag
     - quay_team_ldap
+    - quay_team_oidc
     - quay_team
     - quay_user
     - quay_vulnerability_info

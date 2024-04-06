@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2022, Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2024, Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # For accessing the API documentation from a running system, use the swagger-ui
@@ -23,16 +23,16 @@ __metaclass__ = type
 
 DOCUMENTATION = r"""
 ---
-module: quay_team_ldap
-short_description: Synchronize Quay Container Registry teams with LDAP groups
+module: quay_team_oidc
+short_description: Synchronize Quay Container Registry teams with OIDC groups
 description:
-  - Synchronize and unsynchronize teams in organizations with LDAP groups.
-version_added: '0.0.9'
+  - Synchronize and unsynchronize teams in organizations with OIDC groups.
+version_added: '1.2.0'
 author: Herve Quatremain (@herve4m)
 options:
   name:
     description:
-      - Name of the team to synchronize or unsynchronize with an LDAP group.
+      - Name of the team to synchronize or unsynchronize with an OIDC group.
         That team must exist (see the M(herve4m.quay.quay_team) module to
         create it).
     required: true
@@ -44,38 +44,24 @@ options:
     type: str
   sync:
     description:
-      - If C(yes), then the team members are retrieved from the LDAP group
-        that you define in I(group_dn). The pre-existing members are removed
+      - If C(yes), then the team members are retrieved from the OIDC group
+        that you define in I(group_name). The pre-existing members are removed
         from the team before the synchronization process starts.
         Existing robot account members are not removed.
-      - If C(no), then the synchronization from LDAP is disabled. Existing
-        team members (from LDAP) are kept, except if you set I(keep_users) to
-        C(no).
+      - If C(no), then the synchronization from OIDC is disabled.
     type: bool
     default: yes
-  group_dn:
+  group_name:
     description:
-      - LDAP group distinguished name (DN), relative to the base DN that you
-        defined in the C(config.yaml) Quay configuration file with the
-        C(LDAP_BASE_DN) parameter.
-      - For example, if the LDAP group DN is
-        C(cn=group1,ou=groups,dc=example,dc=org) and the base DN is
-        C(dc=example,dc=org), then you must set I(group_dn) to
-        C(cn=group1,ou=groups).
-      - I(group_dn) is required when I(sync) is C(yes).
+      - OIDC group name.
+      - I(group_name) is required when I(sync) is C(yes).
     type: str
-  keep_users:
-    description:
-      - If C(yes), then the current team members are kept after the
-        synchronization is disabled.
-      - If C(no), then the team members are removed (except robot accounts)
-      - I(keep_users) is only used when I(sync) is C(no).
-    type: bool
-    default: yes
 notes:
+  - The module requires Quay version 3.11 or later.
   - The module requires that your Quay administrator configures the Quay
-    authentication method to LDAP (C(AUTHENTICATION_TYPE) to C(LDAP) in
-    C(config.yaml) and the C(LDAP_*) parameters correctly set).
+    authentication method to OIDC (C(AUTHENTICATION_TYPE) to C(OIDC) in
+    C(config.yaml)), and enables team synchronization (C(FEATURE_TEAM_SYNCING)
+    to C(true) in C(config.yaml)).
   - Supports C(check_mode).
   - The token that you provide in I(quay_token) must have the "Administer
     Organization" and "Administer User" permissions.
@@ -85,12 +71,12 @@ extends_documentation_fragment:
 """
 
 EXAMPLES = r"""
-- name: Ensure team operators exists before activating LDAP synchronization
+- name: Ensure team operators exists before activating OIDC synchronization
   herve4m.quay.quay_team:
     name: operators
     organization: production
     role: creator
-    # Only robot accounts can be added to a team you prepare for LDAP
+    # Only robot accounts can be added to a team you prepare for OIDC
     # synchronization. User accounts that you might add are removed when the
     # synchronization is activated
     members:
@@ -100,22 +86,20 @@ EXAMPLES = r"""
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-- name: Ensure team operators is synchronized with the op1 LDAP group
-  herve4m.quay.quay_team_ldap:
+- name: Ensure team operators is synchronized with the op1 OIDC group
+  herve4m.quay.quay_team_oidc:
     name: operators
     organization: production
     sync: true
-    group_dn: cn=op1,ou=groups
+    group_name: op1
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-- name: Ensure team operators is not synchronized anymore with an LDAP group
-  herve4m.quay.quay_team_ldap:
+- name: Ensure team operators is not synchronized anymore with an OIDC group
+  herve4m.quay.quay_team_oidc:
     name: operators
     organization: production
     sync: false
-    # Remove all the users from the team synchronized from the LDAP group
-    keep_users: false
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 """
@@ -130,15 +114,14 @@ def main():
         name=dict(required=True),
         organization=dict(required=True),
         sync=dict(type="bool", default=True),
-        group_dn=dict(),
-        keep_users=dict(type="bool", default=True),
+        group_name=dict(),
     )
 
     # Create a module for ourselves
     module = APIModule(
         argument_spec=argument_spec,
         required_if=[
-            ("sync", True, ["group_dn"]),
+            ("sync", True, ["group_name"]),
         ],
         supports_check_mode=True,
     )
@@ -147,8 +130,7 @@ def main():
     name = module.params.get("name")
     organization = module.params.get("organization")
     sync = module.params.get("sync")
-    group_dn = module.params.get("group_dn")
-    keep_users = module.params.get("keep_users")
+    group_name = module.params.get("group_name")
 
     # Get the organization details from the given name.
     #
@@ -264,14 +246,13 @@ def main():
     #   ],
     #   "can_edit": true,
     #   "can_sync": {
-    #     "service": "ldap",
-    #     "base_dn": "dc=example,dc=org"
+    #     "service": "oidc"
     #   },
     #   "synced": {
-    #     "service": "ldap",
-    #     "last_updated": "Mon, 17 Jan 2022 15:09:00 -0000",
+    #     "service": "oidc",
+    #     "last_updated": null,
     #     "config": {
-    #       "group_dn": "cn=group1,ou=users"
+    #       "group_name": "mygroup"
     #     }
     #   }
     # }
@@ -284,8 +265,7 @@ def main():
     #   "members": [],
     #   "can_edit": true,
     #   "can_sync": {
-    #     "service": "ldap",
-    #     "base_dn": "dc=example,dc=org"
+    #     "service": "oidc"
     #   }
     # }
     team_details = module.get_object_path(
@@ -300,43 +280,22 @@ def main():
             )
         )
 
-    # Disable LDAP synchronization
+    # Disable OIDC synchronization
     if not sync:
         if "synced" not in team_details:
             module.exit_json(changed=False)
         module.delete(
             team_details,
-            "LDAP synchronization",
+            "OIDC synchronization",
             name,
             "organization/{orgname}/team/{team}/syncing",
-            auto_exit=False,
             orgname=organization,
             team=name,
         )
-        # Remove the users from the team (skip robot accounts)
-        if not keep_users:
-            to_delete = [
-                user["name"]
-                for user in team_details.get("members", [])
-                if "name" in user and not user.get("is_robot")
-            ]
 
-            for member in to_delete:
-                module.delete(
-                    True,
-                    "team member",
-                    member,
-                    "organization/{orgname}/team/{team}/members/{member}",
-                    auto_exit=False,
-                    orgname=organization,
-                    team=name,
-                    member=member,
-                )
-        module.exit_json(changed=True)
-
-    # Activate LDAP synchronization
+    # Activate OIDC synchronization
     try:
-        if team_details["synced"]["config"]["group_dn"] == group_dn:
+        if team_details["synced"]["config"]["group_name"] == group_name:
             module.exit_json(changed=False)
     except KeyError:
         pass
@@ -345,7 +304,7 @@ def main():
     if "synced" in team_details:
         module.delete(
             team_details,
-            "LDAP synchronization",
+            "OIDC synchronization",
             name,
             "organization/{orgname}/team/{team}/syncing",
             auto_exit=False,
@@ -353,10 +312,10 @@ def main():
             team=name,
         )
     module.create(
-        "LDAP synchronization",
+        "OIDC synchronization",
         name,
         "organization/{orgname}/team/{team}/syncing",
-        {"group_dn": group_dn},
+        {"group_name": group_name},
         orgname=organization,
         team=name,
     )

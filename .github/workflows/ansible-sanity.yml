@@ -14,6 +14,12 @@ jobs:
         with:
           path: ansible_collections/herve4m/quay
 
+      # Work around https://github.com/actions/runner-images/issues/9425
+      - name: Install crun
+        uses: ./.github/actions/fix-crun
+        with:
+          checksums: CHECKSUMS
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'

@@ -95,6 +95,9 @@ options:
     choices: [absent, present]
 notes:
   - Supports C(check_mode).
+  - Your Quay administrator must enable the auto-prune capability of your Quay
+    installation (C(FEATURE_AUTO_PRUNE) in C(config.yaml)) to use the
+    I(auto_prune_method) and I(auto_prune_value) parameters.
   - Using I(auto_prune_method) and I(auto_prune_value) requires Quay version
     3.11 or later.
   - The token that you provide in I(quay_token) must have the "Administer
@@ -112,6 +115,8 @@ EXAMPLES = r"""
     name: production
     email: prodlist@example.com
     time_machine_expiration: "7d"
+    auto_prune_method: tags
+    auto_prune_value: 20
     state: present
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
@@ -175,9 +180,9 @@ def main():
     new_name = module.params.get("new_name")
     email = module.params.get("email")
     tm_expiration = module.params.get("time_machine_expiration")
-    state = module.params.get("state")
     auto_prune_method = module.params.get("auto_prune_method")
     auto_prune_value = module.params.get("auto_prune_value")
+    state = module.params.get("state")
 
     # Validate the auto-pruning tags values
     if auto_prune_method == "tags":
@@ -314,7 +319,7 @@ def main():
     # Process the auto-pruning tags policy configuration
     #
 
-    # The user dis not provide the auto_prune_method parameter, therefore there
+    # The user did not provide the auto_prune_method parameter, therefore there
     # is nothing to do.
     if auto_prune_method is None:
         module.exit_json(changed=created or updated)
@@ -332,7 +337,7 @@ def main():
     #   ]
     # }
     #
-    # If not policy is defined, then the returned data is {"policies": []}
+    # If no policy is defined, then the returned data is {"policies": []}
     prune_details = module.get_object_path(
         "organization/{orgname}/autoprunepolicy/", orgname=name
     )

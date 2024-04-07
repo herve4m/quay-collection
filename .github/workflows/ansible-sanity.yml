@@ -16,7 +16,7 @@ jobs:
 
       # Work around https://github.com/actions/runner-images/issues/9425
       - name: Install crun
-        uses: ./.github/actions/fix-crun
+        uses: ansible_collections/herve4m/quay/.github/actions/fix-crun
         with:
           checksums: CHECKSUMS
 

@@ -4,6 +4,19 @@ Quay Container Registry Collection Release Notes
 
 .. contents:: Topics
 
+v1.2.0
+======
+
+Minor Changes
+-------------
+
+- Add support for the auto-pruning tags feature in Quay 3.11 for organizations and repositories. The ``herve4m.quay.quay_organization`` and ``herve4m.quay.quay_repository`` modules now have the ``auto_prune_method`` and ``auto_prune_value`` options.
+
+New Modules
+-----------
+
+- herve4m.quay.quay_team_oidc - Synchronize Quay Container Registry teams with OIDC groups
+
 v1.1.0
 ======
 

@@ -73,6 +73,11 @@ options:
     choices: [absent, present]
 notes:
   - Supports C(check_mode).
+  - Your Quay administrator must enable the auto-prune capability of your Quay
+    installation (C(FEATURE_AUTO_PRUNE) in C(config.yaml)) to use the
+    I(auto_prune_method) and I(auto_prune_value) parameters.
+  - Using I(auto_prune_method) and I(auto_prune_value) requires Quay version
+    3.11 or later.
   - The token that you provide in I(quay_token) must have the "Administer
     Organization" and "Administer User" permissions.
   - To rename organizations, the token must also have the "Super User Access"
@@ -80,6 +85,7 @@ notes:
 extends_documentation_fragment:
   - herve4m.quay.auth
   - herve4m.quay.auth.login
+  - herve4m.quay.autoprune
 """
 
 EXAMPLES = r"""
@@ -88,6 +94,8 @@ EXAMPLES = r"""
     name: production
     email: prodlist@example.com
     time_machine_expiration: "7d"
+    auto_prune_method: tags
+    auto_prune_value: 20
     state: present
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
@@ -110,6 +118,8 @@ EXAMPLES = r"""
 
 RETURN = r""" # """
 
+import re
+
 from ..module_utils.api_module import APIModule
 
 
@@ -126,18 +136,62 @@ def main():
         new_name=dict(),
         email=dict(),
         time_machine_expiration=dict(choices=list(tm_allowed_values.keys())),
+        auto_prune_method=dict(choices=["none", "tags", "date"]),
+        auto_prune_value=dict(),
         state=dict(choices=["present", "absent"], default="present"),
     )
 
     # Create a module for ourselves
-    module = APIModule(argument_spec=argument_spec, supports_check_mode=True)
+    module = APIModule(
+        argument_spec=argument_spec,
+        required_if=[
+            ("auto_prune_method", "tags", ["auto_prune_value"]),
+            ("auto_prune_method", "date", ["auto_prune_value"]),
+        ],
+        required_by={
+            "auto_prune_value": "auto_prune_method",
+        },
+        supports_check_mode=True,
+    )
 
     # Extract our parameters
     name = module.params.get("name")
     new_name = module.params.get("new_name")
     email = module.params.get("email")
     tm_expiration = module.params.get("time_machine_expiration")
+    auto_prune_method = module.params.get("auto_prune_method")
+    auto_prune_value = module.params.get("auto_prune_value")
     state = module.params.get("state")
+
+    # Validate the auto-pruning tags values
+    if auto_prune_method == "tags":
+        try:
+            auto_prune_value = int(auto_prune_value)
+        except ValueError:
+            module.fail_json(
+                msg=(
+                    "Wrong format for the `auto_prune_value' parameter:"
+                    " {auto_prune_value} is not a positive integer."
+                ).format(auto_prune_value=auto_prune_value)
+            )
+        if auto_prune_value <= 0:
+            module.fail_json(
+                msg=(
+                    "Wrong format for the `auto_prune_value' parameter:"
+                    " {auto_prune_value} is not a positive integer."
+                ).format(auto_prune_value=auto_prune_value)
+            )
+    if auto_prune_method == "date":
+        value = "".join(auto_prune_value.split())
+        if not re.match(r"[1-9]\d*[smhdw]$", value):
+            module.fail_json(
+                msg=(
+                    "Wrong format for the `auto_prune_value' parameter:"
+                    " {auto_prune_value} is not a positive integer followed by"
+                    " the s, m, h, d, or w suffix."
+                ).format(auto_prune_value=auto_prune_value)
+            )
+        auto_prune_value = value
 
     org_details = module.get_organization(name)
     new_org_details = module.get_organization(new_name) if new_name else None
@@ -239,6 +293,92 @@ def main():
         auto_exit=False,
         orgname=name,
     )
+
+    #
+    # Process the auto-pruning tags policy configuration
+    #
+
+    if auto_prune_method is not None:
+
+        # Get the current auto-pruning tags policy:
+        #
+        # GET /api/v1/organization/{orgname}/autoprunepolicy/
+        # {
+        #   "policies": [
+        #     {
+        #       "uuid": "e54f146d-eb0e-446c-9057-61291a0b257c",
+        #       "method": "creation_date",
+        #       "value": "7h"
+        #     }
+        #   ]
+        # }
+        #
+        # If no policy is defined, then the returned data is {"policies": []}
+        prune_details = module.get_object_path(
+            "organization/{orgname}/autoprunepolicy/", orgname=name
+        )
+        try:
+            policies = prune_details["policies"]
+        except (TypeError, IndexError):
+            policies = []
+
+        # Removing the auto-prune policies (the UI only manages one policy, but
+        # the backend seems to allow several policies)
+        if auto_prune_method == "none":
+            deleted = False
+            for policy in policies:
+                uuid = policy.get("uuid")
+                if module.delete(
+                    uuid,
+                    "organization auto-prune policy",
+                    name,
+                    "organization/{orgname}/autoprunepolicy/{uuid}",
+                    auto_exit=False,
+                    orgname=name,
+                    uuid=uuid,
+                ):
+                    deleted = True
+            if deleted:
+                updated = True
+        else:
+            # Compose the request
+            method = "creation_date" if auto_prune_method == "date" else "number_of_tags"
+            new_policy = {
+                "method": method,
+                "value": auto_prune_value,
+            }
+
+            # Verify whether the policy already exists
+            for policy in policies:
+                # The policy already exists
+                if policy.get("method") == method and policy.get("value") == auto_prune_value:
+                    break
+            else:
+                # The policy does not exist. If a policy is not already defined,
+                # then create the policy
+                if len(policies) == 0 or policies[0].get("uuid") is None:
+                    module.create(
+                        "organization auto-prune policy",
+                        name,
+                        "organization/{orgname}/autoprunepolicy/",
+                        new_policy,
+                        auto_exit=False,
+                        orgname=name,
+                    )
+                    updated = True
+                else:
+                    # Update the existing policy (the first one in the list)
+                    uuid = policies[0]["uuid"]
+                    new_policy["uuid"] = uuid
+                    module.unconditional_update(
+                        "organization auto-prune policy",
+                        name,
+                        "organization/{orgname}/autoprunepolicy/{uuid}",
+                        new_policy,
+                        orgname=name,
+                        uuid=uuid,
+                    )
+                    updated = True
 
     module.exit_json(changed=created or updated)
 

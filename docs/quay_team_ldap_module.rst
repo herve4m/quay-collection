@@ -23,7 +23,7 @@ herve4m.quay.quay_team_ldap module -- Synchronize Quay Container Registry teams 
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.1.0).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.2.0).
 
     It is not included in ``ansible-core``.
     To check whether it is installed, run :code:`ansible-galaxy collection list`.
@@ -283,7 +283,7 @@ Examples
         organization: production
         role: creator
         # Only robot accounts can be added to a team you prepare for LDAP
-        # synchonization. User accounts that you might add are removed when the
+        # synchronization. User accounts that you might add are removed when the
         # synchronization is activated
         members:
           - production+automationrobot

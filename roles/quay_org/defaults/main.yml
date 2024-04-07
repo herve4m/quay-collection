@@ -7,6 +7,8 @@
 # quay_org_validate_certs: false
 # quay_org_name: production
 # quay_org_email: production@example.com
+# quay_org_auto_prune_method: date
+# quay_org_auto_prune_value: 4w
 # quay_org_cache_registry: quay.io/sclorg
 # quay_org_cache_insecure: false
 # quay_org_cache_username: ""
@@ -50,6 +52,8 @@
 #   - name: small_image
 #     description: Small GNU/Linux image
 #     visibility: public
+#     auto_prune_method: tags
+#     auto_prune_value: 15
 #     perms:
 #       - name: qa
 #         type: team

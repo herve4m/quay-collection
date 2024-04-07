@@ -13,7 +13,7 @@ services:
       - "./postgresql-extension.sh:/opt/app-root/src/postgresql-start/postgresql-extension.sh:ro"
 
   redis:
-    image: quay.io/sclorg/redis-6-c9s
+    image: quay.io/fedora/redis-7:latest
     environment:
       REDIS_PASSWORD: strongpassword
 
@@ -21,12 +21,12 @@ services:
     image: docker.io/eaudeweb/mailtrap
 
   clair:
-    image: quay.io/centos7/httpd-24-centos7
+    image: quay.io/fedora/httpd-24:latest
     ports:
       - "8089:8080"
 
   quay:
-    image: quay.io/projectquay/quay:v3.10.1
+    image: quay.io/projectquay/quay:v3.11.0
     volumes:
       - "./quay-config:/conf/stack:Z"
       - "./quay-delay.sh:/quay-registry/conf/init/a-delay.sh:ro"

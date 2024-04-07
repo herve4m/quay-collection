@@ -9,7 +9,7 @@
 Herve4M.Quay
 ============
 
-Collection version 1.1.0
+Collection version 1.2.0
 
 .. contents::
    :local:
@@ -73,6 +73,7 @@ Modules
 * :ansplugin:`quay_tag_info module <herve4m.quay.quay_tag_info#module>` -- Gather information about tags in a Quay Container Registry repository
 * :ansplugin:`quay_team module <herve4m.quay.quay_team#module>` -- Manage Quay Container Registry teams
 * :ansplugin:`quay_team_ldap module <herve4m.quay.quay_team_ldap#module>` -- Synchronize Quay Container Registry teams with LDAP groups
+* :ansplugin:`quay_team_oidc module <herve4m.quay.quay_team_oidc#module>` -- Synchronize Quay Container Registry teams with OIDC groups
 * :ansplugin:`quay_user module <herve4m.quay.quay_user#module>` -- Manage Quay Container Registry users
 * :ansplugin:`quay_vulnerability_info module <herve4m.quay.quay_vulnerability_info#module>` -- Gather information about image vulnerabilities in Quay Container Registry
 
@@ -100,6 +101,7 @@ Modules
     quay_tag_info_module
     quay_team_module
     quay_team_ldap_module
+    quay_team_oidc_module
     quay_user_module
     quay_vulnerability_info_module
 

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2021-2024 Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2021-2024, Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # For accessing the API documentation from a running system, use the swagger-ui
@@ -125,6 +125,7 @@ notes:
 extends_documentation_fragment:
   - herve4m.quay.auth
   - herve4m.quay.auth.login
+  - herve4m.quay.autoprune
 """
 
 EXAMPLES = r"""
@@ -191,10 +192,12 @@ EXAMPLES = r"""
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-- name: Ensure the repository has a star
+- name: Ensure the repository has a star and tags older that 4 weeks are pruned
   herve4m.quay.quay_repository:
     name: production/smallimage
     star: true
+    auto_prune_method: date
+    auto_prune_value: 4w
     state: present
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
@@ -211,6 +214,8 @@ EXAMPLES = r"""
 """
 
 RETURN = r""" # """
+
+import re
 
 from ..module_utils.api_module import APIModule
 
@@ -232,11 +237,23 @@ def main():
         append=dict(type="bool", default=True),
         star=dict(type="bool"),
         repo_state=dict(choices=["NORMAL", "READ_ONLY", "MIRROR"]),
+        auto_prune_method=dict(choices=["none", "tags", "date"]),
+        auto_prune_value=dict(),
         state=dict(choices=["present", "absent"], default="present"),
     )
 
     # Create a module for ourselves
-    module = APIModule(argument_spec=argument_spec, supports_check_mode=True)
+    module = APIModule(
+        argument_spec=argument_spec,
+        required_if=[
+            ("auto_prune_method", "tags", ["auto_prune_value"]),
+            ("auto_prune_method", "date", ["auto_prune_value"]),
+        ],
+        required_by={
+            "auto_prune_value": "auto_prune_method",
+        },
+        supports_check_mode=True,
+    )
 
     # Extract our parameters
     name = module.params.get("name").strip("/")
@@ -245,8 +262,40 @@ def main():
     perms = module.params.get("perms")
     append = module.params.get("append")
     star = module.params.get("star")
-    state = module.params.get("state")
     repo_state = module.params.get("repo_state")
+    auto_prune_method = module.params.get("auto_prune_method")
+    auto_prune_value = module.params.get("auto_prune_value")
+    state = module.params.get("state")
+
+    # Validate the auto-pruning tags values
+    if auto_prune_method == "tags":
+        try:
+            auto_prune_value = int(auto_prune_value)
+        except ValueError:
+            module.fail_json(
+                msg=(
+                    "Wrong format for the `auto_prune_value' parameter:"
+                    " {auto_prune_value} is not a positive integer."
+                ).format(auto_prune_value=auto_prune_value)
+            )
+        if auto_prune_value <= 0:
+            module.fail_json(
+                msg=(
+                    "Wrong format for the `auto_prune_value' parameter:"
+                    " {auto_prune_value} is not a positive integer."
+                ).format(auto_prune_value=auto_prune_value)
+            )
+    if auto_prune_method == "date":
+        value = "".join(auto_prune_value.split())
+        if not re.match(r"[1-9]\d*[smhdw]$", value):
+            module.fail_json(
+                msg=(
+                    "Wrong format for the `auto_prune_value' parameter:"
+                    " {auto_prune_value} is not a positive integer followed by"
+                    " the s, m, h, d, or w suffix."
+                ).format(auto_prune_value=auto_prune_value)
+            )
+        auto_prune_value = value
 
     my_name = module.who_am_i()
     try:
@@ -395,6 +444,92 @@ def main():
                 full_repo_name=full_repo_name,
             )
             changed = True
+
+    #
+    # Process the auto-pruning tags policy configuration
+    #
+
+    if auto_prune_method is not None:
+
+        # Get the current auto-pruning tags policy:
+        #
+        # GET /api/v1/repository/{namespace}/{repository}/autoprunepolicy/
+        # {
+        #   "policies": [
+        #     {
+        #       "uuid": "e54f146d-eb0e-446c-9057-61291a0b257c",
+        #       "method": "creation_date",
+        #       "value": "7h"
+        #     }
+        #   ]
+        # }
+        #
+        # If no policy is defined, then the returned data is {"policies": []}
+        prune_details = module.get_object_path(
+            "repository/{full_repo_name}/autoprunepolicy/", full_repo_name=full_repo_name
+        )
+        try:
+            policies = prune_details["policies"]
+        except (TypeError, IndexError):
+            policies = []
+
+        # Removing the auto-prune policies (the UI only manages one policy, but
+        # the backend seems to allow several policies)
+        if auto_prune_method == "none":
+            deleted = False
+            for policy in policies:
+                uuid = policy.get("uuid")
+                if module.delete(
+                    uuid,
+                    "repository auto-prune policy",
+                    full_repo_name,
+                    "repository/{full_repo_name}/autoprunepolicy/{uuid}",
+                    auto_exit=False,
+                    full_repo_name=full_repo_name,
+                    uuid=uuid,
+                ):
+                    deleted = True
+            if deleted:
+                changed = True
+        else:
+            # Compose the request
+            method = "creation_date" if auto_prune_method == "date" else "number_of_tags"
+            new_policy = {
+                "method": method,
+                "value": auto_prune_value,
+            }
+
+            # Verify whether the policy already exists
+            for policy in policies:
+                # The policy already exists
+                if policy.get("method") == method and policy.get("value") == auto_prune_value:
+                    break
+            else:
+                # The policy does not exist. If a policy is not already defined,
+                # then create the policy
+                if len(policies) == 0 or policies[0].get("uuid") is None:
+                    module.create(
+                        "repository auto-prune policy",
+                        full_repo_name,
+                        "repository/{full_repo_name}/autoprunepolicy/",
+                        new_policy,
+                        auto_exit=False,
+                        full_repo_name=full_repo_name,
+                    )
+                    changed = True
+                else:
+                    # Update the existing policy (the first one in the list)
+                    uuid = policies[0]["uuid"]
+                    new_policy["uuid"] = uuid
+                    module.unconditional_update(
+                        "repository auto-prune policy",
+                        full_repo_name,
+                        "repository/{full_repo_name}/autoprunepolicy/{uuid}",
+                        new_policy,
+                        full_repo_name=full_repo_name,
+                        uuid=uuid,
+                    )
+                    changed = True
 
     # No permission to change. Exit
     if perms is None:

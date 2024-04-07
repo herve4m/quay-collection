@@ -787,7 +787,7 @@ class APIModule(AnsibleModule):
                 raise
 
         # Failure
-        if response["status_code"] not in [200, 201]:
+        if response["status_code"] not in [200, 201, 204]:
             error_msg = self.get_error_message(response)
             if error_msg:
                 fail_msg = "Unable to update {object_type} {name}: {error}".format(

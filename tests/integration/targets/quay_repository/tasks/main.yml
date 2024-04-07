@@ -186,6 +186,92 @@
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
+- name: Ensure repository ansibletestrepo4 exists
+  herve4m.quay.quay_repository:
+    name: ansibletestorg/ansibletestrepo4
+    auto_prune_method: date
+    auto_prune_value: 5d
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure repository ansibletestrepo4 exists (no change 1)
+  herve4m.quay.quay_repository:
+    name: ansibletestorg/ansibletestrepo4
+    auto_prune_method: date
+    auto_prune_value: 5  d
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  ansible.builtin.assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure repository ansibletestrepo4 exists (no change 2)
+  herve4m.quay.quay_repository:
+    name: ansibletestorg/ansibletestrepo4
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  ansible.builtin.assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure repository ansibletestrepo4 auto-prunes tags by date
+  herve4m.quay.quay_repository:
+    name: ansibletestorg/ansibletestrepo4
+    auto_prune_method: date
+    auto_prune_value: 4w
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure repository ansibletestrepo4 auto-prunes tags by number
+  herve4m.quay.quay_repository:
+    name: ansibletestorg/ansibletestrepo4
+    auto_prune_method: tags
+    auto_prune_value: 20
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure repository ansibletestrepo4 does not auto-prune
+  herve4m.quay.quay_repository:
+    name: ansibletestorg/ansibletestrepo4
+    auto_prune_method: none
+    auto_prune_value: 20
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure repository ansibletestrepo4 does not auto-prune (no change)
+  herve4m.quay.quay_repository:
+    name: ansibletestorg/ansibletestrepo4
+    auto_prune_method: none
+    auto_prune_value: 4d
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  ansible.builtin.assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
 - name: Ensure repositories are removed
   herve4m.quay.quay_repository:
     name: "ansibletestorg/{{ item }}"
@@ -197,6 +283,7 @@
     - ansibletestrepo1
     - ansibletestrepo2
     - ansibletestrepo3
+    - ansibletestrepo4
 
 - name: Ensure the teams are removed
   herve4m.quay.quay_team:

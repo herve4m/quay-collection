@@ -11,14 +11,14 @@
 
 .. Anchors
 
-.. _ansible_collections.herve4m.quay.quay_default_perm_module:
+.. _ansible_collections.herve4m.quay.quay_team_oidc_module:
 
 .. Anchors: short name for ansible.builtin
 
 .. Title
 
-herve4m.quay.quay_default_perm module -- Manage Quay Container Registry default repository permissions
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+herve4m.quay.quay_team_oidc module -- Synchronize Quay Container Registry teams with OIDC groups
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. Collection note
 
@@ -30,13 +30,13 @@ herve4m.quay.quay_default_perm module -- Manage Quay Container Registry default 
 
     To install it, use: :code:`ansible-galaxy collection install herve4m.quay`.
 
-    To use it in a playbook, specify: :code:`herve4m.quay.quay_default_perm`.
+    To use it in a playbook, specify: :code:`herve4m.quay.quay_team_oidc`.
 
 .. version_added
 
 .. rst-class:: ansible-version-added
 
-New in herve4m.quay 0.0.1
+New in herve4m.quay 1.2.0
 
 .. contents::
    :local:
@@ -50,7 +50,7 @@ Synopsis
 
 .. Description
 
-- Create, delete, and update default repository permissions.
+- Synchronize and unsynchronize teams in organizations with OIDC groups.
 
 
 .. Aliases
@@ -80,17 +80,16 @@ Parameters
   <tbody>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-creator"></div>
-      <p class="ansible-option-title"><strong>creator</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-creator" title="Permalink to this option"></a>
+      <div class="ansibleOptionAnchor" id="parameter-group_name"></div>
+      <p class="ansible-option-title"><strong>group_name</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-group_name" title="Permalink to this option"></a>
       <p class="ansible-option-type-line">
         <span class="ansible-option-type">string</span>
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Quay applies the default permission only when repositories are created by the user that you define in <em>creator</em>.</p>
-      <p>By default, if you do not provide that <em>creator</em> parameter, then Quay applies the default permission to all new repositories, whoever creates them.</p>
-      <p>You cannot use robot accounts or teams for the <em>creator</em> parameter. You can only use regular user accounts.</p>
+      <p>OIDC group name.</p>
+      <p><em>group_name</em> is required when <em>sync</em> is <code class='docutils literal notranslate'>yes</code>.</p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -104,8 +103,7 @@ Parameters
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Name of the user or team that gets permission to new created repositories in the organization.</p>
-      <p>For robot accounts use the <code class='docutils literal notranslate'>namespace</code>+<code class='docutils literal notranslate'>shortrobotname</code> format.</p>
+      <p>Name of the team to synchronize or unsynchronize with an OIDC group. That team must exist (see the <a href='../../herve4m/quay/quay_team_module.html' class='module'>herve4m.quay.quay_team</a> module to create it).</p>
     </div></td>
   </tr>
   <tr class="row-even">
@@ -119,7 +117,7 @@ Parameters
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Name of the organization for the default permission. That organization must exist.</p>
+      <p>Name of the organization for the team. That organization must exist.</p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -187,61 +185,20 @@ Parameters
   </tr>
   <tr class="row-odd">
     <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-role"></div>
-      <p class="ansible-option-title"><strong>role</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-role" title="Permalink to this option"></a>
+      <div class="ansibleOptionAnchor" id="parameter-sync"></div>
+      <p class="ansible-option-title"><strong>sync</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-sync" title="Permalink to this option"></a>
       <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
+        <span class="ansible-option-type">boolean</span>
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Permission that Quay automatically grants to the user or team on new created repositories in the organization.</p>
-      <p>If you do not provide that parameter, then the module uses <code class='docutils literal notranslate'>read</code> by default.</p>
+      <p>If <code class='docutils literal notranslate'>yes</code>, then the team members are retrieved from the OIDC group that you define in <em>group_name</em>. The pre-existing members are removed from the team before the synchronization process starts. Existing robot account members are not removed.</p>
+      <p>If <code class='docutils literal notranslate'>no</code>, then the synchronization from OIDC is disabled.</p>
       <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
       <ul class="simple">
-        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;read&#34;</code></p></li>
-        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;write&#34;</code></p></li>
-        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;admin&#34;</code></p></li>
-      </ul>
-
-    </div></td>
-  </tr>
-  <tr class="row-even">
-    <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-state"></div>
-      <p class="ansible-option-title"><strong>state</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-state" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
-      </p>
-    </div></td>
-    <td><div class="ansible-option-cell">
-      <p>If <code class='docutils literal notranslate'>absent</code>, then the module deletes the default permission.</p>
-      <p>If <code class='docutils literal notranslate'>present</code>, then the module creates the default permission if it does not already exist.</p>
-      <p>If the default permission already exists, then the module updates its role parameter (<code class='docutils literal notranslate'>read</code>, <code class='docutils literal notranslate'>write</code>, or <code class='docutils literal notranslate'>admin</code>).</p>
-      <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
-      <ul class="simple">
-        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;absent&#34;</code></p></li>
-        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold"><strong>&#34;present&#34;</strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
-      </ul>
-
-    </div></td>
-  </tr>
-  <tr class="row-odd">
-    <td><div class="ansible-option-cell">
-      <div class="ansibleOptionAnchor" id="parameter-type"></div>
-      <p class="ansible-option-title"><strong>type</strong></p>
-      <a class="ansibleOptionLink" href="#parameter-type" title="Permalink to this option"></a>
-      <p class="ansible-option-type-line">
-        <span class="ansible-option-type">string</span>
-      </p>
-    </div></td>
-    <td><div class="ansible-option-cell">
-      <p>Type of the account defined in <em>name</em>. Choose <code class='docutils literal notranslate'>user</code> for both user and robot accounts.</p>
-      <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
-      <ul class="simple">
-        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold"><strong>&#34;user&#34;</strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
-        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;team&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">false</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-default-bold"><strong>true</strong></code> <span class="ansible-option-choices-default-mark">← (default)</span></p></li>
       </ul>
 
     </div></td>
@@ -283,6 +240,8 @@ Notes
 -----
 
 .. note::
+   - The module requires Quay version 3.11 or later.
+   - The module requires that your Quay administrator configures the Quay authentication method to OIDC (\ :literal:`AUTHENTICATION\_TYPE`\  to \ :literal:`OIDC`\  in \ :literal:`config.yaml`\ ), and enables team synchronization (\ :literal:`FEATURE\_TEAM\_SYNCING`\  to \ :literal:`true`\  in \ :literal:`config.yaml`\ ).
    - Supports \ :literal:`check\_mode`\ .
    - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Administer Organization" and "Administer User" permissions.
 
@@ -297,53 +256,35 @@ Examples
 .. code-block:: yaml+jinja
 
     
-    - name: Create default admin permission for user
-      herve4m.quay.quay_default_perm:
+    - name: Ensure team operators exists before activating OIDC synchronization
+      herve4m.quay.quay_team:
+        name: operators
         organization: production
-        name: lvasquez
-        type: user
-        role: admin
+        role: creator
+        # Only robot accounts can be added to a team you prepare for OIDC
+        # synchronization. User accounts that you might add are removed when the
+        # synchronization is activated
+        members:
+          - production+automationrobot
+        append: false
         state: present
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-    - name: Create default write permission for robot
-      herve4m.quay.quay_default_perm:
+    - name: Ensure team operators is synchronized with the op1 OIDC group
+      herve4m.quay.quay_team_oidc:
+        name: operators
         organization: production
-        name: production+automationrobot
-        type: user
-        role: write
-        state: present
+        sync: true
+        group_name: op1
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-    - name: Create default read permission for team
-      herve4m.quay.quay_default_perm:
+    - name: Ensure team operators is not synchronized anymore with an OIDC group
+      herve4m.quay.quay_team_oidc:
+        name: operators
         organization: production
-        name: managers
-        type: team
-        role: read
-        state: present
-        quay_host: https://quay.example.com
-        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
-
-    - name: Grant read permission for the managers team when dwilde creates repo
-      herve4m.quay.quay_default_perm:
-        organization: production
-        name: managers
-        type: team
-        role: read
-        creator: dwilde
-        state: present
-        quay_host: https://quay.example.com
-        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
-
-    - name: Ensure default permission for robot is removed
-      herve4m.quay.quay_default_perm:
-        organization: production
-        name: production+automationrobot
-        type: user
-        state: absent
+        sync: false
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 

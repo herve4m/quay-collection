@@ -23,7 +23,7 @@ herve4m.quay.quay_organization module -- Manage Quay Container Registry organiza
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.1.0).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.2.0).
 
     It is not included in ``ansible-core``.
     To check whether it is installed, run :code:`ansible-galaxy collection list`.
@@ -78,6 +78,45 @@ Parameters
   </tr>
   </thead>
   <tbody>
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-auto_prune_method"></div>
+      <p class="ansible-option-title"><strong>auto_prune_method</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-auto_prune_method" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Method to use for the auto-pruning tags policy.</p>
+      <p>If <code class='docutils literal notranslate'>none</code>, then the module ensures that no policy is in place. The tags are not pruned.</p>
+      <p>If <code class='docutils literal notranslate'>tags</code>, then the policy keeps only the number of tags that you specify in <em>auto_prune_value</em>.</p>
+      <p>If <code class='docutils literal notranslate'>date</code>, then the policy deletes the tags older than the time period that you specify in <em>auto_prune_value</em>.</p>
+      <p><em>auto_prune_value</em> is required when <em>auto_prune_method</em> is <code class='docutils literal notranslate'>tags</code> or <code class='docutils literal notranslate'>date</code>.</p>
+      <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+      <ul class="simple">
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;none&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;tags&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;date&#34;</code></p></li>
+      </ul>
+
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-auto_prune_value"></div>
+      <p class="ansible-option-title"><strong>auto_prune_value</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-auto_prune_value" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Number of tags to keep when <em>auto_prune_value</em> is <code class='docutils literal notranslate'>tags</code>. The value must be 1 or more.</p>
+      <p>Period of time when <em>auto_prune_value</em> is <code class='docutils literal notranslate'>date</code>. The value must be 1 or more, and must be followed by a suffix; s (for second), m (for minute), h (for hour), d (for day), or w (for week).</p>
+      <p><em>auto_prune_method</em> is required when <em>auto_prune_value</em> is set.</p>
+    </div></td>
+  </tr>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-email"></div>
@@ -268,8 +307,12 @@ Notes
 
 .. note::
    - Supports \ :literal:`check\_mode`\ .
+   - Your Quay administrator must enable the auto-prune capability of your Quay installation (\ :literal:`FEATURE\_AUTO\_PRUNE`\  in \ :literal:`config.yaml`\ ) to use the \ :emphasis:`auto\_prune\_method`\  and \ :emphasis:`auto\_prune\_value`\  parameters.
+   - Using \ :emphasis:`auto\_prune\_method`\  and \ :emphasis:`auto\_prune\_value`\  requires Quay version 3.11 or later.
    - The token that you provide in \ :emphasis:`quay\_token`\  must have the "Administer Organization" and "Administer User" permissions.
    - To rename organizations, the token must also have the "Super User Access" permission.
+   - Your Quay administrator must enable the auto-prune capability of your Quay installation (\ :literal:`FEATURE\_AUTO\_PRUNE`\  in \ :literal:`config.yaml`\ ) to use the \ :emphasis:`auto\_prune\_method`\  and \ :emphasis:`auto\_prune\_value`\  parameters.
+   - Using \ :emphasis:`auto\_prune\_method`\  and \ :emphasis:`auto\_prune\_value`\  requires Quay version 3.11 or later.
 
 .. Seealso
 
@@ -287,6 +330,8 @@ Examples
         name: production
         email: prodlist@example.com
         time_machine_expiration: "7d"
+        auto_prune_method: tags
+        auto_prune_value: 20
         state: present
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7

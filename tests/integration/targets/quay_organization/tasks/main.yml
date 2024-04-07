@@ -52,6 +52,7 @@
   herve4m.quay.quay_organization:
     name: testansible3
     time_machine_expiration: "1d"
+    auto_prune_method: none
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
     validate_certs: false
@@ -72,6 +73,123 @@
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
     validate_certs: false
+
+- name: Ensure organization testansible5 has an auto-prune policy by tags (30)
+  herve4m.quay.quay_organization:
+    name: testansible5
+    email: testansible5@example.com
+    state: present
+    time_machine_expiration: "1month"
+    auto_prune_method: tags
+    auto_prune_value: 30
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure organization testansible5 has an auto-prune policy by tags (42)
+  herve4m.quay.quay_organization:
+    name: testansible5
+    state: present
+    auto_prune_method: tags
+    auto_prune_value: 42
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure organization testansible5 has an auto-prune policy (no change) 1
+  herve4m.quay.quay_organization:
+    name: testansible5
+    state: present
+    auto_prune_method: tags
+    auto_prune_value: 42
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  ansible.builtin.assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure organization testansible5 has an auto-prune policy (no change) 2
+  herve4m.quay.quay_organization:
+    name: testansible5
+    state: present
+    time_machine_expiration: "1month"
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  ansible.builtin.assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure organization testansible5 has an auto-prune policy by date
+  herve4m.quay.quay_organization:
+    name: testansible5
+    email: testansible5@example.com
+    state: present
+    auto_prune_method: date
+    auto_prune_value: 4w
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure organization testansible5 has an auto-prune policy (new date)
+  herve4m.quay.quay_organization:
+    name: testansible5
+    email: testansible5@example.com
+    state: present
+    auto_prune_method: date
+    auto_prune_value: 4d
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure organization testansible5 has an auto-prune policy (no change)
+  herve4m.quay.quay_organization:
+    name: testansible5
+    state: present
+    auto_prune_method: date
+    auto_prune_value: 4   d
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  ansible.builtin.assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: Ensure organization testansible5 has no auto-prune policy
+  herve4m.quay.quay_organization:
+    name: testansible5
+    state: present
+    auto_prune_method: none
+    auto_prune_value: 12w
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure organization testansible5 has no auto-prune policy (no change)
+  herve4m.quay.quay_organization:
+    name: testansible5
+    state: present
+    auto_prune_method: none
+    auto_prune_value: 4   h
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  ansible.builtin.assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
 
 - name: Ensure non-existing organization is deleted (no change)
   herve4m.quay.quay_organization:
@@ -101,4 +219,5 @@
     - testansible2
     - testansible3
     - testansible4
+    - testansible5
 ...

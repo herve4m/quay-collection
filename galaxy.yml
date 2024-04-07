@@ -1,7 +1,7 @@
 ---
 namespace: herve4m
 name: quay
-version: 1.1.0
+version: 1.2.0
 readme: README.md
 authors:
   - Hervé Quatremain <rv4m@yahoo.co.uk>
@@ -17,7 +17,7 @@ repository: https://github.com/herve4m/quay-collection
 # The URL to any online docs
 documentation: https://github.com/herve4m/quay-collection
 
-# The URL to the homepage of the collection/project
+# The URL to the home page of the collection/project
 homepage: https://github.com/herve4m/quay-collection
 
 # The URL to the collection issue tracker

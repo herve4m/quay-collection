@@ -13,6 +13,8 @@
         quay_org_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
         quay_org_name: production
         quay_org_email: production@example.com
+        quay_org_auto_prune_method: tags
+        quay_org_auto_prune_value: 15
         quay_org_cache_registry: public.ecr.aws/nginx
         quay_org_cache_expiration: 345600
         quay_org_quota: 500 GiB
@@ -49,6 +51,8 @@
         quay_org_repositories:
           - name: small_image
             visibility: public
+            auto_prune_method: date
+            auto_prune_value: 10w
             perms:
               - name: qa
                 type: team

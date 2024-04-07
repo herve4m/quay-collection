@@ -10,13 +10,10 @@ jobs:
   integration:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        with:
-          path: ansible_collections/herve4m/quay
-
       # Work around https://github.com/actions/runner-images/issues/9425
+      - uses: actions/checkout@v4
       - name: Install crun
-        uses: ansible_collections/herve4m/quay/.github/actions/fix-crun
+        uses: ./.github/actions/fix-crun
         with:
           checksums: CHECKSUMS
 
@@ -26,6 +23,10 @@ jobs:
 
       - name: Install required packages
         run: pip install -Iv ansible
+
+      - uses: actions/checkout@v4
+        with:
+          path: ansible_collections/herve4m/quay
 
       - name: Run sanity tests
         run: >

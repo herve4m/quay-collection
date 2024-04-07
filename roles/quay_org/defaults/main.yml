@@ -52,6 +52,8 @@
 #   - name: small_image
 #     description: Small GNU/Linux image
 #     visibility: public
+#     auto_prune_method: tags
+#     auto_prune_value: 15
 #     perms:
 #       - name: qa
 #         type: team

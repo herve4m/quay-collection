@@ -57,6 +57,8 @@
       - name: ansibletestrepo1
         description: Test repository 1
         visibility: public
+        auto_prune_method: date
+        auto_prune_value: 10w
         perms:
           - name: ansibletestteam1
             type: team

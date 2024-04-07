@@ -134,6 +134,8 @@ Example Playbook
         quay_org_repositories:
           - name: small_image
             visibility: private
+            auto_prune_method: date
+            auto_prune_value: 5w
             perms:
               - name: qa
                 type: team

@@ -3,6 +3,8 @@
   herve4m.quay.quay_repository:
     name: "{{ quay_org_name }}/{{ item['name'] }}"
     visibility: "{{ item['visibility'] | default(omit) }}"
+    auto_prune_method: "{{ item['auto_prune_method'] | default(omit) }}"
+    auto_prune_value: "{{ item['auto_prune_value'] | default(omit) }}"
     description: "{{ item['description'] | default(omit) }}"
     perms: "{{ item['perms'] | default(omit) }}"
     repo_state: "{{ item['repo_state'] | default(omit) }}"

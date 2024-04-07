@@ -201,3 +201,16 @@ releases:
     release_date: '2024-02-16'
   1.1.0:
     release_date: '2024-02-16'
+  1.2.0:
+    changes:
+      minor_changes:
+      - Add support for the auto-pruning tags feature in Quay 3.11 for organizations
+        and repositories. The ``herve4m.quay.quay_organization`` and ``herve4m.quay.quay_repository``
+        modules now have the ``auto_prune_method`` and ``auto_prune_value`` options.
+    fragments:
+    - PR32-v1.2.0-summary.yml
+    modules:
+    - description: Synchronize Quay Container Registry teams with OIDC groups
+      name: quay_team_oidc
+      namespace: ''
+    release_date: '2024-04-07'

@@ -22,7 +22,7 @@ herve4m.quay.quay_org role -- Create and configure a Quay Container Registry org
 .. Collection note
 
 .. note::
-    This role is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.1.0).
+    This role is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.2.0).
 
     It is not included in ``ansible-core``.
     To check whether it is installed, run :code:`ansible-galaxy collection list`.
@@ -160,6 +160,47 @@ Parameters
     </div></td>
   </tr>
 
+  <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-main--quay_org_auto_prune_method"></div>
+      <p class="ansible-option-title"><strong>quay_org_auto_prune_method</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-main--quay_org_auto_prune_method" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Method to use for the auto-pruning tags policy.</p>
+      <p>If <code class='docutils literal notranslate'>none</code>, then the module ensures that no policy is in place. The tags are not pruned.</p>
+      <p>If <code class='docutils literal notranslate'>tags</code>, then the policy keeps only the number of tags that you specify in <em>quay_org_auto_prune_value</em>.</p>
+      <p>If <code class='docutils literal notranslate'>date</code>, then the policy deletes the tags older than the time period that you specify in <em>quay_org_auto_prune_value</em>.</p>
+      <p><em>quay_org_auto_prune_value</em> is required when <em>quay_org_auto_prune_method</em> is <code class='docutils literal notranslate'>tags</code> or <code class='docutils literal notranslate'>date</code>.</p>
+      <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+      <ul class="simple">
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;none&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;tags&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;date&#34;</code></p></li>
+      </ul>
+
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-main--quay_org_auto_prune_value"></div>
+      <p class="ansible-option-title"><strong>quay_org_auto_prune_value</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-main--quay_org_auto_prune_value" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Number of tags to keep when <em>quay_org_auto_prune_value</em> is <code class='docutils literal notranslate'>tags</code>. The value must be 1 or more.</p>
+      <p>Period of time when <em>quay_org_auto_prune_value</em> is <code class='docutils literal notranslate'>date</code>. The value must be 1 or more, and must be followed by a suffix; s (for second), m (for minute), h (for hour), d (for day), or w (for week).</p>
+      <p><em>quay_org_auto_prune_method</em> is required when <em>quay_org_auto_prune_value</em> is set.</p>
+    </div></td>
+  </tr>
   <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-main--quay_org_cache_expiration"></div>
@@ -345,7 +386,7 @@ Parameters
     </div></td>
     <td><div class="ansible-option-cell">
       <p>Email address to associate with the new organization.</p>
-      <p>If your Quay administrator has enabled the mailing capability of your Quay installation (<code class='docutils literal notranslate'>FEATURE_MAILING</code> to <code class='docutils literal notranslate'>true</code> in <code class='docutils literal notranslate'>config.yaml</code>), then this <em>email</em> parameter is mandatory.</p>
+      <p>If your Quay administrator has enabled the mailing capability of your Quay installation (<code class='docutils literal notranslate'>FEATURE_MAILING</code> to <code class='docutils literal notranslate'>true</code> in <code class='docutils literal notranslate'>config.yaml</code>), then this <em>quay_org_email</em> parameter is mandatory.</p>
       <p>You cannot use the same address as your account email.</p>
     </div></td>
   </tr>
@@ -395,8 +436,8 @@ Parameters
     <td><div class="ansible-option-cell">
       <p>The password to use for authenticating against the API.</p>
       <p>If you do not set the parameter, then the role tries the <code class='docutils literal notranslate'>QUAY_PASSWORD</code> environment variable.</p>
-      <p>If you set <em>quay_password</em>, then you also need to set <em>quay_username</em>.</p>
-      <p>Mutually exclusive with <em>quay_token</em>.</p>
+      <p>If you set <em>quay_org_password</em>, then you also need to set <em>quay_org_username</em>.</p>
+      <p>Mutually exclusive with <em>quay_org_token</em>.</p>
     </div></td>
   </tr>
   <tr class="row-even">
@@ -443,6 +484,47 @@ Parameters
     </div></td>
     <td><div class="ansible-option-cell">
       <p>Create repositories in the organization.</p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
+    <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-main--quay_org_repositories/auto_prune_method"></div>
+      <p class="ansible-option-title"><strong>auto_prune_method</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-main--quay_org_repositories/auto_prune_method" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+
+    </div></td>
+    <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
+      <p>Method to use for the auto-pruning tags policy.</p>
+      <p>If <code class='docutils literal notranslate'>none</code>, then the module ensures that no policy is in place. The tags are not pruned.</p>
+      <p>If <code class='docutils literal notranslate'>tags</code>, then the policy keeps only the number of tags that you specify in <em>auto_prune_value</em>.</p>
+      <p>If <code class='docutils literal notranslate'>date</code>, then the policy deletes the tags older than the time period that you specify in <em>auto_prune_value</em>.</p>
+      <p><em>auto_prune_value</em> is required when <em>auto_prune_method</em> is <code class='docutils literal notranslate'>tags</code> or <code class='docutils literal notranslate'>date</code>.</p>
+      <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
+      <ul class="simple">
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;none&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;tags&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;date&#34;</code></p></li>
+      </ul>
+
+    </div></td>
+  </tr>
+  <tr class="row-even">
+    <td><div class="ansible-option-indent"></div><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-main--quay_org_repositories/auto_prune_value"></div>
+      <p class="ansible-option-title"><strong>auto_prune_value</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-main--quay_org_repositories/auto_prune_value" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">string</span>
+      </p>
+
+    </div></td>
+    <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
+      <p>Number of tags to keep when <em>auto_prune_value</em> is <code class='docutils literal notranslate'>tags</code>. The value must be 1 or more.</p>
+      <p>Period of time when <em>auto_prune_value</em> is <code class='docutils literal notranslate'>date</code>. The value must be 1 or more, and must be followed by a suffix; s (for second), m (for minute), h (for hour), d (for day), or w (for week).</p>
+      <p><em>auto_prune_method</em> is required when <em>auto_prune_value</em> is set.</p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -681,7 +763,7 @@ Parameters
     </div></td>
     <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
       <p>List of the user or robot accounts in the team. Use the syntax <code class='docutils literal notranslate'>organization</code>+<code class='docutils literal notranslate'>robotshortname</code> for robot accounts.</p>
-      <p>If the team is synchronized with an LDAP group (see the <span class="error">ERROR while parsing: While parsing "M(quay_team_ldap)" at index 57: Module name "quay_team_ldap" is not a FQCN</span> module), then you can only add or remove robot accounts.</p>
+      <p>If the team is synchronized with an LDAP or OIDC group (see the <span class="error">ERROR while parsing: While parsing "M(quay_team_ldap)" at index 65: Module name "quay_team_ldap" is not a FQCN</span> and <span class="error">ERROR while parsing: While parsing "M(quay_team_oidc)" at index 87: Module name "quay_team_oidc" is not a FQCN</span> modules), then you can only add or remove robot accounts.</p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -735,7 +817,7 @@ Parameters
     <td><div class="ansible-option-cell">
       <p>OAuth access token for authenticating against the API.</p>
       <p>If you do not set the parameter, then the role tries the <code class='docutils literal notranslate'>QUAY_TOKEN</code> environment variable.</p>
-      <p>Mutually exclusive with <em>quay_username</em> and <em>quay_password</em>.</p>
+      <p>Mutually exclusive with <em>quay_org_username</em> and <em>quay_org_password</em>.</p>
     </div></td>
   </tr>
   <tr class="row-even">
@@ -751,8 +833,8 @@ Parameters
     <td><div class="ansible-option-cell">
       <p>The username to use for authenticating against the API.</p>
       <p>If you do not set the parameter, then the role tries the <code class='docutils literal notranslate'>QUAY_USERNAME</code> environment variable.</p>
-      <p>If you set <em>quay_username</em>, then you also need to set <em>quay_password</em>.</p>
-      <p>Mutually exclusive with <em>quay_token</em>.</p>
+      <p>If you set <em>quay_org_username</em>, then you also need to set <em>quay_org_password</em>.</p>
+      <p>Mutually exclusive with <em>quay_org_token</em>.</p>
     </div></td>
   </tr>
   <tr class="row-odd">

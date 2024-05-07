@@ -7,7 +7,7 @@
     :trim:
 
 .. meta::
-  :antsibull-docs: 2.7.0
+  :antsibull-docs: 2.11.0
 
 .. Anchors
 
@@ -23,7 +23,7 @@ herve4m.quay.quay_team_ldap module -- Synchronize Quay Container Registry teams 
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.2.0).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.3.0).
 
     It is not included in ``ansible-core``.
     To check whether it is installed, run :code:`ansible-galaxy collection list`.
@@ -104,7 +104,7 @@ Parameters
     </div></td>
     <td><div class="ansible-option-cell">
       <p>If <code class='docutils literal notranslate'>yes</code>, then the current team members are kept after the synchronization is disabled.</p>
-      <p>If <code class='docutils literal notranslate'>no</code>, then the team members are removed (except robot accounts)</p>
+      <p>If <code class='docutils literal notranslate'>no</code>, then the team members are removed (except robot accounts).</p>
       <p><em>keep_users</em> is only used when <em>sync</em> is <code class='docutils literal notranslate'>no</code>.</p>
       <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
       <ul class="simple">

@@ -28,7 +28,7 @@ Name | Description
 [quay_proxy_cache](https://github.com/herve4m/quay-collection/blob/main/docs/quay_proxy_cache_module.rst) |  Manage Quay Container Registry proxy cache configurations
 [quay_quota](https://github.com/herve4m/quay-collection/blob/main/docs/quay_quota_module.rst) |  Manage Quay Container Registry organizations quota
 [quay_repository](https://github.com/herve4m/quay-collection/blob/main/docs/quay_repository_module.rst) |  Manage Quay Container Registry repositories
-[quay_repository_mirror](https://github.com/herve4m/quay-collection/blob/main/docs/quay_repository_mirror_module.rst) |  Manage Quay Container Registry repositories mirrors
+[quay_repository_mirror](https://github.com/herve4m/quay-collection/blob/main/docs/quay_repository_mirror_module.rst) |  Manage Quay Container Registry repository mirrors
 [quay_robot](https://github.com/herve4m/quay-collection/blob/main/docs/quay_robot_module.rst) |  Manage Quay Container Registry robot accounts
 [quay_tag](https://github.com/herve4m/quay-collection/blob/main/docs/quay_tag_module.rst) | Manage Quay Container Registry image tags
 [quay_tag_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_tag_info_module.rst) |  Gather information about tags in a Quay Container Registry repository
@@ -37,6 +37,11 @@ Name | Description
 [quay_team_oidc](https://github.com/herve4m/quay-collection/blob/main/docs/quay_team_oidc_module.rst) |  Synchronize Quay Container Registry teams with OIDC groups
 [quay_user](https://github.com/herve4m/quay-collection/blob/main/docs/quay_user_module.rst) |  Manage Quay Container Registry users
 [quay_vulnerability_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_vulnerability_info_module.rst) | Gather information about image vulnerabilities in Quay Container Registry
+
+### Jinja2 Filters
+Name | Description
+---: | :---
+[quay_docker_config](https://github.com/herve4m/quay-collection/blob/main/docs/quay_docker_config_filter.rst) |  Build a Docker configuration in JSON format
 
 ### Roles
 Name | Description
@@ -60,10 +65,10 @@ collections:
   - name: herve4m.quay
 ```
 
-Use the `ansible-galaxy collection install -r collections/requirements.yml` command to install the collection from that file.
-If you manage your Ansible project in automation controller, then automation controller detects that `collections/requirements.yml` file and automatically installs the collection.
+Use the `ansible-galaxy collection install -r collections/requirements.yml` command to install the collection from this file.
+If you manage your Ansible project in automation controller, then automation controller detects this `collections/requirements.yml` file, and automatically installs the collection.
 
-You can also download the tar archive from [Ansible Galaxy](https://galaxy.ansible.com/herve4m/quay) and then manually install the collection.
+You can also download the tar archive from [Ansible Galaxy](https://galaxy.ansible.com/herve4m/quay), and then manually install the collection.
 
 See [Ansible -- Using collections](https://docs.ansible.com/ansible/latest/user_guide/collections_using.html) for more details.
 
@@ -84,7 +89,7 @@ There are two ways to get an OAuth access token:
 ### Creating an OAuth Access Token by Using the Web UI
 
 Before you can use the collection, you must generate an OAuth access token.
-To do so, follow those steps:
+To do so, follow these steps:
 
 1. Log in to the Quay Container Registry web UI.
 2. Use an existing organization or create a new one.
@@ -106,7 +111,7 @@ See the [Quay.io API](https://docs.quay.io/api/) documentation for more details.
 
 Just after you installed Quay Container Registry, and before you do anything else, you can create the first user and generate an OAuth access token for that user.
 
-After that initial operation, you can create additional user accounts by using the `herve4m.quay.quay_user` module and generate OAuth access tokens for those additional accounts by using the `herve4m.quay.quay_api_token` module.
+After this initial operation, you can create additional user accounts by using the `herve4m.quay.quay_user` module and generate OAuth access tokens for these additional accounts by using the `herve4m.quay.quay_api_token` module.
 
 The following playbook example uses the `herve4m.quay.quay_first_user` module to create the first user:
 
@@ -154,7 +159,7 @@ The requirements for the `herve4m.quay.quay_first_user` module are as follows:
 * You must enable the first user creation feature (`FEATURE_USER_INITIALIZE` in `config.yaml`).
 * You must use the internal database for user authentication (`AUTHENTICATION_TYPE` to `Database` in `config.yaml` or `Internal Authentication` to `Local Database` in the configuration web UI).
 * You probably want the first user to have superuser permissions.
-  To do so, add that user account to the `SUPER_USERS` section in the `config.yaml` file.
+  To do so, add this user account to the `SUPER_USERS` section in the `config.yaml` file.
 
 
 ### Grouping Common Module Parameters

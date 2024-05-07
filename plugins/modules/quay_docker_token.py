@@ -114,8 +114,8 @@ token_code:
   sample: OVKFT8YJBTQYG4Z30YHDOPJBU4M2VPMCQJ5IYW4BAQGZD8T5V70JORLJBJHFYVVFQ89K7
 auth_b64:
   description:
-    - Base 64 encoding of the username and the token
-      (C(I(username):I(token_code)))
+    - Base64 encoding of the username and the token
+      (C(I(username):I(token_code))).
     - Some client configuration files, such as the C(~/.docker/config.json)
       Docker configuration file, require that you provide the username and the
       token in that format.
@@ -126,7 +126,7 @@ auth_b64:
   sample: JGFw...NzBK
 dockerconfigjson_b64:
   description:
-    - Base 64 encoding of the C(~/.docker/config.json) configuration file.
+    - Base64 encoding of the C(~/.docker/config.json) configuration file.
     - The C(containers-auth.json)(5) man page describe the format of the file.
   returned: always
   type: str

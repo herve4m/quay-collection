@@ -116,7 +116,7 @@ tags:
         - SHA256 digest for the tag.
         - You can use that digest to pull the image instead of using the tag
           name. For example,
-          C(podman pull quay.example.com/production/smallimage@sha256:a8f2...5ea7)
+          C(podman pull quay.example.com/production/smallimage@sha256:a8f2...5ea7).
       type: str
       returned: always
       sample: sha256:a8f231c07da40107543d74ed1e9a1938a004b498377dbefcf29082c7a9e55ea7

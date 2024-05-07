@@ -68,7 +68,7 @@ options:
     description:
       - If C(yes), then the current team members are kept after the
         synchronization is disabled.
-      - If C(no), then the team members are removed (except robot accounts)
+      - If C(no), then the team members are removed (except robot accounts).
       - I(keep_users) is only used when I(sync) is C(no).
     type: bool
     default: yes

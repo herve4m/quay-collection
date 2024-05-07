@@ -1,7 +1,7 @@
 ---
 - name: Build a Docker configuration in JSON format
   ansible.builtin.set_fact:
-    json_conf: "{{ 'myuser' | herve4m.quay.docker_config_json('mypassword',
+    json_conf: "{{ 'myuser' | herve4m.quay.quay_docker_config('mypassword',
       'https://www.example.com:8080', 'myuser@example.com') }}"
 
 - name: Ensure that the Docker configuration matches

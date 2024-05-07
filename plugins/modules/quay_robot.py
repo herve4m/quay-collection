@@ -87,6 +87,11 @@ EXAMPLES = r"""
 - debug:
     msg: "Robot token: {{ robot_details['token'] }}"
 
+- debug:
+    msg: "Docker configuration (Base64): {{ robot_details['name']
+      | herve4m.quay.quay_docker_config(robot_details['token'],
+      'https://quay.example.com') }}"
+
 - name: Ensure the robot account myrobot exists in my namespace
   herve4m.quay.quay_robot:
     name: myrobot
@@ -104,7 +109,11 @@ EXAMPLES = r"""
 
 RETURN = r"""
 name:
-  description: Token name.
+  description:
+    - Token name.
+    - From this name and the token, in I(token), you can construct a Docker
+      configuration file that you can use to manage images in the container
+      image registry. See P(herve4m.quay.quay_docker_config#filter).
   returned: changed
   type: str
   sample: production+robotprod1

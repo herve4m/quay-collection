@@ -7,7 +7,7 @@
     :trim:
 
 .. meta::
-  :antsibull-docs: 2.7.0
+  :antsibull-docs: 2.11.0
 
 .. Anchors
 
@@ -23,7 +23,7 @@ herve4m.quay.quay_robot module -- Manage Quay Container Registry robot accounts
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.2.0).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.3.0).
 
     It is not included in ``ansible-core``.
     To check whether it is installed, run :code:`ansible-galaxy collection list`.
@@ -255,6 +255,11 @@ Examples
     - debug:
         msg: "Robot token: {{ robot_details['token'] }}"
 
+    - debug:
+        msg: "Docker configuration (Base64): {{ robot_details['name']
+          | herve4m.quay.quay_docker_config(robot_details['token'],
+          'https://quay.example.com') }}"
+
     - name: Ensure the robot account myrobot exists in my namespace
       herve4m.quay.quay_robot:
         name: myrobot
@@ -302,6 +307,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
     </div></td>
     <td><div class="ansible-option-cell">
       <p>Token name.</p>
+      <p>From this name and the token, in <em>token</em>, you can construct a Docker configuration file that you can use to manage images in the container image registry. See <a href='../../herve4m/quay/quay_docker_config_filter.html' class='module'>herve4m.quay.quay_docker_config</a>.</p>
       <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> changed</p>
       <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-value literal notranslate ansible-option-sample">&#34;production+robotprod1&#34;</code></p>
     </div></td>

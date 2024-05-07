@@ -2,7 +2,7 @@ herve4m.quay.quay_org
 =========
 
 This role creates an organization in Quay Container Registry.
-In addition, it can creates user accounts, robot accounts, teams, default permissions, applications, and repositories for that organization.
+In addition, it can create user accounts, robot accounts, teams, default permissions, applications, and repositories for that organization.
 
 
 Requirements

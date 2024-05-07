@@ -1,0 +1,49 @@
+---
+# Copyright: (c) 2024, Herve Quatremain <rv4m@yahoo.co.uk>
+# GNU General Public License v3.0+ (see COPYING or
+# https://www.gnu.org/licenses/gpl-3.0.txt)
+DOCUMENTATION:
+  name: quay_docker_config
+  short_description: Build a Docker configuration in JSON format
+  description:
+    - Construct and return a Docker configuration in JSON format.
+    - This filter returns the resulting JSON data encoded in Base64.
+  version_added: '1.3.0'
+  author: Herve Quatremain (@herve4m)
+  options:
+    _input:
+      description: The username associated with the token.
+      type: str
+      required: true
+    token:
+      description: Token or password.
+      type: str
+      required: true
+    url:
+      description: URL of the API.
+      type: str
+      default: http://127.0.0.1
+      required: false
+    email:
+      description: Email address of the user.
+      type: str
+      default: ""
+      required: false
+    encoding:
+      description: Email address of the user.
+      type: str
+      default: utf-8
+      required: false
+
+EXAMPLES: |
+  # Build the Docker configuration for lvasquez with password vs9mrD55NP
+  # for accessing the registry at quay.example.com
+  {{ 'lvasquez' | herve4m.quay.quay_docker_config('vs9mrD55NP',
+     'https://quay.example.com') }}
+
+RETURN:
+  _value:
+    description:
+      - The Docker configuration as a JSON serialized string encoded in
+        Base64.
+    type: string

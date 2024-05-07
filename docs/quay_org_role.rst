@@ -7,7 +7,7 @@
     :trim:
 
 .. meta::
-  :antsibull-docs: 2.7.0
+  :antsibull-docs: 2.11.0
 
 .. Anchors
 
@@ -22,7 +22,7 @@ herve4m.quay.quay_org role -- Create and configure a Quay Container Registry org
 .. Collection note
 
 .. note::
-    This role is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.2.0).
+    This role is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.3.0).
 
     It is not included in ``ansible-core``.
     To check whether it is installed, run :code:`ansible-galaxy collection list`.
@@ -641,7 +641,7 @@ Parameters
     <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
       <p>If <code class='docutils literal notranslate'>NORMAL</code>, then the repository is in the default state (read/write).</p>
       <p>If <code class='docutils literal notranslate'>READ_ONLY</code>, then the repository is read-only.</p>
-      <p>If <code class='docutils literal notranslate'>MIRROR</code>, then the repository is a mirror and you can configure it by using the <span class="error">ERROR while parsing: While parsing "M(quay_repository_mirror)" at index 85: Module name "quay_repository_mirror" is not a FQCN</span> module.</p>
+      <p>If <code class='docutils literal notranslate'>MIRROR</code>, then the repository is a mirror and you can configure it by using the <a href='../../herve4m/quay/quay_repository_mirror_module.html' class='module'>herve4m.quay.quay_repository_mirror</a> module.</p>
       <p>You must enable the mirroring capability of your Quay installation to use this <em>repo_state</em> parameter.</p>
       <p class="ansible-option-line"><strong class="ansible-option-choices">Choices:</strong></p>
       <ul class="simple">
@@ -763,7 +763,7 @@ Parameters
     </div></td>
     <td><div class="ansible-option-indent-desc"></div><div class="ansible-option-cell">
       <p>List of the user or robot accounts in the team. Use the syntax <code class='docutils literal notranslate'>organization</code>+<code class='docutils literal notranslate'>robotshortname</code> for robot accounts.</p>
-      <p>If the team is synchronized with an LDAP or OIDC group (see the <span class="error">ERROR while parsing: While parsing "M(quay_team_ldap)" at index 65: Module name "quay_team_ldap" is not a FQCN</span> and <span class="error">ERROR while parsing: While parsing "M(quay_team_oidc)" at index 87: Module name "quay_team_oidc" is not a FQCN</span> modules), then you can only add or remove robot accounts.</p>
+      <p>If the team is synchronized with an LDAP or OIDC group (see the <a href='../../herve4m/quay/quay_team_ldap_module.html' class='module'>herve4m.quay.quay_team_ldap</a> and <a href='../../herve4m/quay/quay_team_oidc_module.html' class='module'>herve4m.quay.quay_team_oidc</a> modules), then you can only add or remove robot accounts.</p>
     </div></td>
   </tr>
   <tr class="row-odd">
@@ -948,6 +948,7 @@ Parameters
 
 
 .. Seealso
+
 
 
 Authors

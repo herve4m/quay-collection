@@ -1,0 +1,14 @@
+---
+- name: Build a Docker configuration in JSON format
+  ansible.builtin.set_fact:
+    json_conf: "{{ 'myuser' | herve4m.quay.quay_docker_config('mypassword',
+      'https://www.example.com:8080', 'myuser@example.com') }}"
+
+- name: Ensure that the Docker configuration matches
+  ansible.builtin.assert:
+    that: "json_conf == 'eyJhdXRocyI6IHsid3d3LmV4YW1wbGUuY29tOjgwODAiOiB7ImF1dG\
+      giOiAiYlhsMWMyVnlPbTE1Y0dGemMzZHZjbVE9IiwgImVtYWlsIjogIm15dXNlckBleGFtcGxl\
+      LmNvbSJ9fX0='"
+    fail_msg: >
+      The preceding task did not correctly build the Docker configuration
+...

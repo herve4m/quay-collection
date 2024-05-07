@@ -1,7 +1,7 @@
 
 
 .. meta::
-  :antsibull-docs: 2.7.0
+  :antsibull-docs: 2.11.0
 
 
 .. _plugins_in_herve4m.quay:
@@ -9,7 +9,7 @@
 Herve4M.Quay
 ============
 
-Collection version 1.2.0
+Collection version 1.3.0
 
 .. contents::
    :local:
@@ -42,7 +42,6 @@ Ansible modules to manage Quay Container Registry installations
 
 .. toctree::
     :maxdepth: 1
-
 
 Plugin Index
 ------------
@@ -104,6 +103,18 @@ Modules
     quay_team_oidc_module
     quay_user_module
     quay_vulnerability_info_module
+
+
+Filter Plugins
+~~~~~~~~~~~~~~
+
+* :ansplugin:`quay_docker_config filter <herve4m.quay.quay_docker_config#filter>` -- Build a Docker configuration in JSON format
+
+.. toctree::
+    :maxdepth: 1
+    :hidden:
+
+    quay_docker_config_filter
 
 
 Role Index

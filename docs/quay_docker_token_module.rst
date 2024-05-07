@@ -7,7 +7,7 @@
     :trim:
 
 .. meta::
-  :antsibull-docs: 2.7.0
+  :antsibull-docs: 2.11.0
 
 .. Anchors
 
@@ -23,7 +23,7 @@ herve4m.quay.quay_docker_token module -- Manage tokens for accessing Quay Contai
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.2.0).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.3.0).
 
     It is not included in ``ansible-core``.
     To check whether it is installed, run :code:`ansible-galaxy collection list`.
@@ -285,7 +285,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Base 64 encoding of the username and the token (<code class='docutils literal notranslate'>I(username</code>:<em>token_code</em>))</p>
+      <p>Base64 encoding of the username and the token (<code class='docutils literal notranslate'>I(username</code>:<em>token_code</em>)).</p>
       <p>Some client configuration files, such as the <code class='docutils literal notranslate'>~/.docker/config.json</code> Docker configuration file, require that you provide the username and the token in that format.</p>
       <p>You can decode the string by using the <code class='docutils literal notranslate'>base64 --decode</code> command. See the <code class='docutils literal notranslate'>base64</code>(1) man page.</p>
       <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
@@ -317,7 +317,7 @@ Common return values are documented :ref:`here <common_return_values>`, the foll
       </p>
     </div></td>
     <td><div class="ansible-option-cell">
-      <p>Base 64 encoding of the <code class='docutils literal notranslate'>~/.docker/config.json</code> configuration file.</p>
+      <p>Base64 encoding of the <code class='docutils literal notranslate'>~/.docker/config.json</code> configuration file.</p>
       <p>The <code class='docutils literal notranslate'>containers-auth.json</code>(5) man page describe the format of the file.</p>
       <p class="ansible-option-line"><strong class="ansible-option-returned-bold">Returned:</strong> always</p>
       <p class="ansible-option-line ansible-option-sample"><strong class="ansible-option-sample-bold">Sample:</strong> <code class="ansible-value literal notranslate ansible-option-sample">&#34;ewog...Cn0=&#34;</code></p>

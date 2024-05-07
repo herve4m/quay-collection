@@ -220,8 +220,9 @@ argument_specs:
               - List of the user or robot accounts in the team. Use the syntax
                 C(organization)+C(robotshortname) for robot accounts.
               - If the team is synchronized with an LDAP or OIDC group (see the
-                M(quay_team_ldap) and M(quay_team_oidc) modules), then you can
-                only add or remove robot accounts.
+                M(herve4m.quay.quay_team_ldap) and
+                M(herve4m.quay.quay_team_oidc) modules), then you can only add
+                or remove robot accounts.
             type: list
             elements: str
       quay_org_default_perms:
@@ -374,7 +375,8 @@ argument_specs:
                 (read/write).
               - If C(READ_ONLY), then the repository is read-only.
               - If C(MIRROR), then the repository is a mirror and you can
-                configure it by using the M(quay_repository_mirror) module.
+                configure it by using the
+                M(herve4m.quay.quay_repository_mirror) module.
               - You must enable the mirroring capability of your Quay
                 installation to use this I(repo_state) parameter.
             type: str

@@ -4,6 +4,17 @@ Quay Container Registry Collection Release Notes
 
 .. contents:: Topics
 
+v1.3.0
+======
+
+New Plugins
+-----------
+
+Filter
+~~~~~~
+
+- herve4m.quay.quay_docker_config - Build a Docker configuration in JSON format
+
 v1.2.0
 ======
 

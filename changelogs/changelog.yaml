@@ -214,3 +214,10 @@ releases:
       name: quay_team_oidc
       namespace: ''
     release_date: '2024-04-07'
+  1.3.0:
+    plugins:
+      filter:
+      - description: Build a Docker configuration in JSON format
+        name: quay_docker_config
+        namespace: null
+    release_date: '2024-05-07'

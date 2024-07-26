@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2022, Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2022-2024, Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # For accessing the API documentation from a running system, use the swagger-ui
@@ -46,8 +46,8 @@ options:
     description:
       - The client ID associated with the OAuth application to use for
         generating the OAuth access token.
-      - See the M(herve4m.quay.quay_application) module to create an application
-        object and to retrieve the associated client ID.
+      - See the M(herve4m.quay.quay_application) module to create
+        an application object and to retrieve the associated client ID.
     required: true
     type: str
   rights:
@@ -71,6 +71,9 @@ notes:
   - Supports C(check_mode).
   - The generated OAuth access token acts on behalf of the user account you use
     with the module (in I(quay_username)).
+  - The user must have admin rights to the application's organization, by being
+    the creator of this organization, or by belonging to a team with admin
+    rights.
   - The module is not idempotent. Every time you run it, an additional OAuth
     access token is produced. The other OAuth access tokens stay valid.
   - You cannot delete OAuth access tokens.
@@ -83,8 +86,9 @@ EXAMPLES = r"""
   herve4m.quay.quay_api_token:
     quay_username: lvasquez
     quay_password: vs9mrD55NP
-    # The OAuth application must exist. See the following example that shows
-    # how to create an organization and an application.
+    # The OAuth application must exist, and the user must have admin rights
+    # to the organization that hosts the application. See the following example
+    # that shows how to create an organization, a team, and an application.
     client_id: PZ6F80R1LCVPGYNZGSZQ
     rights:
       - org:admin
@@ -97,9 +101,11 @@ EXAMPLES = r"""
     msg: "The OAuth access token is: {{ token_details['access_token'] }}"
 
 # The following example creates an organization, an OAuth application, a user
-# account, and then generates an OAuth access token for that user account.
+# account, and a team, and then generates an OAuth access token for this user
+# account.
+# The team grants organization admin rights to the user.
 # The OAuth access token of an existing super user is required to create the
-# organization, the application, and the user account.
+# organization, the application, the user account, and the team.
 - name: Ensure the organization exists
   herve4m.quay.quay_organization:
     name: production
@@ -108,7 +114,7 @@ EXAMPLES = r"""
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-- name: Ensure the application extapp exists
+- name: Ensure the extapp application exists
   herve4m.quay.quay_application:
     organization: production
     name: extapp
@@ -122,6 +128,17 @@ EXAMPLES = r"""
     username: jziglar
     password: i45fR38GhY
     email: jziglar@example.com
+    state: present
+    quay_host: https://quay.example.com
+    quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+
+- name: Ensure the operators team exists in the production organization
+  herve4m.quay.quay_team:
+    name: operators
+    organization: production
+    role: admin
+    members:
+      - jziglar
     state: present
     quay_host: https://quay.example.com
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7

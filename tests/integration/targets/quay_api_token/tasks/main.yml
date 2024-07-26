@@ -44,10 +44,6 @@
     validate_certs: false
   register: app_details
 
-- name: Pause for 5 seconds
-  ansible.builtin.pause:
-    seconds: 5
-
 - name: Generate an OAuth access token for the user
   herve4m.quay.quay_api_token:
     quay_username: ansibletestuser1

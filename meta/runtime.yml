@@ -2,7 +2,6 @@
 requires_ansible: ">=2.15.0"
 action_groups:
   quay:
-    - quay_api_token
     - quay_application
     - quay_default_perm
     - quay_docker_token

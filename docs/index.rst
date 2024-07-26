@@ -1,7 +1,7 @@
 
 
 .. meta::
-  :antsibull-docs: 2.11.0
+  :antsibull-docs: 2.12.0
 
 
 .. _plugins_in_herve4m.quay:
@@ -9,7 +9,7 @@
 Herve4M.Quay
 ============
 
-Collection version 1.3.0
+Collection version 1.3.1
 
 .. contents::
    :local:

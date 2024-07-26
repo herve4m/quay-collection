@@ -7,7 +7,7 @@
     :trim:
 
 .. meta::
-  :antsibull-docs: 2.11.0
+  :antsibull-docs: 2.12.0
 
 .. Anchors
 
@@ -23,7 +23,7 @@ herve4m.quay.quay_api_token module -- Create OAuth access tokens for accessing t
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.3.0).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.3.1).
 
     It is not included in ``ansible-core``.
     To check whether it is installed, run :code:`ansible-galaxy collection list`.
@@ -206,6 +206,7 @@ Notes
 .. note::
    - Supports \ :literal:`check\_mode`\ .
    - The generated OAuth access token acts on behalf of the user account you use with the module (in \ :emphasis:`quay\_username`\ ).
+   - The user must have admin rights to the application's organization, by being the creator of this organization, or by belonging to a team with admin rights.
    - The module is not idempotent. Every time you run it, an additional OAuth access token is produced. The other OAuth access tokens stay valid.
    - You cannot delete OAuth access tokens.
 
@@ -224,8 +225,9 @@ Examples
       herve4m.quay.quay_api_token:
         quay_username: lvasquez
         quay_password: vs9mrD55NP
-        # The OAuth application must exist. See the following example that shows
-        # how to create an organization and an application.
+        # The OAuth application must exist, and the user must have admin rights
+        # to the organization that hosts the application. See the following example
+        # that shows how to create an organization, a team, and an application.
         client_id: PZ6F80R1LCVPGYNZGSZQ
         rights:
           - org:admin
@@ -238,9 +240,11 @@ Examples
         msg: "The OAuth access token is: {{ token_details['access_token'] }}"
 
     # The following example creates an organization, an OAuth application, a user
-    # account, and then generates an OAuth access token for that user account.
+    # account, and a team, and then generates an OAuth access token for this user
+    # account.
+    # The team grants organization admin rights to the user.
     # The OAuth access token of an existing super user is required to create the
-    # organization, the application, and the user account.
+    # organization, the application, the user account, and the team.
     - name: Ensure the organization exists
       herve4m.quay.quay_organization:
         name: production
@@ -249,7 +253,7 @@ Examples
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
 
-    - name: Ensure the application extapp exists
+    - name: Ensure the extapp application exists
       herve4m.quay.quay_application:
         organization: production
         name: extapp
@@ -263,6 +267,17 @@ Examples
         username: jziglar
         password: i45fR38GhY
         email: jziglar@example.com
+        state: present
+        quay_host: https://quay.example.com
+        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+
+    - name: Ensure the operators team exists in the production organization
+      herve4m.quay.quay_team:
+        name: operators
+        organization: production
+        role: admin
+        members:
+          - jziglar
         state: present
         quay_host: https://quay.example.com
         quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7

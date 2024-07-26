@@ -4,6 +4,20 @@ Quay Container Registry Collection Release Notes
 
 .. contents:: Topics
 
+v1.3.1
+======
+
+Release Summary
+---------------
+
+Testing against Quay v3.12.0.
+
+Minor Changes
+-------------
+
+- herve4m.quay.quay_api_token - remove from the parameter group, because the options are different for this module.
+- herve4m.quay.quay_api_token - update the documentation to indicate that the user must have admin rights to the organization.
+
 v1.3.0
 ======
 

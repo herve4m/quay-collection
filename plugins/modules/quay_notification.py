@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2021, 2022, Herve Quatremain <rv4m@yahoo.co.uk>
+# Copyright: (c) 2021, 2022, 2024 Herve Quatremain <rv4m@yahoo.co.uk>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # For accessing the API documentation from a running system, use the swagger-ui
@@ -60,6 +60,7 @@ options:
       - repo_mirror_sync_started
       - repo_mirror_sync_success
       - repo_mirror_sync_failed
+      - repo_image_expiry
   method:
     description:
       - Notification method. Each method requires a specific set of options
@@ -132,6 +133,13 @@ options:
       - low
       - negligible
       - unknown
+  image_expiry_days:
+    description:
+      - Only used when I(event) is C(repo_image_expiry).
+      - The notification is triggered when the image expires in the specified
+        number of days.
+    type: int
+    default: 7
   regexp:
     description:
       - The regular expression to search in the title of the existing
@@ -187,6 +195,11 @@ options:
     choices: [absent, present]
 notes:
   - Supports C(check_mode).
+  - Your Quay administrator must enable the image garbage collection capability
+    of your Quay installation (C(FEATURE_GARBAGE_COLLECTION) in C(config.yaml))
+    to use the C(repo_image_expiry) event.
+  - Using the C(repo_image_expiry) event and the I(image_expiry_days) parameter
+    requires Quay version 3.12 or later.
   - The user account associated with the token that you provide in
     I(quay_token) must have administrator access to the repository.
 extends_documentation_fragment:
@@ -216,6 +229,22 @@ EXAMPLES = r"""
     title: Webhook notification on critical image vulnerability
     event: vulnerability_found
     vulnerability_level: critical
+    method: webhook
+    config:
+      url: https://webhook.example.com/webhook/12345
+      template: "{{ lookup('file', 'post.json') | string }}"
+    state: present
+    quay_host: https://quay.example.com
+    quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+
+# You must enable the image garbage collection capability of your Quay
+# installation (3.12 or later) to use the repo_image_expiry event.
+- name: Ensure notification exists for when an image is going to expire
+  herve4m.quay.quay_notification:
+    repository: production/smallimage
+    title: Webhook notification 10 days before an image expires
+    event: repo_image_expiry
+    image_expiry_days: 10
     method: webhook
     config:
       url: https://webhook.example.com/webhook/12345
@@ -306,6 +335,7 @@ def main():
                 "repo_mirror_sync_started",
                 "repo_mirror_sync_success",
                 "repo_mirror_sync_failed",
+                "repo_image_expiry",
             ]
         ),
         method=dict(
@@ -319,6 +349,7 @@ def main():
             ]
         ),
         vulnerability_level=dict(choices=vulnerability_level_names),
+        image_expiry_days=dict(type="int", default=7),
         config=dict(
             type="dict",
             options=dict(
@@ -386,6 +417,7 @@ def main():
     reset_failcount = module.params.get("reset_failcount")
     state = module.params.get("state")
     vulnerability_level = module.params.get("vulnerability_level")
+    image_expiry_days = module.params.get("image_expiry_days")
 
     # Extract namespace and repository from the repository parameter
     my_name = module.who_am_i()
@@ -454,6 +486,19 @@ def main():
     #         "url": "https://hooks.slack.com/services/XXX/YYY/ZZZ"
     #       },
     #       "event_config": {},
+    #       "number_of_failures": 0
+    #     },
+    #     {
+    #       "uuid": "d5e8976c-0ac1-4792-be9e-58d4261b2cf8",
+    #       "title": "Send notification on push to Slack 2",
+    #       "event": "repo_image_expiry",
+    #       "method": "slack",
+    #       "config": {
+    #         "url": "https://hooks.slack.com/services/AAA/BBB/CCC"
+    #       },
+    #       "event_config": {
+    #         "days": 10
+    #       },
     #       "number_of_failures": 0
     #     }
     #   ]
@@ -531,7 +576,7 @@ def main():
             )
 
         # Gather and verify the parameters
-        new_fields = {"eventConfig": {}, "config": {}}
+        new_fields = {"eventConfig": {}, "event_config": {}, "config": {}}
         missing_parameters = []
         if title:
             new_fields["title"] = title
@@ -665,8 +710,12 @@ def main():
                 )
 
         if event == "vulnerability_found" and vulnerability_level is not None:
-            new_fields["eventConfig"]["level"] = str(
+            new_fields["eventConfig"]["level"] = new_fields["event_config"]["level"] = str(
                 vulnerability_level_names.index(vulnerability_level)
+            )
+        elif event == "repo_image_expiry":
+            new_fields["eventConfig"]["days"] = new_fields["event_config"]["days"] = int(
+                image_expiry_days
             )
 
         match_notifications.append(

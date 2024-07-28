@@ -4,6 +4,19 @@ Quay Container Registry Collection Release Notes
 
 .. contents:: Topics
 
+v1.4.0
+======
+
+Release Summary
+---------------
+
+Adding the ``repo_image_expiry`` event to the ``herve4m.quay.quay_notification`` module.
+
+Minor Changes
+-------------
+
+- herve4m.quay.quay_notification - New ``repo_image_expiry`` event and new ``image_expiry_days`` parameter (Quay 3.12)
+
 v1.3.1
 ======
 

@@ -23,7 +23,7 @@ herve4m.quay.quay_notification module -- Manage Quay Container Registry reposito
 .. Collection note
 
 .. note::
-    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.3.1).
+    This module is part of the `herve4m.quay collection <https://galaxy.ansible.com/ui/repo/published/herve4m/quay/>`_ (version 1.4.0).
 
     It is not included in ``ansible-core``.
     To check whether it is installed, run :code:`ansible-galaxy collection list`.
@@ -230,11 +230,27 @@ Parameters
         <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;repo_mirror_sync_started&#34;</code></p></li>
         <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;repo_mirror_sync_success&#34;</code></p></li>
         <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;repo_mirror_sync_failed&#34;</code></p></li>
+        <li><p><code class="ansible-value literal notranslate ansible-option-choices-entry">&#34;repo_image_expiry&#34;</code></p></li>
       </ul>
 
     </div></td>
   </tr>
   <tr class="row-even">
+    <td><div class="ansible-option-cell">
+      <div class="ansibleOptionAnchor" id="parameter-image_expiry_days"></div>
+      <p class="ansible-option-title"><strong>image_expiry_days</strong></p>
+      <a class="ansibleOptionLink" href="#parameter-image_expiry_days" title="Permalink to this option"></a>
+      <p class="ansible-option-type-line">
+        <span class="ansible-option-type">integer</span>
+      </p>
+    </div></td>
+    <td><div class="ansible-option-cell">
+      <p>Only used when <em>event</em> is <code class='docutils literal notranslate'>repo_image_expiry</code>.</p>
+      <p>The notification is triggered when the image expires in the specified number of days.</p>
+      <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-value literal notranslate ansible-option-default">7</code></p>
+    </div></td>
+  </tr>
+  <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-method"></div>
       <p class="ansible-option-title"><strong>method</strong></p>
@@ -258,7 +274,7 @@ Parameters
 
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-quay_host"></div>
       <p class="ansible-option-title"><strong>quay_host</strong></p>
@@ -274,7 +290,7 @@ Parameters
       <p class="ansible-option-line"><strong class="ansible-option-default-bold">Default:</strong> <code class="ansible-value literal notranslate ansible-option-default">&#34;http://127.0.0.1&#34;</code></p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-quay_password"></div>
       <p class="ansible-option-title"><strong>quay_password</strong></p>
@@ -290,7 +306,7 @@ Parameters
       <p>Mutually exclusive with <em>quay_token</em>.</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-quay_token"></div>
       <p class="ansible-option-title"><strong>quay_token</strong></p>
@@ -305,7 +321,7 @@ Parameters
       <p>Mutually exclusive with <em>quay_username</em> and <em>quay_password</em>.</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-quay_username"></div>
       <p class="ansible-option-title"><strong>quay_username</strong></p>
@@ -321,7 +337,7 @@ Parameters
       <p>Mutually exclusive with <em>quay_token</em>.</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-regexp"></div>
       <div class="ansibleOptionAnchor" id="parameter-regex"></div>
@@ -341,7 +357,7 @@ Parameters
       <p>Mutually exclusive with <em>search_string</em>.</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-repository"></div>
       <p class="ansible-option-title"><strong>repository</strong></p>
@@ -356,7 +372,7 @@ Parameters
       <p>If you omit the namespace part in the name, then the module looks for the repository in your personal namespace.</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-reset_failcount"></div>
       <p class="ansible-option-title"><strong>reset_failcount</strong></p>
@@ -375,7 +391,7 @@ Parameters
 
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-search_string"></div>
       <p class="ansible-option-title"><strong>search_string</strong></p>
@@ -391,7 +407,7 @@ Parameters
       <p>Mutually exclusive with <em>regexp</em>.</p>
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-state"></div>
       <p class="ansible-option-title"><strong>state</strong></p>
@@ -413,7 +429,7 @@ Parameters
 
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-test"></div>
       <p class="ansible-option-title"><strong>test</strong></p>
@@ -432,7 +448,7 @@ Parameters
 
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-title"></div>
       <p class="ansible-option-title"><strong>title</strong></p>
@@ -445,7 +461,7 @@ Parameters
       <p>Notification title.</p>
     </div></td>
   </tr>
-  <tr class="row-even">
+  <tr class="row-odd">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-validate_certs"></div>
       <div class="ansibleOptionAnchor" id="parameter-verify_ssl"></div>
@@ -468,7 +484,7 @@ Parameters
 
     </div></td>
   </tr>
-  <tr class="row-odd">
+  <tr class="row-even">
     <td><div class="ansible-option-cell">
       <div class="ansibleOptionAnchor" id="parameter-vulnerability_level"></div>
       <p class="ansible-option-title"><strong>vulnerability_level</strong></p>
@@ -507,6 +523,8 @@ Notes
 
 .. note::
    - Supports \ :literal:`check\_mode`\ .
+   - Your Quay administrator must enable the image garbage collection capability of your Quay installation (\ :literal:`FEATURE\_GARBAGE\_COLLECTION`\  in \ :literal:`config.yaml`\ ) to use the \ :literal:`repo\_image\_expiry`\  event.
+   - Using the \ :literal:`repo\_image\_expiry`\  event and the \ :emphasis:`image\_expiry\_days`\  parameter requires Quay version 3.12 or later.
    - The user account associated with the token that you provide in \ :emphasis:`quay\_token`\  must have administrator access to the repository.
 
 .. Seealso
@@ -541,6 +559,22 @@ Examples
         title: Webhook notification on critical image vulnerability
         event: vulnerability_found
         vulnerability_level: critical
+        method: webhook
+        config:
+          url: https://webhook.example.com/webhook/12345
+          template: "{{ lookup('file', 'post.json') | string }}"
+        state: present
+        quay_host: https://quay.example.com
+        quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
+
+    # You must enable the image garbage collection capability of your Quay
+    # installation (3.12 or later) to use the repo_image_expiry event.
+    - name: Ensure notification exists for when an image is going to expire
+      herve4m.quay.quay_notification:
+        repository: production/smallimage
+        title: Webhook notification 10 days before an image expires
+        event: repo_image_expiry
+        image_expiry_days: 10
         method: webhook
         config:
           url: https://webhook.example.com/webhook/12345

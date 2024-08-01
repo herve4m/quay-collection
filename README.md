@@ -9,45 +9,58 @@ The collection provides modules for managing your Quay Container Registry deploy
 
 ## Included Content
 
-The modules have been tested against versions 3.10, 3.11, and 3.12 of Quay Container Registry.
+After you install the collection, use the `ansible-doc` command to access the collection documentation.
 
 ### Modules
+
+Run the `ansible-doc -l herve4m.quay` command to list the modules that the collection provides.
+For accessing the documentation of a module, use the `ansible-doc herve4m.quay.<module-name>` command.
+
+You can also access the documentation from [Ansible Galaxy](https://galaxy.ansible.com/ui/repo/published/herve4m/quay/docs/).
+
 Name | Description
 ---: | :---
-[quay_api_token](https://github.com/herve4m/quay-collection/blob/main/docs/quay_api_token_module.rst) |  Create OAuth access tokens for accessing the Quay Container Registry API
-[quay_application](https://github.com/herve4m/quay-collection/blob/main/docs/quay_application_module.rst) |  Manage Quay Container Registry applications
-[quay_default_perm](https://github.com/herve4m/quay-collection/blob/main/docs/quay_default_perm_module.rst) |  Manage Quay Container Registry default repository permissions
-[quay_docker_token](https://github.com/herve4m/quay-collection/blob/main/docs/quay_docker_token_module.rst) |  Manage tokens for accessing Quay Container Registry repositories
-[quay_first_user](https://github.com/herve4m/quay-collection/blob/main/docs/quay_first_user_module.rst) |  Create the first user account
-[quay_layer_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_layer_info_module.rst) |  Gather information about image layers in Quay Container Registry
-[quay_manifest_label](https://github.com/herve4m/quay-collection/blob/main/docs/quay_manifest_label_module.rst) |  Manage Quay Container Registry image manifest labels
-[quay_manifest_label_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_manifest_label_info_module.rst) |  Gather information about manifest labels in Quay Container Registry
-[quay_message](https://github.com/herve4m/quay-collection/blob/main/docs/quay_message_module.rst) |  Manage Quay Container Registry global messages
-[quay_notification](https://github.com/herve4m/quay-collection/blob/main/docs/quay_notification_module.rst) |  Manage Quay Container Registry repository notifications
-[quay_organization](https://github.com/herve4m/quay-collection/blob/main/docs/quay_organization_module.rst) |  Manage Quay Container Registry organizations
-[quay_proxy_cache](https://github.com/herve4m/quay-collection/blob/main/docs/quay_proxy_cache_module.rst) |  Manage Quay Container Registry proxy cache configurations
-[quay_quota](https://github.com/herve4m/quay-collection/blob/main/docs/quay_quota_module.rst) |  Manage Quay Container Registry organizations quota
-[quay_repository](https://github.com/herve4m/quay-collection/blob/main/docs/quay_repository_module.rst) |  Manage Quay Container Registry repositories
-[quay_repository_mirror](https://github.com/herve4m/quay-collection/blob/main/docs/quay_repository_mirror_module.rst) |  Manage Quay Container Registry repository mirrors
-[quay_robot](https://github.com/herve4m/quay-collection/blob/main/docs/quay_robot_module.rst) |  Manage Quay Container Registry robot accounts
-[quay_tag](https://github.com/herve4m/quay-collection/blob/main/docs/quay_tag_module.rst) | Manage Quay Container Registry image tags
-[quay_tag_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_tag_info_module.rst) |  Gather information about tags in a Quay Container Registry repository
-[quay_team](https://github.com/herve4m/quay-collection/blob/main/docs/quay_team_module.rst) |  Manage Quay Container Registry teams
-[quay_team_ldap](https://github.com/herve4m/quay-collection/blob/main/docs/quay_team_ldap_module.rst) |  Synchronize Quay Container Registry teams with LDAP groups
-[quay_team_oidc](https://github.com/herve4m/quay-collection/blob/main/docs/quay_team_oidc_module.rst) |  Synchronize Quay Container Registry teams with OIDC groups
-[quay_user](https://github.com/herve4m/quay-collection/blob/main/docs/quay_user_module.rst) |  Manage Quay Container Registry users
-[quay_vulnerability_info](https://github.com/herve4m/quay-collection/blob/main/docs/quay_vulnerability_info_module.rst) | Gather information about image vulnerabilities in Quay Container Registry
+`quay_api_token` |          Create OAuth access tokens for accessing the Quay Container Registry API
+`quay_application` |        Manage Quay Container Registry applications
+`quay_default_perm` |       Manage Quay Container Registry default repository permissions
+`quay_docker_token` |       Manage tokens for accessing Quay Container Registry repositories
+`quay_first_user` |         Create the first user account
+`quay_layer_info` |         Gather information about image layers in Quay Container Registry
+`quay_manifest_label` |     Manage Quay Container Registry image manifest labels
+`quay_manifest_label_info` | Gather information about manifest labels in Quay Container Registry
+`quay_message` |            Manage Quay Container Registry global messages
+`quay_notification` |       Manage Quay Container Registry repository notifications
+`quay_organization` |       Manage Quay Container Registry organizations
+`quay_proxy_cache` |        Manage Quay Container Registry proxy cache configurations
+`quay_quota` |              Manage Quay Container Registry organizations quota
+`quay_repository` |         Manage Quay Container Registry repositories
+`quay_repository_mirror` |  Manage Quay Container Registry repository mirror configurations
+`quay_robot` |              Manage Quay Container Registry robot accounts
+`quay_tag` |                Manage Quay Container Registry image tags
+`quay_tag_info` |           Gather information about tags in a Quay Container Registry repository
+`quay_team` |               Manage Quay Container Registry teams
+`quay_team_ldap` |          Synchronize Quay Container Registry teams with LDAP groups
+`quay_team_oidc` |          Synchronize Quay Container Registry teams with OIDC groups
+`quay_user` |               Manage Quay Container Registry users
+
 
 ### Jinja2 Filters
+
+Run the `ansible-doc -t filter -l herve4m.quay` command to list the filters that the collection provides.
+For accessing the documentation of a filter, use the `ansible-doc -t filter herve4m.quay.<filter-name>` command.
+
 Name | Description
 ---: | :---
-[quay_docker_config](https://github.com/herve4m/quay-collection/blob/main/docs/quay_docker_config_filter.rst) |  Build a Docker configuration in JSON format
+`quay_docker_config` |  Build a Docker configuration in JSON format
 
 ### Roles
+
+Run the `ansible-doc -t role -l herve4m.quay` command to list the roles that the collection provides.
+For accessing the documentation of a role, use the `ansible-doc -t role herve4m.quay.<role-name>` command.
+
 Name | Description
 ---: | :---
-[quay_org](https://github.com/herve4m/quay-collection/blob/main/roles/quay_org/README.md) ([variables](https://github.com/herve4m/quay-collection/blob/main/docs/quay_org_role.rst)) | Create and configure a Quay Container Registry organization | [quay_org](https://github.com/herve4m/quay-collection/blob/main/docs/quay_org_role.rst)
-
+`quay_org` | Create and configure a Quay Container Registry organization
 
 ## Installing the Collection
 

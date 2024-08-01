@@ -21,7 +21,7 @@ jobs:
         working-directory: ./ansible_collections/herve4m/quay/tests
 
       - name: Deploy Quay
-        run: docker-compose up -d
+        run: docker compose up -d
         working-directory: ./ansible_collections/herve4m/quay/tests
 
       - uses: actions/setup-python@v5

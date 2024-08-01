@@ -22,7 +22,7 @@ jobs:
           python-version: '3.11'
 
       - name: Install required packages
-        run: pip install -Iv ansible
+        run: pip install -Iv ansible antsibull-docs
 
       - uses: actions/checkout@v4
         with:
@@ -33,4 +33,9 @@ jobs:
           ANSIBLE_TEST_PREFER_PODMAN=1 ansible-test sanity
           --docker default -v --color
         working-directory: ./ansible_collections/herve4m/quay
+
+      - name: Lint documentation
+        run: >
+          antsibull-docs lint-collection-docs --plugin-docs
+          ./ansible_collections/herve4m/quay
 ...

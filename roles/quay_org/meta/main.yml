@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  author: Hervé Quatremain <rv4m@yahoo.co.uk>
+  author: Hervé Quatremain <herve.quatremain@redhat.com>
   description: Create and configure a Quay Container Registry organization
   license: GPL-3.0-or-later
   min_ansible_version: "2.1"

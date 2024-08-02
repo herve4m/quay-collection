@@ -1,7 +1,6 @@
 # Quay Container Registry Collection for Ansible
 
-[![Code Linting](https://github.com/herve4m/quay-collection/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/herve4m/quay-collection/actions/workflows/pre-commit.yml)
-[![Sanity Test](https://github.com/herve4m/quay-collection/actions/workflows/ansible-sanity.yml/badge.svg)](https://github.com/herve4m/quay-collection/actions/workflows/ansible-sanity.yml)
+[![Sanity Test](https://github.com/herve4m/quay-collection/actions/workflows/pre-commit-sanity.yml/badge.svg)](https://github.com/herve4m/quay-collection/actions/workflows/pre-commit-sanity.yml)
 [![Integration Test](https://github.com/herve4m/quay-collection/actions/workflows/ansible-integration.yml/badge.svg)](https://github.com/herve4m/quay-collection/actions/workflows/ansible-integration.yml)
 
 
@@ -181,6 +180,7 @@ When your play calls multiple modules from the collection, you can group common 
 For example, instead of repeating the `quay_host`, `quay_username`, and `quay_password` parameters in each task, you can declare them at the top of your play:
 
 ```yaml
+---
 - name: Creating the development organization and the developers team
   hosts: localhost
 

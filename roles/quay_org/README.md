@@ -155,4 +155,4 @@ GPL 3.0 or later.
 Author Information
 ------------------
 
-This role was created in 2022 by Hervé Quatremain <rv4m@yahoo.co.uk>
+This role was created in 2022 by Hervé Quatremain <herve.quatremain@redhat.com>

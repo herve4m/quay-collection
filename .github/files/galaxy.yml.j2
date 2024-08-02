@@ -1,7 +1,7 @@
 ---
-namespace: herve4m
-name: quay
-version: 1.4.0
+namespace: {{ collection_namespace }}
+name: {{ collection_name }}
+version: {{ collection_version }}
 readme: README.md
 authors:
   - Hervé Quatremain <herve.quatremain@redhat.com>
@@ -12,14 +12,14 @@ tags:
   - application
   - quay
   - registry
-repository: https://github.com/herve4m/quay-collection
+repository: {{ collection_repo }}
 
 # The URL to any online docs
-documentation: https://github.com/herve4m/quay-collection
+documentation: {{ collection_repo }}
 
 # The URL to the home page of the collection/project
-homepage: https://github.com/herve4m/quay-collection
+homepage: {{ collection_repo }}
 
 # The URL to the collection issue tracker
-issues: https://github.com/herve4m/quay-collection/issues
+issues: {{ collection_repo }}/issues
 ...

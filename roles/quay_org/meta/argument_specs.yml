@@ -2,7 +2,7 @@
 argument_specs:
   main:
     author:
-      - Hervé Quatremain <rv4m@yahoo.co.uk>
+      - Hervé Quatremain <herve.quatremain@redhat.com>
     short_description: >
       Create and configure a Quay Container Registry organization
     description:

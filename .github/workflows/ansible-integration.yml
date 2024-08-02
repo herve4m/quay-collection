@@ -26,7 +26,7 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - name: Install required packages
         run: pip install -Iv ansible
@@ -50,7 +50,7 @@ jobs:
           --group-by version
         working-directory: ./ansible_collections/herve4m/quay
 
-      # See the repots at https://codecov.io/gh/herve4m/quay
+      # See the reports at https://codecov.io/gh/herve4m/quay
       - uses: codecov/codecov-action@v4
         with:
           fail_ci_if_error: false

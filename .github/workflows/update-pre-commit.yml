@@ -3,7 +3,7 @@ name: Update pre-commit Configuration
 
 on:
   schedule:
-    - cron: "30 * * * *"
+    - cron: "4 2 * * 0"
 
 jobs:
   pre-commit:

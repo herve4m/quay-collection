@@ -1,7 +1,6 @@
 # Quay Container Registry Collection for Ansible
 
-[![Code Linting](https://github.com/herve4m/quay-collection/actions/workflows/pre-commit.yml/badge.svg)](https://github.com/herve4m/quay-collection/actions/workflows/pre-commit.yml)
-[![Sanity Test](https://github.com/herve4m/quay-collection/actions/workflows/ansible-sanity.yml/badge.svg)](https://github.com/herve4m/quay-collection/actions/workflows/ansible-sanity.yml)
+[![Sanity Test](https://github.com/herve4m/quay-collection/actions/workflows/pre-commit-sanity.yml/badge.svg)](https://github.com/herve4m/quay-collection/actions/workflows/pre-commit-sanity.yml.yml)
 [![Integration Test](https://github.com/herve4m/quay-collection/actions/workflows/ansible-integration.yml/badge.svg)](https://github.com/herve4m/quay-collection/actions/workflows/ansible-integration.yml)
 
 

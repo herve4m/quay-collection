@@ -4,7 +4,7 @@ name: quay
 version: 1.4.0
 readme: README.md
 authors:
-  - Hervé Quatremain <rv4m@yahoo.co.uk>
+  - Hervé Quatremain <herve.quatremain@redhat.com>
 description: Ansible modules to manage Quay Container Registry installations
 license:
   - GPL-3.0-or-later

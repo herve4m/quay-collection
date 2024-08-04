@@ -1,43 +1,33 @@
 ---
-# Supporting organization
-- name: Ensure organization ansibletestorg exists
-  herve4m.quay.quay_organization:
-    name: ansibletestorg
-    email: ansibletestorg@example.com
-    state: present
-    quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
-    validate_certs: false
-
 # Supporting user account
-- name: Ensure ansibletestuser1 user account exists
+- name: Ensure testuser1 user account exists
   herve4m.quay.quay_user:
-    username: ansibletestuser1
+    username: testuser1
     password: vs9mrD55NP
-    email: ansibletestuser1@example.com
+    email: testuser1@example.com
     state: present
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
     validate_certs: false
 
 # Supporting team
-- name: Ensure ansibletestteam1 team exists
+- name: Ensure testteam1 team exists
   herve4m.quay.quay_team:
-    name: ansibletestteam1
+    name: testteam1
     organization: ansibletestorg
     role: admin
     members:
-      - ansibletestuser1
+      - testuser1
     state: present
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
     validate_certs: false
 
 # Supporting application
-- name: Ensure the ansibletestapp1 application exists
+- name: Ensure the testapp11 application exists
   herve4m.quay.quay_application:
     organization: ansibletestorg
-    name: ansibletestapp1
+    name: testapp11
     state: present
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
@@ -46,7 +36,7 @@
 
 - name: Generate an OAuth access token for the user
   herve4m.quay.quay_api_token:
-    quay_username: ansibletestuser1
+    quay_username: testuser1
     quay_password: vs9mrD55NP
     client_id: "{{ app_details['client_id'] }}"
     rights:
@@ -60,18 +50,18 @@
     that: "'access_token' in result"
     fail_msg: The result should have the access_token key
 
-- name: Ensure ansibletestteam1 team is removed
+- name: Ensure testteam1 team is removed
   herve4m.quay.quay_team:
-    name: ansibletestteam1
+    name: testteam1
     organization: ansibletestorg
     state: absent
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
     validate_certs: false
 
-- name: Ensure ansibletestuser1 user account is removed
+- name: Ensure testuser1 user account is removed
   herve4m.quay.quay_user:
-    username: ansibletestuser1
+    username: testuser1
     state: absent
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
@@ -80,19 +70,9 @@
 - name: Ensure the application is removed
   herve4m.quay.quay_application:
     organization: ansibletestorg
-    name: ansibletestapp1
+    name: testapp11
     state: absent
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
-    validate_certs: false
-
-- name: Ensure the organization is removed
-  herve4m.quay.quay_organization:
-    name: ansibletestorg
-    state: absent
-    quay_host: "{{ quay_url }}"
-    # For testing, authenticating with username/password instead of the token
-    quay_username: "{{ admin_username }}"
-    quay_password: "{{ admin_password }}"
     validate_certs: false
 ...

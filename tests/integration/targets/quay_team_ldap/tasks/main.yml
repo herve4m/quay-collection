@@ -2,29 +2,10 @@
 # Expecting user1, user2, user3, and user4 from LDAP
 # Expecting cn=group1,ou=users and cn=group2,ou=users from LDAP
 
-# Supporting organization
-- name: Ensure organization ansibletestorg exists
-  herve4m.quay.quay_organization:
-    name: ansibletestorg
-    email: ansibletestorg@example.com
-    state: present
-    quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
-    validate_certs: false
-
-# Supporting robot account
-- name: Ensure the robot account exists
-  herve4m.quay.quay_robot:
-    name: ansibletestorg+ansibletestrobot1
-    state: present
-    quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
-    validate_certs: false
-
 # Supporting team
-- name: Ensure team ansibletestteam1 exists
+- name: Ensure team testteam1 exists
   herve4m.quay.quay_team:
-    name: ansibletestteam1
+    name: testteam1
     organization: ansibletestorg
     state: present
     role: creator
@@ -34,9 +15,9 @@
     quay_token: "{{ quay_token }}"
     validate_certs: false
 
-- name: Ensure team ansibletestteam1 is not synchronized (no change)
+- name: Ensure team testteam1 is not synchronized (no change)
   herve4m.quay.quay_team_ldap:
-    name: ansibletestteam1
+    name: testteam1
     organization: ansibletestorg
     sync: false
     quay_host: "{{ quay_url }}"
@@ -49,9 +30,9 @@
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
-- name: Ensure team ansibletestteam1 is synchronized (group1)
+- name: Ensure team testteam1 is synchronized (group1)
   herve4m.quay.quay_team_ldap:
-    name: ansibletestteam1
+    name: testteam1
     organization: ansibletestorg
     sync: true
     group_dn: cn=group1,ou=users
@@ -59,9 +40,9 @@
     quay_token: "{{ quay_token }}"
     validate_certs: false
 
-- name: Ensure team ansibletestteam1 is synchronized (no change)
+- name: Ensure team testteam1 is synchronized (no change)
   herve4m.quay.quay_team_ldap:
-    name: ansibletestteam1
+    name: testteam1
     organization: ansibletestorg
     group_dn: cn=group1,ou=users
     quay_host: "{{ quay_url }}"
@@ -74,9 +55,9 @@
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
-- name: Ensure team ansibletestteam1 synchronization is updated (group2)
+- name: Ensure team testteam1 synchronization is updated (group2)
   herve4m.quay.quay_team_ldap:
-    name: ansibletestteam1
+    name: testteam1
     organization: ansibletestorg
     sync: true
     group_dn: cn=group2,ou=users
@@ -84,9 +65,9 @@
     quay_token: "{{ quay_token }}"
     validate_certs: false
 
-- name: Ensure team ansibletestteam1 is not synchronized anymore
+- name: Ensure team testteam1 is not synchronized anymore
   herve4m.quay.quay_team_ldap:
-    name: ansibletestteam1
+    name: testteam1
     organization: ansibletestorg
     sync: false
     group_dn: cn=group1,ou=users
@@ -95,9 +76,9 @@
     quay_token: "{{ quay_token }}"
     validate_certs: false
 
-- name: Ensure team ansibletestteam1 is not synchronized anymore (no change)
+- name: Ensure team testteam1 is not synchronized anymore (no change)
   herve4m.quay.quay_team_ldap:
-    name: ansibletestteam1
+    name: testteam1
     organization: ansibletestorg
     sync: false
     quay_host: "{{ quay_url }}"
@@ -110,30 +91,12 @@
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
-- name: Ensure the ansibletestteam1 team is removed
+- name: Ensure the testteam1 team is removed
   herve4m.quay.quay_team:
-    name: ansibletestteam1
+    name: testteam1
     organization: ansibletestorg
     state: absent
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
-    validate_certs: false
-
-- name: Ensure the robot account is removed
-  herve4m.quay.quay_robot:
-    name: ansibletestorg+ansibletestrobot1
-    state: absent
-    quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
-    validate_certs: false
-
-- name: Ensure the organization is removed
-  herve4m.quay.quay_organization:
-    name: ansibletestorg
-    state: absent
-    quay_host: "{{ quay_url }}"
-    # For testing, authenticating with username/password instead of the token
-    quay_username: "{{ admin_username }}"
-    quay_password: "{{ admin_password }}"
     validate_certs: false
 ...

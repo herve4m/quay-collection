@@ -6,8 +6,8 @@
     quay_org_host: "{{ quay_url }}"
     quay_org_token: "{{ quay_token }}"
     quay_org_validate_certs: false
-    quay_org_name: ansibletestorg
-    quay_org_email: ansibletestorg@example.com
+    quay_org_name: testorg
+    quay_org_email: testorg@example.com
     quay_org_auto_prune_method: tags
     quay_org_auto_prune_value: 15
     quay_org_cache_registry: public.ecr.aws/nginx
@@ -17,70 +17,70 @@
     quay_org_warning_pct: 90
     quay_org_reject_pct: 97
     quay_org_users:
-      - username: ansibletestuser1
-        email: ansibletestuser1@example.com
+      - username: testuser1
+        email: testuser1@example.com
         password: vs9mrD55NP
-      - username: ansibletestuser2
-        email: ansibletestuser2@example.com
-      - username: ansibletestuser3
-        email: ansibletestuser3@example.com
+      - username: testuser2
+        email: testuser2@example.com
+      - username: testuser3
+        email: testuser3@example.com
     quay_org_robots:
-      - name: ansibletestrobot1
+      - name: testrobot1
         description: Test robot 1
     quay_org_teams:
-      - name: ansibletestteam1
+      - name: testteam1
         description: Test team 1
         role: member
         members:
-          - ansibletestuser1
-      - name: ansibletestteam2
+          - testuser1
+      - name: testteam2
         role: creator
         members:
-          - ansibletestuser2
-          - ansibletestorg+ansibletestrobot1
+          - testuser2
+          - testorg+testrobot1
     quay_org_default_perms:
-      - name: ansibletestteam2
+      - name: testteam2
         type: team
         role: write
-      - name: ansibletestuser1
+      - name: testuser1
         type: user
         role: read
-        creator: ansibletestuser3
+        creator: testuser3
     quay_org_applications:
-      - name: ansibletestapp1
+      - name: testapp1
         description: Test application 1
-      - name: ansibletestapp2
+      - name: testapp2
         application_uri: http://test.example.com
         redirect_uri: http://test.example.com
         avatar_email: http://test.example.com
     quay_org_repositories:
-      - name: ansibletestrepo1
+      - name: testrepo1
         description: Test repository 1
         visibility: public
         auto_prune_method: date
         auto_prune_value: 10w
         perms:
-          - name: ansibletestteam1
+          - name: testteam1
             type: team
             role: read
-      - name: ansibletestrepo2
+      - name: testrepo2
 
 # Cleanup (by using quay_username and quay_password for testing purpose)
 - name: Ensure repositories are removed
   herve4m.quay.quay_repository:
-    name: "ansibletestorg/{{ item }}"
+    name: "testorg/{{ item }}"
     state: absent
     quay_host: "{{ quay_url }}"
     quay_username: "{{ admin_username }}"
     quay_password: "{{ admin_password }}"
     validate_certs: false
   loop:
-    - ansibletestrepo1
-    - ansibletestrepo2
+    - testrepo1
+    - testrepo2
 
 - name: Ensure the applications are removed
   herve4m.quay.quay_application:
-    organization: ansibletestorg
+    organization: testorg
     name: "{{ item }}"
     state: absent
     quay_host: "{{ quay_url }}"
@@ -88,25 +88,25 @@
     quay_password: "{{ admin_password }}"
     validate_certs: false
   loop:
-    - ansibletestapp1
-    - ansibletestapp2
+    - testapp1
+    - testapp2
 
 - name: Ensure the teams are removed
   herve4m.quay.quay_team:
     name: "{{ item }}"
-    organization: ansibletestorg
+    organization: testorg
     state: absent
     quay_host: "{{ quay_url }}"
     quay_username: "{{ admin_username }}"
     quay_password: "{{ admin_password }}"
     validate_certs: false
   loop:
-    - ansibletestteam1
-    - ansibletestteam2
+    - testteam1
+    - testteam2
 
 - name: Ensure the robot accounts are removed
   herve4m.quay.quay_robot:
-    name: ansibletestorg+ansibletestrobot1
+    name: testorg+testrobot1
     state: absent
     quay_host: "{{ quay_url }}"
     quay_username: "{{ admin_username }}"
@@ -122,13 +122,13 @@
     quay_password: "{{ admin_password }}"
     validate_certs: false
   loop:
-    - ansibletestuser1
-    - ansibletestuser2
-    - ansibletestuser3
+    - testuser1
+    - testuser2
+    - testuser3
 
 - name: Ensure the proxy cache configuration is removed
   herve4m.quay.quay_proxy_cache:
-    organization: ansibletestorg
+    organization: testorg
     state: absent
     quay_host: "{{ quay_url }}"
     quay_username: "{{ admin_username }}"
@@ -137,9 +137,10 @@
 
 - name: Ensure the organization is removed
   herve4m.quay.quay_organization:
-    name: ansibletestorg
+    name: testorg
     state: absent
     quay_host: "{{ quay_url }}"
     quay_username: "{{ admin_username }}"
     quay_password: "{{ admin_password }}"
     validate_certs: false
+...

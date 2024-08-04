@@ -1,53 +1,16 @@
 ---
-# Supporting organization
-- name: Ensure organization ansibletestorg exists
-  herve4m.quay.quay_organization:
-    name: ansibletestorg
-    email: ansibletestorg@example.com
-    state: present
-    quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
-    validate_certs: false
-
-# Supporting user accounts
-- name: Ensure user accounts exist
-  herve4m.quay.quay_user:
-    username: "{{ item }}"
-    email: "{{ item }}@example.com"
-    state: present
-    quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
-    validate_certs: false
-  loop:
-    - ansibletestuser1
-    - ansibletestuser2
-    - ansibletestuser3
-    - ansibletestuser4
-
-# Supporting robot accounts
-- name: Ensure the robot accounts exist
-  herve4m.quay.quay_robot:
-    name: "{{ item }}"
-    state: present
-    quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
-    validate_certs: false
-  loop:
-    - ansibletestorg+ansibletestrobot1
-    - ansibletestorg+ansibletestrobot2
-
-- name: Ensure team ansibletestteam1 exists
+- name: Ensure team testteam1 exists
   herve4m.quay.quay_team:
-    name: ansibletestteam1
+    name: testteam1
     organization: ansibletestorg
     state: present
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
     validate_certs: false
 
-- name: Ensure team ansibletestteam2 exists
+- name: Ensure team testteam2 exists
   herve4m.quay.quay_team:
-    name: ansibletestteam2
+    name: testteam2
     organization: ansibletestorg
     description: |
        # Team 2
@@ -64,9 +27,9 @@
     quay_token: "{{ quay_token }}"
     validate_certs: false
 
-- name: Ensure team ansibletestteam2 is updated
+- name: Ensure team testteam2 is updated
   herve4m.quay.quay_team:
-    name: ansibletestteam2
+    name: testteam2
     organization: ansibletestorg
     role: admin
     members:
@@ -79,9 +42,9 @@
     quay_token: "{{ quay_token }}"
     validate_certs: false
 
-- name: Ensure team ansibletestteam2 has no members
+- name: Ensure team testteam2 has no members
   herve4m.quay.quay_team:
-    name: ansibletestteam2
+    name: testteam2
     organization: ansibletestorg
     role: admin
     members: []
@@ -91,18 +54,18 @@
     quay_token: "{{ quay_token }}"
     validate_certs: false
 
-- name: Ensure team ansibletestteam3 exists
+- name: Ensure team testteam3 exists
   herve4m.quay.quay_team:
-    name: ansibletestteam3
+    name: testteam3
     organization: ansibletestorg
     state: present
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
     validate_certs: false
 
-- name: Ensure team ansibletestteam3 exists (no change)
+- name: Ensure team testteam3 exists (no change)
   herve4m.quay.quay_team:
-    name: ansibletestteam3
+    name: testteam3
     organization: ansibletestorg
     role: member
     state: present
@@ -140,41 +103,7 @@
     quay_token: "{{ quay_token }}"
     validate_certs: false
   loop:
-    - ansibletestteam1
-    - ansibletestteam2
-    - ansibletestteam3
-
-- name: Ensure user accounts are removed
-  herve4m.quay.quay_user:
-    username: "{{ item }}"
-    state: absent
-    quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
-    validate_certs: false
-  loop:
-    - ansibletestuser1
-    - ansibletestuser2
-    - ansibletestuser3
-    - ansibletestuser4
-
-- name: Ensure the robot accounts are removed
-  herve4m.quay.quay_robot:
-    name: "{{ item }}"
-    state: absent
-    quay_host: "{{ quay_url }}"
-    quay_token: "{{ quay_token }}"
-    validate_certs: false
-  loop:
-    - ansibletestorg+ansibletestrobot1
-    - ansibletestorg+ansibletestrobot2
-
-- name: Ensure the organization is removed
-  herve4m.quay.quay_organization:
-    name: ansibletestorg
-    state: absent
-    quay_host: "{{ quay_url }}"
-    # For testing, authenticating with username/password instead of the token
-    quay_username: "{{ admin_username }}"
-    quay_password: "{{ admin_password }}"
-    validate_certs: false
+    - testteam1
+    - testteam2
+    - testteam3
 ...

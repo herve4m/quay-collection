@@ -54,3 +54,4 @@
   ansible.builtin.assert:
     that: labels['labels']|length == 0
     fail_msg: The preceding task should not have returned labels
+...

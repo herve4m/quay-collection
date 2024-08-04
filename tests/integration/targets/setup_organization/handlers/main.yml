@@ -1,0 +1,45 @@
+---
+# Supporting user accounts
+- name: Ensure user accounts exist
+  herve4m.quay.quay_user:
+    username: "{{ item }}"
+    email: "{{ item }}@example.com"
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  loop:
+    - ansibletestuser1
+    - ansibletestuser2
+    - ansibletestuser3
+    - ansibletestuser4
+  listen: Create resources in organization
+
+# Supporting robot accounts
+- name: Ensure the robot accounts exist
+  herve4m.quay.quay_robot:
+    name: "{{ item }}"
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  loop:
+    - ansibletestorg+ansibletestrobot1
+    - ansibletestorg+ansibletestrobot2
+  listen: Create resources in organization
+
+# Supporting teams
+- name: Ensure teams exist
+  herve4m.quay.quay_team:
+    name: "{{ item }}"
+    organization: ansibletestorg
+    role: admin
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  loop:
+    - ansibletestteam1
+    - ansibletestteam2
+  listen: Create resources in organization
+...

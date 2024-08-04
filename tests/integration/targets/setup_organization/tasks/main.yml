@@ -1,0 +1,14 @@
+---
+# Supporting organization
+- name: Ensure organization ansibletestorg exists
+  herve4m.quay.quay_organization:
+    name: ansibletestorg
+    email: ansibletestorg@example.com
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  # To speed up the tests, only create the user accounts, robots, and teams
+  # when the organization does not already exist.
+  notify: Create resources in organization
+...

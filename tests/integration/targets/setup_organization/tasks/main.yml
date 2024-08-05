@@ -11,4 +11,9 @@
   # To speed up the tests, only create the user accounts, robots, and teams
   # when the organization does not already exist.
   notify: Create resources in organization
+
+# Ensure the user accounts, robots, and teams are created before the roles that
+# might use them.
+- name: Ensure the handlers run just after the role execution
+  ansible.builtin.meta: flush_handlers
 ...

@@ -137,12 +137,12 @@ tags:
         - The module only returns expired tags when the I(only_active_tags)
           parameter is C(no).
       type: int
-      returned: only when an expiration date has been explicitly assigned.
+      returned: only when an expiration date has been explicitly assigned
       sample: 1640336040
     expiration:
       description: Expiration date and time in a human readable format.
       type: str
-      returned: only when an expiration date has been explicitly assigned.
+      returned: only when an expiration date has been explicitly assigned
       sample: Fri, 24 Dec 2021 08:54:00 -0000
   sample: [
             {

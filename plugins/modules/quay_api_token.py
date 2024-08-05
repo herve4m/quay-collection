@@ -67,10 +67,20 @@ options:
       - user:read
       - all
     default: repo:read
+  for_user:
+    description:
+      - The username to generate an OAuth access token for.
+      - The user receives a notification in the web interface, which enables
+        the user to retrieve the token.
+      - When you use this option, the module does not return the token.
+      - Requires Quay version 3.12 or later.
+    type: str
+    required: false
 notes:
   - Supports C(check_mode).
+  - I(for_user) requires Quay version 3.12 or later.
   - The generated OAuth access token acts on behalf of the user account you use
-    with the module (in I(quay_username)).
+    with the module (in I(for_user) if set, otherwise in I(quay_username)).
   - The user must have admin rights to the application's organization, by being
     the creator of this organization, or by belonging to a team with admin
     rights.
@@ -95,6 +105,18 @@ EXAMPLES = r"""
       - user:admin
     quay_host: https://quay.example.com
   register: token_details
+
+- name: Generate an OAuth access token for dwilde
+  herve4m.quay.quay_api_token:
+    quay_username: lvasquez
+    quay_password: vs9mrD55NP
+    # A notification in the web interface informs dwilde of the new OAuth
+    # access token.
+    for_user: dwilde
+    client_id: PZ6F80R1LCVPGYNZGSZQ
+    rights:
+      - repo:admin
+    quay_host: https://quay.example.com
 
 - name: Display the new OAuth access token
   debug:
@@ -161,7 +183,7 @@ EXAMPLES = r"""
 RETURN = r"""
 access_token:
   description: The OAuth access token.
-  returned: always
+  returned: only when I(for_user) is not set
   type: str
   sample: CywbRGkh1ttYkRRy9VL0Aw0yU9q7J62vIeo7WCFw
  """
@@ -194,6 +216,7 @@ def main():
         rights=dict(
             type="list", elements="str", choices=allowed_rights, default=["repo:read"]
         ),
+        for_user=dict(),
     )
 
     # Create a module for ourselves
@@ -209,25 +232,51 @@ def main():
         rights.remove("all")
     else:
         rights = set(rights)
+    for_user = module.params.get("for_user")
 
-    # Generate the OAuth access token
-    headers = {
-        "Accept": "*/*",
-        "Content-Type": "application/x-www-form-urlencoded",
-    }
     redirect_url = module.host_url._replace(path="/oauth/localapp")
     data = {
         "response_type": "token",
         "client_id": client_id,
         "redirect_uri": redirect_url.geturl(),
         "scope": " ".join(rights),
-        "_csrf_token": module.token,
     }
-    url = module.host_url._replace(path="/oauth/authorizeapp")
+
+    # Generate an OAuth token for another user
+    if for_user is not None:
+        if module.check_mode:
+            module.exit_json(changed=True)
+        data["username"] = for_user
+        # The data is provided as URL query parameters
+        url = module.host_url._replace(path="/oauth/authorize/assignuser")._replace(
+            query=urlencode(data)
+        )
+        try:
+            response = module.make_raw_request("POST", url)
+        except APIModuleError as e:
+            module.fail_json(msg=str(e))
+
+        if response["status_code"] != 200:
+            module.fail_json(
+                msg=(
+                    "Cannot create the OAuth access token for {user}: "
+                    "Maybe the user does not exist."
+                ).format(user=for_user)
+            )
+
+        module.exit_json(changed=True)
+
+    # Generate an OAuth token for the current user
     if module.check_mode:
         module.exit_json(
             changed=True, access_token="NotValidCheckModeNotValidCheckModeNotVal"
         )
+    data["_csrf_token"] = module.token
+    headers = {
+        "Accept": "*/*",
+        "Content-Type": "application/x-www-form-urlencoded",
+    }
+    url = module.host_url._replace(path="/oauth/authorizeapp")
     try:
         response = module.make_raw_request(
             "POST",

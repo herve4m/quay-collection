@@ -4,6 +4,19 @@ Quay Container Registry Collection Release Notes
 
 .. contents:: Topics
 
+v1.5.0
+======
+
+Release Summary
+---------------
+
+Supporting creating OAuth access tokens for other users.
+
+Minor Changes
+-------------
+
+- Add the ``for_user`` option to the ``herve4m.quay.quay_api_token`` module. With this option you can assign OAuth API tokens to other users (Quay 3.12 and later).
+
 v1.4.0
 ======
 

@@ -84,10 +84,10 @@ EXAMPLES = r"""
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
   register: robot_details
 
-- debug:
+- ansible.builtin.debug:
     msg: "Robot token: {{ robot_details['token'] }}"
 
-- debug:
+- ansible.builtin.debug:
     msg: "Docker configuration (Base64): {{ robot_details['name']
       | herve4m.quay.quay_docker_config(robot_details['token'],
       'https://quay.example.com') }}"

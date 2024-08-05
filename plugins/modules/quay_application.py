@@ -97,7 +97,7 @@ EXAMPLES = r"""
     quay_token: vgfH9zH5q6eV16Con7SvDQYSr0KPYQimMHVehZv7
   register: app_details
 
-- debug:
+- ansible.builtin.debug:
     msg: "Client secret: {{ app_details['client_secret'] }}"
 
 - name: Ensure the application is renamed

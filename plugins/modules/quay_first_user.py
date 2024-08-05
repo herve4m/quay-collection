@@ -95,7 +95,7 @@ EXAMPLES = r"""
     quay_host: https://quay.example.com
   register: result
 
-- debug:
+- ansible.builtin.debug:
     msg: "Access token: {{ result['access_token'] }}"
 """
 

@@ -6,10 +6,10 @@
 # 2) If the default_token parameter in defaults/main.yml is missing or empty,
 #    then the default_token parameter from the /tmp/quay_collection_TOKEN.yml
 #    file is used instead.
-# 3) If the default_token parameter is stil not set (not in defaults/main.yml
+# 3) If the default_token parameter is still not set (not in defaults/main.yml
 #    and not in /tmp/quay_collection_TOKEN.yml), then the module
 #    herve4m.quay.quay_first_user is used to create the first user account and
-#    get its token. If that fails, then an error is reported
+#    get its token. If that fails, then an error is reported.
 # 4) The retrieved token is stored in /tmp/quay_collection_TOKEN.yml so that it
 #    can be reused by other playbooks.
 - name: Set the quay_token fact from defaults/main.yml
@@ -37,7 +37,7 @@
 - name: Get the quay_token fact from first user creation
   when: quay_token is not defined or quay_token|length == 0
   block:
-    # Create the first user after Quay installation. The task may fail if:
+    # Create the first user after Quay installation. The task might fail if:
     # * the database is not empty (Quay has already been used)
     # * the Quay version is not 3.6 or later
     # * the configuration does not allow first user creation

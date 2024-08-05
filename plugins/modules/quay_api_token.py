@@ -79,6 +79,9 @@ options:
 notes:
   - Supports C(check_mode).
   - I(for_user) requires Quay version 3.12 or later.
+  - Your Quay administrator must enable the OAuth assignment capability
+    of your Quay installation (C(FEATURE_ASSIGN_OAUTH_TOKEN) in C(config.yaml))
+    to use the I(for_user) option in Quay version 3.12 or later.
   - The generated OAuth access token acts on behalf of the user account you use
     with the module (in I(for_user) if set, otherwise in I(quay_username)).
   - The user must have admin rights to the application's organization, by being

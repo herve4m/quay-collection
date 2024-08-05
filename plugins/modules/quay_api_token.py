@@ -106,6 +106,10 @@ EXAMPLES = r"""
     quay_host: https://quay.example.com
   register: token_details
 
+- name: Display the new OAuth access token
+  ansible.builtin.debug:
+    msg: "The OAuth access token is: {{ token_details['access_token'] }}"
+
 - name: Generate an OAuth access token for dwilde
   herve4m.quay.quay_api_token:
     quay_username: lvasquez
@@ -117,10 +121,6 @@ EXAMPLES = r"""
     rights:
       - repo:admin
     quay_host: https://quay.example.com
-
-- name: Display the new OAuth access token
-  debug:
-    msg: "The OAuth access token is: {{ token_details['access_token'] }}"
 
 # The following example creates an organization, an OAuth application, a user
 # account, and a team, and then generates an OAuth access token for this user
@@ -176,7 +176,7 @@ EXAMPLES = r"""
   register: token_details
 
 - name: Display the new OAuth access token
-  debug:
+  ansible.builtin.debug:
     msg: "The OAuth access token is: {{ token_details['access_token'] }}"
 """
 

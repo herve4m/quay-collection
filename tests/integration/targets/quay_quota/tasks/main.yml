@@ -158,6 +158,78 @@
 - name: Ensure the quota is updated (3)
   herve4m.quay.quay_quota:
     organization: ansibletestorg
+    quota: 1 GB
+    warning_pct: 85
+    reject_pct: 99
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure the quota is updated (4)
+  herve4m.quay.quay_quota:
+    organization: ansibletestorg
+    quota: 4000000 KIB
+    warning_pct: 85
+    reject_pct: 99
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure the quota is updated (5)
+  herve4m.quay.quay_quota:
+    organization: ansibletestorg
+    quota: 3000000 Kb
+    warning_pct: 85
+    reject_pct: 99
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure the quota is updated (6)
+  herve4m.quay.quay_quota:
+    organization: ansibletestorg
+    quota: 3000 MiB
+    warning_pct: 85
+    reject_pct: 99
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure the quota is updated (7)
+  herve4m.quay.quay_quota:
+    organization: ansibletestorg
+    quota: 4000 MB
+    warning_pct: 85
+    reject_pct: 99
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Missing organization and state=absent (no change)
+  herve4m.quay.quay_quota:
+    organization: nonexisting
+    quota: 1 TiB
+    warning_pct: 85
+    reject_pct: 99
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  ansible.builtin.assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: ERROR EXPECTED Missing organization
+  herve4m.quay.quay_quota:
+    organization: nonexisting
     quota: 1 TiB
     warning_pct: 85
     reject_pct: 99
@@ -165,6 +237,31 @@
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
     validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (non-existing organization)
+
+- name: ERROR EXPECTED Wrong quota format
+  herve4m.quay.quay_quota:
+    organization: ansibletestorg
+    quota: that is a wrong quota format
+    warning_pct: 85
+    reject_pct: 99
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (wrong quota format)
 
 - name: Ensure quota does not exist
   herve4m.quay.quay_quota:

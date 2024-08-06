@@ -103,6 +103,76 @@
     quay_token: "{{ quay_token }}"
     validate_certs: false
 
+- name: Non-existing organization and state=absent (no change)
+  herve4m.quay.quay_application:
+    organization: nonexisting
+    name: ansibletestapp1
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  ansible.builtin.assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: ERROR EXPECTED Non-existing organization
+  herve4m.quay.quay_application:
+    organization: nonexisting
+    name: ansibletestapp1
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (non-existing organization)
+
+- name: ERROR EXPECTED Already existing application
+  herve4m.quay.quay_application:
+    organization: ansibletestorg
+    name: ansibletestapp2
+    new_name: ansibletestapp3
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (application exists)
+
+- name: Ensure the application ansibletestapp2 is updated (new_name)
+  herve4m.quay.quay_application:
+    organization: ansibletestorg
+    name: doesnotexist
+    new_name: ansibletestapp2
+    description: Application 2 description
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure the application ansibletestapp3 is removed
+  herve4m.quay.quay_application:
+    organization: ansibletestorg
+    name: doesnotexist
+    new_name: ansibletestapp3
+    description: "New ansibletestapp3 application"
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
 - name: Ensure the applications are removed
   herve4m.quay.quay_application:
     organization: ansibletestorg

@@ -62,6 +62,78 @@
     quay_token: "{{ quay_token }}"
     validate_certs: false
 
+- name: Non-existing organization and state=absent (no change)
+  herve4m.quay.quay_robot:
+    name: nonexisting+testrobot5
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  ansible.builtin.assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: ERROR EXPECTED Non-existing organization
+  herve4m.quay.quay_robot:
+    name: nonexisting+testrobot5
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (non-existing organization)
+
+- name: ERROR EXPECTED No organization specified why anonymous access
+  herve4m.quay.quay_robot:
+    name: testrobot5
+    state: present
+    quay_host: quay.io
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (non-existing organization)
+
+- name: ERROR EXPECTED Not the owner of the namespace
+  herve4m.quay.quay_robot:
+    name: ansibletestuser1+testrobot5
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (not my namespace)
+
+- name: ERROR EXPECTED Access denied
+  herve4m.quay.quay_robot:
+    name: hquatrem+testrobot5
+    state: present
+    quay_host: quay.io
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (access denied)
+
 - name: Ensure robot accounts are removed
   herve4m.quay.quay_robot:
     name: "{{ item }}"

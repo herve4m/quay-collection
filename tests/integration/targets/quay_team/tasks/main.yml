@@ -106,7 +106,7 @@
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
-- name: Missing organization and state=absent (no change)
+- name: Non-existing organization and state=absent (no change)
   herve4m.quay.quay_team:
     name: testteam3
     organization: nonexisting
@@ -122,7 +122,7 @@
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
-- name: ERROR EXPECTED Missing organization
+- name: ERROR EXPECTED Non-existing organization
   herve4m.quay.quay_team:
     name: testteam3
     organization: nonexisting

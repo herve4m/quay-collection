@@ -113,6 +113,117 @@
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
+- name: Missing organization and state=absent (no change)
+  herve4m.quay.quay_default_perm:
+    organization: nonexisting
+    name: ansibletestteam1
+    type: team
+    role: admin
+    creator: ansibletestuser2
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  ansible.builtin.assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: ERROR EXPECTED Non-existing organization
+  herve4m.quay.quay_default_perm:
+    organization: nonexisting
+    name: ansibletestteam1
+    type: team
+    role: admin
+    creator: ansibletestuser2
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (non-existing organization)
+
+- name: ERROR EXPECTED Non-existing user
+  herve4m.quay.quay_default_perm:
+    organization: ansibletestorg
+    name: nonexistinguser
+    type: user
+    role: admin
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (non-existing user)
+
+- name: ERROR EXPECTED Non-existing team
+  herve4m.quay.quay_default_perm:
+    organization: ansibletestorg
+    name: nonexistingteam
+    type: team
+    role: admin
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (non-existing team)
+
+- name: ERROR EXPECTED Non-existing creator
+  herve4m.quay.quay_default_perm:
+    organization: ansibletestorg
+    name: ansibletestteam1
+    type: team
+    role: admin
+    creator: nonexistingcreator
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (non-existing creator)
+
+- name: ERROR EXPECTED Creator is a robot account
+  herve4m.quay.quay_default_perm:
+    organization: ansibletestorg
+    name: ansibletestteam1
+    type: team
+    role: admin
+    creator: ansibletestorg+ansibletestrobot1
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (creator is a robot)
+
 - name: Ensure default perm anon-read-ansibletestuser1 is removed
   herve4m.quay.quay_default_perm:
     organization: ansibletestorg

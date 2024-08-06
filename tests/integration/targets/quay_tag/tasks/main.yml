@@ -199,6 +199,20 @@
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
+- name: Ensure the tag v1.0.0 is set (no change)
+  herve4m.quay.quay_tag:
+    image: ansibletestorg/ansibletestrepo:v2.0.0
+    tag: v1.0.0
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
+- name: Ensure that the task did not change anything
+  ansible.builtin.assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
 - name: Ensure the tag v2.0.0 has no expiration
   herve4m.quay.quay_tag:
     image: ansibletestorg/ansibletestrepo:v2.0.0
@@ -226,6 +240,115 @@
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
     validate_certs: false
+
+- name: Non-existing namespace
+  herve4m.quay.quay_tag:
+    image: nonexisting/ansibletestrepo:v2.0.0
+    tag: v1.0.0
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  ansible.builtin.assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: ERROR EXPECTED Missing organization
+  herve4m.quay.quay_tag:
+    image: ansibletestrepo:latest
+    tag: v1.0.0
+    state: present
+    quay_host: quay.io
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (no organization specified)
+
+- name: ERROR EXPECTED Non-existing namespace
+  herve4m.quay.quay_tag:
+    image: nonexisting/ansibletestrepo:v2.0.0
+    tag: v1.0.0
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (non-existing organization)
+
+- name: ERROR EXPECTED Missing tag when digest is set
+  herve4m.quay.quay_tag:
+    image: ansibletestorg/ansibletestrepo@{{ t['tags'][0]['manifest_digest'] }}
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (missing tag)
+
+- name: ERROR EXPECTED Expiration date in the past
+  herve4m.quay.quay_tag:
+    image: ansibletestorg/ansibletestrepo:v2.0.0
+    expiration: "202112312356.42"
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (date in the past)
+
+- name: ERROR EXPECTED Wrong format for the expiration date
+  herve4m.quay.quay_tag:
+    image: ansibletestorg/ansibletestrepo:v2.0.0
+    expiration: ABCEDFGHIJ
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (wrong date format)
+
+- name: ERROR EXPECTED Non-existing image
+  herve4m.quay.quay_tag:
+    image: ansibletestorg/ansibletestrepo:1234567
+    tag: v4.0.0
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (non-existing image)
 
 - name: Ensure the tag v2.0.0 is removed
   herve4m.quay.quay_tag:

@@ -67,6 +67,87 @@
     quay_host: "{{ quay_url }}"
     validate_certs: false
 
+- name: ERROR EXPECTED Non-existing user
+  herve4m.quay.quay_api_token:
+    for_user: nonexistinguser
+    quay_username: testuser1
+    quay_password: vs9mrD55NP
+    client_id: "{{ app_details['client_id'] }}"
+    rights:
+      - org:admin
+      - repo:admin
+      - repo:create
+      - repo:read
+      - repo:write
+      - user:admin
+      - user:read
+    quay_host: "{{ quay_url }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (non-existing user)
+
+- name: ERROR EXPECTED No rights specified
+  herve4m.quay.quay_api_token:
+    quay_username: testuser1
+    quay_password: vs9mrD55NP
+    client_id: "{{ app_details['client_id'] }}"
+    rights: []
+    quay_host: "{{ quay_url }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (non-existing organization)
+
+- name: Generate an OAuth access token for the current user (check mode)
+  herve4m.quay.quay_api_token:
+    quay_username: testuser1
+    quay_password: vs9mrD55NP
+    client_id: "{{ app_details['client_id'] }}"
+    rights:
+      - all
+    quay_host: "{{ quay_url }}"
+    validate_certs: false
+  check_mode: true
+  register: result
+
+- name: Ensure that the returned data has the access_token key
+  ansible.builtin.assert:
+    that: "'access_token' in result"
+    fail_msg: The result should have the access_token key
+
+- name: Generate an OAuth access token for ansibletestuser1  (check mode)
+  herve4m.quay.quay_api_token:
+    for_user: ansibletestuser1
+    quay_username: testuser1
+    quay_password: vs9mrD55NP
+    client_id: "{{ app_details['client_id'] }}"
+    rights:
+      - org:admin
+      - repo:admin
+      - repo:create
+      - repo:read
+      - repo:write
+      - user:admin
+      - user:read
+    quay_host: "{{ quay_url }}"
+    validate_certs: false
+  check_mode: true
+  register: result
+
+- name: Ensure that the task did change something
+  ansible.builtin.assert:
+    that: result['changed']
+    fail_msg: The preceding task should created the token
+
 - name: Ensure testteam1 team is removed
   herve4m.quay.quay_team:
     name: testteam1

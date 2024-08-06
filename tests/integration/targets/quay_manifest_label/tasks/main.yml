@@ -11,7 +11,7 @@
 # - Tagging it so that it can be pushed to the local Quay Container Registry
 # - Pushing the image
 # - Deleting the images from the local system
-# The tasks do not use the podman collection because it may not be
+# The tasks do not use the podman collection because it might not be
 # available on the testing system.
 - name: Ensure the image is prepared with podman
   when: "podman['rc'] == 0"
@@ -74,6 +74,10 @@
         cmd: "docker push
               {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
       changed_when: true
+      register: result
+      retries: 3
+      delay: 5
+      until: result["rc"] == 0
 
     - name: Ensure the images are removed
       ansible.builtin.command:

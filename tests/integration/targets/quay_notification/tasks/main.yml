@@ -19,7 +19,7 @@
 - name: ERROR EXPECTED Ensure notification exists (but repo does not exist)
   herve4m.quay.quay_notification:
     repository: myansibletestrepo
-    title: Test Quay Notification
+    title: Test Quay Notification 13
     event: repo_push
     method: quay_notification
     config:
@@ -40,7 +40,7 @@
 - name: ERROR EXPECTED Non-existing repository (anonymous)
   herve4m.quay.quay_notification:
     repository: myansibletestrepo
-    title: Test Quay Notification
+    title: Test Quay Notification 14
     event: repo_push
     method: quay_notification
     config:
@@ -227,7 +227,7 @@
 - name: Non-existing organization and state=absent (no change)
   herve4m.quay.quay_notification:
     repository: nonexisting/ansibletestrepo
-    title: Test Quay Notification
+    title: Test Quay Notification 11
     event: repo_push
     method: quay_notification
     config:
@@ -247,7 +247,7 @@
 - name: ERROR EXPECTED Non-existing organization
   herve4m.quay.quay_notification:
     repository: nonexisting/ansibletestrepo
-    title: Test Quay Notification
+    title: Test Quay Notification 12
     event: repo_push
     method: quay_notification
     config:
@@ -268,7 +268,7 @@
 - name: ERROR EXPECTED Missing parameter for notification (1)
   herve4m.quay.quay_notification:
     repository: ansibletestorg/ansibletestrepo
-    title: Test Quay Notification
+    title: Test Quay Notification 1
     event: repo_push
     method: email
     config: {}
@@ -287,7 +287,7 @@
 - name: ERROR EXPECTED Missing parameter for notification (2)
   herve4m.quay.quay_notification:
     repository: ansibletestorg/ansibletestrepo
-    title: Test Quay Notification
+    title: Test Quay Notification 2
     event: repo_push
     method: flowdock
     config: {}
@@ -306,7 +306,7 @@
 - name: ERROR EXPECTED Missing parameter for notification (3)
   herve4m.quay.quay_notification:
     repository: ansibletestorg/ansibletestrepo
-    title: Test Quay Notification
+    title: Test Quay Notification 3
     event: repo_push
     method: hipchat
     config: {}
@@ -325,7 +325,7 @@
 - name: ERROR EXPECTED Missing parameter for notification (4)
   herve4m.quay.quay_notification:
     repository: ansibletestorg/ansibletestrepo
-    title: Test Quay Notification
+    title: Test Quay Notification 4
     event: repo_push
     method: slack
     config: {}
@@ -344,7 +344,7 @@
 - name: ERROR EXPECTED Missing parameter for notification (5)
   herve4m.quay.quay_notification:
     repository: ansibletestorg/ansibletestrepo
-    title: Test Quay Notification
+    title: Test Quay Notification 5
     event: repo_push
     method: webhook
     config: {}
@@ -363,7 +363,7 @@
 - name: ERROR EXPECTED Missing parameter for notification (6)
   herve4m.quay.quay_notification:
     repository: ansibletestorg/ansibletestrepo
-    title: Test Quay Notification
+    title: Test Quay Notification 6
     event: repo_push
     method: quay_notification
     config: {}
@@ -382,7 +382,7 @@
 - name: ERROR EXPECTED Non-existing user
   herve4m.quay.quay_notification:
     repository: ansibletestorg/ansibletestrepo
-    title: Test Quay Notification
+    title: Test Quay Notification 7
     event: repo_push
     method: quay_notification
     config:
@@ -403,7 +403,7 @@
 - name: ERROR EXPECTED Non-existing team
   herve4m.quay.quay_notification:
     repository: ansibletestorg/ansibletestrepo
-    title: Test Quay Notification
+    title: Test Quay Notification 8
     event: repo_push
     method: quay_notification
     config:
@@ -424,7 +424,7 @@
 - name: ERROR EXPECTED Non-existing organization
   herve4m.quay.quay_notification:
     repository: ansibletestorg/ansibletestrepo
-    title: Test Quay Notification
+    title: Test Quay Notification 9
     event: repo_push
     method: quay_notification
     config:
@@ -445,7 +445,7 @@
 - name: ERROR EXPECTED Robot account not allowed
   herve4m.quay.quay_notification:
     repository: ansibletestorg/ansibletestrepo
-    title: Test Quay Notification
+    title: Test Quay Notification 10
     event: repo_push
     method: quay_notification
     config:

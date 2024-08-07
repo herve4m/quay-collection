@@ -20,7 +20,7 @@
     that: layers1['layers']|length == layers2['layers']|length
     fail_msg: The same image should have been returned
 
-- name: Retrieve an image with no namespace (error)
+- name: ERROR EXPECTED Retrieve an image with no namespace
   herve4m.quay.quay_layer_info:
     image: nosuchimageipresume
     quay_host: quay.io
@@ -31,6 +31,19 @@
   ansible.builtin.assert:
     that: result['failed']
     fail_msg: The preceding task should have failed
+
+- name: Retrieve an image in a non-existing namespace
+  herve4m.quay.quay_layer_info:
+    image: nonexisting/ansibletestrepo:latest
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  ansible.builtin.assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
 
 - name: Retrieve a non-existing image in my namespace (no change)
   herve4m.quay.quay_layer_info:

@@ -79,6 +79,18 @@
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
+- name: Ensure team testteam3 is updated
+  herve4m.quay.quay_team:
+    name: testteam3
+    organization: ansibletestorg
+    # Same role as the role previously assigned to the team
+    members:
+      - ansibletestuser4
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+
 - name: Ensure non-existing team is deleted (no change)
   herve4m.quay.quay_team:
     name: nonexistingteam
@@ -94,6 +106,60 @@
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
 
+- name: Non-existing organization and state=absent (no change)
+  herve4m.quay.quay_team:
+    name: testteam3
+    organization: nonexisting
+    role: member
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  ansible.builtin.assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: ERROR EXPECTED Non-existing organization
+  herve4m.quay.quay_team:
+    name: testteam3
+    organization: nonexisting
+    role: member
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (non-existing organization)
+
+- name: ERROR EXPECTED Non-existing members
+  herve4m.quay.quay_team:
+    name: testteam4
+    organization: ansibletestorg
+    role: admin
+    members:
+      - nonexistinguser1
+      - nonexistinguser2
+    append: false
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (non-existing members)
+
 - name: Ensure the teams are removed
   herve4m.quay.quay_team:
     name: "{{ item }}"
@@ -106,4 +172,5 @@
     - testteam1
     - testteam2
     - testteam3
+    - testteam4
 ...

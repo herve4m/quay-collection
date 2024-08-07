@@ -11,7 +11,7 @@
 # - Tagging it so that it can be pushed to the local Quay Container Registry
 # - Pushing the image
 # - Deleting the images from the local system
-# The tasks do not use the podman collection because it may not be
+# The tasks do not use the podman collection because it might not be
 # available on the testing system.
 - name: Ensure the image is prepared with podman
   when: "podman['rc'] == 0"
@@ -74,6 +74,10 @@
         cmd: "docker push
               {{ quay_hostname }}/ansibletestorg/ansibletestrepo:latest"
       changed_when: true
+      register: result
+      retries: 3
+      delay: 5
+      until: result["rc"] == 0
 
     - name: Ensure the images are removed
       ansible.builtin.command:
@@ -237,6 +241,70 @@
   ansible.builtin.assert:
     that: not result['changed']
     fail_msg: The preceding task should not have changed anything
+
+- name: Non-existing namespace
+  herve4m.quay.quay_manifest_label:
+    image: nonexisting/ansibletestrepo:latest
+    key: architecture
+    state: absent
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  register: result
+
+- name: Ensure that the task did not change anything
+  ansible.builtin.assert:
+    that: not result['changed']
+    fail_msg: The preceding task should not have changed anything
+
+- name: ERROR EXPECTED Missing organization
+  herve4m.quay.quay_manifest_label:
+    image: ansibletestrepo:latest
+    key: architecture
+    state: absent
+    quay_host: quay.io
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (no organization specified)
+
+- name: ERROR EXPECTED Non-existing namespace
+  herve4m.quay.quay_manifest_label:
+    image: nonexisting/ansibletestrepo:latest
+    key: architecture
+    value: other
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (non-existing organization)
+
+- name: ERROR EXPECTED Non-existing tag
+  herve4m.quay.quay_manifest_label:
+    image: ansibletestorg/ansibletestrepo:1234567
+    key: architecture
+    value: other
+    state: present
+    quay_host: "{{ quay_url }}"
+    quay_token: "{{ quay_token }}"
+    validate_certs: false
+  ignore_errors: true
+  register: result
+
+- name: Ensure that the task failed
+  ansible.builtin.assert:
+    that: result['failed']
+    fail_msg: The preceding task should have failed (non-existing tag)
 
 - name: Ensure the repository is removed
   herve4m.quay.quay_repository:

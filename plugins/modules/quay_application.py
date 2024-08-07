@@ -285,7 +285,7 @@ def main():
         new_fields["name"] = new_name
         # The original application does not exists...
         if not app_details:
-            # and neither the new organization. Create that new organization.
+            # and neither the new application. Create that new application.
             if not new_app_details:
                 data = module.create(
                     "application",
@@ -297,8 +297,8 @@ def main():
                 )
                 exit_module(module, True, data)
 
-            # The original organization does not exists but the new one does.
-            # Update that new organization.
+            # The original application does not exists but the new one does.
+            # Update that new application.
             updated, data = module.update(
                 new_app_details,
                 "application",
@@ -310,7 +310,7 @@ def main():
                 id=new_app_details.get("client_id", ""),
             )
             exit_module(module, updated, data if updated else new_app_details)
-        # The original organization exists. Rename it.
+        # The original application exists. Rename it.
         updated, data = module.update(
             app_details,
             "application",

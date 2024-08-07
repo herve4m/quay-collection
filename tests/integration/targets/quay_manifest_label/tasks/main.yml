@@ -276,6 +276,7 @@
   herve4m.quay.quay_manifest_label:
     image: nonexisting/ansibletestrepo:latest
     key: architecture
+    value: other
     state: present
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"
@@ -292,6 +293,7 @@
   herve4m.quay.quay_manifest_label:
     image: ansibletestorg/ansibletestrepo:1234567
     key: architecture
+    value: other
     state: present
     quay_host: "{{ quay_url }}"
     quay_token: "{{ quay_token }}"

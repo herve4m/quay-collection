@@ -1,4 +1,4 @@
-# Copyright: (c) 2021-2024, Herve Quatremain <herve.quatremain@redhat.com>
+# Copyright: (c) 2021-2024 Hervé Quatremain <herve.quatremain@redhat.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 

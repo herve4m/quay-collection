@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright: (c) 2024 Herve Quatremain <herve.quatremain@redhat.com>
+# Copyright: (c) 2024 Hervé Quatremain <herve.quatremain@redhat.com>
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # For accessing the API documentation from a running system, use the swagger-ui
@@ -28,7 +28,7 @@ short_description: Manage Quay Container Registry proxy cache configurations
 description:
   - Create, delete, and update the proxy cache configuration in organizations.
 version_added: '1.1.0'
-author: Herve Quatremain (@herve4m)
+author: Hervé Quatremain (@herve4m)
 options:
   organization:
     description:

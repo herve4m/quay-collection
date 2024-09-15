@@ -1,3 +1,23 @@
+> [!IMPORTANT]
+>
+> **We've moved!**
+>
+> This repository is no longer used and has been archived for historical purposes.
+>
+> You can find the latest code at https://github.com/redhat-cop/quay_configuration, where we continue to develop and maintain the collection.
+>
+> We also renamed the collection in the new repository, from `herve4m.quay` to `infra.quay_configuration`
+> The modules have not changed: they retain their names and parameters.
+> For example, the old `herve4m.quay.quay_repository` module is now available as `infra.quay_configuration.quay_repository`
+>
+> * Issues can be filed against our new repository at https://github.com/redhat-cop/quay_configuration/issues
+> * The collection is available from Ansible Galaxy at https://galaxy.ansible.com/ui/repo/published/infra/quay_configuration/
+> * You can install the new collection on your system by running the following command:
+>
+> ```bash
+> ansible-galaxy collection install infra.quay_configuration
+> ```
+
 # Quay Container Registry Collection for Ansible
 
 [![Sanity Test](https://github.com/herve4m/quay-collection/actions/workflows/pre-commit-sanity.yml/badge.svg)](https://github.com/herve4m/quay-collection/actions/workflows/pre-commit-sanity.yml)
